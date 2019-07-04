@@ -1,0 +1,50 @@
+﻿
+     template<_Ty>
+     class CompareFunc
+     {
+         // 功能：排序函数
+         // 参数：p1, p2是要比较的对象
+         // 返回值：-1表示p1 < p2; 0是相等;1表示p1 > p2         
+         public int Compare(_Ty p1, _Ty p2);
+     };
+     
+     template<_Ty>  // _Ty 不支持List与 map的嵌套, 仅支持基础数据类型与自定义的class
+     class List
+     {
+         // 功能：取数组的长度
+         public int   Length;
+         public int   Length();
+         // 功能：指定数组的长度
+         public void  resize(int nSize);
+         // 功能：预分配
+         public void  reserve(int nSize);
+         // 功能：反序
+         public void  Inserve();
+         // 功能：插入一个节点
+         public void  Insert(int nIndex, _Ty value);
+         // 功能：移除值相等的节点
+         public void  Remove(_Ty value); 
+         // 功能：删除指定下标的节点
+         public void  RemoveAt(int nIndex);
+         // 功能：删除指定下标开始，指定数量的节点
+         public void  RemoveAt(int nIndex, int nCount);
+         // 功能：删除所有的节点
+         public void  RemoveAll();
+         // 功能：添加一个变量
+         public void  push_back(_Ty value);
+         // 功能：数组连接（添加一个数组）
+         public void  push_back(list &other);
+         
+         // 功能：默认的排序(升序)
+         public void  Sort();         
+        
+         // 功能：指定排序实例与排序函数
+         // 参数：pIns - 自定义类实例
+         //       func_name : _TyOther类的成员函数, 必须是 CompareFunc::Compare声明样式
+         template <class _TyOther>
+         public void  Sort(_TyOther pIns, func_anme);
+         
+         // 功能：下标引用
+         // 参数：nIndex - 可以常数或变量
+         public _Ty  &operator[](int nIndex);
+     };

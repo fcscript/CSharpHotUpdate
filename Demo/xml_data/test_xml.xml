@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ROOT NameID="5" Tips="Is Me?">
+   <!--this is help -->
+   <BUFF key="10">
+     <value ID="10" AddHP="100" Country="0">
+        <ARRAY_ID value="1"/>
+        <ARRAY_ID value="2"/>
+        <MAP_ID key="10" value="100"/>
+        <MAP_ID key="20" value="200"/>
+        <EFECT ID="3100" BindPos="1"/>
+        <EFECT ID="3101" BindPos="2"/>
+        <EFECT ID="3102" BindPos="3"></EFECT>
+     </value>
+   </BUFF>
+   <BUFF key="20">
+     <value ID="20" AddHP="200" Country="0">
+        <ARRAY_ID value="3"/>
+        <ARRAY_ID value="4"/>
+        <MAP_ID key="30" value="300"/>
+        <MAP_ID key="40" value="400"/>
+        <EFECT ID="3200" BindPos="1"/>
+        <EFECT ID="3201" BindPos="2"/>
+        <EFECT ID="3202" BindPos="3"></EFECT>
+     </value>
+   </BUFF>
+</ROOT>

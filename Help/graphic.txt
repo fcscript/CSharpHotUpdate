@@ -1,0 +1,175 @@
+﻿struct Vector2
+{
+	float x, y;
+public:
+	Vector2  &operator = (const Vector2 &other);
+	void  Set(float x, float y);
+	// 功能：返回向量的长度
+	float Length();
+	// 功能：检测是不是相似（相等）
+	bool  IsSimilar( const Vector2 &v, float fD = 0.00001f );
+	// 功能：向量归一化
+	void  Normalize();
+	// 功能：向量置零
+	void  Zero();
+	// 功能：向量置一
+	void  One();
+	Vector2  &operator += ( const Vector2 &v);
+	Vector2  &operator -= ( const Vector2 &v);
+	Vector2  &operator *= ( float fScale );
+	Vector2  &operator /= ( float fScale );
+	friend Vector2 operator + (Vector2 left, Vector2 right);
+	friend Vector2 operator - (Vector2 left, Vector2 right);
+	Vector2 operator * (Vector2 left, float right);
+	Vector2 operator / (Vector2 left, float right);
+	float operator * (Vector2 left, Vector2 right);
+	friend float Length(Vector2 v1, Vector2 v2);
+	friend float GetDistSQ(Vector2 v1, Vector2 v2);
+	friend bool  Equals( const Vector2 &v1, const Vector2 &v2 );
+	friend float Dot(const Vector2 &v1, const Vector2 &v2 );
+	friend Vector2 Lerp(const Vector2 &v1, const Vector2 &v2, float fSlerp);
+};
+
+struct Vector3
+{
+	float x, y, z;
+public:
+	Vector3  &operator = (const Vector3 &other);
+	void Set(float x, float y, float z);
+	float Length();
+	bool IsSimilar( const Vector3 &v, float fD = 0.00001f );
+	void Normalize();
+	void Zero();
+	void One();
+	Vector3  &operator += ( const Vector3 &v);
+	Vector3  &operator -= ( const Vector3 &v);
+	Vector3  &operator *= ( float fScale );
+	Vector3  &operator /= ( float fScale );
+	friend Vector3 operator + (Vector3 left, Vector3 right);
+	friend Vector3 operator - (Vector3 left, Vector3 right);
+	friend Vector3 operator * (Vector3 left, float fScale);
+	friend Vector3 operator / (Vector3 left, float fScale);
+	friend float operator * (Vector3 left, Vector3 right);  // 点乘
+
+	friend float Length(Vector3 v1, Vector3 v2);
+	friend float GetDistSQ(Vector3 v1, Vector3 v2);
+	friend bool  Equals( const Vector3 &v1, const Vector3 &v );
+	friend float Dot(const Vector3 &v1, const Vector3 &v2 );
+	friend Vector3 Lerp(const Vector3 &v1, const Vector3 &v2, float fSlerp);
+	friend Vector3 Cross(const Vector3 &v1, const Vector3 &v2);
+
+	void  RotationY(float fYaw);
+	void  RotationX(float fPitch);
+	void  RotationZ(float fRoll);
+	void  TransformCoord( const Vector3 &vIn, const Matrix& mat );
+	void  TransformNormal( const Vector3 &vIn, const Matrix& mat );
+	Vector2  ToScreen( const Matrix &matWorldViewProj, float fScreenW, float fScreenH ) const
+};
+
+struct Vector4
+{
+	float  x, y, z, w;
+
+	Vector4  &operator = (const Vector4 &other);
+	void Set(float x, float y, float z, float w);
+	float Length() const;
+	void Normalize();
+
+	friend  Vector4 operator + ( const Vector4 &v0, const Vector4 &v1 );
+	friend  Vector4 operator - ( const Vector4 &v0, const Vector4 &v1 );
+	friend  float operator * ( const Vector4 &v0, const Vector3 &v1 );
+	friend  float operator * ( const Vector3 &v0, const Vector4 &v1 );
+	friend  float operator * ( const Vector4 &v0, const Vector4 &v1 );
+	friend Vector4  operator *( const Vector4 &v, float fScale);
+
+	void  operator *=(float fScale)
+	void  operator *= ( const Matrix& mat )
+	void  operator += ( const Vector4 &v )
+};
+
+struct Panel
+{
+	float  a, b, c, d;
+
+	Panel  &operator = (const Panel &other);
+	void Set(float a, float b, float c, float d);
+	void Normalize()
+	Vector3  GetNormal() const;
+	void  InitFromPoints( const Vector3 &v1, const Vector3 &v2, const Vector3 &v3 )
+	void  InitFromPointNormal( const Vector3 &vPoint, const Vector3 &vNormal )
+	bool  IsFront( const Vector3 &vPos ) const
+	bool  IntersectLine(Vector3  *pPos, const Vector3 *pBegin, const Vector3 *pRayDir) const
+};
+
+struct Matrix
+{
+    union
+    {
+        struct
+        {
+            float    _11,_12, _13, _14;
+            float    _21,_22, _23, _24;
+            float    _31,_32, _33, _34;
+            float    _41,_42, _43, _44;
+        };
+        float m[4][4];
+    };
+
+	Matrix  &operator = (const Matrix &other);
+	float[] operator[](int nIndex){return _m[nIndex];}
+	//float operator[][](int nRow, nCol){return _m[nRow][nCol];}
+	void  Identity();
+	void  OrthoRH(float w, float h, float zn, float zf);
+	void  OrthoLH(float w, float h, float zn, float zf);
+	void  PerspectiveR(float fovy, float Aspect, float zn, float zf);
+	void  PerspectiveL(float fovy, float Aspect, float zn, float zf);
+	void  Translation( float fx, float fy, float fz );
+	void  RotationYawPitchRoll( float fYaw, float fPitch, float fRoll );
+
+	void   RotationYawPicthRollSacle( float fYaw, float fPitch, float fRoll, float fScaleX, float fScaleY, float fScaleZ );
+	void   MoveRotationYawPicthRoll( float fMoveX, float fMoveY, float fMoveZ, float fYaw, float fPitch, float fRoll );
+	void   RotationYawPicthRollMove( float fYaw, float fPitch, float fRoll, float fMoveX, float fMoveY, float fMoveZ );
+	void   Scaling( float fScaleX, float fScaleY, float fScaleZ );
+	void   RotationRoll( float fRoll ); void   RotationZ( float fRoll );
+	void   RotationPitch( float fPitch );  void   RotationY( float fPitch );
+	void   RotationYaw( float fYaw );  void   RotationX( float fYaw );
+	bool   Inverse( const Matrix &other );
+	bool   Inverse();
+	void   Transpose( const Matrix &other ); // 求转置距阵
+	void   Transpose();
+
+	Matrix   &operator += ( const Matrix &mat );
+	Matrix   &operator -= ( const Matrix &mat );
+	Matrix   &operator *= ( const Matrix &mat );
+	Matrix   &operator *= ( float f )
+	Matrix   &operator /= ( float f );
+	Matrix  &Mul( const Matrix &mat1, const Matrix &mat2 ); // a = b * c
+
+	void LookAtRH( const Vector3 *pEye, const Vector3 *pAt, const Vector3 *pUp )
+	void LookAtLH( const Vector3 *pEye, const Vector3 *pAt, const Vector3 *pUp );
+};
+
+struct BundBox
+{
+	Vector3  min;
+	Vector3  max;
+	BundBox  &operator = (const BundBox &other);
+	void Set(Vector3 vMin, Vector3 vMax)
+	float Width()
+	float Height();
+	float Length();
+	Vector3  GetCenter();
+	void AddVector(const Vector3 &p);
+	void   AddBoudBox( const GLBoundBox &sBox );
+	void   SetLineBox( const Vector3 &vBegin, const Vector3 &vEnd, float fLineSize )
+	bool   IsContain( const GLBoundBox &sBox);
+	bool   IsContain( const GLBoundBox &sBox, float fStep );
+	bool   IsContain( const Vector3 &sPoint );
+	bool   IsContain( const Vector3 &sPoint, float fStep );
+	bool   GetIntersectPoint( Vector3 &vPickPoint, const Vector3 &vRayOrg, const Vector3 &vRayDir );
+	bool   IsIntersectRay( const Vector3 &vRayOrg, const Vector3 &vRayDir, float fLineMax ) const
+	void   Transform(const GLMatrix* pMat);
+
+	bool  GetIntersectPoint( Vector3 &vPickPt, const Vector3& v0, const Vector3& v1, const Vector3& v2 );
+	bool  IntersectTriangle( const Vector3& v0, const Vector3& v1, const Vector3& v2, float* t, float* u, float* v );
+};

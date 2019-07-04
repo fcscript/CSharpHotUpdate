@@ -1,0 +1,13 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+    $(curpath)007-typedef\
+</IncludePath>
+<IncludeFile>
+</IncludeFile>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>

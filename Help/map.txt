@@ -1,0 +1,83 @@
+﻿
+   声明：
+   map<int, StringA>   aID2Name = new map<int, StringA>();
+   
+   说明：
+       如果_TyKey为自定义的class, 需要实现 GetHashCode与Equals函数
+       例
+       class map_key
+       {
+           int  m_nID;
+           uint  GetHashCode()
+           {
+               return m_nID; // 返回一个hash值
+           }
+           bool Equals(map_key other)
+           {
+               return m_nID == other.m_nID;
+           }
+       };
+   
+   templalte <class _TyKey, class _TyValue>   // _TyKey与_TyValue 不支持list与 map的嵌套, 仅支持基础数据类型与自定义的class
+   class  map
+   {
+       // 取map的节点数量
+       public int  Length;
+       public int  Length();
+       // 功能：下标引用, 如果节点不存在，就插入一个节点
+       public _TyValue &operator[](_TyKey key);
+       // 功能：从后面有序插入
+       // 说明：如果已经存在key, 就更新变量
+       //       如果key节点不存在，就从末尾追加, 你可以将map理解成一个list
+       public void push_back(_TyKey key, _TyValue  value);
+       // 功能：从前面有序插入
+       // 说明：如果已经存在key, 就更新变量
+       //       如果key节点不存在，就从前端插入, 你可以将map理解成一个list
+       public void push_front(_TyKey key, _TyValue  value);
+       // 功能：从指定位置后面插入
+       public void insert_back(_TyKey where, _TyKey key, _TyValue  value);
+       // 功能：从指定位置前面插入
+       public void insert_front(_TyKey where, _TyKey key, _TyValue  value);
+       // 功能：删除指定的节点
+       public void remove(_TyKey key);
+       // 功能：删除所有的节点
+       public void RemoveAll();
+       // 功能：返回首节点
+       public iterator  begin();
+       // 功能：查找指定KEY值的节点
+       public iterator  find(_TyKey key);
+       // 功能：测试是不是存在指定Key值的节点
+       public bool  ContainKey(_TyKey key);
+       // 功能：预分配hash数组，用于性能优化
+       // 说明：如果你大致知道总的节点的数量，预先设置一下总的节点数量，有利于优化插入的性能
+       public void  Reserve(int nSize);
+       // 功能：插入完成的优化
+       // 参数：nMaxSize - hash数组的最大长度（内存限制，以免优化后内存大副增加)
+       // 说明：调用这个接口可以优化hash数组，减少冲突，提升查询性能，对于节点数量巨大且查询非常频繁的map来说，是很有效的
+       public void  Optimize(int nMaxSize);
+   };
+   
+   // hash_map专用迭代器
+   class  iterator
+   {
+       public void operator ++(); // 自增
+       // 功能：测试迭代器是不是有效
+       public bool IsValid();
+       // 功能：测试迭代器是不是有效
+       // 说明：直接将对象作bool变量测试, 如果为true表示有效, 为false表示无效
+       pulbic operator bool();
+       // 功能：返回迭代器指向的节点的key
+       public _TyKey key;
+       // 功能：返回迭代器指向的节点的value
+       public _TyValue value;
+   };
+   // 说明：iterator是安全的，相对于C#或C++的std::map来说，可以在循环体中删除map的节点而不影响迭代器遍历操作，是不是很方便啊，哈哈
+   例:
+     for(iterator it = map.begin(); it; ++it)
+     {
+         if(it.key == 5)
+         {
+            map.remove(it.key);  // 这样删除不影响遍历，也不会崩溃
+            map.remove(12); // 这样删除也不会影响遍历，也不会崩溃
+         }
+     }

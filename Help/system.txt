@@ -1,0 +1,40 @@
+﻿   class System
+   {
+       // 功能：返回当前系统时钟，单位是微秒(1000微秒 = 1毫秒)
+       public static int64 clock();
+       // 功能：返回当前系统时钟，单位是毫秒(1000毫秒 = 1秒)
+       public static int64 GetTickCount();
+       // 功能：设置随机函数的初始种子,相当于C函数的srand
+       public static void srand(uint nRandSeed);
+       // 功能：随机一个整数, 区间[nMin, nMax)
+       public static int  RandInt(int nMin, int nMax);
+       // 功能：随机一个浮点数,区间[fMin, fMax)
+       public static float RandFloat(float fMin, float fMax);
+       // 功能：随机一个双精浮点数,区间[min, max)
+       public static double RandDouble(double min, double max);   
+       // 功能：取utc时间
+       public static int64 time();   
+       // 功能：取时间描述的字符串，如 xxxx-xx-xx xx:xx:xx
+       // 说明：将当前utc时间转换成字符串，格式如：xxxx-xx-xx xx:xx:xx
+       public static StringA time_desc();
+       // 功能：将当前时间的六个分量拷贝到一个INT数组
+       //       a[0] = year; a[1] = month; a[2] = day; a[3] = hour; a[4] = minute; a[5] = second;
+       public static void TimeToArray(list<int> array);
+       // 功能：返回class实例ins的引用计数,调试用的接口
+       pulbic static int  GetRef(ins);
+       // 功能：返回class实例ins的弱引用计数,调试用的接口
+       pulbic static int  GetWeakRef(ins);
+       // 功能：开方
+       pulbic static float sqrt(float fValue);
+       pulbic static float sin(float fValue);
+       pulbic static float cos(float fValue);
+       pulbic static float tan(float fValue);
+       pulbic static float atan(float fValue);
+       pulbic static float asin(float fValue);
+       pulbic static float acos(float fValue);
+       
+       public bool ReadXml(_Ty pXmlRoot, const StringA &szRootName, const StringA &szFileData);
+       pulbic bool WriteXml(_Ty pXmlRoot,const StringA &szRootName, StringA &szFileData);
+       public bool ReadBin( _Ty pXmlRoot, const StringA &szFileData);
+       public bool XmlToBin(_Ty pXmlRoot, StringA &szFileData);
+   };

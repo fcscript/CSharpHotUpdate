@@ -1,0 +1,221 @@
+﻿<a href="index.html">返回主页</a>
+<h2>基础数据类型</h2>
+<p>支持所有C基础数据类型</p>
+<p>char, bool, byte, short, ushort, wchar, int, uint, float, int64, uint64, double</p>
+<p>支持所有C操作符</p>
+<p>++, --, +, -, *, /, %, ?, (), =, +=, -=, *=, /=, >>, <<, >>=, <<=, >, <, ==, >=, <=, &&, ||, &, |, ^, !, ~, ->, . , </p>
+<p>对于int数据类型，操作符运算有额外的优化，运算效率最高，建议尽量使用int数据类型</p>
+<h2>字符串类</h2>
+<p>StringA    utf8编码的字符串</p>
+<p>StringW    utf16编码的字符串</p>
+<p>StringA 与 StringW 可以相互赋值</p>
+<p></p>
+<a href="string.txt">字符串头文件</a>
+<h2>数组模板类</h2>
+<p>数组不分动态与固定，都是动态数据，不管是new出来的, 都是数组对象，都可以调用数组的接口方法</p>
+<p>初始化方法一</p>
+<p>char []array = new char[100];</p>
+<p>初始化方法以二</p>
+<p>List &#60;char&#62;  array = new List &#60;char&#62;();</p>
+<p>初始化方法三</p>
+<p>int []array = {1, 2, 3, 5, 8, 9};</p>
+<p>数组的显式释放</p>
+<p>array = NULL;</p>
+<a href="array.txt">数组头文件</a>
+<p>List不支持List或map的嵌套</p>
+<h2>map, 模板类</h2>
+<p>map  &#60key, value&#62</p>
+<a href="map.txt">map模板头文件</a>
+<p>map不支持List或map的嵌套</p>
+<p>list, map为什么不支持嵌套，主要是为了性能，也是为了简化VM的代码</p>
+<h2>系统函数接口</h2>
+<a href="system.txt">系统函数头文件</a>
+<h2>序列化流</h2>
+<a href="serialize.txt">序列化头文件</a>
+<h2>if</h2>
+<p>语法与C, C++, C#语法完全一致</p>
+<p>if(exp){}</p>
+<p>if(exp1) exp2;</p>
+<p>if(exp1) ...</p>
+<p>else if(exp2) ...</p>
+<p>else ...</p>
+<p>例：</p>
+<p>if(n1 + 3 < n2) n1 += 5;</p>
+<p>if((n1 + 3 < n2) && (n2 > 8)) { n1 += 5; n2 += 3;}</p>
+<p>if(n1 > 50) n2 = 1;</p>
+<p>else if(n1 > 40) n2 = 2;</p>
+<p>else n2 = 3;</p>
+<h2>for</h2>
+<p>语法与C, C++, C#语法完全一致</p>
+<p>for( ;exp; ) exp2;</p>
+<h2>while</h2>
+<p>语法与C, C++, C#语法完全一致</p>
+<p>while(exp){...}</p>
+<h2>do while</h2>
+<p>语法与C, C++, C#语法完全一致</p>
+<p>do{exp}while(exp2);</p>
+<h2>switch</h2>
+<p>支持整数，UTF8字符串，区段;</p>
+<p>整数的switch, 与C, C++, C#语法一致;</p>
+<p>字符串的switch, 与C#语法一致;</p>
+<p>区段switch是这里自创的，语法示例如下：</p>
+<p>switch(n1)</p>
+<p>{</p>
+<p>&ensp;&ensp;&ensp;&ensp;case [0, 100):  // 如果 n1 >= 0 && n1 < 100</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 1;</p>
+<p>&ensp;&ensp;&ensp;&ensp;case [150, 200): // 如果 n1 >= 150 && n1 < 200</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 2;</p>
+<p>&ensp;&ensp;&ensp;&ensp;case [350, 400): // 如果 n1 >= 350 && n1 < 400</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 3;</p>
+<p>&ensp;&ensp;&ensp;&ensp;default:</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;break;</p>
+<p>}</p>
+<h2>return</h2>
+<p>语法与C, C++, C#语法完全一致, 可以返回基础数据类型，自定义数据类型(class), 数组, map对象</p>
+<h2>this指针</h2>
+<p>例:  this.m_value = 1;  或  this->m_value = 1;</p>
+<p>this.func(...);    或  this->func(...);</p>
+<p>做参数传递, 如：func(this, p1);</p>
+<h2>class</h2>
+<p>支持，语法与C++, C#语法完全一致</p>
+<p>特性：</p>
+<p>单继承与多继承            -- 支持</p>
+<p>虚函数（多态）            -- 不支持</p>
+<p>运行时转换                -- 不支持</p>
+<p>权限控制(public,private)  -- 可支持, 目前暂不支持</p>
+<p>属性方法(get,set)         -- 可支持, 目前暂不支持</p>
+<h2>Delegate 委托</h2>
+<p>支持</p>
+<p>Delegate</p>
+<p>{</p>
+<p>&ensp;&ensp;&ensp;&ensp;public Delegate(AnyType obj, funcname(param1, param2, param3...));  // func_name 是 AnyType的成员函数</p>
+<p>&ensp;&ensp;&ensp;&ensp;public Delegate(AnyType obj, funcname, param1, param2, param3...);  </p>
+<p>&ensp;&ensp;&ensp;&ensp;public void Call(); // 调用委托的方法</p>
+<p>&ensp;&ensp;&ensp;&ensp;public void SetParam(int nIndex, AnyType param); // 修改委托函数的第N个参数</p>
+<p>}</p>
+<p>创建方式</p>
+<p>Delegate  ptr = new Delegate(obj, func_name(param1, param2, param3, ...));  // 方式1</p>
+<p>Delegate  ptr = new Delegate(obj, func_name, param1, param2, param3, ...);  // 方式2</p>
+<p>ptr.Call(); // 启动委托函数的调用</p>
+<h2>反射</h2>
+<p>不支持严格意义上的反射，但支持Serialize类序列化一个类, 这个主要用于网络消息传输。</p>
+<p>说明：这个序列化不支持版本兼容，是一个二进之流的有序读写，所以不用这个来做持久化。</p>
+<p>当然了，你也可以自己负责版本兼容的代码。</p>
+<h2>XML读写</h2>
+<p>目前对XML的读取是比较友好的，只需要一行代码，就可以将XML读取对应的数据结构中。</p>
+<p>扩展了XML的功能，比C#都还要好用，真的，你用了就公喜欢它的。</p>
+<p>扩展特性：</p>
+<p>支持List的读写，支持自定义的class类型的List</p>
+<p>支持map的读写，支持自定义的class类型的map</p>
+<p>数组使用 value 关键字读取属性</p>
+<p>map使用 key, value 关键字读取key与value</p>
+<p>只需要在自定义的类成员变量前面添加[XmlElementAttribute]标签就可以了</p>
+<a href="xml.txt">XML代码与配置示例</a>
+<h2>inline</h2>
+<p>支持C++关键字inline, 标记inline的函数，调用时会内嵌到调用处，可以省去函数调用的开销，是优化的神器</p>
+<p>好处：减少函数调用开销，提升性能</p>
+<p>坏处：会增加代码长度，字节码变大</p>
+<p>当然了，如果函数很简单，增加的长度可以忽略不计。</p>
+<p>构造函数不支持 inline</p>
+<p>递归函数，调用深度超过6层，就执行普通调用，不再内联, 所以递归就不要使用inline了。</p>
+<h2>全局变量</h2>
+<p>在类外声明的，目前都是全局变量，支持跨文件访问。</p>
+<p>不需要static声明。</p>
+<h2>typedef</h2>
+<p>与C, C++语法一致, 但比C++灵活。为什么？因为可以不分顺序，可以乱序啊。</p>
+<p>示例：</p>
+<p>typedef  int64  long</p>
+<p>typedef map&#60;int, CStringA&#62;   ID2Name;</p>
+<p>typedef StringA   CStringA; // CStringA 这个在ID2Name后声明</p>
+<p>typedef map&#60;int, ID2Name&#62;   IDArray; // 这个是错误的声明，因为目前map的key, value不支持模板</p>
+<p>class A{ ID2Name id2Name;};</p>
+<p>typedef map&#60;int, A&#62;   IDArray;// 这个是合法的</p>
+<h2>enum 枚举</h2>
+<p>支持全局的 enum 与类内 enum, enum 的语法与C#一致</p>
+<p>示例：</p>
+<p>enum NUMB_VALUE{ NUMB1 = 1, NUMB2, NUMB3 = NUMB1 + 10, NUMB4};</p>
+<p>int  n1 = NUMB_VALUE.NUMB1;</p>
+<p>class CTest</p>
+<p>{</p>
+<p>enum { NUMB1, NUMB2, NUMB3 };</p>
+<p>};</p>
+<h2>const 常量</h2>
+<p>const 常量可以是类外声明，也可以是类内声明</p>
+<p>支持const常量，支持 const常量的运算, const常量的引用不分顺序，可以是乱序的</p>
+<p>class CTest</p>
+<p>{</p>
+<p>const int  NUMB_MAX = NUMB1;</p>
+<p>};</p>
+<p>const int NUMB1 = NUMB2 + 10;</p>
+<p>const int NUMB2 = NUMB3 + 10;</p>
+<p>const int NUMB3 = 100;</p>
+<p>const StringA  TEST_STR1 = TEST_STR2 + "ABC";   // 编译时合并成一个字符串 "CC_ABC"  </p>
+<p>const StringA  TEST_STR2 = "CC_";</p>
+<p>const 字段会有额外的编译优化，请尽量使用</p>
+<h2>static_cast 强制转换</h2>
+<p>仅C基础数据类型支持强转, 大部分情况并不需要强制转换, 因为数据类型都是自动转换的</p>
+<p>int64  i = 999999999999;</p>
+<p>int  k = (int)i + 10;    // 等价于 int k = i + 10;</p>
+<p>StringA  str = (StringA)i + "__test";  // 等价于  str = i + "__test";</p>
+<p>尽量不要强制转换，这有可能会导致额外的指令, 从而降低性能</p>
+<p>注意：强制转换使用(), 并不是staic_cast</p>
+<h2>图形对象的扩展</h2>
+<p>支持以下图形对象</p>
+<p>Vector2, Vector3, Vector4, Plane, Matrix, BoundBox, Ray, FrustumBox, Sphere, IntRect, Rect, Color, Color32, Bezier2D, Bezier3D</p>
+<a href="graphic.txt">接口文档</a>
+<h2>IEnumerator 协程</h2>
+<p>class  IEnumerator  // 这个类似于Delegate</p>
+<p>{</p>
+<p>&ensp;&ensp;&ensp;&ensp;// 功能：启动协程</p>
+<p>&ensp;&ensp;&ensp;&ensp;public void Start();</p>
+<p>&ensp;&ensp;&ensp;&ensp;// 功能：停止协程;</p>
+<p>&ensp;&ensp;&ensp;&ensp;public void Stop();</p>
+<p>&ensp;&ensp;&ensp;&ensp;// 功能：唤醒wait的协程</p>
+<p>&ensp;&ensp;&ensp;&ensp;public void Wakeup();</p>
+<p>};</p>
+<p>协程对象是IEnumerator, 基本功能与API与c#基本一样</p>
+<p>协程启动接口StartCoroutine</p>
+<p>IEnumerator  StartCoroutine(obj, 函数名称(参数1, 参数2, 参数3, ..., 参数N));</p>
+<p>启动一个协程方式1:</p>
+<p>IEnumerator  coroutine = new IEnumerator(target, 函数名称(参数1, 参数2, 参数3, ..., 参数N));</p>
+<p>coroutine.Start();</p>
+<p>启动一个协程方式2:</p>
+<p>IEnumerator  coroutine = StartCoroutine(target, 函数名称(参数1, 参数2, 参数3, ..., 参数N));</p>
+<p>停止一个协程:</p>
+<p>方法1：通过IEnumerator参数停止</p>
+<p>StopCoroutine(coroutine);</p>
+<p>方法2：通过成员函数名字停止</p>
+<p>&#32;&#32;&#32;&#32;如果当前函数不是类的成员函数，就按全局函数名搜索</p>
+<p>StopCoroutine(函数名);</p>
+<p>方法3：通过类名 + 函数名的方式</p>
+<p>&#32;&#32;&#32;&#32;如果指定类名，不存在，就默认是全局函数</p>
+<p>StopCoroutine(类名, 类成员函数名);</p>
+<p>停止所有的协程</p>
+<p>StopAllCoroutine(); </p>
+<h2>跨平台交互</h2>
+<p>其他平台需要调用脚本的接口，需要先将脚本内的类名或函数名添加export标记</p>
+<p>例：</p>
+<p>export  void  main()</p>
+<p>{</p>
+<p>}</p>
+<p>export  class TestA</p>
+<p>{</p>
+<p>&ensp;&ensp;&ensp;&ensp;export void  Func()</p>
+<p>&ensp;&ensp;&ensp;&ensp;{</p>
+<p>&ensp;&ensp;&ensp;&ensp;}</p>
+<p>&ensp;&ensp;&ensp;&ensp;void  HideFunc()  // 这个没有export导出，不可以在其他平台调用</p>
+<p>&ensp;&ensp;&ensp;&ensp;{</p>
+<p>&ensp;&ensp;&ensp;&ensp;}</p>
+<p>}</p>
+<p>详细调用参考Demo </p>
+<h2>调试</h2>
+<p>调试功能正在开发中，敬请期待 </p>
+<p>将要实现的功能有： </p>
+<p>(1), 远程调试（可以调试真机代码） </p>
+<p>(2), 支持单步调试 </p>
+<p>(3), 支持条件断点 </p>
+<p>(4), 支持运行时修改变量，内存数据 </p>
+<p>(5), 支持断住后，代码跳转的功能，可以在当前函数内任意位置跳转，像VC++调试器一样 </p>
+<p>(6), 可以运行时切换调试与非调试的功能，优化性能。 </p>
+<p>(7), 支持局部变量，全局变量，this成员变量的控制台显示与修改  </p>
+<a href="index.html">返回主页</a>

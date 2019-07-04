@@ -1,0 +1,31 @@
+﻿
+    代码：
+    class TestConnfigure
+    {
+        [XmlElementAttribute("NAME_ID")]
+        list<int>    NameID;
+        [XmlElementAttribute("NAME_MAP")]
+        map<int, StringA>   IDToName;
+    };
+
+    XML内容：
+
+    <root>
+       <NAME_ID value="1"><NAME_ID/>
+       <NAME_ID value="2"><NAME_ID/>
+       <NAME_ID value="3"><NAME_ID/>
+       <NAME_ID value="4"><NAME_ID/>
+       <NAME_ID value="5"><NAME_ID/>
+       <NAME_MAP key="1" value="name1"><NAME_MAP/>
+       <NAME_MAP key="2" value="name2"><NAME_MAP/>
+       <NAME_MAP key="3" value="name3"><NAME_MAP/>
+       <NAME_MAP key="4" value="name4"><NAME_MAP/>
+       <NAME_MAP key="5" value="name5"><NAME_MAP/>
+    </root>
+
+    读取的代码如下：
+    StringA   szFileData;
+    // 将文件读取一个字符串中, 这个是外部注册的读取文件的接口，也可以是其他的名字
+    ReadFile("config.xml", szFileData);
+    TestConnfigure  pCfg = new TestConnfigure();
+    System.ReadXml(pCfg, szFileData); // 读取完成
