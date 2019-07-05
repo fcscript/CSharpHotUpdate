@@ -10,7 +10,7 @@
 <p>StringW    utf16编码的字符串</p>
 <p>StringA 与 StringW 可以相互赋值</p>
 <p></p>
-<a href="string.txt">字符串头文件</a>
+<a href="string.txt">字符类接口</a>
 <h2>数组模板类</h2>
 <p>数组不分动态与固定，都是动态数据，不管是new出来的, 都是数组对象，都可以调用数组的接口方法</p>
 <p>初始化方法一</p>
@@ -21,17 +21,17 @@
 <p>int []array = {1, 2, 3, 5, 8, 9};</p>
 <p>数组的显式释放</p>
 <p>array = NULL;</p>
-<a href="array.txt">数组头文件</a>
+<a href="array.txt">List模板类接口</a>
 <p>List不支持List或map的嵌套</p>
 <h2>map, 模板类</h2>
 <p>map  &#60key, value&#62</p>
-<a href="map.txt">map模板头文件</a>
+<a href="map.txt">map模板类接口</a>
 <p>map不支持List或map的嵌套</p>
 <p>list, map为什么不支持嵌套，主要是为了性能，也是为了简化VM的代码</p>
 <h2>系统函数接口</h2>
-<a href="system.txt">系统函数头文件</a>
+<a href="system.txt">系统函数接口</a>
 <h2>序列化流</h2>
-<a href="serialize.txt">序列化头文件</a>
+<a href="serialize.txt">序列化接口</a>
 <h2>if</h2>
 <p>语法与C, C++, C#语法完全一致</p>
 <p>if(exp){}</p>
@@ -58,6 +58,17 @@
 <p>支持整数，UTF8字符串，区段;</p>
 <p>整数的switch, 与C, C++, C#语法一致;</p>
 <p>字符串的switch, 与C#语法一致;</p>
+<p>switch(str)</p>
+<p>{</p>
+<p>&ensp;&ensp;&ensp;&ensp;case "a1":</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 1;</p>
+<p>&ensp;&ensp;&ensp;&ensp;case "a2":</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 2;</p>
+<p>&ensp;&ensp;&ensp;&ensp;case "a3":</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;return 3;</p>
+<p>&ensp;&ensp;&ensp;&ensp;default:</p>
+<p>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;break;</p>
+<p>}</p>
 <p>区段switch是这里自创的，语法示例如下：</p>
 <p>switch(n1)</p>
 <p>{</p>

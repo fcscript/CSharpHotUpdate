@@ -28,4 +28,4 @@
     // 将文件读取一个字符串中, 这个是外部注册的读取文件的接口，也可以是其他的名字
     ReadFile("config.xml", szFileData);
     TestConnfigure  pCfg = new TestConnfigure();
-    System.ReadXml(pCfg, szFileData); // 读取完成
+    System.ReadXml(pCfg,"root", szFileData); // 读取完成
