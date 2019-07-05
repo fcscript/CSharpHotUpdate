@@ -18,8 +18,10 @@
          public void  resize(int nSize);
          // 功能：预分配
          public void  reserve(int nSize);
+
          // 功能：反序
          public void  Inserve();
+
          // 功能：插入一个节点
          public void  Insert(int nIndex, _Ty value);
          // 功能：移除值相等的节点
@@ -34,9 +36,16 @@
          public void  push_back(_Ty value);
          // 功能：数组连接（添加一个数组）
          public void  push_back(list &other);
-         
+
+         // 功能：冒泡排序
+         public void  BubbleSort();         
+
          // 功能：默认的排序(升序)
+         // 说明：这个是混合排序法，用到快排，堆排，插入排序，自适应
          public void  Sort();         
+
+         // 功能：使用自定义的函数排序
+         public void  Sort(func_anme);
         
          // 功能：指定排序实例与排序函数
          // 参数：pIns - 自定义类实例

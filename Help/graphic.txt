@@ -173,3 +173,6 @@ struct BundBox
 	bool  GetIntersectPoint( Vector3 &vPickPt, const Vector3& v0, const Vector3& v1, const Vector3& v2 );
 	bool  IntersectTriangle( const Vector3& v0, const Vector3& v1, const Vector3& v2, float* t, float* u, float* v );
 };
+
+  FrustumBox, Sphere, IntRect, Rect, Color, Color32, Bezier2D, Bezier3D
+  这些对象目前暂时没有实现，需要的话，可以加上
