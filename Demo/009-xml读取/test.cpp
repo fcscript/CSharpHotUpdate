@@ -50,7 +50,7 @@ void   PrintSkillXml()
 
 StringA   GetSkillPathName()
 {
-	StringA   szXmlPath = GetWorkPath() + "Skill_SL.xml";
+	StringA   szXmlPath = GetWorkPath() + "xml_data\\Skill_SL.xml";
 	return szXmlPath;
 }
 

@@ -70,155 +70,185 @@ public class FCDll
     }
 
     // 功能：调用FC脚本时，传递参数
-    public static void PushCallParam(bool v)
+    public static void PushReturnParam(bool v)
     {
         FCLibHelper.fc_push_bool(v);
     }
-    public static void PushCallParam(byte v)
+    public static void PushReturnParam(byte v)
     {
         FCLibHelper.fc_push_byte(v);
     }
-    public static void PushCallParam(char v)
+    public static void PushReturnParam(char v)
     {
         FCLibHelper.fc_push_char(v);
     }
-    public static void PushCallParam(short v)
+    public static void PushReturnParam(short v)
     {
         FCLibHelper.fc_push_short(v);
     }
-    public static void PushCallParam(ushort v)
+    public static void PushReturnParam(ushort v)
     {
         FCLibHelper.fc_push_ushort(v);
     }
-    public static void PushCallParam(int v)
+    public static void PushReturnParam(int v)
     {
         FCLibHelper.fc_push_int(v);
     }
-    public static void PushCallParam(uint v)
+    public static void PushReturnParam(uint v)
     {
         FCLibHelper.fc_push_uint(v);
     }
-    public static void PushCallParam(float v)
+    public static void PushReturnParam(float v)
     {
         FCLibHelper.fc_push_float(v);
     }
-    public static void PushCallParam(double v)
+    public static void PushReturnParam(double v)
     {
         FCLibHelper.fc_push_double(v);
     }
-    public static void PushCallParam(long v)
+    public static void PushReturnParam(long v)
     {
         FCLibHelper.fc_push_int64(v);
     }
-    public static void PushCallParam(ulong v)
+    public static void PushReturnParam(ulong v)
     {
         FCLibHelper.fc_push_uint64(v);
     }
-    public static void PushCallParam(IntPtr v)
+    public static void PushReturnParam(IntPtr v)
     {
         FCLibHelper.fc_push_intptr(v.ToInt64());
     }
-    public static void PushCallParam(string v)
+    public static void PushReturnParam(string v)
     {
         FCLibHelper.fc_push_string_a(v);
     }
-    public static void PushCallParam(byte []v)
+    public static void PushReturnParam(byte []v)
     {
         if (v != null)
             FCLibHelper.fc_push_byte_array(v, 0, v.Length);
         else
             FCLibHelper.fc_push_byte_array(v, 0, 0);
     }
-    public static void PushCallParam(byte[] v, int nStart, int nLen)
+    public static void PushReturnParam(byte[] v, int nStart, int nLen)
     {
         if (v != null && nStart > 0 && nStart + nLen < v.Length)
             FCLibHelper.fc_push_byte_array(v, nStart, nLen);
         else
             FCLibHelper.fc_push_byte_array(v, 0, 0);
     }
-    public static void PushCallParam(Vector2 v)
+    public static void PushReturnParam(ref Vector2 v)
     {
         FCLibHelper.fc_push_vector2(ref v);
     }
-    public static void PushCallParam(Vector3 v)
+    public static void PushReturnParam(ref Vector3 v)
     {
         FCLibHelper.fc_push_vector3(ref v);
     }
-    public static void PushCallParam(Vector4 v)
+    public static void PushReturnParam(ref Vector4 v)
     {
         FCLibHelper.fc_push_vector4(ref v);
     }
-
-    //----------------------------------------------------------------------------
-
-    // 功能：调用FC脚本时，传递参数
-    public static void GetCallParam(ref bool v)
+    public static void PushReturnParam(ref Plane v)
+    {
+        FCLibHelper.fc_push_plane(ref v);
+    }
+    public static void PushReturnParam(ref Matrix4x4 v)
+    {
+        FCLibHelper.fc_push_matrix(ref v);
+    }
+    public static void PushReturnParam(ref Bounds v)
+    {
+        FCLibHelper.fc_push_bounds(ref v);
+    }
+    public static void PushReturnParam(ref Ray v)
+    {
+        FCLibHelper.fc_push_ray(ref v);
+    }
+    public static void PushReturnParam(Color32 v)
+    {
+        FCLibHelper.fc_push_color32(ref v);
+    }
+    public static void PushReturnParam(ref Color v)
+    {
+        FCLibHelper.fc_push_color(ref v);
+    }
+    public static void PushReturnParam(ref IntRect v)
+    {
+        FCLibHelper.fc_push_intrect(ref v);
+    }
+    public static void PushReturnParam(ref Rect v)
+    {
+        FCLibHelper.fc_push_rect(ref v);
+    }
+    public static void PushReturnParam(Sphere v)
+    {
+        FCLibHelper.fc_push_sphere(ref v);
+    }
+    
+    // 功能：调用FC脚本时，传递返回值参数
+    public static void GetReturnParam(ref bool v)
     {
         v = FCLibHelper.fc_get_return_bool();
     }
-    public static void GetCallParam(ref byte v)
+    public static void GetReturnParam(ref byte v)
     {
         v = FCLibHelper.fc_get_return_byte();
     }
-    public static void GetCallParam(ref char v)
+    public static void GetReturnParam(ref char v)
     {
         v = FCLibHelper.fc_get_return_char();
     }
-    public static void GetCallParam(ref short v)
+    public static void GetReturnParam(ref short v)
     {
         v = FCLibHelper.fc_get_return_short();
     }
-    public static void GetCallParam(ref ushort v)
+    public static void GetReturnParam(ref ushort v)
     {
         v = FCLibHelper.fc_get_return_ushort();
     }
-    public static void GetCallParam(ref int v)
+    public static void GetReturnParam(ref int v)
     {
         v = FCLibHelper.fc_get_return_int();
     }
-    public static void GetCallParam(ref uint v)
+    public static void GetReturnParam(ref uint v)
     {
         v = FCLibHelper.fc_get_return_uint();
     }
-    public static void GetCallParam(ref float v)
+    public static void GetReturnParam(ref float v)
     {
         v = FCLibHelper.fc_get_return_float();
     }
-    public static void GetCallParam(ref double v)
+    public static void GetReturnParam(ref double v)
     {
         v = FCLibHelper.fc_get_return_double();
     }
-    public static void GetCallParam(ref long v)
+    public static void GetReturnParam(ref long v)
     {
         v = FCLibHelper.fc_get_return_int64();
     }
-    public static void GetCallParam(ref ulong v)
+    public static void GetReturnParam(ref ulong v)
     {
         v = FCLibHelper.fc_get_return_uint64();
     }
-    public static void GetCallParam(ref IntPtr v)
-    {
-        v = new IntPtr(FCLibHelper.fc_get_return_intptr());
-    }
-    public static void GetCallParam(ref string v)
+    public static void GetReturnParam(ref string v)
     {
         v = FCLibHelper.fc_get_return_string_a();
     }
-    //public static void GetCallParam(ref byte[] v)
+    //public static void GetReturnParam(ref byte[] v)
     //{
     //    FCLibHelper.fc_get_return_string_a();
     //}
-    public static void GetCallParam(ref Vector2 v)
+    public static void GetReturnParam(ref Vector2 v)
     {
-        v = FCLibHelper.fc_get_return_vector2();
+        FCLibHelper.fc_get_return_vector2(ref v);
     }
-    public static void GetCallParam(ref Vector3 v)
+    public static void GetReturnParam(ref Vector3 v)
     {
-        v = FCLibHelper.fc_get_return_vector3();
+        FCLibHelper.fc_get_return_vector3(ref v);
     }
-    public static void GetCallParam(ref Vector4 v)
+    public static void GetReturnParam(ref Vector4 v)
     {
-        v = FCLibHelper.fc_get_return_vector4();
+        FCLibHelper.fc_get_return_vector4(ref v);
     }
     //------------------------------------------------------------------------
 
@@ -234,10 +264,12 @@ public class FCDll
 
             byte[] fileData = System.IO.File.ReadAllBytes(pcsPathName);
 
-            if(fileData != null)
-                FCLibHelper.fc_set_byte_array(L, 1, fileData, 0, fileData.Length);
+            long ptr = FCLibHelper.fc_get_param_ptr(L, 1);
+
+            if (fileData != null)
+                FCLibHelper.fc_set_array_byte(ptr, fileData, 0, fileData.Length);
             else
-                FCLibHelper.fc_set_byte_array(L, 1, null, 0, 0);
+                FCLibHelper.fc_set_array_byte(ptr, null, 0, 0);
         }
         catch(Exception e)
         {
