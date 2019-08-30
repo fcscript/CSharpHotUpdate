@@ -34,10 +34,32 @@ public class FCClassWrap
     StringBuilder m_szTempBuilder;
 
     FCClassExport m_export;
+    FCTemplateWrap m_templateWrap;
 
     // 功能：
     public FCClassWrap()
     {
+    }
+
+    // 功能：删除指定目录下的所有文件
+    void  DeletePath(string szPath)
+    {
+        try
+        {
+            if (!Directory.Exists(szPath))
+                return;
+            string [] allFileNames = Directory.GetFiles(szPath, "*.*", SearchOption.AllDirectories);
+            if (allFileNames == null)
+                return;
+            foreach(string szFileName in allFileNames)
+            {
+                File.Delete(szFileName);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
     // 功能：开始导出
@@ -50,17 +72,22 @@ public class FCClassWrap
             m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "fcscript/";
         }
         m_szFCScriptPath = Application.dataPath;
-        m_szFCScriptPath = m_szFCScriptPath.Substring(0, m_szFCScriptPath.Length - 6) + "inport/";
+        m_szFCScriptPath = m_szFCScriptPath.Substring(0, m_szFCScriptPath.Length - 6) + "Script/inport/";
+        DeletePath(m_szExportPath);
+        DeletePath(m_szFCScriptPath);
         Directory.CreateDirectory(m_szExportPath);
         Directory.CreateDirectory(m_szFCScriptPath);
         // 清除该目录下的文件
         m_szTempBuilder = new StringBuilder(1024 * 1024 * 1);
         m_export = new FCClassExport();
+        m_templateWrap = new FCTemplateWrap();
+        m_templateWrap.BeginExport(m_szExportPath);
     }
 
     // 功能：结束所有的导出
     public void EndExport()
     {
+        m_templateWrap.EndExport(m_szTempBuilder);
         ExportWrapInit("AllClassWrap", m_AllWrapClassName);
     }
 
@@ -257,10 +284,28 @@ public class FCClassWrap
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
 
+            FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
+
             szLeftName = string.Format("arg{0}", i);
-            fileData.Append(FCValueType.SetMemberValue("            ", nParamType, szLeftName, "L", i.ToString(), true));
+            if (param.IsOut)
+            {
+                string szCSharpName = param_value.GetTypeName(true);
+                fileData.AppendFormat("            {0} {1};\r\n", szCSharpName, szLeftName);
+            }
+            else
+            {
+                fileData.Append(FCValueType.SetMemberValue("            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut));
+            }
             if (i > 0)
                 szCallParam += ',';
+            if(param.IsOut)
+            {
+                szCallParam += "out ";
+            }
+            else if (nParamType.IsByRef)
+            {
+                szCallParam += "ref ";
+            }
             szCallParam += szLeftName;
         }
         fileData.AppendFormat("            {0} obj = new {1}({2});\r\n", m_szCurClassName, m_szCurClassName, szCallParam);
@@ -392,7 +437,7 @@ public class FCClassWrap
     void PushFieldInfo(FieldInfo value)
     {
         // 生成get_value, set_value方法
-        PushPropertyFunc(value.FieldType, value.Name, true, true, false);        
+        PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
     }
     // 功能：添加get-set方法
     void PushPropertyInfo(PropertyInfo property)
@@ -429,9 +474,7 @@ public class FCClassWrap
         else
             func.m_szSetName = "null";
         
-        fc_value_type nFCType = fc_value_type.fc_value_unknow;
-        string szFCValueType = FCValueType.GetTypeDescEx(nVaueType, ref nFCType);
-        string szCSharpName = FCValueType.GetCSharpTypeName(nVaueType);
+        FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(nVaueType);
 
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
@@ -447,7 +490,7 @@ public class FCClassWrap
             fileData.AppendLine("        {");
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
-            fileData.AppendLine(FCValueType.PushReturnValue("            ", nVaueType, "L", szLeftName, true));
+            FCValueType.PushReturnValue(fileData, "            ", ret_value, "L", szLeftName, true);
             fileData.AppendLine("        }");
             fileData.AppendLine("        catch(Exception e)");
             fileData.AppendLine("        {");
@@ -466,7 +509,8 @@ public class FCClassWrap
             fileData.AppendLine("        {");
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
-            fileData.Append(FCValueType.SetMemberValue("            ", nVaueType, szLeftName, "L", "0", false));
+            fileData.Append(FCValueType.SetMemberValue("            ", ret_value, "arg0", "L", "0", true, false));
+            fileData.AppendFormat("            {0} = arg0;\r\n", szLeftName);
             fileData.AppendLine("        }");
             fileData.AppendLine("        catch(Exception e)");
             fileData.AppendLine("        {");
@@ -480,6 +524,21 @@ public class FCClassWrap
         m_CurClassFunc.Add(func);
     }
 
+    // 功能：检测函数是不是模板函数
+    bool IsTemplateFunc(MethodInfo method)
+    {
+        string szMethodName = method.ToString();
+        // xxx func[T, V](...);
+        int nIndex = szMethodName.IndexOf('(');
+        if (nIndex == -1)
+            return false;
+        if(nIndex > 0 && szMethodName[nIndex-1] == ']')
+        {
+            return true;
+        }
+        return false;
+    }
+    
     // 功能：添加函数调用的方法
     void PushMethodInfo(MethodInfo method)
     {
@@ -487,6 +546,14 @@ public class FCClassWrap
         {
             return;
         }
+        string szMethodName = method.ToString();
+        bool bTemplateFunc = IsTemplateFunc(method);
+        // 模板函数暂时不导出吧
+        if(bTemplateFunc)
+        {
+            return;
+        }
+        FCValueType  ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
 
         int nSameNameCount = 0;
         if(m_CurSameName.TryGetValue(method.Name, out nSameNameCount))
@@ -522,8 +589,6 @@ public class FCClassWrap
         fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
         // 处理函数参数
         Type nParamType;
-        fc_value_type nFCRetType = fc_value_type.fc_value_unknow;
-        FCValueType.GetTypeDescEx(nRetType, ref nFCRetType);
         string szLeftName = string.Empty;
         string szCallParam = string.Empty;
         string szLeftType = string.Empty;
@@ -534,31 +599,63 @@ public class FCClassWrap
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
             szLeftName = string.Format("arg{0}", i);
-            fileData.Append(FCValueType.SetMemberValue("            ", nParamType, szLeftName, "L", i.ToString(), true));
+            FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
+            if (param.IsOut)
+            {
+                string szCSharpName = param_value.GetTypeName(true);
+                fileData.AppendFormat("            {0} {1};\r\n", szCSharpName, szLeftName);
+            }
+            else
+            {
+                fileData.Append(FCValueType.SetMemberValue("            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut));
+            }
             if (i > 0)
                 szCallParam += ',';
+            if(param.IsOut)
+            {
+                szCallParam += "out ";
+            }
+            else if(nParamType.IsByRef)
+            {
+                szCallParam += "ref ";
+            }
             szCallParam += szLeftName;
-            szFullFuncName = szFullFuncName + '_' + FCValueType.GetTypeDesc(nParamType);
+            szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(true);
         }
         // 处理返回值
-        string szCShareRetName = FCValueType.GetCSharpTypeName(nRetType);
-        if(nFCRetType == fc_value_type.fc_value_void)
+        if (ret_value.m_nValueType == fc_value_type.fc_value_void)
         {
-            if(bStatic)
+            if (bStatic)
                 fileData.AppendFormat("            {0}.{1}({2});\r\n", m_szCurClassName, func.m_szName, szCallParam);
             else
                 fileData.AppendFormat("            obj.{0}({1});\r\n", func.m_szName, szCallParam);
         }
         else
         {
-            if(bStatic)
+            string szCShareRetName = ret_value.GetTypeName(true);
+            if (bStatic)
                 fileData.AppendFormat("            {0} ret = {1}.{2}({3});\r\n", szCShareRetName, m_szCurClassName, func.m_szName, szCallParam);
             else
                 fileData.AppendFormat("            {0} ret = obj.{1}({2});\r\n", szCShareRetName, func.m_szName, szCallParam);
-            // 将返回值
-            fileData.AppendLine(FCValueType.PushReturnValue("            ", nRetType, "L", "ret", false));
         }
 
+        // 处理输出参数
+        for (int i = 0; i < nParamCount; ++i)
+        {
+            ParameterInfo param = allParams[i];
+            nParamType = param.ParameterType;
+            szLeftName = string.Format("arg{0}", i);
+            if (param.IsOut || nParamType.IsByRef)
+            {
+                FCValueType value = PushOutParamWrap(nParamType);
+                fileData.Append(FCValueType.ModifyScriptCallParam("            ", value, szLeftName, "L", i.ToString(), true));
+            }
+        }
+        // 处理返回值
+        if (ret_value.m_nValueType != fc_value_type.fc_value_void)
+        {
+            FCValueType.PushReturnValue(fileData, "            ", ret_value, "L", "ret", false);
+        }
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
         fileData.AppendLine("        {");
@@ -573,5 +670,10 @@ public class FCClassWrap
         else
             func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         m_CurClassFunc.Add(func);        
+    }
+    // 添加回传的参数的wrap
+    FCValueType PushOutParamWrap(Type nType)
+    {
+        return m_templateWrap.PushOutTypeWrap(nType);
     }
 }

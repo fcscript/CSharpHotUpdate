@@ -27,6 +27,21 @@ class FCCustomParam
         rList.AddRange(buffer);
         return rList;
     }
+    public static List<string> GetList(ref List<string> rList, long L, int nIndex)
+    {
+        if (rList == null)
+            rList = new List<string>();
+        else
+            rList.Clear();
+        long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
+        int nArraySize = FCLibHelper.fc_get_array_size(ptr);
+        for (int i = 0; i < nArraySize; ++i)
+        {
+            long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+            rList.Add(FCLibHelper.fc_get_value_string_a(item_ptr));
+        }
+        return rList;
+    }
     public static List<byte> GetList(ref List<byte> rList, long L, int nIndex)
     {
         if (rList == null)

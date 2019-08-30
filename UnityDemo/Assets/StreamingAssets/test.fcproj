@@ -1,10 +1,14 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)Script\
+    $(curpath)Script\fccode\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
+<CSharpPath>
+    G:\xiayidao\Client\test_script_2017\Script\wrap\
+    G:\xiayidao\Client\test_script_2017\Script\inport\
+</CSharpPath>
 <ExcutePath>
 </ExcutePath>
 <ExcuteFile>

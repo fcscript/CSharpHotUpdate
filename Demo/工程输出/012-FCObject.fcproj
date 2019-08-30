@@ -1,0 +1,15 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+    $(curpath)012-FCObject\
+</IncludePath>
+<IncludeFile>
+</IncludeFile>
+<CSharpPath>
+</CSharpPath>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>

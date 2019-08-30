@@ -1,4 +1,4 @@
-﻿typedef  StringA  string;
+﻿//typedef  StringA  string; // 为了兼容C#, string默认表示StringA
 
 public class Skill_Configs
 {

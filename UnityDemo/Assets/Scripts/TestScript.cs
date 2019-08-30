@@ -1,13 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class TestExport
-{
+{    
     public enum ValueType
     {
         value_none,
@@ -15,20 +18,83 @@ public class TestExport
         value_float = 3,
     }
     int m_nType;
-
-    public int m_nValue;
-    public int value { get { return m_nValue; } set { m_nValue = value; } }
-    public TestExport this_ptr { get { return this; } }
-    //public void SetValue(int nValue)
+    public static TestCallback onPostRender; // 这个也于属性一样，有get, set
+    //public void SetList(List<int>  aNumb)
     //{
-    //    m_nValue = nValue;
     //}
-    public static bool is_valid { get { return true; } }
-    public void SetList(List<int>  aNumb)
+    // out 仅输出
+    public void GetIntArray(out List<int> pList)
     {
-
+        TestExport szName = GetChild<TestExport, int >("abc");
+        TestExport t2 = GetChild<TestExport, int>();
+        pList = null;
     }
+    // ref 输入也输出
+    public List<int> GetRefList(ref List<int> pList)
+    {
+        UnityEngine.Events.UnityAction  ac;
+        byte[] buffer = new byte[100];
+        return null;
+    }
+    public T  GetChild<T, V>(string szName)
+    {
+        return default(T); // 返回默认值
+    }
+    public T GetChild<T, V>()
+    {
+        return default(T);
+    }   
+    void  Test()
+    {
+        TestExport ret = this;
+        long v = FCGetObj.PushObj(TestExport.onPostRender);
+        FCDll.PushReturnParam(v);
+        //FCDll.PushReturnParam(ret.onPostRender);
+        List<int> arg0;
+        float f1;
+        //this.GetRefList(ref arg0);
+    }
+
+    public delegate void TestCallback(int nType);
 }
+
+class TestExport_Handle_Wrap
+{
+    void  TestFunc(long L)
+    {
+        long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
+        TestExport ret = get_obj(nThisPtr);
+        TestExport.TestCallback arg0 = FCGetObj.GetObj<TestExport.TestCallback>(FCLibHelper.fc_get_intptr(L, 0));
+        TestExport.onPostRender = arg0;
+    }
+
+    static TestExport get_obj(long nThisPtr)
+    {
+        return FCGetObj.GetObj<TestExport>(nThisPtr);
+    }
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int GetChild_T_V_string(long L)
+    {
+        // 这个是
+        try
+        {
+            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
+            TestExport obj = get_obj(nThisPtr);
+            int nTemplateParamCount = FCLibHelper.fc_get_template_param_count(L);
+            string T = FCLibHelper.fc_get_string_a(L, 0);
+            string V = FCLibHelper.fc_get_string_a(L, 1);
+
+            // 函数参数
+            string arg0 = FCLibHelper.fc_get_string_a(L, 2);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
+    }
+
+};
 
 class TestScript : MonoBehaviour
 {
@@ -86,34 +152,63 @@ class TestScript : MonoBehaviour
 #endif
         return url;
     }
+    public static string GetAssetStreamingPathName(string szFileName)
+    {
+        string szPathName = string.Format("{0}/{1}", Application.streamingAssetsPath, szFileName);
+        return szPathName;
+    }
+
+    public static bool LoadBinText(ref byte[] fileData, AssetBundle bunlde)
+    {
+        if (bunlde == null)
+            return false;
+        TextAsset text = bunlde.mainAsset as TextAsset;
+        if (text == null)
+        {
+            string[] Names = bunlde.GetAllAssetNames();
+            if (Names != null && Names.Length > 0)
+            {
+                text = bunlde.LoadAsset(Names[0], typeof(TextAsset)) as TextAsset;
+            }
+        }
+        if (text != null)
+        {
+            fileData = text.bytes;
+            bunlde.Unload(true);
+            return true;
+        }
+        bunlde.Unload(true);
+        return false;
+    }
+
+    bool  LoadByteCodeByFile()
+    {
+        string szPathName = "test.code";// GetAssetStreamingPathName("test.code");
+        print_error("开始加载, 路径：" + szPathName);
+        try
+        {
+            BetterStreamingAssets.Initialize();
+
+            byte[] fileData = BetterStreamingAssets.ReadAllBytes(szPathName);
+            if (fileData != null && fileData.Length > 0)
+            {
+                print_error("加载成功:" + szPathName + ", 字节大小：" + fileData.Length.ToString());
+                FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
+                return true;
+            }
+        }
+        catch(Exception e)
+        {
+            print_error(e.ToString());
+        }
+        print_error("加载失败:" + szPathName);
+        return false;
+    }
 
     IEnumerator   LoadByteCode()
     {
-        string url = GetAssetStreamingUrlForWWW("test.code");
-        WWW _www = new WWW(url);
-        yield return _www;
-        if(string.IsNullOrEmpty(_www.error))
-        {
-            byte []fileData = _www.bytes;
-            try
-            {
-                FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
-            }
-            catch(Exception e)
-            {
-                print_error(e.ToString());
-            }
-            print_error("test.code 加载成功：" + url);
-        }
-        else
-        {
-            print_error(_www.error);
-            print_error("test.code 加载失败:" + url);
-        }
-        print_error("本地目录：" + Application.dataPath);
-        _www.Dispose();
-        _www = null;
-        yield break;
+        if (LoadByteCodeByFile())
+            yield break;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back))]
@@ -154,6 +249,7 @@ class TestScript : MonoBehaviour
         {
             print_error(e.ToString());
         }
+        return;
 
         try
         {
@@ -293,6 +389,18 @@ class TestScript : MonoBehaviour
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试图形对象"))
         {
             TestGraphicCall();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "初始化DLL"))
+        {
+            if(!FCLibHelper.fc_is_init())
+                FCLibHelper.fc_init();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "释放DLL"))
+        {
+            if(FCLibHelper.fc_is_init())
+                FCLibHelper.fc_release();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;

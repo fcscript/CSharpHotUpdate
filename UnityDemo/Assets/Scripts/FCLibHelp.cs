@@ -87,7 +87,7 @@ class FCLibHelper
 #else
     const string FCDLL = "fclib_dll";
 #endif
-
+    
 
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_init();
@@ -140,6 +140,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_attrib(int nClassNameID, string pcsFuncName, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_class_attrib_ex(int nClassNameID, string pcsFuncName, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet, fc_call_back_inport_class_func pAddSet, fc_call_back_inport_class_func pSubSet);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_cast(int nClassNameID, fc_call_back_inport_class_func func);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_new(int nClassNameID, fc_call_back_inport_class_func func);
@@ -155,6 +157,8 @@ class FCLibHelper
     public static extern int fc_get_param_count(long L);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_param_ptr(long L, int i);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_get_template_param_count(long L);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_inport_obj_ptr(long L);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -529,4 +533,18 @@ class FCLibHelper
     public static extern long fc_get_map_push_value_ptr(long pMapPtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_map_push_key_value(long pMapPtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_inport_delegate_get_obj_ptr(long pDelegatePtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_class_name_id(long pDelegatePtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_func_name_id(long pDelegatePtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_class_name_len(long pDelegatePtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_class_name(long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_func_name_len(long pDelegatePtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_inport_delegate_get_func_name(long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
 }

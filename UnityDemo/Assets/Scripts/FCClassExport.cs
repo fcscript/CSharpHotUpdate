@@ -61,7 +61,8 @@ class FCClassExport
                 PushDelayType(nParamType);
                 if (i > 0)
                     szCallParam += ',';
-                szCallParam += FCValueType.GetTypeDesc(nParamType);
+                FCValueType value = FCTemplateWrap.Instance.TransType(nParamType);
+                szCallParam += value.GetTypeName(false);
                 szCallParam = szCallParam + " " + param.Name;
             }
         }
@@ -125,7 +126,8 @@ class FCClassExport
             szSetBody = " set; ";
         if (bStatic)
             szStatic = "static ";
-        string szValueType = FCValueType.GetTypeDesc(nVaueType);
+        FCValueType value = FCTemplateWrap.Instance.TransType(nVaueType);
+        string szValueType = value.GetTypeName(false);
         m_szTempBuilder.AppendFormat("    public {0}{1} {2} {{{3}{4}}}\r\n", szStatic, szValueType, szName, szGetBody, szSetBody);
     }
 
@@ -146,6 +148,10 @@ class FCClassExport
         {
             return;
         }
+        // 模板函数不导出了吧
+        //if (IsTemplateFunc(method))
+        //    return;
+
         bool bStatic = method.IsStatic;
         string szStatic = string.Empty;
         if (bStatic)
@@ -163,12 +169,40 @@ class FCClassExport
                 {
                     szCallParam += ',';
                 }
-                szCallParam += FCValueType.GetTypeDesc(nParamType);
+                FCValueType value = FCTemplateWrap.Instance.TransType(nParamType);
+                szCallParam += value.GetTypeName(false);
                 szCallParam += " ";
                 szCallParam += allParams[i].Name;
             }
         }
-        m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3});\r\n", szStatic, FCValueType.GetTypeDesc(method.ReturnType), method.Name, szCallParam);
+        FCValueType ret_value = FCTemplateWrap.Instance.TransType(method.ReturnType);
+        if(ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
+        {
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return null; }}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam);
+        }
+        else if(ret_value.m_nValueType == fc_value_type.fc_value_void)
+        {
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{}}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam);
+        }
+        else
+        {
+            string szRetCShaprName = ret_value.GetTypeName(true);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return default({4}); }}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam, szRetCShaprName);
+        }
+    }
+    // 功能：检测函数是不是模板函数
+    bool IsTemplateFunc(MethodInfo method)
+    {
+        string szMethodName = method.ToString();
+        // xxx func[T, V](...);
+        int nIndex = szMethodName.IndexOf('(');
+        if (nIndex == -1)
+            return false;
+        if (nIndex > 0 && szMethodName[nIndex - 1] == ']')
+        {
+            return true;
+        }
+        return false;
     }
     void PushDelayType(Type  nType)
     {

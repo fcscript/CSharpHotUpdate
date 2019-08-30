@@ -1,0 +1,20 @@
+    FCType  nType = typeof(CTestD);  // typeof(类名)
+
+    class  FCType 
+    {
+        public FCType &operator = (const FCType &other);
+        public StringA  ToString();
+        public bool     operator == (FCType other);
+        public bool     operator != (FCType other);
+    };
+
+    class FCObject
+    {
+        public static FCObject  Create(FCType nType);  // 通过类型实例化一个对象
+        public static FCObject  Create(StringA szName); // 通过类名实例化一个对象
+        public static bool  IsNull(FCObject obj); // 检测对象是不是空指针
+        public FCObject  operator=(T other);  // 重载赋值操作符，支持自定义class, 或外部平台导入的class
+        public bool  operator == (T other);
+        public bool  operator != (T other);
+        public T  operator()(T);   // 强制转换接口 (CTestD)obj;
+    };

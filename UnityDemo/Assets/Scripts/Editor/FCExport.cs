@@ -8,6 +8,60 @@ using UnityEditor;
 
 public static class FCExport
 {
+    [MenuItem("FCScript/导出脚本类", false, 5)]
+    static void ExportAll()
+    {
+        FCClassWrap pWrap = new FCClassWrap();
+        pWrap.BeginExport("");
+
+        WrapUnityClass(pWrap);
+        WrapCustomClass(pWrap);
+
+        pWrap.EndExport();
+    }
+    static void WrapUnityClass(FCClassWrap pWrap)
+    {
+        pWrap.BeginModleWrap("Unity");
+
+        //pWrap.WrapClass(typeof(UnityEngine.Transform));
+        //pWrap.WrapClass(typeof(UnityEngine.Texture2D));
+        //pWrap.WrapClass(typeof(UnityEngine.GameObject));
+        //pWrap.WrapClass(typeof(UnityEngine.Transform));
+        //pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
+
+        pWrap.EndModleWrap();
+    }
+    static void WrapCustomClass(FCClassWrap pWrap)
+    {
+        pWrap.BeginModleWrap("Custom");
+
+        pWrap.WrapClass(typeof(TestExport));
+
+        pWrap.EndModleWrap();
+    }
+
+    [MenuItem("FCScript/调试C#类型", false, 5)]
+    static void LookAll()
+    {
+        FCValueType v1 = new FCValueType(typeof(TestExport));
+        FCValueType v4 = new FCValueType(typeof(TestExport.TestCallback));
+        FCValueType v2 = new FCValueType(typeof(Vector2));
+        FCValueType v3 = new FCValueType(typeof(Texture2D));
+
+        List<int> aInt = new List<int>();
+        GetListIntPtr(aInt);
+        LookClass(typeof(TestExport));
+        LookClass(typeof(int[]));
+        LookClass(typeof(Texture2D));
+        LookClass(typeof(UnityEngine.GameObject));
+        LookClass(typeof(TextureFormat));
+        LookClass(typeof(Texture2D.EXRFlags));
+        LookClass(typeof(List<TestExport>));
+        LookClass(typeof(Dictionary<int, TestExport>));
+        LookClass(typeof(List<bool>));
+        LookClass(typeof(List<int>));
+    }
+
     static long GetListIntPtr(List<int> aInt)
     {
         int[] pBuffer = aInt.ToArray();
@@ -25,40 +79,6 @@ public static class FCExport
 
         return n2;
     }
-
-    [MenuItem("FCScript/导出脚本类", false, 5)]
-    static void ExportAll()
-    {
-        //ExportClass(typeof(UnityEngine.Camera));
-        List<int> aInt = new List<int>();
-        GetListIntPtr(aInt);
-        LookClass(typeof(TestExport));
-        LookClass(typeof(int[]));
-        LookClass(typeof(Texture2D));
-        LookClass(typeof(TextureFormat));
-        LookClass(typeof(Texture2D.EXRFlags));
-        LookClass(typeof(List<TestExport>));
-        LookClass(typeof(Dictionary<int, TestExport>));
-        LookClass(typeof(List<bool>));
-        LookClass(typeof(List<int>));
-        
-        FCClassWrap pWrap = new FCClassWrap();
-        pWrap.BeginExport("");
-
-        WrapCustomClass(pWrap);
-
-        pWrap.EndExport();
-    }
-    static void WrapCustomClass(FCClassWrap pWrap)
-    {
-        pWrap.BeginModleWrap("Custom");
-
-        pWrap.WrapClass(typeof(TestExport));
-        pWrap.WrapClass(typeof(UnityEngine.Texture2D));
-
-        pWrap.EndModleWrap();
-    }
-
 
     static void LookClass(Type  nClassType)
     {
