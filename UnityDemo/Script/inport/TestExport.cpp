@@ -14,7 +14,7 @@ class  TestExport
     public List<int> GetRefList(List<int> pList){ return null; }
     public T GetChild(StringA szName){ return default(T); }
     public T GetChild(){ return default(T); }
-    public bool Equals(Object obj){ return default(bool); }
+    public bool Equals(System.Object obj){ return default(bool); }
     public int GetHashCode(){ return default(int); }
     public Type GetType(){ return default(Type); }
     public StringA ToString(){ return default(string); }
