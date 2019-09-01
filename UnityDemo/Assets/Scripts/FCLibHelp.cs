@@ -13,12 +13,6 @@ public sealed class MonoPInvokeCallbackAttribute : Attribute
     }
 }
 
-struct GLPlane
-{
-    public Vector3 vNormal;
-    public float fDist;
-};
-
 public struct IntRect
 {
     public int left, top, right, bottom;
@@ -65,6 +59,10 @@ class FCLibHelper
         string szParam = System.Text.Encoding.UTF8.GetString(buff, 0, nLen);
         return szParam;
     }
+    public static void fc_set_value_string_a(long ptr, string v)
+    {
+        FCLibHelper.fc_set_value_string(ptr, v);
+    }
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -87,7 +85,7 @@ class FCLibHelper
 #else
     const string FCDLL = "fclib_dll";
 #endif
-    
+
 
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_init();
@@ -112,6 +110,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_relese_ins(long ptr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool fc_is_valid_ins(long ptr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_coroutine_udpate();
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_output_error_func(LPCustomPrintCallback pFunc);
@@ -131,6 +131,8 @@ class FCLibHelper
     public static extern void fc_test_box(ref Bounds box);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_test_ray(ref Ray ray);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_test_quaternion(ref Quaternion qua);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_func(string pcsFuncName, fc_call_back func);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -206,6 +208,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_bounds(long L, int i, ref Bounds v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_get_quaternion(long L, int i, ref Quaternion v);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_ray(long L, int i, ref Ray v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_color32(long L, int i, ref Color32 v);
@@ -219,42 +223,6 @@ class FCLibHelper
     public static extern void fc_get_sphere(long L, int i, ref Sphere v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_return_ptr(long L);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_bool(long L, bool v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_char(long L, char v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_long_char(long L, int v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_byte(long L, byte v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_short(long L, short v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_ushort(long L, ushort v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_int(long L, int v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_uint(long L, uint v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_float(long L, float v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_double(long L, double v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_int64(long L, long v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_uint64(long L, ulong v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_intptr(long L, long v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_string_a(long L, string v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_byte_array(long L, byte[] ptr, int nStart, int nLen);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_vector2(long L, ref Vector2 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_vector3(long L, ref Vector3 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_return_vector4(long L, ref Vector4 v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_clear_param();
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -301,6 +269,8 @@ class FCLibHelper
     public static extern void fc_push_matrix(ref Matrix4x4 v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_bounds(ref Bounds v);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_push_quaternion(ref Quaternion v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_ray(ref Ray v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -390,6 +360,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_bounds(long ptr, ref Bounds v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_set_value_quaternion(long ptr, ref Quaternion v);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_ray(long ptr, ref Ray v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_color32(long ptr, ref Color32 v);
@@ -441,6 +413,8 @@ class FCLibHelper
     public static extern void fc_get_value_matrix(long ptr, ref Matrix4x4 v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_value_bounds(long ptr, ref Bounds v);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_get_value_quaternion(long ptr, ref Quaternion v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_value_ray(long ptr, ref Ray v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]

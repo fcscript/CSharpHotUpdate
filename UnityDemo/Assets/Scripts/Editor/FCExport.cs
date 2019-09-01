@@ -16,6 +16,7 @@ public static class FCExport
 
         WrapUnityClass(pWrap);
         WrapCustomClass(pWrap);
+        WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
 
         pWrap.EndExport();
     }
@@ -23,11 +24,11 @@ public static class FCExport
     {
         pWrap.BeginModleWrap("Unity");
 
-        //pWrap.WrapClass(typeof(UnityEngine.Transform));
-        //pWrap.WrapClass(typeof(UnityEngine.Texture2D));
-        //pWrap.WrapClass(typeof(UnityEngine.GameObject));
-        //pWrap.WrapClass(typeof(UnityEngine.Transform));
-        //pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
+        pWrap.WrapClass(typeof(UnityEngine.Transform));
+        pWrap.WrapClass(typeof(UnityEngine.Texture2D));
+        pWrap.WrapClass(typeof(UnityEngine.GameObject));
+        pWrap.WrapClass(typeof(UnityEngine.Transform));
+        pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
 
         pWrap.EndModleWrap();
     }
@@ -40,9 +41,49 @@ public static class FCExport
         pWrap.EndModleWrap();
     }
 
+    // 功能：导出带有标签的类
+    static void WrapCustomAttribClass(FCClassWrap pWrap)
+    {
+        pWrap.BeginModleWrap("AutoClass");
+
+        Assembly assembly = Assembly.Load("Assembly-CSharp");
+        Type[] types = assembly.GetExportedTypes();
+        foreach (Type t in types)
+        {
+            if (t.IsDefined(typeof(AutoWrapAttribute), false))
+            {
+                pWrap.WrapClass(t, false);
+            }
+            else if (t.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                pWrap.WrapClass(t, true);
+            }
+        }
+        pWrap.EndModleWrap();
+    }
+
     [MenuItem("FCScript/调试C#类型", false, 5)]
     static void LookAll()
     {
+        Type nType1 = typeof(UnityEngine.GameObject);
+        //System.Object o1 = new UnityEngine.GameObject();
+        //nType1 = o1.GetType();
+        Type []allps = nType1.GetInterfaces();
+        Type  nt1 = nType1.GetInterface("Object");
+        Type  b = nType1.BaseType;
+
+        FCValueType a0 = new FCValueType(typeof(Action));
+        FCValueType a1 = new FCValueType(typeof(Action<int>));
+        FCValueType a2 = new FCValueType(typeof(Action<int, int>));
+        FCValueType a3 = new FCValueType(typeof(Action<int, int, int>));
+        FCValueType a4 = new FCValueType(typeof(Action<int, int, int, int>));
+
+        FCValueType u0 = new FCValueType(typeof(UnityEngine.Events.UnityAction));
+        FCValueType u1 = new FCValueType(typeof(UnityEngine.Events.UnityAction<int>));
+        FCValueType u2 = new FCValueType(typeof(UnityEngine.Events.UnityAction<int, int>));
+        FCValueType u3 = new FCValueType(typeof(UnityEngine.Events.UnityAction<int, int, int>));
+        FCValueType u4 = new FCValueType(typeof(UnityEngine.Events.UnityAction<int, int, int, int>));
+
         FCValueType v1 = new FCValueType(typeof(TestExport));
         FCValueType v4 = new FCValueType(typeof(TestExport.TestCallback));
         FCValueType v2 = new FCValueType(typeof(Vector2));
@@ -62,6 +103,15 @@ public static class FCExport
         LookClass(typeof(List<int>));
     }
 
+    static void LoadAssembly(string name)
+    {
+        Assembly assembly = Assembly.Load(name);
+        if (assembly == null)
+        {
+            assembly = Assembly.Load(AssemblyName.GetAssemblyName(name));
+        }
+    }
+
     static long GetListIntPtr(List<int> aInt)
     {
         int[] pBuffer = aInt.ToArray();
@@ -72,10 +122,6 @@ public static class FCExport
         long n1 = p.ToInt64();
         Marshal.Release(p);
         // 测试结果是 n1 == n2, 对于普通数组可以这样求指针地址，再传递给C++
-        int s1 = sizeof(int);
-        int s2 = sizeof(bool);
-        int s3 = sizeof(short);
-        int s4 = sizeof(long);
 
         return n2;
     }
@@ -106,8 +152,6 @@ public static class FCExport
         ParameterInfo[] pFuncParam = null;
         int nParamCount = 0;
         Type nParamType;
-        string szParamType;
-        string szRetType;
 
         //LookAssembly(ab);
         //LookModule(md);
@@ -141,15 +185,12 @@ public static class FCExport
             }
 
             pFuncParam = pMethod.GetParameters();
-            szRetType = GetTypeDesc(pMethod.ReturnType);
             nParamCount = pFuncParam != null ? pFuncParam.Length : 0;
             for(int k = 0; k<nParamCount; ++k)
             {
                 nParamType = pFuncParam[k].ParameterType;
-                szParamType = GetTypeDesc(nParamType);
             }
         }
-        int iii = 0;
     }
     static void LookAssembly(Assembly am)
     {
@@ -181,36 +222,5 @@ public static class FCExport
         {
 
         }
-    }
-    static string  GetTypeDesc(Type nType)
-    {
-        string szType = nType.ToString();
-        if (nType.Equals(typeof(int)))
-            return "int";
-        if (nType.Equals(typeof(float)))
-            return "float";
-        if (nType.Equals(typeof(byte)))
-            return "byte";
-        if (nType.Equals(typeof(char)))
-            return "char";
-        if (nType.Equals(typeof(bool)))
-            return "bool";
-        if (nType.Equals(typeof(short)))
-            return "short";
-        if (nType.Equals(typeof(ushort)))
-            return "short";
-        if (nType.Equals(typeof(uint)))
-            return "uint";
-        if (nType.Equals(typeof(long)))
-            return "long";
-        if (nType.Equals(typeof(ulong)))
-            return "ulong";
-        if (nType.Equals(typeof(double)))
-            return "double";
-        if (nType.Equals(typeof(void)))
-            return "void";
-        if (nType.Equals(typeof(string)))
-            return "string";
-        return nType.ToString();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-// 这个可以由项目者自己实现相关接口
+// 这个可以由项目者自己实现相关接口, 这个目前只是用来做自动wrap的模板测试代码，自动导出功能完成后，这个就不需要了
 
 
 class FCHandParam

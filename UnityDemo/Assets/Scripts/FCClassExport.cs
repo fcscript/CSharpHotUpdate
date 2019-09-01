@@ -12,29 +12,109 @@ class FCClassExport
     Type m_nClassType;
     string m_szPathName;
     StringBuilder m_szTempBuilder = new StringBuilder(1024 * 1024 * 1);
+    StringBuilder m_szFileBuilder = new StringBuilder(1024 * 1024 * 1);
     Dictionary<Type, int> m_OuterType = new Dictionary<Type, int>();
     List<Type> m_DelayType = new List<Type>();
+    bool m_bPartWrap = false;
+    bool m_bOnlyThisAPI = false;
+    List<string> m_CurRefNameSpace = new List<string>();
+    Dictionary<string, int> m_CurRefNameSpacesFlags = new Dictionary<string, int>();
 
-    public void ExportClass(Type nClassType, string szPathName)
+    Dictionary<Type, int> m_AllExportType = new Dictionary<Type, int>(); // 所有的类型
+    Dictionary<Type, int> m_AllRefType = new Dictionary<Type, int>(); // 所有引用的类型
+
+    public void ExportDefaultClass(string szPath)
     {
+        m_szFileBuilder.Length = 0;
+        m_szFileBuilder.AppendLine();
+        foreach (Type nType in m_AllRefType.Keys)
+        {
+            if (m_AllExportType.ContainsKey(nType))
+                continue;
+            if(nType.IsEnum)
+            {
+                PushInnerType(m_szFileBuilder, string.Empty, nType);
+                continue;
+            }
+            if (nType.IsArray)
+                continue;
+            if(!nType.IsClass)
+            {
+                continue;
+            }
+            FCValueType value = FCValueType.TransType(nType);
+            if (value.m_nTemplateType != fc_value_tempalte_type.template_none)
+                continue;
+            if (value.m_nValueType == fc_value_type.fc_value_delegate)
+                continue;
+            if (FCValueType.IsBaseType(value.m_nValueType))
+                continue;
+
+            if(nType == typeof(Type))
+            {
+                m_szFileBuilder.AppendLine("class Type{}");
+            }
+            else if(nType == typeof(System.Object))
+            {
+                m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
+            }
+            else if(nType == typeof(UnityEngine.Object))
+            {
+                m_szFileBuilder.AppendLine("class UnityObject{}");
+            }
+            else
+            {
+                m_szFileBuilder.AppendFormat("class {0} : {1}{{}}\r\n", nType.Name, nType.BaseType.Name);
+            }
+            m_szFileBuilder.AppendLine();
+        }
+        string szPathName = szPath + "all_default_class.cs";
+        File.WriteAllText(szPathName, m_szFileBuilder.ToString());
+    }
+
+    string  GetTypeName(Type nType)
+    {
+        if (nType == typeof(UnityEngine.Object))
+            return "UnityObject";
+        return nType.Name;
+    }
+
+    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi)
+    {
+        m_bPartWrap = bPartWrap;
+        m_bOnlyThisAPI = bOnlyThisApi;
         m_nClassType = nClassType;
         m_szPathName = szPathName;
         m_DelayType.Clear();
         m_szTempBuilder.Length = 0;
+        m_CurRefNameSpace.Clear();
+        m_CurRefNameSpacesFlags.Clear();
 
-        m_szTempBuilder.AppendFormat("\r\nclass  {0}\r\n", nClassType.Name);
+        m_AllExportType[nClassType] = 1;
+        Type nParentType = nClassType.BaseType;
+        m_AllRefType[nParentType] = 1;
+
+        m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", nClassType.Name, GetTypeName(nParentType));
         m_szTempBuilder.AppendLine("{");
 
-        MakeInnerEnum();
-        MakeConstructor();
-        MakeProperty();
-        MakeMethod();
+        MakeInnerEnum();  // 分析内部的枚举类
+        MakeConstructor();  // 分析构造函数
+        MakeProperty();  // 分析get - set方法
+        MakeMethod();  // 分析函数
         m_szTempBuilder.AppendLine("};\r\n");
 
         // 导出类外的枚举
         MakeOuterEnum();
 
-        File.WriteAllText(m_szPathName, m_szTempBuilder.ToString());
+        m_szFileBuilder.Length = 0;
+        foreach(string szNameSpace in m_CurRefNameSpace)
+        {
+            m_szFileBuilder.AppendFormat("using {0};\r\n", szNameSpace);
+        }
+        m_szFileBuilder.AppendLine();
+        m_szFileBuilder.Append(m_szTempBuilder.ToString());
+
+        File.WriteAllText(m_szPathName, m_szFileBuilder.ToString());
     }
 
     void MakeConstructor()
@@ -47,6 +127,19 @@ class FCClassExport
             PushConstructor(cons);
         }
     }
+    void PushNameSpace(string szNameSpace)
+    {
+        if (string.IsNullOrEmpty(szNameSpace))
+            return;
+        if (m_CurRefNameSpacesFlags.ContainsKey(szNameSpace))
+            return;
+        m_CurRefNameSpacesFlags[szNameSpace] = 1;
+        m_CurRefNameSpace.Add(szNameSpace);        
+    }
+    void PushRefType(Type nType)
+    {
+        m_AllRefType[nType] = 1;
+    }
     void PushConstructor(ConstructorInfo cons)
     {
         ParameterInfo[] allParams = cons.GetParameters();
@@ -58,10 +151,12 @@ class FCClassExport
             {
                 ParameterInfo param = allParams[i];
                 nParamType = param.ParameterType;
+                PushNameSpace(nParamType.Namespace);
                 PushDelayType(nParamType);
+                PushRefType(nParamType);
                 if (i > 0)
                     szCallParam += ',';
-                FCValueType value = FCTemplateWrap.Instance.TransType(nParamType);
+                FCValueType value = FCValueType.TransType(nParamType);
                 szCallParam += value.GetTypeName(false);
                 szCallParam = szCallParam + " " + param.Name;
             }
@@ -91,12 +186,55 @@ class FCClassExport
     // 功能：添加公有变量
     void PushFieldInfo(FieldInfo value)
     {
+        if (m_bPartWrap)
+        {
+            if (!value.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该变量有不导出的标记
+        if (value.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (value.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
+        PushNameSpace(value.FieldType.Namespace);
+        PushRefType(value.FieldType);
         // 生成get_value, set_value方法
-        PushPropertyFunc(value.FieldType, value.Name, true, true, false);
+        FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(value.FieldType);
+        if (ret_value.m_nTemplateType == fc_value_tempalte_type.template_none
+            && ret_value.m_nValueType == fc_value_type.fc_value_delegate)
+        {
+            PushPropertyFunc(value.FieldType, value.Name, false, true, value.IsStatic);
+        }
+        else
+            PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
     }
     // 功能：添加get-set方法
     void PushPropertyInfo(PropertyInfo property)
     {
+        if (m_bPartWrap)
+        {
+            if (!property.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该变量有不导出的标记
+        if (property.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (property.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
+        PushNameSpace(property.PropertyType.Namespace);
+        PushRefType(property.PropertyType);
         Type nVaueType = property.PropertyType;
         MethodInfo metGet = property.GetGetMethod();
         MethodInfo metSet = property.GetSetMethod();
@@ -126,7 +264,7 @@ class FCClassExport
             szSetBody = " set; ";
         if (bStatic)
             szStatic = "static ";
-        FCValueType value = FCTemplateWrap.Instance.TransType(nVaueType);
+        FCValueType value = FCValueType.TransType(nVaueType);
         string szValueType = value.GetTypeName(false);
         m_szTempBuilder.AppendFormat("    public {0}{1} {2} {{{3}{4}}}\r\n", szStatic, szValueType, szName, szGetBody, szSetBody);
     }
@@ -148,10 +286,26 @@ class FCClassExport
         {
             return;
         }
-        // 模板函数不导出了吧
-        //if (IsTemplateFunc(method))
-        //    return;
+        if (m_bPartWrap)
+        {
+            if (!method.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该函数有不导出的标记
+        if (method.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (method.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
 
+        // 模板函数不导出了吧
+        if (IsTemplateFunc(method))
+            return;
         bool bStatic = method.IsStatic;
         string szStatic = string.Empty;
         if (bStatic)
@@ -169,13 +323,17 @@ class FCClassExport
                 {
                     szCallParam += ',';
                 }
-                FCValueType value = FCTemplateWrap.Instance.TransType(nParamType);
+                PushNameSpace(nParamType.Namespace);
+                PushRefType(nParamType);
+                FCValueType value = FCValueType.TransType(nParamType);
                 szCallParam += value.GetTypeName(false);
                 szCallParam += " ";
                 szCallParam += allParams[i].Name;
             }
         }
-        FCValueType ret_value = FCTemplateWrap.Instance.TransType(method.ReturnType);
+        PushNameSpace(method.ReturnType.Namespace);
+        PushRefType(method.ReturnType);
+        FCValueType ret_value = FCValueType.TransType(method.ReturnType);
         if(ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
         {
             m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return null; }}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam);
@@ -220,17 +378,17 @@ class FCClassExport
             return;
         foreach(Type  nClassType in allInnerTypes)
         {
-            PushInnerType("    ", nClassType);
+            PushInnerType(m_szTempBuilder, "    ", nClassType);
         }        
     }
     void MakeOuterEnum()
     {
         foreach(Type nEnumType  in m_DelayType)
         {
-            PushInnerType("", nEnumType);
+            PushInnerType(m_szTempBuilder, "", nEnumType);
         }
     }
-    void  PushInnerType(string szLeft, Type nClassType)
+    void  PushInnerType(StringBuilder fileBuilder, string szLeft, Type nClassType)
     {
         bool bEnum = nClassType.IsEnum;
 
@@ -238,8 +396,9 @@ class FCClassExport
         if (!bEnum)
             return;
         string szEnumName = nClassType.Name;
-        m_szTempBuilder.AppendFormat("{0}public enum {1}\r\n", szLeft, szEnumName);
-        m_szTempBuilder.AppendLine(szLeft + "{");
+        fileBuilder.AppendFormat("{0}public enum {1}\r\n", szLeft, szEnumName);
+        fileBuilder.AppendLine(szLeft + "{");
+        m_AllExportType[nClassType] = 1;
 
         Array enumValues = Enum.GetValues(nClassType);
         string szValueName = string.Empty;
@@ -247,8 +406,8 @@ class FCClassExport
         {
             int nKey = Convert.ToInt32(enumValue);
             szValueName = enumValue.ToString();
-            m_szTempBuilder.AppendFormat("{0}    {1} = {2},\r\n", szLeft, szValueName, nKey);
-        }        
-        m_szTempBuilder.AppendLine(szLeft + "};\r\n");
+            fileBuilder.AppendFormat("{0}    {1} = {2},\r\n", szLeft, szValueName, nKey);
+        }
+        fileBuilder.AppendLine(szLeft + "};\r\n");
     }
 }

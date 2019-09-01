@@ -17,55 +17,120 @@ public class TestExport
         value_int = 2,
         value_float = 3,
     }
-    int m_nType;
+    int m_nType = 0;
     public static TestCallback onPostRender; // 这个也于属性一样，有get, set
-    //public void SetList(List<int>  aNumb)
-    //{
-    //}
-    // out 仅输出
-    public void GetIntArray(out List<int> pList)
+    public TestCallback onOwnPostRender; // 这个也于属性一样，有get, set
+    public TestCallback2 onCallFunc2;
+
+    public void SetCallFunc(string szName, Action<int, float, string> func)
     {
-        TestExport szName = GetChild<TestExport, int >("abc");
-        TestExport t2 = GetChild<TestExport, int>();
-        pList = null;
+
     }
-    // ref 输入也输出
-    public List<int> GetRefList(ref List<int> pList)
+
+    public Material[] materials { get; set; }
+
+    [Obsolete("test dissable func", true)]
+    public int  value
     {
-        UnityEngine.Events.UnityAction  ac;
-        byte[] buffer = new byte[100];
-        return null;
+        get { return m_nType; }
+        set { m_nType = value; }
     }
-    public T  GetChild<T, V>(string szName)
-    {
-        return default(T); // 返回默认值
-    }
-    public T GetChild<T, V>()
-    {
-        return default(T);
-    }   
+
     void  Test()
     {
         TestExport ret = this;
         long v = FCGetObj.PushObj(TestExport.onPostRender);
-        FCDll.PushReturnParam(v);
-        //FCDll.PushReturnParam(ret.onPostRender);
-        List<int> arg0;
-        float f1;
+        FCDll.PushCallParam(v);
+        int[] buffer = new int[10];
+        unsafe
+        {
+            fixed (void* p = buffer)
+            {
+            }
+        }
         //this.GetRefList(ref arg0);
     }
 
     public delegate void TestCallback(int nType);
+    public delegate void TestCallback2(int nType, string value, Vector2 v3);
 }
+
+[AutoWrap]
+public class TestD
+{
+    [DontWrap]
+    public int m_nValue;
+    public void  SetValue(int nValue)
+    {
+    }
+    [DontWrap]
+    public void Update()
+    {
+
+    }
+}
+
+[PartWrap]
+public class TestPart
+{
+    public int m_nValue;
+    [PartWrap]
+    public void SetValue(int nValue)
+    {
+        m_nValue = nValue;
+    }
+    public void SetFunc(Action func)
+    {
+    }
+}
+
+class onPostRender_deletate : FCDelegateBase
+{
+    public void   CallFunc(int nType)
+    {
+        try
+        {
+            FCDll.PushCallParam(nType);
+            FCLibHelper.fc_call(m_nThisPtr, m_szFuncName);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+};
 
 class TestExport_Handle_Wrap
 {
-    void  TestFunc(long L)
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    int set_onPostRender_Wrap(long L)
     {
-        long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-        TestExport ret = get_obj(nThisPtr);
-        TestExport.TestCallback arg0 = FCGetObj.GetObj<TestExport.TestCallback>(FCLibHelper.fc_get_intptr(L, 0));
-        TestExport.onPostRender = arg0;
+        try
+        {
+            onPostRender_deletate func = FCDelegateMng.Instance.GetDelegate<onPostRender_deletate>(L);
+            TestExport.onPostRender = func.CallFunc;
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
+    }
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    int set_onOwnPostRender_Wrap(long L)
+    {
+        try
+        {
+            onPostRender_deletate func = FCDelegateMng.Instance.GetDelegate<onPostRender_deletate>(L);
+            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
+            TestExport ret = get_obj(nThisPtr);
+            ret.onOwnPostRender = func.CallFunc;
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
     }
 
     static TestExport get_obj(long nThisPtr)
@@ -96,49 +161,8 @@ class TestExport_Handle_Wrap
 
 };
 
-class TestScript : MonoBehaviour
+class TestScript : FCScriptLoader
 {
-    static string s_szFromFC = string.Empty;
-    static List<string> m_ScriptLog = new List<string>();
-
-    void  Start()
-    {
-        InitDll();
-    }   
-        
-    void  InitDll()
-    {
-        if (!FCDll.IsInitDll())
-        {
-            try
-            {
-                FCLibHelper.fc_set_debug_print_func(print_error);
-                FCLibHelper.fc_set_output_error_func(print_error);
-
-                FCDll.InitDll();
-
-                FCLibHelper.fc_set_debug_print_func(print_error);
-                FCLibHelper.fc_set_output_error_func(print_error);
-                
-                // 注册两个测试函数
-                FCLibHelper.fc_register_func("fc2csharp_set_vector3", fc2csharp_set_vector3);
-                FCLibHelper.fc_register_func("fc2csharp_set_vector4", fc2csharp_set_vector4);
-                FCLibHelper.fc_register_func("fc2csharp_set_string", fc2csharp_set_string);
-            }
-            catch(Exception e)
-            {
-                print_error(e.ToString());
-            }            
-            StartCoroutine(LoadByteCode());
-        }
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.LPCustomPrintCallback))]
-    static void  print_error(string szInfo)
-    {
-        m_ScriptLog.Add(szInfo);
-    }
-
     public static string GetAssetStreamingUrlForWWW(string szFileName)
     {
         string url = null;
@@ -158,57 +182,11 @@ class TestScript : MonoBehaviour
         return szPathName;
     }
 
-    public static bool LoadBinText(ref byte[] fileData, AssetBundle bunlde)
+    protected override void OnAfterLoadScriptData()
     {
-        if (bunlde == null)
-            return false;
-        TextAsset text = bunlde.mainAsset as TextAsset;
-        if (text == null)
-        {
-            string[] Names = bunlde.GetAllAssetNames();
-            if (Names != null && Names.Length > 0)
-            {
-                text = bunlde.LoadAsset(Names[0], typeof(TextAsset)) as TextAsset;
-            }
-        }
-        if (text != null)
-        {
-            fileData = text.bytes;
-            bunlde.Unload(true);
-            return true;
-        }
-        bunlde.Unload(true);
-        return false;
-    }
-
-    bool  LoadByteCodeByFile()
-    {
-        string szPathName = "test.code";// GetAssetStreamingPathName("test.code");
-        print_error("开始加载, 路径：" + szPathName);
-        try
-        {
-            BetterStreamingAssets.Initialize();
-
-            byte[] fileData = BetterStreamingAssets.ReadAllBytes(szPathName);
-            if (fileData != null && fileData.Length > 0)
-            {
-                print_error("加载成功:" + szPathName + ", 字节大小：" + fileData.Length.ToString());
-                FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
-                return true;
-            }
-        }
-        catch(Exception e)
-        {
-            print_error(e.ToString());
-        }
-        print_error("加载失败:" + szPathName);
-        return false;
-    }
-
-    IEnumerator   LoadByteCode()
-    {
-        if (LoadByteCodeByFile())
-            yield break;
+        FCLibHelper.fc_register_func("fc2csharp_set_vector3", fc2csharp_set_vector3);
+        FCLibHelper.fc_register_func("fc2csharp_set_vector4", fc2csharp_set_vector4);
+        FCLibHelper.fc_register_func("fc2csharp_set_string", fc2csharp_set_string);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back))]
@@ -244,25 +222,26 @@ class TestScript : MonoBehaviour
             print_error("fc_get_version() is " + nV2);
             bool bDebugMode = FCLibHelper.fc_is_debug_mode();
             print_error("fc_is_debug_mode() is " + bDebugMode);
+            int nLisenPort = FCLibHelper.fc_get_debug_port();
+            print_error("开启监控的端口: " + nLisenPort);
         }
         catch(Exception e)
         {
             print_error(e.ToString());
         }
-        return;
 
         try
         {
             Vector3 v = new Vector3(1, 2, 3);
-            FCDll.PushReturnParam(ref v);
+            FCDll.PushCallParam(ref v);
             FCLibHelper.fc_call(0, "csharp2fc_set_vector3");
 
             Vector4 v2 = new Vector4(22, 33, 44, 55);
-            FCDll.PushReturnParam(ref v2);
+            FCDll.PushCallParam(ref v2);
             FCLibHelper.fc_call(0, "csharp2fc_set_vector4");
 
             string szTest = "测试字符串传参";
-            FCDll.PushReturnParam(szTest);
+            FCDll.PushCallParam(szTest);
             FCLibHelper.fc_call(0, "csharp2fc_set_string");
         }
         catch (Exception e)
@@ -292,18 +271,15 @@ class TestScript : MonoBehaviour
     }
     void TestGraphicCall()
     {
+        // 说明：这里只是为了检验C#中的结构体，传C++后的内存数据结构
+
         print_error("r, g, b, a ==>(60, 120, 180, 220)");
         Color32 c = new Color32(60, 120, 180, 220);
         FCLibHelper.fc_test_color32(c);
         Color c2 = new Color(1f, 2f, 3f, 4f);
         FCLibHelper.fc_test_color(ref c2);
         Vector3 vNormal = new Vector3(3, 2, 1);
-        GLPlane p1 = new GLPlane();
-        p1.vNormal = new Vector3(1, 2, 3);
-        p1.fDist = 4.0f;
-        Plane p2 = new Plane(p1.vNormal, p1.fDist);
-        p1.vNormal = p2.normal;
-        p1.fDist = p2.distance;
+        Plane p2 = new Plane(vNormal, 4.0f);
         FCLibHelper.fc_test_plane(ref p2);
         Ray r = new Ray(new Vector3(1.0f, 2.0f, 3.0f), new Vector3(0.0f, 1.0f, 0.5f));
         FCLibHelper.fc_test_ray(ref r);
@@ -332,6 +308,9 @@ class TestScript : MonoBehaviour
         mat.m32 = 32f;
         mat.m33 = 33f;
         FCLibHelper.fc_test_matrix(ref mat);
+
+        Quaternion qa = new Quaternion(1, 2, 3, 4);
+        FCLibHelper.fc_test_quaternion(ref qa);
     }
     void  DeleteScriptObject()
     {

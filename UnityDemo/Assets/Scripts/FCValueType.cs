@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Text;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+
 
 public enum  fc_value_type
 {
@@ -28,6 +31,7 @@ public enum  fc_value_type
     fc_value_matrix,  // Matrix4x4
     fc_value_ray,  // Ray
     fc_value_sphere,  // Sphere
+    fc_value_quaternion, // Quaternion
     fc_value_color32,  // Color32
     fc_value_color,  // Color
     fc_value_intrect,  // IntRect
@@ -38,10 +42,10 @@ public enum  fc_value_type
 
     fc_value_enum,   // 枚举
     fc_value_int_ptr, // IntPtr
-
-    fc_value_system_list,
-    fc_value_system_map,  // Dictionary
-    fc_value_system_array, // 原生数组
+    
+    fc_value_delegate,  // 委托
+    fc_value_action,    // Action
+    fc_value_unity_action, // UnityAction
 };
 
 public enum fc_value_tempalte_type
@@ -121,11 +125,11 @@ public class FCValueType
     }
     public string GetKeyName(bool bCSharp, bool bFullName = false)
     {
-        return GetBaseValueTypeName(m_nKeyType, bFullName ? m_key.FullName : m_key.Name, bCSharp);
+        return GetBaseValueTypeName(m_nKeyType, m_key, bCSharp, bFullName);
     }
     public string GetValueName(bool bCSharp, bool bFullName = false)
     {
-        return GetBaseValueTypeName(m_nValueType, bFullName ? m_value.FullName : m_value.Name, bCSharp);
+        return GetBaseValueTypeName(m_nValueType, m_value, bCSharp, bFullName);
     }
     // 得到类型的名字
     public string GetTypeName(bool bSharp, bool bFullName = false)
@@ -147,64 +151,132 @@ public class FCValueType
                 else
                     return string.Format("map<{0},{1}>", GetKeyName(bSharp, bFullName), GetValueName(bSharp, bFullName));
         }
-        return GetBaseValueTypeName(m_nValueType, bFullName ? m_value.FullName : m_value.Name, bSharp);
+        return GetBaseValueTypeName(m_nValueType, m_value, bSharp, bFullName);
     }
+    public string GetDelegateName(bool bSharp)
+    {
+        // 检测
+        return GetDelegateTypeName(m_value, bSharp);
+    }
+    static string GetDelegateTypeName(Type nType, bool bSharp)
+    {
+        string szName = nType.Name;
+        switch (szName)
+        {
+            case "Action":
+            case "UnityAction":
+                return szName;
+            default:
+                break;
+        }
+        bool bBaseDelegate = false;
+        if (szName.IndexOf("Action`") != -1)
+        {
+            bBaseDelegate = true;
+            szName = "Action";
+        }
+        else if (szName.IndexOf("UnityAction`") != -1)
+        {
+            bBaseDelegate = true;
+            szName = "UnityAction";
+        }
+        if (bBaseDelegate)
+        {
+            MethodInfo method = nType.GetMethod("Invoke");
+            ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+            if (allParams != null)
+            {
+                szName += "_";
+                for (int i = 0; i<allParams.Length; ++i)
+                {
+                    FCValueType value_param = TransType(allParams[i].ParameterType);
+                    if (i > 0)
+                        szName += "_";
+                    szName += value_param.GetTypeName(true, true);
+                }
+            }
+        }
+        string szCSharpName = szName.Replace('+', '.');
+        return szCSharpName;
+    }
+
+    static Dictionary<Type, FCValueType> s_TransType;
+    public static FCValueType TransType(Type nType)
+    {
+        if (s_TransType == null)
+            s_TransType = new Dictionary<Type, FCValueType>();
+        FCValueType value = null;
+        if (s_TransType.TryGetValue(nType, out value))
+            return value;
+        value = new FCValueType(nType);
+        s_TransType[nType] = value;
+        return value;
+    }
+
+    static Dictionary<Type, fc_value_type> s_BaseTypeFinder;
+    static void  InitBaseTypeFinder()
+    {
+        if (s_BaseTypeFinder != null)
+            return;
+        s_BaseTypeFinder = new Dictionary<Type, fc_value_type>();
+        s_BaseTypeFinder[typeof(byte)] = fc_value_type.fc_value_byte;
+        s_BaseTypeFinder[typeof(char)] = fc_value_type.fc_value_char;
+        s_BaseTypeFinder[typeof(bool)] = fc_value_type.fc_value_bool;
+        s_BaseTypeFinder[typeof(Boolean)] = fc_value_type.fc_value_bool;
+        s_BaseTypeFinder[typeof(short)] = fc_value_type.fc_value_short;
+        s_BaseTypeFinder[typeof(Int16)] = fc_value_type.fc_value_short;
+        s_BaseTypeFinder[typeof(ushort)] = fc_value_type.fc_value_ushort;
+        s_BaseTypeFinder[typeof(UInt16)] = fc_value_type.fc_value_ushort;
+        s_BaseTypeFinder[typeof(int)] = fc_value_type.fc_value_int;
+        s_BaseTypeFinder[typeof(Int32)] = fc_value_type.fc_value_int;
+        s_BaseTypeFinder[typeof(uint)] = fc_value_type.fc_value_uint;
+        s_BaseTypeFinder[typeof(UInt32)] = fc_value_type.fc_value_uint;
+        s_BaseTypeFinder[typeof(float)] = fc_value_type.fc_value_float;
+        s_BaseTypeFinder[typeof(Single)] = fc_value_type.fc_value_float;
+        s_BaseTypeFinder[typeof(double)] = fc_value_type.fc_value_double;
+        s_BaseTypeFinder[typeof(Double)] = fc_value_type.fc_value_double;
+        s_BaseTypeFinder[typeof(long)] = fc_value_type.fc_value_int64;
+        s_BaseTypeFinder[typeof(Int64)] = fc_value_type.fc_value_int64;
+        s_BaseTypeFinder[typeof(ulong)] = fc_value_type.fc_value_uint64;
+        s_BaseTypeFinder[typeof(UInt64)] = fc_value_type.fc_value_uint64;
+        s_BaseTypeFinder[typeof(void)] = fc_value_type.fc_value_void;
+        s_BaseTypeFinder[typeof(string)] = fc_value_type.fc_value_string_a;
+        s_BaseTypeFinder[typeof(String)] = fc_value_type.fc_value_string_a;
+
+        s_BaseTypeFinder[typeof(Vector2)] = fc_value_type.fc_value_vector2;
+        s_BaseTypeFinder[typeof(Vector3)] = fc_value_type.fc_value_vector3;
+        s_BaseTypeFinder[typeof(Vector4)] = fc_value_type.fc_value_vector4;
+        s_BaseTypeFinder[typeof(Plane)] = fc_value_type.fc_value_plane;
+        s_BaseTypeFinder[typeof(Bounds)] = fc_value_type.fc_value_bounds;
+        s_BaseTypeFinder[typeof(Matrix4x4)] = fc_value_type.fc_value_matrix;
+        s_BaseTypeFinder[typeof(Ray)] = fc_value_type.fc_value_ray;
+        s_BaseTypeFinder[typeof(Sphere)] = fc_value_type.fc_value_sphere;
+        s_BaseTypeFinder[typeof(Quaternion)] = fc_value_type.fc_value_quaternion;
+        s_BaseTypeFinder[typeof(Color32)] = fc_value_type.fc_value_color32;
+        s_BaseTypeFinder[typeof(Color)] = fc_value_type.fc_value_color;
+        s_BaseTypeFinder[typeof(IntRect)] = fc_value_type.fc_value_intrect;
+        s_BaseTypeFinder[typeof(Rect)] = fc_value_type.fc_value_rect;
+        s_BaseTypeFinder[typeof(System.Object)] = fc_value_type.fc_value_system_object;
+    }
+
     public static fc_value_type GetBaseFCType(Type nType)
     {
-        if (nType.Equals(typeof(int)) || nType.Equals(typeof(Int32)))
-            return fc_value_type.fc_value_int;
-        if (nType.Equals(typeof(float)))
-            return fc_value_type.fc_value_float;
-        if (nType.Equals(typeof(byte)))
-            return fc_value_type.fc_value_byte;
-        if (nType.Equals(typeof(char)))
-            return fc_value_type.fc_value_char;
-        if (nType.Equals(typeof(bool)))
-            return fc_value_type.fc_value_bool;
-        if (nType.Equals(typeof(short)) || nType.Equals(typeof(Int16)))
-            return fc_value_type.fc_value_short;
-        if (nType.Equals(typeof(ushort)) || nType.Equals(typeof(UInt16)))
-            return fc_value_type.fc_value_ushort;
-        if (nType.Equals(typeof(uint)) || nType.Equals(typeof(UInt32)))
-            return fc_value_type.fc_value_uint;
-        if (nType.Equals(typeof(long)) || nType.Equals(typeof(Int64)))
-            return fc_value_type.fc_value_int64;
-        if (nType.Equals(typeof(ulong)) || nType.Equals(typeof(UInt64)))
-            return fc_value_type.fc_value_uint64;
-        if (nType.Equals(typeof(double)))
-            return fc_value_type.fc_value_double;
-        if (nType.Equals(typeof(void)))
-            return fc_value_type.fc_value_void;
-        if (nType.Equals(typeof(string)))
-            return fc_value_type.fc_value_string_a;
-        if (nType.Equals(typeof(Vector2)))
-            return fc_value_type.fc_value_vector2;
-        if (nType.Equals(typeof(Vector3)))
-            return fc_value_type.fc_value_vector3;
-        if (nType.Equals(typeof(Vector4)))
-            return fc_value_type.fc_value_vector4;
-        if (nType.Equals(typeof(Plane)))
-            return fc_value_type.fc_value_plane;
-        if (nType.Equals(typeof(Bounds)))
-            return fc_value_type.fc_value_bounds;
-        if (nType.Equals(typeof(Matrix4x4)))
-            return fc_value_type.fc_value_matrix;
-        if (nType.Equals(typeof(Ray)))
-            return fc_value_type.fc_value_ray;
-        if (nType.Equals(typeof(Sphere)))
-            return fc_value_type.fc_value_sphere;
-        if (nType.Equals(typeof(Color32)))
-            return fc_value_type.fc_value_color32;
-        if (nType.Equals(typeof(Color)))
-            return fc_value_type.fc_value_color;
-        if (nType.Equals(typeof(IntRect)))
-            return fc_value_type.fc_value_intrect;
-        if (nType.Equals(typeof(Rect)))
-            return fc_value_type.fc_value_rect;
-        if (nType.Equals(typeof(System.Object)))
-            return fc_value_type.fc_value_system_object;
+        if(s_BaseTypeFinder == null)
+        {
+            InitBaseTypeFinder();
+        }
+        fc_value_type nFCType = fc_value_type.fc_value_unknow;
+        if(s_BaseTypeFinder.TryGetValue(nType, out nFCType))
+        {
+            return nFCType;
+        }
         if (nType.IsEnum)
             return fc_value_type.fc_value_enum;
+        if(typeof(System.MulticastDelegate).IsAssignableFrom(nType)
+            || nType == typeof(System.MulticastDelegate))
+        {
+            return fc_value_type.fc_value_delegate;
+        }        
         return fc_value_type.fc_value_object;
     }
     public static bool  IsRefType(fc_value_type nType)
@@ -219,6 +291,7 @@ public class FCValueType
             case fc_value_type.fc_value_matrix:
             case fc_value_type.fc_value_ray:
             case fc_value_type.fc_value_sphere:
+            case fc_value_type.fc_value_quaternion:
             case fc_value_type.fc_value_color32:
             case fc_value_type.fc_value_color:
             case fc_value_type.fc_value_intrect:
@@ -250,73 +323,22 @@ public class FCValueType
             return;
         }        
         string szType = value.GetTypeName(true, true);
-        if(IsBaseType(value.m_nValueType))
+        fileData.AppendFormat("{0}long ret_ptr = FCLibHelper.fc_get_return_ptr(L);\r\n", szLeftEmpty);
+        if (IsBaseType(value.m_nValueType))
         {
-            if(IsRefType(value.m_nValueType))
+            string szFuncAddr = GetFCLibFuncShortName(value.m_nValueType);
+            if (IsRefType(value.m_nValueType))
             {
                 fileData.AppendFormat("{0}{1} temp_ret = {2};\r\n", szLeftEmpty, szType, szValueName);
-                fileData.AppendFormat("{0}FCDll.PushReturnParam(ref temp_ret);\r\n", szLeftEmpty);
+                fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}(ret_ptr, ref temp_ret);\r\n", szLeftEmpty, szFuncAddr);
                 return;
             }
-            fileData.AppendFormat("{0}FCDll.PushReturnParam({1});\r\n", szLeftEmpty, szValueName);
+            fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}(ret_ptr, {2});\r\n", szLeftEmpty, szFuncAddr, szValueName);
             return;
         }
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
-        fileData.AppendFormat("{0}FCDll.PushReturnParam(v);\r\n", szLeftEmpty);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr(ret_ptr, v);\r\n", szLeftEmpty);
     }
-    // 功能：获取脚本的第N个参数
-    public static string SetMemberValue(string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue, bool bOut)
-    {
-        // szLeftName = fc_get_bool(L, 0);
-        string szFuncAppend = FCValueType.GetFCLibFuncShortName(value.m_nValueType);
-        string szCSharpName = value.GetTypeName(true, true);
-        string szDefine = string.Empty;
-        if (bTempValue)
-            szDefine = szCSharpName + " ";
-        if(value.IsArray)
-        {
-            szDefine = szLeftEmpty + string.Format("{0} {1} = null;\r\n", szCSharpName, szLeftName);
-            return szDefine + szLeftEmpty + string.Format("{0} = FCCustomParam.GetArray(ref {1},{2},{3});\r\n", szLeftName, szLeftName, Ptr, szIndex);
-        }
-        else if(value.IsList)
-        {
-            szDefine = szLeftEmpty + string.Format("{0} {1} = null;\r\n", szCSharpName, szLeftName);
-            return szDefine + szLeftEmpty + string.Format("{0} = FCCustomParam.GetList(ref {1},{2},{3});\r\n", szLeftName, szLeftName, Ptr, szIndex);
-        }
-        else if(value.IsMap)
-        {
-            szDefine = szLeftEmpty + string.Format("{0} {1} = null;\r\n", szCSharpName, szLeftName);
-            return szDefine + szLeftEmpty + string.Format("{0} = FCCustomParam.GetDictionary(ref {1},{2},{3});\r\n", szLeftName, szLeftName, Ptr, szIndex);
-        }
-        if(string.IsNullOrEmpty(szFuncAppend))
-        {
-            if (value.m_nValueType == fc_value_type.fc_value_enum)
-            {
-                return szLeftEmpty + string.Format("{0}{1} = ({2})(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szDefine, szLeftName, szCSharpName, Ptr, szIndex);
-            }
-            if (value.m_nValueType == fc_value_type.fc_value_int_ptr)
-            {
-                return szLeftEmpty + string.Format("{0}{1} = ({2})(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szDefine, szLeftName, szCSharpName, Ptr, szIndex);
-            }
-            if (value.m_nValueType == fc_value_type.fc_value_system_object)
-            {
-                return szLeftEmpty + string.Format("{0}{1} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({2},{3}));\r\n", szDefine, szLeftName, Ptr, szIndex);
-            }
-        }
-        else
-        {
-            if(IsGraphicType(value.m_nValueType))
-            {
-                szDefine = szLeftEmpty + string.Format("{0} {1} = new {2}();\r\n", szCSharpName, szLeftName, szCSharpName);
-                return szDefine + szLeftEmpty + string.Format("FCLibHelper.fc_get_{0}({1},{2},ref {3});\r\n", szFuncAppend, Ptr, szIndex, szLeftName);
-            }
-            else
-            {
-                return szLeftEmpty + string.Format("{0}{1} = FCLibHelper.fc_get_{2}({3},{4});\r\n", szDefine, szLeftName, szFuncAppend, Ptr, szIndex);
-            }
-        }        
-        return szLeftEmpty + string.Format("{0}{1} = FCGetObj.GetObj<{2}>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szDefine, szLeftName, szCSharpName, Ptr, szIndex);
-    }    
     public static string ModifyScriptCallParam(string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
     {
         if(value.IsArray)
@@ -349,7 +371,7 @@ public class FCValueType
     }    
 
     // 功能：得到变量的类型名
-    public static string GetBaseValueTypeName(fc_value_type nFCType, string szCSharpName, bool bCSharp)
+    public static string GetBaseValueTypeName(fc_value_type nFCType, Type nType, bool bCSharp, bool bFullName)
     {
         switch(nFCType)
         {
@@ -395,6 +417,8 @@ public class FCValueType
                 return "Ray";
             case fc_value_type.fc_value_sphere:
                 return "Sphere";
+            case fc_value_type.fc_value_quaternion:
+                return "Quaternion";
             case fc_value_type.fc_value_color32:
                 return "Color32";
             case fc_value_type.fc_value_color:
@@ -404,12 +428,52 @@ public class FCValueType
             case fc_value_type.fc_value_rect:
                 return "Rect";
             case fc_value_type.fc_value_system_object:
-                return "System.Object";
+                return bCSharp ?"System.Object" : "Object";
+            case fc_value_type.fc_value_delegate:
+                {
+                    return GetDeleteExportName(nType, bCSharp, bFullName);
+                }
             default:
                 break;
         }
+        string szCSharpName = bFullName ? nType.FullName : nType.Name;
         szCSharpName = szCSharpName.Replace('+', '.');
         return szCSharpName;
+    }
+
+    static string  GetDeleteExportName(Type nType, bool bCSharp, bool bFullName)
+    {
+        string szName = bFullName ? nType.FullName : nType.Name;
+        bool bBaseDelegate = false;
+        if (szName.IndexOf("Action`") != -1)
+        {
+            bBaseDelegate = true;
+            szName = "Action";
+        }
+        else if (szName.IndexOf("UnityAction`") != -1)
+        {
+            bBaseDelegate = true;
+            szName = "UnityAction";
+        }
+        if (bBaseDelegate)
+        {
+            MethodInfo method = nType.GetMethod("Invoke");
+            ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+            if (allParams != null)
+            {
+                szName += "<";
+                for (int i = 0; i < allParams.Length; ++i)
+                {
+                    FCValueType value_param = TransType(allParams[i].ParameterType);
+                    if (i > 0)
+                        szName += ",";
+                    szName += value_param.GetTypeName(true, true);
+                }
+                szName += ">";
+            }
+        }
+        szName = szName.Replace('+', '.');
+        return szName;
     }
     
     public static string GetFCLibFuncShortName(fc_value_type nType)
@@ -451,9 +515,11 @@ public class FCValueType
             case fc_value_type.fc_value_ray:
                 return "ray";
             case fc_value_type.fc_value_matrix:
-                return "martix";
+                return "matrix";
             case fc_value_type.fc_value_sphere:
                 return "sphere";
+            case fc_value_type.fc_value_quaternion:
+                return "quaternion";
             case fc_value_type.fc_value_bounds:
                 return "bounds";
             case fc_value_type.fc_value_rect:

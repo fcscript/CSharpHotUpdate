@@ -48,7 +48,7 @@ public class ScriptMono : MonoBehaviour
 
         if (m_nScriptInsPtr != 0)
         {
-            FCDll.PushReturnParam(szName);  // 传点击的按钮的参数
+            FCDll.PushCallParam(szName);  // 传点击的按钮的参数
             FCLibHelper.fc_call(m_nScriptInsPtr, "OnButtonClicked");
         }
     }

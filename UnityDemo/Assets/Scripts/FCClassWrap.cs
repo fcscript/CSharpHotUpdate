@@ -23,6 +23,8 @@ public class FCClassWrap
     string m_szCurModleName; // 当前模块的名字
     string m_szCurClassName; // 当前的类名
     string m_szFCScriptPath; // 脚本导出路径
+    bool m_bPartWrap = false;
+    bool m_bOnlyThisAPI = false;
     Type m_nCurClassType;
 
     List<string> m_AllWrapClassName = new List<string>(); // 所有wrap的类名
@@ -30,11 +32,17 @@ public class FCClassWrap
     List<WrapFuncDesc> m_CurClassFunc = new List<WrapFuncDesc>();
     Dictionary<string, int> m_CurSameName = new Dictionary<string, int>();
     Dictionary<string, int> m_CurFuncCount = new Dictionary<string, int>();
+    List<string> m_CurRefNameSpace = new List<string>();
+    Dictionary<string, int> m_CurRefNameSpacesFlags = new Dictionary<string, int>();
+
+    List<string> m_AllRefNameSpace = new List<string>();
+    Dictionary<string, int> m_AllRefNameSpaceFlags = new Dictionary<string, int>();
 
     StringBuilder m_szTempBuilder;
 
     FCClassExport m_export;
     FCTemplateWrap m_templateWrap;
+    FCDelegateWrap m_deleteWrap;
 
     // 功能：
     public FCClassWrap()
@@ -69,7 +77,7 @@ public class FCClassWrap
         if (string.IsNullOrEmpty(m_szExportPath))
         {
             m_szExportPath = Application.dataPath;
-            m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "fcscript/";
+            m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "FCWrap/";
         }
         m_szFCScriptPath = Application.dataPath;
         m_szFCScriptPath = m_szFCScriptPath.Substring(0, m_szFCScriptPath.Length - 6) + "Script/inport/";
@@ -82,30 +90,36 @@ public class FCClassWrap
         m_export = new FCClassExport();
         m_templateWrap = new FCTemplateWrap();
         m_templateWrap.BeginExport(m_szExportPath);
+        m_deleteWrap = new FCDelegateWrap();
+        m_deleteWrap.BeginExport(m_szExportPath);
     }
 
     // 功能：结束所有的导出
     public void EndExport()
     {
+        m_deleteWrap.EndExport(m_szTempBuilder);
         m_templateWrap.EndExport(m_szTempBuilder);
-        ExportWrapInit("AllClassWrap", m_AllWrapClassName);
+        m_export.ExportDefaultClass(m_szFCScriptPath);
+        ExportWrapInit("all_class_wrap", m_AllWrapClassName);
     }
 
-    void  ExportWrapInit(string szModle, List<string> aWrapNames)
+    void  ExportWrapInit(string szClassName, List<string> aWrapNames)
     {
-        string szPathName = m_szExportPath + szModle + ".cs";
+        string szPathName = m_szExportPath + szClassName + ".cs";
         // 这里只导出一个
 
         StringBuilder fileData = new StringBuilder(1024 * 1024 * 1);
         fileData.AppendLine("using System;");
         fileData.AppendLine("using UnityEngine;\r\n");
-        fileData.AppendFormat("public class {0}\r\n", szModle);
+        fileData.AppendLine("using UnityEngine.Rendering;\r\n");
+        fileData.AppendLine("");
+        fileData.AppendFormat("public class {0}\r\n", szClassName);
         fileData.AppendLine("{");
         fileData.AppendLine("    public static void Register()");
         fileData.AppendLine("    {");
-        foreach(string szClassName in aWrapNames)
+        foreach(string szCurClassName in aWrapNames)
         {
-            fileData.AppendFormat("        {0}.Register();\r\n", szClassName);
+            fileData.AppendFormat("        {0}.Register();\r\n", szCurClassName);
         }
         fileData.AppendLine("    }");
         fileData.AppendLine("}");
@@ -124,25 +138,42 @@ public class FCClassWrap
     }
     public void  EndModleWrap()
     {
-        ExportWrapInit(m_szCurModleName, m_CurWrapClassNames);
-        m_AllWrapClassName.Add(m_szCurModleName);
+        string szModelClassName = m_szCurModleName + "_wrap";
+        ExportWrapInit(szModelClassName, m_CurWrapClassNames);
+        m_AllWrapClassName.Add(szModelClassName);
     }
 
-    public void  WrapClass(Type nClassType)
+    public void  WrapClass(Type nClassType, bool bPartWrap = false)
     {
+        WrapClassEx(nClassType, bPartWrap, true);
+    }
+    public void WrapClassEx(Type nClassType, bool bPartWrap, bool bOnlyThisApi)
+    {
+        m_bPartWrap = bPartWrap;
+        m_bOnlyThisAPI = bOnlyThisApi;
         m_szTempBuilder.Length = 0;
         string szWrapName = nClassType.Name + "_wrap";
         m_CurWrapClassNames.Add(szWrapName);
         m_szCurClassName = nClassType.Name;
         m_nCurClassType = nClassType;
         WrapSubClass(m_szTempBuilder, nClassType);
-        m_export.ExportClass(nClassType, m_szFCScriptPath + m_szCurClassName + ".cpp");
+        m_export.ExportClass(nClassType, m_szFCScriptPath + m_szCurClassName + ".cpp", bPartWrap, bOnlyThisApi);
+
     }
+
     void  WrapSubClass(StringBuilder fileData, Type nClassType)
     {
         string szWrapName = nClassType.Name + "_wrap";
         m_CurClassFunc.Clear();
         m_CurSameName.Clear();
+        m_CurRefNameSpace.Clear();
+        m_CurRefNameSpacesFlags.Clear();
+
+        PushNameSpace("System");
+        PushNameSpace("System.Collections.Generic");
+        PushNameSpace("System.Text");
+        PushNameSpace("UnityEngine");
+        //PushNameSpace("UnityEngine.Rendering");
 
         // 先生成init函数
         FieldInfo[] allFields = nClassType.GetFields(); // 所有成员变量(只有public的)
@@ -196,12 +227,17 @@ public class FCClassWrap
         string  szNamespace = m_nCurClassType.Namespace;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
-        fileData.AppendLine("using System;");
-        fileData.AppendLine("using System.Collections.Generic;");
-        fileData.AppendLine("using System.Text;");
-        fileData.AppendLine("using UnityEngine;\r\n");
-        if(!string.IsNullOrEmpty(szNamespace) && szNamespace != "UnityEngine")
-            fileData.AppendFormat("using {0};\r\n", szNamespace);
+        foreach(string szNameSpace in m_CurRefNameSpace)
+        {
+            fileData.AppendFormat("using {0};\r\n", szNameSpace);
+        }
+        fileData.AppendLine("");
+        //fileData.AppendLine("using System;");
+        //fileData.AppendLine("using System.Collections.Generic;");
+        //fileData.AppendLine("using System.Text;");
+        //fileData.AppendLine("using UnityEngine;\r\n");
+        //if (!string.IsNullOrEmpty(szNamespace) && szNamespace != "UnityEngine")
+        //    fileData.AppendFormat("using {0};\r\n", szNamespace);
 
         fileData.AppendFormat("public class {0}\r\n", szWrapName);
         fileData.AppendLine("{");
@@ -212,6 +248,22 @@ public class FCClassWrap
         fileData.AppendLine("}");
         File.WriteAllText(szPathName, fileData.ToString());
     }
+    void  PushNameSpace(string szNameSpace)
+    {
+        if (string.IsNullOrEmpty(szNameSpace))
+            return;
+        if (m_CurRefNameSpacesFlags.ContainsKey(szNameSpace))
+            return;
+        m_CurRefNameSpacesFlags[szNameSpace] = 1;
+        m_CurRefNameSpace.Add(szNameSpace);
+
+        if(!m_AllRefNameSpaceFlags.ContainsKey(szNameSpace))
+        {
+            m_AllRefNameSpaceFlags[szNameSpace] = 1;
+            m_AllRefNameSpace.Add(szNameSpace);
+        }
+    }
+
     void MakeGetObj()
     {
         m_szTempBuilder.Length = 0;
@@ -248,7 +300,8 @@ public class FCClassWrap
         fileData.AppendLine("    public static int  obj_new(long L)");
         fileData.AppendLine("    {");
         fileData.AppendFormat("        long nPtr = FCGetObj.NewObj<{0}>();\r\n", m_szCurClassName);
-        fileData.AppendLine("        FCLibHelper.fc_push_return_intptr(L, nPtr);");
+        fileData.AppendLine("        long ret = FCLibHelper.fc_get_return_ptr(L);");
+        fileData.AppendLine("        FCLibHelper.fc_set_value_intptr(ret, nPtr);");
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
 
@@ -294,7 +347,7 @@ public class FCClassWrap
             }
             else
             {
-                fileData.Append(FCValueType.SetMemberValue("            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut));
+                SetMemberValue(fileData, "            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut);
             }
             if (i > 0)
                 szCallParam += ',';
@@ -310,7 +363,8 @@ public class FCClassWrap
         }
         fileData.AppendFormat("            {0} obj = new {1}({2});\r\n", m_szCurClassName, m_szCurClassName, szCallParam);
         fileData.AppendFormat("            long nPtr = FCGetObj.PushNewObj<{0}>(obj);\r\n", m_szCurClassName);
-        fileData.AppendLine("            FCLibHelper.fc_push_return_intptr(L, nPtr);");
+        fileData.AppendLine("            long ret = FCLibHelper.fc_get_return_ptr(L);");
+        fileData.AppendLine("            FCLibHelper.fc_set_value_intptr(ret, nPtr);");        
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
         fileData.AppendLine("        {");
@@ -436,13 +490,119 @@ public class FCClassWrap
     // 功能：添加公有变量
     void PushFieldInfo(FieldInfo value)
     {
+        if (m_bPartWrap)
+        {
+            if (!value.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该变量有不导出的标记
+        if (value.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if(value.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
+
+        PushNameSpace(value.FieldType.Namespace);
+
         // 生成get_value, set_value方法
-        PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
+        FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(value.FieldType);
+        if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_none
+            && ret_value.m_nValueType == fc_value_type.fc_value_delegate)
+        {
+            PushPropertyDelegate(ret_value, value.Name, false, true, value.IsStatic); // // 委托只能set, 不可get
+        }
+        else
+            PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
     }
+    void PushPropertyDelegate(FCValueType ret_value, string szName, bool bCanGet, bool bCanSet, bool bStatic)
+    {
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_bAttrib = true;
+        func.m_szName = szName;
+        if (bCanGet)
+            func.m_szGetName = string.Format("get_{0}_wrap", szName);
+        else
+            func.m_szGetName = "null";
+        if (bCanSet)
+            func.m_szSetName = string.Format("set_{0}_wrap", szName);
+        else
+            func.m_szSetName = "null";
+
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+        string szLeftName = string.Format("ret.{0}", szName);
+        if (bStatic)
+            szLeftName = string.Format("{0}.{1}", m_szCurClassName, szName);
+        
+        string szDelegateClassName = string.Format("{0}_deletate", ret_value.GetDelegateName(true));
+        m_deleteWrap.PushDelegateWrap(ret_value.m_value, szDelegateClassName);
+
+        if (bCanSet)
+        {
+            fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
+            fileData.AppendFormat("    public static int {0}(long L)\r\n", func.m_szSetName);
+            fileData.AppendLine("    {");
+            fileData.AppendLine("        try");
+            fileData.AppendLine("        {");
+
+            fileData.AppendFormat("            {0} func = FCDelegateMng.Instance.GetDelegate<{1}>(L);\r\n", szDelegateClassName, szDelegateClassName);
+            if (bStatic)
+            {
+                fileData.AppendLine("            if(func != null)");
+                fileData.AppendFormat("                {0} = func.CallFunc;\r\n", szLeftName);
+                fileData.AppendLine("            else");
+                fileData.AppendFormat("                {0} = null;\r\n", szLeftName);
+            }
+            else
+            {
+                fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+                fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
+                fileData.AppendLine("            if(func != null)");
+                fileData.AppendFormat("                {0} = func.CallFunc;\r\n", szLeftName);
+                fileData.AppendLine("            else");
+                fileData.AppendFormat("                {0} = null;\r\n", szLeftName);
+            }
+            fileData.AppendFormat("            FCDelegateMng.Instance.RecordDelegate({0}, func);\r\n", szLeftName);
+            fileData.AppendLine("        }");
+            fileData.AppendLine("        catch(Exception e)");
+            fileData.AppendLine("        {");
+            fileData.AppendLine("            Debug.LogException(e);");
+            fileData.AppendLine("        }");
+            fileData.AppendLine("        return 0;");
+            fileData.AppendLine("    }");
+        }
+        func.m_szContent = fileData.ToString();
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_attrib(nClassName,\"{0}\",{1},{2});", func.m_szName, func.m_szGetName, func.m_szSetName);
+        m_CurClassFunc.Add(func);
+    }
+
     // 功能：添加get-set方法
     void PushPropertyInfo(PropertyInfo property)
     {
+        if (m_bPartWrap)
+        {
+            if (!property.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该变量有不导出的标记
+        if (property.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (property.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
         Type nVaueType = property.PropertyType;
+        PushNameSpace(nVaueType.Namespace);
+
         MethodInfo  metGet = property.GetGetMethod();
         MethodInfo  metSet = property.GetSetMethod();
         bool bStatic = false;
@@ -483,6 +643,8 @@ public class FCClassWrap
             szLeftName = string.Format("{0}.{1}", m_szCurClassName, szName);
         if(bCanGet)
         {
+            m_templateWrap.PushReturnTypeWrap(nVaueType);
+
             fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
             fileData.AppendFormat("    public static int {0}(long L)\r\n", func.m_szGetName);
             fileData.AppendLine("    {");
@@ -509,7 +671,7 @@ public class FCClassWrap
             fileData.AppendLine("        {");
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
-            fileData.Append(FCValueType.SetMemberValue("            ", ret_value, "arg0", "L", "0", true, false));
+            SetMemberValue(fileData, "            ", ret_value, "arg0", "L", "0", true, false);
             fileData.AppendFormat("            {0} = arg0;\r\n", szLeftName);
             fileData.AppendLine("        }");
             fileData.AppendLine("        catch(Exception e)");
@@ -538,11 +700,36 @@ public class FCClassWrap
         }
         return false;
     }
-    
+    // 功能：判断指定类型是不是委托类型
+    bool IsDelegate(Type nType)
+    {
+        if (!typeof(System.MulticastDelegate).IsAssignableFrom(nType) || nType == typeof(System.MulticastDelegate))
+        {
+            return false;
+        }
+        return true;
+    }    
+
     // 功能：添加函数调用的方法
     void PushMethodInfo(MethodInfo method)
     {
         if (0 != (MethodAttributes.SpecialName & method.Attributes))
+        {
+            return;
+        }
+        if (m_bPartWrap)
+        {
+            if (!method.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该函数有不导出的标记
+        if (method.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (method.IsDefined(typeof(ObsoleteAttribute), false))
         {
             return;
         }
@@ -554,6 +741,7 @@ public class FCClassWrap
             return;
         }
         FCValueType  ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
+        PushNameSpace(method.ReturnType.Namespace);
 
         int nSameNameCount = 0;
         if(m_CurSameName.TryGetValue(method.Name, out nSameNameCount))
@@ -599,6 +787,7 @@ public class FCClassWrap
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
             szLeftName = string.Format("arg{0}", i);
+            PushNameSpace(nParamType.Namespace);
             FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
             if (param.IsOut)
             {
@@ -607,7 +796,7 @@ public class FCClassWrap
             }
             else
             {
-                fileData.Append(FCValueType.SetMemberValue("            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut));
+                SetMemberValue(fileData, "            ", param_value, szLeftName, "L", i.ToString(), true, param.IsOut);
             }
             if (i > 0)
                 szCallParam += ',';
@@ -620,7 +809,7 @@ public class FCClassWrap
                 szCallParam += "ref ";
             }
             szCallParam += szLeftName;
-            szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(true);
+            szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(false);
         }
         // 处理返回值
         if (ret_value.m_nValueType == fc_value_type.fc_value_void)
@@ -675,5 +864,80 @@ public class FCClassWrap
     FCValueType PushOutParamWrap(Type nType)
     {
         return m_templateWrap.PushOutTypeWrap(nType);
+    }
+    void SetMemberValue(StringBuilder fileData, string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue, bool bOut)
+    {
+        string szCSharpName = value.GetTypeName(true, true);
+        string szDefine = string.Empty;
+        if (bTempValue)
+            szDefine = szCSharpName + " ";
+        if (value.IsArray)
+        {
+            fileData.AppendFormat("{0}{1} {2} = null;\r\n", szLeftEmpty, szCSharpName, szLeftName);
+            fileData.AppendFormat("{0}{1} = FCCustomParam.GetArray(ref {2},{3},{4});\r\n", szLeftEmpty, szLeftName, szLeftName, Ptr, szIndex);
+            return;
+        }
+        else if (value.IsList)
+        {
+            fileData.AppendFormat("{0}{1} {2} = null;\r\n", szLeftEmpty, szCSharpName, szLeftName);
+            fileData.AppendFormat("{0}{1} = FCCustomParam.GetList(ref {2},{3},{4});\r\n", szLeftEmpty, szLeftName, szLeftName, Ptr, szIndex);
+            return;
+        }
+        else if (value.IsMap)
+        {
+            fileData.AppendFormat("{0}{1} {2} = null;\r\n", szLeftEmpty, szCSharpName, szLeftName);
+            fileData.AppendFormat("{0}{1} = FCCustomParam.GetDictionary(ref {2},{3},{4});\r\n", szLeftEmpty, szLeftName, szLeftName, Ptr, szIndex);
+            return;
+        }
+        string szFuncAppend = FCValueType.GetFCLibFuncShortName(value.m_nValueType);
+        if (string.IsNullOrEmpty(szFuncAppend))
+        {
+            if (value.m_nValueType == fc_value_type.fc_value_enum)
+            {
+                fileData.AppendFormat("{0}{1}{2} = ({3})(FCLibHelper.fc_get_int({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
+                return;
+            }
+            if (value.m_nValueType == fc_value_type.fc_value_int_ptr)
+            {
+                fileData.AppendFormat("{0}{1}{2} = ({3})(FCLibHelper.fc_get_intptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
+                return;
+            }
+            if (value.m_nValueType == fc_value_type.fc_value_system_object)
+            {
+                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                return;
+            }
+            if (value.m_nValueType == fc_value_type.fc_value_delegate)
+            {
+                string szDelegateClassName = string.Format("{0}_deletate", value.GetDelegateName(true));
+                m_deleteWrap.PushDelegateWrap(value.m_value, szDelegateClassName);
+
+                fileData.AppendFormat("{0}{1} func{2} = FCDelegateMng.Instance.GetDelegate<{3}>({4},{5});\r\n", szLeftEmpty, szDelegateClassName, szIndex, szDelegateClassName, Ptr, szIndex);
+                fileData.AppendFormat("{0}{1} arg{2} = null;\r\n", szLeftEmpty, szCSharpName, szIndex);
+                fileData.AppendFormat("{0}if(func{1} != null)\r\n", szLeftEmpty, szIndex);
+                fileData.AppendFormat("{0}    arg{1} = func{2}.CallFunc;\r\n", szLeftEmpty, szIndex, szIndex);
+                fileData.AppendFormat("{0}// 尽量不要在函数参数中传递委托指针，这个无法自动托管，要尽可能是使用get, set属性方法\r\n", szLeftEmpty);
+                fileData.AppendFormat("{0}// 如果在参数中传递了委托指针，请在对应的函数中调用FCDelegateMng.Instance.RecordDelegate(delegate_func, func);\r\n", szLeftEmpty);
+                //fileData.AppendFormat("{0}else\r\n", szLeftEmpty, szIndex);
+                //fileData.AppendFormat("{0}    arg{1} = null;\r\n", szLeftEmpty, szIndex);
+                //fileData.AppendFormat("{0}FCDelegateMng.Instance.RecordDelegate({1}, func{2});\r\n", szLeftEmpty, szLeftName, szIndex); // 这里不能调用这个，对象不一样的噢
+                return;
+            }
+        }
+        else
+        {
+            if (FCValueType.IsGraphicType(value.m_nValueType))
+            {
+                fileData.AppendFormat("{0}{1} {2} = new {3}();\r\n", szLeftEmpty, szCSharpName, szLeftName, szCSharpName);
+                fileData.AppendFormat("{0}FCLibHelper.fc_get_{1}({2},{3},ref {4});\r\n", szLeftEmpty, szFuncAppend, Ptr, szIndex, szLeftName);
+                return;
+            }
+            else
+            {
+                fileData.AppendFormat("{0}{1}{2} = FCLibHelper.fc_get_{3}({4},{5});\r\n", szLeftEmpty, szDefine, szLeftName, szFuncAppend, Ptr, szIndex);
+                return;
+            }
+        }
+        fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<{3}>(FCLibHelper.fc_get_intptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
     }
 }

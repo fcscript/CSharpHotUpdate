@@ -14,7 +14,8 @@ class FCTemplateWrap
     Dictionary<Type, FCValueType> m_OutTypeWrap = new Dictionary<Type, FCValueType>();  // 向脚本输出参数
     Dictionary<Type, FCValueType> m_ReturnTypeWrap = new Dictionary<Type, FCValueType>(); // 向脚本输出返回值
 
-    Dictionary<Type, FCValueType> m_TransType = new Dictionary<Type, FCValueType>(); // 临时转换的
+    List<string> m_AllRefNameSpace = new List<string>();
+    Dictionary<string, int> m_AllRefNameSpaceFlags = new Dictionary<string, int>();
 
     string m_szExportPath;
     StringBuilder m_szTempBuilder;
@@ -34,6 +35,11 @@ class FCTemplateWrap
     {
         s_pIns = this;
         m_szExportPath = szPath;
+        
+        PushNameSapce("System");
+        PushNameSapce("System.Collections.Generic");
+        PushNameSapce("System.Text");
+        PushNameSapce("UnityEngine");
 
         PushGetTypeWrap(typeof(byte[]));
         PushGetTypeWrap(typeof(int[]));
@@ -48,7 +54,7 @@ class FCTemplateWrap
         PushReturnTypeWrap(typeof(byte []));
         PushReturnTypeWrap(typeof(List<byte>));
 
-        // 在这里添加扩展的类型
+        // 手动在这里添加扩展的类型
     }
 
     public void  EndExport(StringBuilder strBuilder)
@@ -56,10 +62,12 @@ class FCTemplateWrap
         m_szTempBuilder = strBuilder;
 
         m_szTempBuilder.Length = 0;
-        m_szTempBuilder.AppendLine("using System;");
-        m_szTempBuilder.AppendLine("using System.Collections.Generic;");
-        m_szTempBuilder.AppendLine("using System.Text;");
-        m_szTempBuilder.AppendLine("using UnityEngine;\r\n");
+        foreach(string szNameSpace in m_AllRefNameSpace)
+        {
+            m_szTempBuilder.AppendFormat("using {0};\r\n", szNameSpace);
+        }
+        m_szTempBuilder.AppendLine();
+        
         m_szTempBuilder.AppendLine("\r\nclass FCCustomParam");
         m_szTempBuilder.AppendLine("{");
         
@@ -71,15 +79,16 @@ class FCTemplateWrap
 
         string szPathName = m_szExportPath + "FCCustomParam.cs";
         File.WriteAllText(szPathName, m_szTempBuilder.ToString());
-    }    
-    public FCValueType TransType(Type nType)
+    }
+
+    void  PushNameSapce(string szNameSpace)
     {
-        FCValueType value = null;
-        if (m_TransType.TryGetValue(nType, out value))
-            return value;
-        value = new FCValueType(nType);
-        m_TransType[nType] = value;
-        return value;
+        if (string.IsNullOrEmpty(szNameSpace))
+            return;
+        if (m_AllRefNameSpaceFlags.ContainsKey(szNameSpace))
+            return;
+        m_AllRefNameSpaceFlags[szNameSpace] = 1;
+        m_AllRefNameSpace.Add(szNameSpace);
     }
 
     // 功能：添加要返回值的值
@@ -90,6 +99,7 @@ class FCTemplateWrap
             return value;
         value = new FCValueType(nType);
         m_GetTypeWrap[nType] = value;
+        PushNameSapce(nType.Namespace);
         return value;
     }
 
@@ -101,6 +111,7 @@ class FCTemplateWrap
             return value;
         value = new FCValueType(nType);
         m_OutTypeWrap[nType] = value;
+        PushNameSapce(nType.Namespace);
         return value;
     }
 
@@ -112,6 +123,7 @@ class FCTemplateWrap
             return value;
         value = new FCValueType(nType);
         m_ReturnTypeWrap[nType] = value;
+        PushNameSapce(nType.Namespace);
         return value;
     }
     
@@ -160,15 +172,16 @@ class FCTemplateWrap
             case fc_value_type.fc_value_color32:
             case fc_value_type.fc_value_color:
                 {
+                    string szFuncAppend = FCValueType.GetFCLibFuncShortName(value.m_nValueType);
                     if(bList)
                     {
                         fileData.AppendFormat("            {0}[] buffer = new {1}[nArraySize];\r\n", szCharpName, szCharpName);
-                        fileData.AppendFormat("            FCLibHelper.fc_get_array_{0}(ptr, buffer, 0, nArraySize);\r\n", szCharpName);
+                        fileData.AppendFormat("            FCLibHelper.fc_get_array_{0}(ptr, buffer, 0, nArraySize);\r\n", szFuncAppend);
                         fileData.AppendLine("            rList.AddRange(buffer);");
                     }
                     else
                     {
-                        fileData.AppendFormat("            FCLibHelper.fc_get_array_{0}(ptr, rList, 0, nArraySize);\r\n", szCharpName);
+                        fileData.AppendFormat("            FCLibHelper.fc_get_array_{0}(ptr, rList, 0, nArraySize);\r\n", szFuncAppend);
                     }
                 }
                 break;
@@ -272,7 +285,10 @@ class FCTemplateWrap
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
                     fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
-                    fileData.AppendFormat("                {0} item = FCGetObj.GetObj<{0}>(item_ptr);\r\n", szCharpName, szCharpName);
+                    //if(value.m_value.IsClass)
+                        fileData.AppendFormat("                {0} item = FCGetObj.GetObj<{0}>(item_ptr);\r\n", szCharpName, szCharpName);
+                    //else
+                    //    fileData.AppendFormat("                {0} item = FCGetObj.GetStructObj<{0}>(item_ptr);\r\n", szCharpName, szCharpName);
                     if (bList)
                         fileData.AppendLine("                rList.Add(item);");
                     else
@@ -695,7 +711,7 @@ class FCTemplateWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
-        fileData.AppendLine("            int nCount = rList != null ? rList.Length : 0;");
+        fileData.AppendLine("            int nCount = rList != null ? rList.Count : 0;");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_return_ptr(L);");
         fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
         if (FCValueType.IsRefType(value.m_nValueType))
