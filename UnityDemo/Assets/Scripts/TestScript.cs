@@ -22,11 +22,10 @@ public class TestExport
     public TestCallback onOwnPostRender; // 这个也于属性一样，有get, set
     public TestCallback2 onCallFunc2;
 
-    public void SetCallFunc(string szName, Action<int, float, string> func)
-    {
+    //public void SetCallFunc(string szName, Action<int, float, string> func)
+    //{
 
-    }
-
+    //}
     public Material[] materials { get; set; }
 
     [Obsolete("test dissable func", true)]

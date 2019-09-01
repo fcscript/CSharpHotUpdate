@@ -24,9 +24,14 @@ public static class FCExport
     {
         pWrap.BeginModleWrap("Unity");
 
+        pWrap.WrapClass(typeof(UnityEngine.Object));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
+        pWrap.WrapClass(typeof(UnityEngine.Component));
         pWrap.WrapClass(typeof(UnityEngine.Texture2D));
         pWrap.WrapClass(typeof(UnityEngine.GameObject));
+        pWrap.WrapClass(typeof(UnityEngine.Behaviour));
+        pWrap.PushCurrentDontWrapName("Item");
+        pWrap.WrapClass(typeof(UnityEngine.Animation));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
 
@@ -36,7 +41,7 @@ public static class FCExport
     {
         pWrap.BeginModleWrap("Custom");
 
-        pWrap.WrapClass(typeof(TestExport));
+        pWrap.WrapClass(typeof(TestExport)); // 导出一个测试的类
 
         pWrap.EndModleWrap();
     }

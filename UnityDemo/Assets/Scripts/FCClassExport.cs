@@ -23,6 +23,8 @@ class FCClassExport
     Dictionary<Type, int> m_AllExportType = new Dictionary<Type, int>(); // 所有的类型
     Dictionary<Type, int> m_AllRefType = new Dictionary<Type, int>(); // 所有引用的类型
 
+    Dictionary<string, int> m_CurDontWrapName = new Dictionary<string, int>();
+
     public void ExportDefaultClass(string szPath)
     {
         m_szFileBuilder.Length = 0;
@@ -71,15 +73,8 @@ class FCClassExport
         string szPathName = szPath + "all_default_class.cs";
         File.WriteAllText(szPathName, m_szFileBuilder.ToString());
     }
-
-    string  GetTypeName(Type nType)
-    {
-        if (nType == typeof(UnityEngine.Object))
-            return "UnityObject";
-        return nType.Name;
-    }
-
-    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi)
+    
+    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi, Dictionary<string, int> aDontWrapName)
     {
         m_bPartWrap = bPartWrap;
         m_bOnlyThisAPI = bOnlyThisApi;
@@ -90,11 +85,13 @@ class FCClassExport
         m_CurRefNameSpace.Clear();
         m_CurRefNameSpacesFlags.Clear();
 
+        m_CurDontWrapName = aDontWrapName;
+
         m_AllExportType[nClassType] = 1;
         Type nParentType = nClassType.BaseType;
         m_AllRefType[nParentType] = 1;
 
-        m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", nClassType.Name, GetTypeName(nParentType));
+        m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", FCValueType.GetClassName(nClassType), FCValueType.GetClassName(nParentType));
         m_szTempBuilder.AppendLine("{");
 
         MakeInnerEnum();  // 分析内部的枚举类
@@ -161,12 +158,23 @@ class FCClassExport
                 szCallParam = szCallParam + " " + param.Name;
             }
         }
-        m_szTempBuilder.AppendFormat("    public {0}({1});\r\n", m_nClassType.Name, szCallParam);
+        m_szTempBuilder.AppendFormat("    public {0}({1});\r\n", FCValueType.GetClassName(m_nClassType), szCallParam);
     }
 
     void MakeProperty()
     {
-        FieldInfo[] allFields = m_nClassType.GetFields(); // 所有成员变量(只有public的)
+        FieldInfo[] allFields = null;
+        PropertyInfo[] allProperties = null;
+        if (m_bOnlyThisAPI)
+        {
+            allFields = m_nClassType.GetFields(BindingFlags.GetField | BindingFlags.Public | BindingFlags.Static);
+            allProperties = m_nClassType.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+        }
+        else
+        {
+            allFields = m_nClassType.GetFields(); // 所有成员变量(只有public的)
+            allProperties = m_nClassType.GetProperties(); // 属性方法 get/set
+        }        
         if (allFields != null)
         {
             foreach (FieldInfo field in allFields)
@@ -174,7 +182,6 @@ class FCClassExport
                 PushFieldInfo(field);
             }
         }
-        PropertyInfo[] allProperties = m_nClassType.GetProperties(); // 属性方法 get/set
         if (allProperties != null)
         {
             foreach (PropertyInfo property in allProperties)
@@ -233,6 +240,14 @@ class FCClassExport
         {
             return;
         }
+        if (m_CurDontWrapName.ContainsKey(property.Name))
+        {
+            return;
+        }
+        //if (property.IsDefined(typeof(DefaultMemberAttribute), false))
+        //{
+        //    return;
+        //}
         PushNameSpace(property.PropertyType.Namespace);
         PushRefType(property.PropertyType);
         Type nVaueType = property.PropertyType;
@@ -271,7 +286,11 @@ class FCClassExport
 
     void MakeMethod()
     {
-        MethodInfo[] allMethods = m_nClassType.GetMethods();  // 函数+get/set方法
+        MethodInfo[] allMethods = null;// m_nClassType.GetMethods();  // 函数+get/set方法
+        if (m_bOnlyThisAPI)
+            allMethods = m_nClassType.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        else
+            allMethods = m_nClassType.GetMethods();  // 函数+get/set方法
         if (allMethods == null)
             return;
         foreach(MethodInfo method in allMethods)

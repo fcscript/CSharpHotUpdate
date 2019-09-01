@@ -38,6 +38,7 @@ public enum  fc_value_type
     fc_value_rect,  // Rect
     
     fc_value_system_object, // System.Object与
+    fc_value_unity_object,  // Unity.Object
     fc_value_object, // 普通的类
 
     fc_value_enum,   // 枚举
@@ -139,7 +140,7 @@ public class FCValueType
             case fc_value_tempalte_type.template_array:
                 {
                     if (bSharp)
-                        return bFullName ? (m_value.FullName + "[]") : (m_value.Name + "[]");
+                        return GetValueName(bSharp, bFullName) + "[]";
                     else
                         return string.Format("List<{0}>", GetKeyName(bSharp, bFullName));
                 }
@@ -157,6 +158,13 @@ public class FCValueType
     {
         // 检测
         return GetDelegateTypeName(m_value, bSharp);
+    }
+    public static string GetClassName(Type nType)
+    {
+        if (nType == typeof(UnityEngine.Object))
+            return "UnityObject";
+        else
+            return nType.Name;
     }
     static string GetDelegateTypeName(Type nType, bool bSharp)
     {
@@ -257,6 +265,7 @@ public class FCValueType
         s_BaseTypeFinder[typeof(IntRect)] = fc_value_type.fc_value_intrect;
         s_BaseTypeFinder[typeof(Rect)] = fc_value_type.fc_value_rect;
         s_BaseTypeFinder[typeof(System.Object)] = fc_value_type.fc_value_system_object;
+        s_BaseTypeFinder[typeof(UnityEngine.Object)] = fc_value_type.fc_value_unity_object;
     }
 
     public static fc_value_type GetBaseFCType(Type nType)
@@ -367,7 +376,7 @@ public class FCValueType
     }
     public static bool IsObjectType(fc_value_type nValueType)
     {
-        return nValueType == fc_value_type.fc_value_system_object || nValueType == fc_value_type.fc_value_object;
+        return nValueType == fc_value_type.fc_value_system_object || nValueType == fc_value_type.fc_value_object || nValueType == fc_value_type.fc_value_unity_object;
     }    
 
     // 功能：得到变量的类型名
@@ -428,7 +437,10 @@ public class FCValueType
             case fc_value_type.fc_value_rect:
                 return "Rect";
             case fc_value_type.fc_value_system_object:
-                return bCSharp ?"System.Object" : "Object";
+                return bCSharp ? "System.Object" : "Object";
+            case fc_value_type.fc_value_unity_object:
+                return bCSharp ? "UnityObject" : "UnityObject";
+            //return bCSharp ? "UnityEngine.Object" : "UnityObject";
             case fc_value_type.fc_value_delegate:
                 {
                     return GetDeleteExportName(nType, bCSharp, bFullName);

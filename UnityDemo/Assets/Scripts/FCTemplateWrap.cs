@@ -40,6 +40,7 @@ class FCTemplateWrap
         PushNameSapce("System.Collections.Generic");
         PushNameSapce("System.Text");
         PushNameSapce("UnityEngine");
+        PushNameSapce("UnityObject = UnityEngine.Object");
 
         PushGetTypeWrap(typeof(byte[]));
         PushGetTypeWrap(typeof(int[]));
@@ -280,6 +281,7 @@ class FCTemplateWrap
                 }
                 break;
             case fc_value_type.fc_value_system_object:
+            case fc_value_type.fc_value_unity_object:
             case fc_value_type.fc_value_object:
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
@@ -433,6 +435,7 @@ class FCTemplateWrap
                 }
                 break;
             case fc_value_type.fc_value_system_object:
+            case fc_value_type.fc_value_unity_object:
             case fc_value_type.fc_value_object:
                 {
                     fileData.AppendFormat("                {0} {1} = FCGetObj.GetObj<{2}>({3});\r\n", szCSharpName, szLeftName, szCSharpName, szPtrName);                    

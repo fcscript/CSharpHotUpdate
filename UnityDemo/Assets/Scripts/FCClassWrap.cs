@@ -34,9 +34,10 @@ public class FCClassWrap
     Dictionary<string, int> m_CurFuncCount = new Dictionary<string, int>();
     List<string> m_CurRefNameSpace = new List<string>();
     Dictionary<string, int> m_CurRefNameSpacesFlags = new Dictionary<string, int>();
-
     List<string> m_AllRefNameSpace = new List<string>();
     Dictionary<string, int> m_AllRefNameSpaceFlags = new Dictionary<string, int>();
+
+    Dictionary<string, int> m_CurDontWrapName = new Dictionary<string, int>();
 
     StringBuilder m_szTempBuilder;
 
@@ -143,6 +144,11 @@ public class FCClassWrap
         m_AllWrapClassName.Add(szModelClassName);
     }
 
+    public void  PushCurrentDontWrapName(string szName)
+    {
+        m_CurDontWrapName[szName] = 1;
+    }
+
     public void  WrapClass(Type nClassType, bool bPartWrap = false)
     {
         WrapClassEx(nClassType, bPartWrap, true);
@@ -152,18 +158,18 @@ public class FCClassWrap
         m_bPartWrap = bPartWrap;
         m_bOnlyThisAPI = bOnlyThisApi;
         m_szTempBuilder.Length = 0;
-        string szWrapName = nClassType.Name + "_wrap";
+        string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
         m_CurWrapClassNames.Add(szWrapName);
-        m_szCurClassName = nClassType.Name;
+        m_szCurClassName = FCValueType.GetClassName(nClassType);
         m_nCurClassType = nClassType;
         WrapSubClass(m_szTempBuilder, nClassType);
-        m_export.ExportClass(nClassType, m_szFCScriptPath + m_szCurClassName + ".cpp", bPartWrap, bOnlyThisApi);
-
+        m_export.ExportClass(nClassType, m_szFCScriptPath + m_szCurClassName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName);
+        m_CurDontWrapName.Clear();
     }
 
     void  WrapSubClass(StringBuilder fileData, Type nClassType)
     {
-        string szWrapName = nClassType.Name + "_wrap";
+        string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
         m_CurClassFunc.Clear();
         m_CurSameName.Clear();
         m_CurRefNameSpace.Clear();
@@ -173,12 +179,25 @@ public class FCClassWrap
         PushNameSpace("System.Collections.Generic");
         PushNameSpace("System.Text");
         PushNameSpace("UnityEngine");
+        PushNameSpace("UnityObject = UnityEngine.Object"); // 给这个家伙换个名字吧
         //PushNameSpace("UnityEngine.Rendering");
 
         // 先生成init函数
-        FieldInfo[] allFields = nClassType.GetFields(); // 所有成员变量(只有public的)
-        PropertyInfo[] allProperties = nClassType.GetProperties(); // 属性方法 get/set
-        MethodInfo[] allMethods = nClassType.GetMethods();  // 函数+get/set方法
+        FieldInfo[] allFields = null;
+        PropertyInfo[] allProperties = null;
+        MethodInfo[] allMethods = null;
+        if(m_bOnlyThisAPI)
+        {
+            allFields = nClassType.GetFields(BindingFlags.GetField | BindingFlags.Public | BindingFlags.Static);
+            allProperties = nClassType.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            allMethods = nClassType.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        }
+        else
+        {
+            allFields = nClassType.GetFields(); // 所有成员变量(只有public的)
+            allProperties = nClassType.GetProperties(); // 属性方法 get/set
+            allMethods = nClassType.GetMethods();  // 函数+get/set方法
+        }
         if(allFields != null)
         {
             foreach(FieldInfo field in allFields)
@@ -216,7 +235,7 @@ public class FCClassWrap
         MakeDel();
         MakeNew();
         // 生成Init函数
-        MakeInitFunc(nClassType.Name);
+        MakeInitFunc(FCValueType.GetClassName(nClassType));
         MakeGetObj(); // 生成 _Ty  get_obj()函数
         MakeWrapClass(szWrapName);
     }
@@ -600,6 +619,14 @@ public class FCClassWrap
         {
             return;
         }
+        if(m_CurDontWrapName.ContainsKey(property.Name))
+        {
+            return;
+        }
+        //if(property.IsDefined(typeof(DefaultMemberAttribute), false))
+        //{
+        //    return;
+        //}
         Type nVaueType = property.PropertyType;
         PushNameSpace(nVaueType.Namespace);
 
@@ -905,6 +932,11 @@ public class FCClassWrap
             if (value.m_nValueType == fc_value_type.fc_value_system_object)
             {
                 fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                return;
+            }
+            if(value.m_nValueType == fc_value_type.fc_value_unity_object)
+            {
+                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 return;
             }
             if (value.m_nValueType == fc_value_type.fc_value_delegate)
