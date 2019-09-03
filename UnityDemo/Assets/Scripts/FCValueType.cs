@@ -554,4 +554,25 @@ public class FCValueType
     {
         return GetFCLibFuncShortName(GetBaseFCType(nType));
     }
+    public static FieldInfo[] GetFields(Type nType, bool bOnlyThisAPI)
+    {
+        if (bOnlyThisAPI)
+            return nType.GetFields(BindingFlags.GetField | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static);
+        else
+            return nType.GetFields();
+    }
+    public static PropertyInfo[] GetProperties(Type nType, bool bOnlyThisAPI)
+    {
+        if (bOnlyThisAPI)
+            return nType.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        else
+            return nType.GetProperties();
+    }
+    public static MethodInfo[] GetMethods(Type nType, bool bOnlyThisAPI)
+    {
+        if (bOnlyThisAPI)
+            return nType.GetMethods(BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+        else
+            return nType.GetMethods();
+    }
 }

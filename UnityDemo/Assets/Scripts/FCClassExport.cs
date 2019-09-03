@@ -158,23 +158,13 @@ class FCClassExport
                 szCallParam = szCallParam + " " + param.Name;
             }
         }
-        m_szTempBuilder.AppendFormat("    public {0}({1});\r\n", FCValueType.GetClassName(m_nClassType), szCallParam);
+        m_szTempBuilder.AppendFormat("    public {0}({1}){{}}\r\n", FCValueType.GetClassName(m_nClassType), szCallParam);
     }
 
     void MakeProperty()
     {
-        FieldInfo[] allFields = null;
-        PropertyInfo[] allProperties = null;
-        if (m_bOnlyThisAPI)
-        {
-            allFields = m_nClassType.GetFields(BindingFlags.GetField | BindingFlags.Public | BindingFlags.Static);
-            allProperties = m_nClassType.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-        }
-        else
-        {
-            allFields = m_nClassType.GetFields(); // 所有成员变量(只有public的)
-            allProperties = m_nClassType.GetProperties(); // 属性方法 get/set
-        }        
+        FieldInfo[] allFields = FCValueType.GetFields(m_nClassType, m_bOnlyThisAPI);
+        PropertyInfo[] allProperties = FCValueType.GetProperties(m_nClassType, m_bOnlyThisAPI);
         if (allFields != null)
         {
             foreach (FieldInfo field in allFields)
@@ -286,11 +276,7 @@ class FCClassExport
 
     void MakeMethod()
     {
-        MethodInfo[] allMethods = null;// m_nClassType.GetMethods();  // 函数+get/set方法
-        if (m_bOnlyThisAPI)
-            allMethods = m_nClassType.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
-        else
-            allMethods = m_nClassType.GetMethods();  // 函数+get/set方法
+        MethodInfo[] allMethods = FCValueType.GetMethods(m_nClassType, m_bOnlyThisAPI);// m_nClassType.GetMethods();  // 函数+get/set方法
         if (allMethods == null)
             return;
         foreach(MethodInfo method in allMethods)

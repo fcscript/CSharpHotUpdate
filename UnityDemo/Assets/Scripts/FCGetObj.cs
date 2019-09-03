@@ -21,11 +21,11 @@ public class FCGetObj
         if(m_AllObj.TryGetValue(nIntPtr, out ref_obj))
         {
             Type nType = typeof(_Ty);
-            if(nType.Equals(ref_obj.m_nType))
-            {
+            //if(nType.Equals(ref_obj.m_nType))
+            //{
                 _Ty ret = (_Ty)ref_obj.m_obj;
                 return ret;
-            }
+            //}
         }
         return default(_Ty);
     }
@@ -60,7 +60,7 @@ public class FCGetObj
     public static long PushObj<_Ty>(_Ty  obj )// where _Ty : class
     {
         FCRefObj ref_obj = new FCRefObj();
-        ref_obj.m_nType = typeof(_Ty);
+        ref_obj.m_nType = obj != null ? obj.GetType() : typeof(_Ty);
         ref_obj.m_nRef = 1;
         ref_obj.m_obj = obj;
         long nPtr = ++m_nObjID;

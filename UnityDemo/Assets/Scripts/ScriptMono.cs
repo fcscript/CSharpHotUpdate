@@ -52,4 +52,123 @@ public class ScriptMono : MonoBehaviour
             FCLibHelper.fc_call(m_nScriptInsPtr, "OnButtonClicked");
         }
     }
+    // 功能：设置脚本中的变量
+    public void SetScriptValue(string szName, bool value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_bool(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, byte value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_byte(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, short value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_short(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, ushort value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_ushort(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, int value)
+    {
+        CreateScript();
+        if(m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_int(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, uint value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_uint(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, float value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_float(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, double value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_double(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, string value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_string(ptr, value);
+        }
+    }
+    public void SetScriptValue(string szName, System.Object value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long obj_ptr = FCGetObj.PushObj(value);
+            FCLibHelper.fc_set_value_intptr(ptr, obj_ptr);
+        }
+    }
+    public void SetScriptValue(string szName, Vector2 value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_vector2(ptr, ref value);
+        }
+    }
+    public void SetScriptValue(string szName, Vector3 value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_vector3(ptr, ref value);
+        }
+    }
+    public void SetScriptValue(string szName, Vector4 value)
+    {
+        CreateScript();
+        if (m_nScriptInsPtr != 0)
+        {
+            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            FCLibHelper.fc_set_value_vector4(ptr, ref value);
+        }
+    }
 }

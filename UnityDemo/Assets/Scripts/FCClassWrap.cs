@@ -51,7 +51,7 @@ public class FCClassWrap
     }
 
     // 功能：删除指定目录下的所有文件
-    void  DeletePath(string szPath)
+    public static void  DeletePath(string szPath)
     {
         try
         {
@@ -77,8 +77,9 @@ public class FCClassWrap
         m_szExportPath = szExportPath;
         if (string.IsNullOrEmpty(m_szExportPath))
         {
-            m_szExportPath = Application.dataPath;
-            m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "FCWrap/";
+            //m_szExportPath = Application.dataPath;
+            //m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "FCWrap/";
+            m_szExportPath = Application.dataPath + "/FCWrap/";
         }
         m_szFCScriptPath = Application.dataPath;
         m_szFCScriptPath = m_szFCScriptPath.Substring(0, m_szFCScriptPath.Length - 6) + "Script/inport/";
@@ -183,21 +184,9 @@ public class FCClassWrap
         //PushNameSpace("UnityEngine.Rendering");
 
         // 先生成init函数
-        FieldInfo[] allFields = null;
-        PropertyInfo[] allProperties = null;
-        MethodInfo[] allMethods = null;
-        if(m_bOnlyThisAPI)
-        {
-            allFields = nClassType.GetFields(BindingFlags.GetField | BindingFlags.Public | BindingFlags.Static);
-            allProperties = nClassType.GetProperties(BindingFlags.GetProperty | BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-            allMethods = nClassType.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
-        }
-        else
-        {
-            allFields = nClassType.GetFields(); // 所有成员变量(只有public的)
-            allProperties = nClassType.GetProperties(); // 属性方法 get/set
-            allMethods = nClassType.GetMethods();  // 函数+get/set方法
-        }
+        FieldInfo[] allFields = FCValueType.GetFields(nClassType, m_bOnlyThisAPI);
+        PropertyInfo[] allProperties = FCValueType.GetProperties(nClassType, m_bOnlyThisAPI);
+        MethodInfo[] allMethods = FCValueType.GetMethods(nClassType, m_bOnlyThisAPI);
         if(allFields != null)
         {
             foreach(FieldInfo field in allFields)

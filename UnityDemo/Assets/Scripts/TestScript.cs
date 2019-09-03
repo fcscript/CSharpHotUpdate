@@ -186,6 +186,7 @@ class TestScript : FCScriptLoader
         FCLibHelper.fc_register_func("fc2csharp_set_vector3", fc2csharp_set_vector3);
         FCLibHelper.fc_register_func("fc2csharp_set_vector4", fc2csharp_set_vector4);
         FCLibHelper.fc_register_func("fc2csharp_set_string", fc2csharp_set_string);
+        all_class_wrap.Register(); // 动态wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back))]
@@ -263,6 +264,16 @@ class TestScript : FCScriptLoader
         print_error(szLog);
         FCLibHelper.fc_call(m_nTestPtr, "Start");
     }
+    void TestFunc0()
+    {
+        GameObject obj = GameObject.Find("Empty");
+        if (obj == null)
+            obj = new GameObject("Empty");
+        //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
+        long nPtr = FCGetObj.PushObj(obj.transform);
+        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_call(0, "Test0");
+    }
     void InvalidObjectScriptCall()
     {
         InitDll();
@@ -339,6 +350,11 @@ class TestScript : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试脚本对象"))
         {
             TestObjectScript();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test0"))
+        {
+            TestFunc0();
         }
         nLeft = 300;
         nTop += 80;

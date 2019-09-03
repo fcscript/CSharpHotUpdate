@@ -66,46 +66,47 @@ export void  csharp2fc_set_string(StringA v)
     print("C#传参 v={0}", v);
     fc2csharp_set_string(v);
 }
-void  PrintTime(StringA szFunc, uint  nTime)
-{
-    print("{0}花费时间：{1}秒{2}毫秒", szFunc, nTime/1000, nTime % 1000);
-}
-
-void Test8()
-{
-    print("start call =================================");
-    uint  nBegin = System.GetTickCount();
-    uint  nTotal = 0;
-    for(int i = 0; i<1000000; ++i)
-    {
-        nTotal = nTotal + i - (i/2) * (i + 3) / (i + 5);
-    }
-    uint nEnd = System.GetTickCount();
-    print("end call =================================");
-    PrintTime("Test8", nEnd - nBegin);
-}
-
-void Test9()
-{
-    List<int>  aNumb = new List<int>();
-    aNumb.resize(1024);
-    for(int i = 0; i<1024; ++i)
-    {
-        aNumb[i] = i;
-    }
-    uint  nBegin = System.GetTickCount();
-    int  nTotal = 0;
-    for(int i = 0; i<100000; ++i)
-    {
-        for(int j = 0; j<1024; ++j)
-        {
-//            nTotal = nTotal + aNumb[i];
-            nTotal += aNumb[j];
-        }
-    }
-    uint nEnd = System.GetTickCount();
-    PrintTime("Test9", nEnd - nBegin);
-}
+//
+//void  PrintTime(StringA szFunc, uint  nTime)
+//{
+//    print("{0}花费时间：{1}秒{2}毫秒", szFunc, nTime/1000, nTime % 1000);
+//}
+//
+//void Test8()
+//{
+//    print("start call =================================");
+//    uint  nBegin = System.GetTickCount();
+//    uint  nTotal = 0;
+//    for(int i = 0; i<1000000; ++i)
+//    {
+//        nTotal = nTotal + i - (i/2) * (i + 3) / (i + 5);
+//    }
+//    uint nEnd = System.GetTickCount();
+//    print("end call =================================");
+//    PrintTime("Test8", nEnd - nBegin);
+//}
+//
+//void Test9()
+//{
+//    List<int>  aNumb = new List<int>();
+//    aNumb.resize(1024);
+//    for(int i = 0; i<1024; ++i)
+//    {
+//        aNumb[i] = i;
+//    }
+//    uint  nBegin = System.GetTickCount();
+//    int  nTotal = 0;
+//    for(int i = 0; i<100000; ++i)
+//    {
+//        for(int j = 0; j<1024; ++j)
+//        {
+////            nTotal = nTotal + aNumb[i];
+//            nTotal += aNumb[j];
+//        }
+//    }
+//    uint nEnd = System.GetTickCount();
+//    PrintTime("Test9", nEnd - nBegin);
+//}
 
 export void  main()
 {

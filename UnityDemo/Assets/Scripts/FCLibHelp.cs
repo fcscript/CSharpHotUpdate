@@ -284,6 +284,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_sphere(ref Sphere v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_prepare_call(long pInsPtr, string pcsFuncName);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_call(long pInsPtr, string pcsFuncName);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_serialize_msg_call(long pInsPtr, string pcsFuncName, byte[] msgPtr, int nStart, int nLen, bool bReadMode);

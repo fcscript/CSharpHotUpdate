@@ -6,19 +6,21 @@ void  PrintTime(StringA szFunc, uint  nTime)
     print("{0}花费时间：{1}秒{2}毫秒", szFunc, nTime/1000, nTime % 1000);
 }
 
-export void Test0(Transfrom transform)
+export void Test0(Transform transform)
 {
+    print("start call =================================");
     uint  nBegin = System.GetTickCount();
 
     for(int i = 0; i<200000; ++i)
     {
         transform.position = transform.position;
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
+    print("end  call =================================");
     PrintTime("Test0", nEnd - nBegin);
 }
 
-void  Test1(Transfrom transform)
+export void  Test1(Transform transform)
 {
     uint  nBegin = System.GetTickCount();
     Vector3 vUp;
@@ -27,11 +29,11 @@ void  Test1(Transfrom transform)
     {
         transform.Rotate(vUp, 1);
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test1", nEnd - nBegin);
 }
 
-void Test2()
+export void Test2()
 {
     uint  nBegin = System.GetTickCount();
     Vector3 v;
@@ -47,22 +49,22 @@ void Test2()
         y = v.y;
         z = v.z;        
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test2", nEnd - nBegin);
 }
 
-void  Test3()
+export void  Test3()
 {
     uint  nBegin = System.GetTickCount();
     for(int i = 0; i<200000; ++i)
     {
         GameObject  obj = new GameObject(); // 这样写，其实是会立即释放的
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test3", nEnd - nBegin);
 }
 
-void Test4()
+export void Test4()
 {
     uint  nBegin = System.GetTickCount();
     //SkinnedMeshRenderer  nType = typeof(SkinnedMeshRenderer);
@@ -73,22 +75,22 @@ void Test4()
         SkinnedMeshRenderer c = obj.GetComponent<SkinnedMeshRenderer>();
         c.receiveShadows = false;
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test4", nEnd - nBegin);
 }
 
-void Test5()
+export void Test5()
 {
     uint  nBegin = System.GetTickCount();
     for(int i = 0; i<200000; ++i)
     {
         Vector3 v = Input.mousePosition;
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test5", nEnd - nBegin);
 }
 
-void Test6()
+export void Test6()
 {
     uint  nBegin = System.GetTickCount();
     for(int i = 0; i<200000; ++i)
@@ -97,11 +99,11 @@ void Test6()
         v.Set(i, i, i);
         v.Normalize();
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test6", nEnd - nBegin);
 }
 
-void Test7()
+export void Test7()
 {
     uint  nBegin = System.GetTickCount();
     Quaternion  qa;
@@ -109,27 +111,31 @@ void Test7()
     Quaternion  q2;
     for(int i = 0; i<200000; ++i)
     {
-        q1 = Quaternion.Euler(i, i, i);
-        q2 = Quaternion.Euler(i * 2, i * 2, i * 2);
-        Quaternion.Slerp(Quaternion.identity, q1, 0.5f);
+        //q1 = Quaternion.Euler(i, i, i);
+        //q2 = Quaternion.Euler(i * 2, i * 2, i * 2);
+        q1.SetEulerAngles(i, i, i);
+        q2.SetEulerAngles(i * 2, i * 2, i * 2);
+        qa.Slerp(q1, q2, 0.5f);
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test7", nEnd - nBegin);
 }
 
-void Test8()
+export void Test8()
 {
+    print("start call =================================");
     uint  nBegin = System.GetTickCount();
-    uint  nTotal = 0;
+    int  nTotal = 0;
     for(int i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
+    print("end call =================================");
     PrintTime("Test8", nEnd - nBegin);
 }
 
-void Test9()
+export void Test9()
 {
     List<int>  aNumb = new List<int>();
     for(int i = 0; i<1024; ++i)
@@ -137,25 +143,26 @@ void Test9()
         aNumb[i] = i;
     }
     uint  nBegin = System.GetTickCount();
-    uint  nTotal = 0;
+    int  total = 0;
     for(int i = 0; i<100000; ++i)
     {
         for(int j = 0; j<1024; ++j)
         {
-            total = total + aNumb[i];
+            //total = total + aNumb[i];
+            total += aNumb[i];
         }
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test9", nEnd - nBegin);
 }
 
-void Test10(Transfrom transform)
+export void Test10(Transform transform)
 {
     uint  nBegin = System.GetTickCount();
     for(int i = 0; i<200000; ++i)
     {
-        UserClass.TestFunc1(1, "123", transform.position, transform);
+        //UserClass.TestFunc1(1, "123", transform.position, transform);
     }
-    unint nEnd = System.GetTickCount();
+    uint nEnd = System.GetTickCount();
     PrintTime("Test10", nEnd - nBegin);
 }

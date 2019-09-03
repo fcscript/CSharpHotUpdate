@@ -20,10 +20,20 @@ public static class FCExport
 
         pWrap.EndExport();
     }
+    [MenuItem("FCScript/清除Wrap脚本", false, 5)]
+    static void ClearWrapFile()
+    {
+        string szDataPath = Application.dataPath;
+        string szExportPath = szDataPath + "/FCWrap/";
+        string szFCScriptPath = szDataPath.Substring(0, szDataPath.Length - 6) + "Script/inport/";
+        FCClassWrap.DeletePath(szExportPath);
+        FCClassWrap.DeletePath(szFCScriptPath);
+    }
     static void WrapUnityClass(FCClassWrap pWrap)
     {
         pWrap.BeginModleWrap("Unity");
 
+        //pWrap.WrapClass(typeof(System.Type));
         pWrap.WrapClass(typeof(UnityEngine.Object));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.Component));
@@ -34,6 +44,7 @@ public static class FCExport
         pWrap.WrapClass(typeof(UnityEngine.Animation));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
+        pWrap.WrapClass(typeof(UnityEngine.Input));
 
         pWrap.EndModleWrap();
     }
