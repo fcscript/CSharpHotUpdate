@@ -16,6 +16,7 @@ public class Unity_wrap
         Behaviour_wrap.Register();
         Animation_wrap.Register();
         Transform_wrap.Register();
+        Renderer_wrap.Register();
         SkinnedMeshRenderer_wrap.Register();
         Input_wrap.Register();
     }

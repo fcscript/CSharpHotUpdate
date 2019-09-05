@@ -68,7 +68,8 @@ export void Test4()
 {
     uint  nBegin = System.GetTickCount();
     //SkinnedMeshRenderer  nType = typeof(SkinnedMeshRenderer);
-    for(int i = 0; i<200000; ++i)
+	//GameObject  obj = new GameObject();  // 这样写，其实也是会立即释放的, 需要保存起来
+    for(int i = 0; i<20000; ++i)
     {
         GameObject  obj = new GameObject();  // 这样写，其实也是会立即释放的, 需要保存起来
         obj.AddComponent<SkinnedMeshRenderer>();
@@ -125,7 +126,7 @@ export void Test8()
 {
     print("start call =================================");
     uint  nBegin = System.GetTickCount();
-    int  nTotal = 0;
+    int  total = 0;
     for(int i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);

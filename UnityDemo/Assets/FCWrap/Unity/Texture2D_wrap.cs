@@ -276,13 +276,13 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            UnityEngine.TextureFormat arg2 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,2));
-            bool arg3 = FCLibHelper.fc_get_bool(L,3);
-            bool arg4 = FCLibHelper.fc_get_bool(L,4);
-            System.IntPtr arg5 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,5));
-            Texture2D ret = Texture2D.CreateExternalTexture(arg0,arg1,arg2,arg3,arg4,arg5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            UnityEngine.TextureFormat arg8 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,8));
+            bool arg9 = FCLibHelper.fc_get_bool(L,9);
+            bool arg10 = FCLibHelper.fc_get_bool(L,10);
+            System.IntPtr arg11 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,11));
+            Texture2D ret = Texture2D.CreateExternalTexture(arg6,arg7,arg8,arg9,arg10,arg11);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -301,8 +301,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            System.IntPtr arg0 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,0));
-            obj.UpdateExternalTexture(arg0);
+            System.IntPtr arg1 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,1));
+            obj.UpdateExternalTexture(arg1);
         }
         catch(Exception e)
         {
@@ -318,11 +318,11 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            Color arg2 = new Color();
-            FCLibHelper.fc_get_color(L,2,ref arg2);
-            obj.SetPixel(arg0,arg1,arg2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            int arg4 = FCLibHelper.fc_get_int(L,4);
+            Color arg5 = new Color();
+            FCLibHelper.fc_get_color(L,5,ref arg5);
+            obj.SetPixel(arg3,arg4,arg5);
         }
         catch(Exception e)
         {
@@ -338,9 +338,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            Color ret = obj.GetPixel(arg0,arg1);
+            int arg2 = FCLibHelper.fc_get_int(L,2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            Color ret = obj.GetPixel(arg2,arg3);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Color temp_ret = ret;
             FCLibHelper.fc_set_value_color(ret_ptr, ref temp_ret);
@@ -359,9 +359,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            float arg0 = FCLibHelper.fc_get_float(L,0);
-            float arg1 = FCLibHelper.fc_get_float(L,1);
-            Color ret = obj.GetPixelBilinear(arg0,arg1);
+            float arg2 = FCLibHelper.fc_get_float(L,2);
+            float arg3 = FCLibHelper.fc_get_float(L,3);
+            Color ret = obj.GetPixelBilinear(arg2,arg3);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Color temp_ret = ret;
             FCLibHelper.fc_set_value_color(ret_ptr, ref temp_ret);
@@ -380,9 +380,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Color[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            obj.SetPixels(arg0);
+            Color[] arg1 = null;
+            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
+            obj.SetPixels(arg1);
         }
         catch(Exception e)
         {
@@ -398,10 +398,10 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Color[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            obj.SetPixels(arg0,arg1);
+            Color[] arg2 = null;
+            arg2 = FCCustomParam.GetArray(ref arg2,L,2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            obj.SetPixels(arg2,arg3);
         }
         catch(Exception e)
         {
@@ -417,14 +417,14 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            Color[] arg4 = null;
-            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
-            int arg5 = FCLibHelper.fc_get_int(L,5);
-            obj.SetPixels(arg0,arg1,arg2,arg3,arg4,arg5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            int arg8 = FCLibHelper.fc_get_int(L,8);
+            int arg9 = FCLibHelper.fc_get_int(L,9);
+            Color[] arg10 = null;
+            arg10 = FCCustomParam.GetArray(ref arg10,L,10);
+            int arg11 = FCLibHelper.fc_get_int(L,11);
+            obj.SetPixels(arg6,arg7,arg8,arg9,arg10,arg11);
         }
         catch(Exception e)
         {
@@ -440,13 +440,13 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            Color[] arg4 = null;
-            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
-            obj.SetPixels(arg0,arg1,arg2,arg3,arg4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            int arg8 = FCLibHelper.fc_get_int(L,8);
+            Color[] arg9 = null;
+            arg9 = FCCustomParam.GetArray(ref arg9,L,9);
+            obj.SetPixels(arg5,arg6,arg7,arg8,arg9);
         }
         catch(Exception e)
         {
@@ -462,9 +462,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Color32[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            obj.SetPixels32(arg0);
+            Color32[] arg1 = null;
+            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
+            obj.SetPixels32(arg1);
         }
         catch(Exception e)
         {
@@ -480,10 +480,10 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Color32[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            obj.SetPixels32(arg0,arg1);
+            Color32[] arg2 = null;
+            arg2 = FCCustomParam.GetArray(ref arg2,L,2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            obj.SetPixels32(arg2,arg3);
         }
         catch(Exception e)
         {
@@ -499,13 +499,13 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            Color32[] arg4 = null;
-            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
-            obj.SetPixels32(arg0,arg1,arg2,arg3,arg4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            int arg8 = FCLibHelper.fc_get_int(L,8);
+            Color32[] arg9 = null;
+            arg9 = FCCustomParam.GetArray(ref arg9,L,9);
+            obj.SetPixels32(arg5,arg6,arg7,arg8,arg9);
         }
         catch(Exception e)
         {
@@ -521,14 +521,14 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            Color32[] arg4 = null;
-            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
-            int arg5 = FCLibHelper.fc_get_int(L,5);
-            obj.SetPixels32(arg0,arg1,arg2,arg3,arg4,arg5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            int arg8 = FCLibHelper.fc_get_int(L,8);
+            int arg9 = FCLibHelper.fc_get_int(L,9);
+            Color32[] arg10 = null;
+            arg10 = FCCustomParam.GetArray(ref arg10,L,10);
+            int arg11 = FCLibHelper.fc_get_int(L,11);
+            obj.SetPixels32(arg6,arg7,arg8,arg9,arg10,arg11);
         }
         catch(Exception e)
         {
@@ -544,9 +544,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            byte[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            obj.LoadRawTextureData(arg0);
+            byte[] arg1 = null;
+            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
+            obj.LoadRawTextureData(arg1);
         }
         catch(Exception e)
         {
@@ -562,9 +562,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            System.IntPtr arg0 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,0));
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            obj.LoadRawTextureData(arg0,arg1);
+            System.IntPtr arg2 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_intptr(L,2));
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            obj.LoadRawTextureData(arg2,arg3);
         }
         catch(Exception e)
         {
@@ -614,8 +614,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            Color[] ret = obj.GetPixels(arg0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            Color[] ret = obj.GetPixels(arg1);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -632,12 +632,12 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            int arg4 = FCLibHelper.fc_get_int(L,4);
-            Color[] ret = obj.GetPixels(arg0,arg1,arg2,arg3,arg4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            int arg8 = FCLibHelper.fc_get_int(L,8);
+            int arg9 = FCLibHelper.fc_get_int(L,9);
+            Color[] ret = obj.GetPixels(arg5,arg6,arg7,arg8,arg9);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -654,11 +654,11 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            int arg3 = FCLibHelper.fc_get_int(L,3);
-            Color[] ret = obj.GetPixels(arg0,arg1,arg2,arg3);
+            int arg4 = FCLibHelper.fc_get_int(L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            int arg7 = FCLibHelper.fc_get_int(L,7);
+            Color[] ret = obj.GetPixels(arg4,arg5,arg6,arg7);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -675,8 +675,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            Color32[] ret = obj.GetPixels32(arg0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            Color32[] ret = obj.GetPixels32(arg1);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -710,9 +710,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            bool arg1 = FCLibHelper.fc_get_bool(L,1);
-            obj.Apply(arg0,arg1);
+            bool arg2 = FCLibHelper.fc_get_bool(L,2);
+            bool arg3 = FCLibHelper.fc_get_bool(L,3);
+            obj.Apply(arg2,arg3);
         }
         catch(Exception e)
         {
@@ -728,8 +728,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            obj.Apply(arg0);
+            bool arg1 = FCLibHelper.fc_get_bool(L,1);
+            obj.Apply(arg1);
         }
         catch(Exception e)
         {
@@ -761,11 +761,11 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            UnityEngine.TextureFormat arg2 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,2));
-            bool arg3 = FCLibHelper.fc_get_bool(L,3);
-            bool ret = obj.Resize(arg0,arg1,arg2,arg3);
+            int arg4 = FCLibHelper.fc_get_int(L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            UnityEngine.TextureFormat arg6 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,6));
+            bool arg7 = FCLibHelper.fc_get_bool(L,7);
+            bool ret = obj.Resize(arg4,arg5,arg6,arg7);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret);
         }
@@ -783,9 +783,9 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            bool ret = obj.Resize(arg0,arg1);
+            int arg2 = FCLibHelper.fc_get_int(L,2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            bool ret = obj.Resize(arg2,arg3);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret);
         }
@@ -803,8 +803,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            obj.Compress(arg0);
+            bool arg1 = FCLibHelper.fc_get_bool(L,1);
+            obj.Compress(arg1);
         }
         catch(Exception e)
         {
@@ -820,12 +820,12 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            UnityEngine.Texture2D[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            bool arg3 = FCLibHelper.fc_get_bool(L,3);
-            Rect[] ret = obj.PackTextures(arg0,arg1,arg2,arg3);
+            UnityEngine.Texture2D[] arg4 = null;
+            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            bool arg7 = FCLibHelper.fc_get_bool(L,7);
+            Rect[] ret = obj.PackTextures(arg4,arg5,arg6,arg7);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -842,11 +842,11 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            UnityEngine.Texture2D[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            Rect[] ret = obj.PackTextures(arg0,arg1,arg2);
+            UnityEngine.Texture2D[] arg3 = null;
+            arg3 = FCCustomParam.GetArray(ref arg3,L,3);
+            int arg4 = FCLibHelper.fc_get_int(L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            Rect[] ret = obj.PackTextures(arg3,arg4,arg5);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -863,10 +863,10 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            UnityEngine.Texture2D[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            Rect[] ret = obj.PackTextures(arg0,arg1);
+            UnityEngine.Texture2D[] arg2 = null;
+            arg2 = FCCustomParam.GetArray(ref arg2,L,2);
+            int arg3 = FCLibHelper.fc_get_int(L,3);
+            Rect[] ret = obj.PackTextures(arg2,arg3);
             FCCustomParam.ReturnArray(ret,L);
         }
         catch(Exception e)
@@ -883,13 +883,13 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Vector2[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            List<Rect> arg3 = null;
-            arg3 = FCCustomParam.GetList(ref arg3,L,3);
-            bool ret = Texture2D.GenerateAtlas(arg0,arg1,arg2,arg3);
+            Vector2[] arg4 = null;
+            arg4 = FCCustomParam.GetArray(ref arg4,L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            List<Rect> arg7 = null;
+            arg7 = FCCustomParam.GetList(ref arg7,L,7);
+            bool ret = Texture2D.GenerateAtlas(arg4,arg5,arg6,arg7);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret);
         }
@@ -907,12 +907,12 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Rect arg0 = new Rect();
-            FCLibHelper.fc_get_rect(L,0,ref arg0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            bool arg3 = FCLibHelper.fc_get_bool(L,3);
-            obj.ReadPixels(arg0,arg1,arg2,arg3);
+            Rect arg4 = new Rect();
+            FCLibHelper.fc_get_rect(L,4,ref arg4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            int arg6 = FCLibHelper.fc_get_int(L,6);
+            bool arg7 = FCLibHelper.fc_get_bool(L,7);
+            obj.ReadPixels(arg4,arg5,arg6,arg7);
         }
         catch(Exception e)
         {
@@ -928,11 +928,11 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
-            Rect arg0 = new Rect();
-            FCLibHelper.fc_get_rect(L,0,ref arg0);
-            int arg1 = FCLibHelper.fc_get_int(L,1);
-            int arg2 = FCLibHelper.fc_get_int(L,2);
-            obj.ReadPixels(arg0,arg1,arg2);
+            Rect arg3 = new Rect();
+            FCLibHelper.fc_get_rect(L,3,ref arg3);
+            int arg4 = FCLibHelper.fc_get_int(L,4);
+            int arg5 = FCLibHelper.fc_get_int(L,5);
+            obj.ReadPixels(arg3,arg4,arg5);
         }
         catch(Exception e)
         {

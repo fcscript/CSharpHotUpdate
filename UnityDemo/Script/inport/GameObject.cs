@@ -19,6 +19,7 @@ class  GameObject : UnityObject
     public GameObject gameObject { get; }
     public static GameObject CreatePrimitive(PrimitiveType type){ return default(GameObject); }
     public Component GetComponent(Type type){ return default(Component); }
+    public T GetComponent<T>(){ return default(T); }
     public Component GetComponent(StringA type){ return default(Component); }
     public Component GetComponentInChildren(Type type,bool includeInactive){ return default(Component); }
     public Component GetComponentInChildren(Type type){ return default(Component); }
@@ -47,6 +48,7 @@ class  GameObject : UnityObject
     public void BroadcastMessage(StringA methodName){}
     public void BroadcastMessage(StringA methodName,SendMessageOptions options){}
     public Component AddComponent(Type componentType){ return default(Component); }
+    public T AddComponent<T>(){ return default(T); }
     public static GameObject Find(StringA name){ return default(GameObject); }
 };
 

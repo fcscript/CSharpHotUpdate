@@ -38,11 +38,13 @@ public static class FCExport
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.Component));
         pWrap.WrapClass(typeof(UnityEngine.Texture2D));
+        AddTemplateSurport(pWrap); // 添加模板函数的wrap支持
         pWrap.WrapClass(typeof(UnityEngine.GameObject));
         pWrap.WrapClass(typeof(UnityEngine.Behaviour));
         pWrap.PushCurrentDontWrapName("Item");
         pWrap.WrapClass(typeof(UnityEngine.Animation));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
+        pWrap.WrapClass(typeof(UnityEngine.Renderer));
         pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
         pWrap.WrapClass(typeof(UnityEngine.Input));
 
@@ -76,6 +78,15 @@ public static class FCExport
             }
         }
         pWrap.EndModleWrap();
+    }
+    static void  AddTemplateSurport(FCClassWrap pWrap)
+    {
+        List<Type> aSupportType = new List<Type>();
+        aSupportType.Add(typeof(UnityEngine.SkinnedMeshRenderer));
+        // 在这里添加其他的类的吧
+
+        pWrap.PushTemplateFuncWrapSupport("AddComponent", aSupportType);
+        pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
     }
 
     [MenuItem("FCScript/调试C#类型", false, 5)]

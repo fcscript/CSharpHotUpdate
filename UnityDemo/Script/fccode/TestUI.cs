@@ -1,4 +1,4 @@
-
+﻿
 export class TestUI
 {
     export void OnButtonClicked(string szName)

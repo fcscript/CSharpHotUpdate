@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityObject = UnityEngine.Object;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 
 class FCCustomParam
@@ -267,6 +268,49 @@ class FCCustomParam
         }
         return rList;
     }
+    public static Material[] GetArray(ref Material[] rList, long L, int nIndex)
+    {
+        try
+        {
+            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
+            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
+            rList = new Material[nArraySize];
+            for (int i = 0; i < nArraySize; ++i)
+            {
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                Material item = FCGetObj.GetObj<Material>(item_ptr);
+                rList[i] = item;
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return rList;
+    }
+    public static List<ReflectionProbeBlendInfo> GetList(ref List<ReflectionProbeBlendInfo> rList, long L, int nIndex)
+    {
+        try
+        {
+            if (rList == null)
+                rList = new List<ReflectionProbeBlendInfo>();
+            else
+                rList.Clear();
+            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
+            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
+            for (int i = 0; i < nArraySize; ++i)
+            {
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                ReflectionProbeBlendInfo item = FCGetObj.GetObj<ReflectionProbeBlendInfo>(item_ptr);
+                rList.Add(item);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return rList;
+    }
     public static Transform[] GetArray(ref Transform[] rList, long L, int nIndex)
     {
         try
@@ -318,26 +362,6 @@ class FCCustomParam
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
                 Touch item = FCGetObj.GetObj<Touch>(item_ptr);
-                rList[i] = item;
-            }
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return rList;
-    }
-    public static Material[] GetArray(ref Material[] rList, long L, int nIndex)
-    {
-        try
-        {
-            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
-            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Material[nArraySize];
-            for (int i = 0; i < nArraySize; ++i)
-            {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Material item = FCGetObj.GetObj<Material>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -468,6 +492,23 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
+    public static void ReturnArray(Material []rList, long L)
+    {
+        try
+        {
+            int nCount = rList != null ? rList.Length : 0;
+            long ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCLibHelper.fc_set_array_size(ptr, nCount);
+            for(int i = 0; i<nCount; ++i)
+            {
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
     public static void ReturnArray(Transform []rList, long L)
     {
         try
@@ -530,23 +571,6 @@ class FCCustomParam
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
                 FCLibHelper.fc_set_value_string_a(pItem, rList[i]);
-            }
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-    }
-    public static void ReturnArray(Material []rList, long L)
-    {
-        try
-        {
-            int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_array_size(ptr, nCount);
-            for(int i = 0; i<nCount; ++i)
-            {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
             }
         }
         catch(Exception e)

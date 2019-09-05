@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TestExport
-{    
+public class TestExport // 测试导出功能的类，没有实际意义
+{
     public enum ValueType
     {
         value_none,
@@ -37,16 +37,16 @@ public class TestExport
 
     void  Test()
     {
-        TestExport ret = this;
-        long v = FCGetObj.PushObj(TestExport.onPostRender);
-        FCDll.PushCallParam(v);
-        int[] buffer = new int[10];
-        unsafe
-        {
-            fixed (void* p = buffer)
-            {
-            }
-        }
+        //TestExport ret = this;
+        //long v = FCGetObj.PushObj(TestExport.onPostRender);
+        //FCDll.PushCallParam(v);
+        //int[] buffer = new int[10];
+        //unsafe
+        //{
+        //    fixed (void* p = buffer)
+        //    {
+        //    }
+        //}
         //this.GetRefList(ref arg0);
     }
 
@@ -55,7 +55,7 @@ public class TestExport
 }
 
 [AutoWrap]
-public class TestD
+public class TestD  // 测试导出功能的类，没有实际意义
 {
     [DontWrap]
     public int m_nValue;
@@ -70,7 +70,7 @@ public class TestD
 }
 
 [PartWrap]
-public class TestPart
+public class TestPart // 测试导出功能的类，没有实际意义
 {
     public int m_nValue;
     [PartWrap]
@@ -83,7 +83,7 @@ public class TestPart
     }
 }
 
-class onPostRender_deletate : FCDelegateBase
+class onPostRender_deletate : FCDelegateBase  // 手动编写的委托桥接，写wrap插件参照的代码，没有什么意义
 {
     public void   CallFunc(int nType)
     {
@@ -274,6 +274,16 @@ class TestScript : FCScriptLoader
         FCLibHelper.fc_push_intptr(nPtr);
         FCLibHelper.fc_call(0, "Test0");
     }
+    void TestFunc4()
+    {
+        GameObject obj = GameObject.Find("Empty");
+        if (obj == null)
+            obj = new GameObject("Empty");
+        //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
+        long nPtr = FCGetObj.PushObj(obj.transform);
+        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_call(0, "Test4");
+    }
     void InvalidObjectScriptCall()
     {
         InitDll();
@@ -355,6 +365,11 @@ class TestScript : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test0"))
         {
             TestFunc0();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test4"))
+        {
+            TestFunc4();
         }
         nLeft = 300;
         nTop += 80;

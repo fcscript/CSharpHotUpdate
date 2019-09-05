@@ -1,12 +1,12 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)Script\fccode\
+    $(curpath)\Script\fccode\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
 <CSharpPath>
-    F:\GitHub\https---github.com-fcscript-public\UnityDemo\Script\inport\
+    $(curpath)\Script\inport\
 </CSharpPath>
 <ExcutePath>
 </ExcutePath>
@@ -14,3 +14,4 @@
 </ExcuteFile>
 <Breakpoint>
 </Breakpoint>
+<CopyPathName>$(curpath)\Assets\StreamingAssets\test.code</CopyPathName>

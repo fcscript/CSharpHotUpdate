@@ -324,8 +324,8 @@ public class SkinnedMeshRenderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             SkinnedMeshRenderer obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            float ret = obj.GetBlendShapeWeight(arg0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            float ret = obj.GetBlendShapeWeight(arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret);
         }
@@ -343,9 +343,9 @@ public class SkinnedMeshRenderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             SkinnedMeshRenderer obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            float arg1 = FCLibHelper.fc_get_float(L,1);
-            obj.SetBlendShapeWeight(arg0,arg1);
+            int arg2 = FCLibHelper.fc_get_int(L,2);
+            float arg3 = FCLibHelper.fc_get_float(L,3);
+            obj.SetBlendShapeWeight(arg2,arg3);
         }
         catch(Exception e)
         {
@@ -361,8 +361,8 @@ public class SkinnedMeshRenderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             SkinnedMeshRenderer obj = get_obj(nThisPtr);
-            UnityEngine.Mesh arg0 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_intptr(L,0));
-            obj.BakeMesh(arg0);
+            UnityEngine.Mesh arg1 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_intptr(L,1));
+            obj.BakeMesh(arg1);
         }
         catch(Exception e)
         {

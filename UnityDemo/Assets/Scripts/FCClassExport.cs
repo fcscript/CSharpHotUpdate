@@ -24,6 +24,7 @@ class FCClassExport
     Dictionary<Type, int> m_AllRefType = new Dictionary<Type, int>(); // 所有引用的类型
 
     Dictionary<string, int> m_CurDontWrapName = new Dictionary<string, int>();
+    Dictionary<string, List<Type>> m_CurSupportTemplateFunc = new Dictionary<string, List<Type>>();
 
     public void ExportDefaultClass(string szPath)
     {
@@ -52,6 +53,9 @@ class FCClassExport
             if (FCValueType.IsBaseType(value.m_nValueType))
                 continue;
 
+            if (nType.Name == "T")
+                continue;
+
             if(nType == typeof(Type))
             {
                 m_szFileBuilder.AppendLine("class Type{}");
@@ -74,7 +78,7 @@ class FCClassExport
         File.WriteAllText(szPathName, m_szFileBuilder.ToString());
     }
     
-    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi, Dictionary<string, int> aDontWrapName)
+    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi, Dictionary<string, int> aDontWrapName, Dictionary<string, List<Type>> aTemplateFunc)
     {
         m_bPartWrap = bPartWrap;
         m_bOnlyThisAPI = bOnlyThisApi;
@@ -86,6 +90,7 @@ class FCClassExport
         m_CurRefNameSpacesFlags.Clear();
 
         m_CurDontWrapName = aDontWrapName;
+        m_CurSupportTemplateFunc = aTemplateFunc;
 
         m_AllExportType[nClassType] = 1;
         Type nParentType = nClassType.BaseType;
@@ -309,8 +314,13 @@ class FCClassExport
         }
 
         // 模板函数不导出了吧
+        bool bTemplateFunc = false;
         if (IsTemplateFunc(method))
-            return;
+        {
+            if(!m_CurSupportTemplateFunc.ContainsKey(method.Name))
+                return;
+            bTemplateFunc = true;
+        }
         bool bStatic = method.IsStatic;
         string szStatic = string.Empty;
         if (bStatic)
@@ -341,17 +351,27 @@ class FCClassExport
         FCValueType ret_value = FCValueType.TransType(method.ReturnType);
         if(ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
         {
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return null; }}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return null; }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam);
         }
         else if(ret_value.m_nValueType == fc_value_type.fc_value_void)
         {
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{}}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{}}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam);
         }
         else
         {
             string szRetCShaprName = ret_value.GetTypeName(true);
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return default({4}); }}\r\n", szStatic, ret_value.GetTypeName(false), method.Name, szCallParam, szRetCShaprName);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return default({4}); }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szRetCShaprName);
         }
+    }
+    string  GetMeshName(MethodInfo method, bool bTemplateFunc)
+    {
+        if (!bTemplateFunc)
+            return method.Name;
+        string szMethodName = method.ToString();
+        int nStart = szMethodName.IndexOf('[');
+        int nEnd = szMethodName.IndexOf(']');
+        string szSubName = szMethodName.Substring(nStart + 1, nEnd - nStart - 1);
+        return string.Format("{0}<{1}>", method.Name, szSubName);
     }
     // 功能：检测函数是不是模板函数
     bool IsTemplateFunc(MethodInfo method)
@@ -407,11 +427,14 @@ class FCClassExport
 
         Array enumValues = Enum.GetValues(nClassType);
         string szValueName = string.Empty;
+        string []allNames = Enum.GetNames(nClassType);
+        int nIndex = 0;
         foreach (Enum enumValue in enumValues)
         {
             int nKey = Convert.ToInt32(enumValue);
-            szValueName = enumValue.ToString();
+            szValueName = allNames[nIndex];
             fileBuilder.AppendFormat("{0}    {1} = {2},\r\n", szLeft, szValueName, nKey);
+            ++nIndex;
         }
         fileBuilder.AppendLine(szLeft + "};\r\n");
     }
