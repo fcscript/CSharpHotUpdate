@@ -56,7 +56,7 @@ export void Test2()
 export void  Test3()
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<20000; ++i)
     {
         GameObject  obj = new GameObject(); // 这样写，其实是会立即释放的
     }
@@ -64,11 +64,12 @@ export void  Test3()
     PrintTime("Test3", nEnd - nBegin);
 }
 
-export void Test4()
+export void Test4(Transform transform)
 {
     uint  nBegin = System.GetTickCount();
     //SkinnedMeshRenderer  nType = typeof(SkinnedMeshRenderer);
-    for(int i = 0; i<200000; ++i)
+	//GameObject  obj = new GameObject();  // 这样写，其实也是会立即释放的, 需要保存起来
+    for(int i = 0; i<20000; ++i)
     {
         GameObject  obj = new GameObject();  // 这样写，其实也是会立即释放的, 需要保存起来
         obj.AddComponent<SkinnedMeshRenderer>();
@@ -125,7 +126,7 @@ export void Test8()
 {
     print("start call =================================");
     uint  nBegin = System.GetTickCount();
-    int  nTotal = 0;
+    int  total = 0;
     for(int i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
@@ -158,10 +159,20 @@ export void Test9()
 
 export void Test10(Transform transform)
 {
-    uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<200000; ++i)
+    List<float>  aNumb = new List<float>();
+    for(int i = 0; i<1024; ++i)
     {
-        //UserClass.TestFunc1(1, "123", transform.position, transform);
+        aNumb[i] = i;
+    }
+    uint  nBegin = System.GetTickCount();
+    float  total = 0;
+    for(int i = 0; i<100000; ++i)
+    {
+        for(int j = 0; j<1024; ++j)
+        {
+            //total = total + aNumb[i];
+            total += aNumb[i];
+        }
     }
     uint nEnd = System.GetTickCount();
     PrintTime("Test10", nEnd - nBegin);

@@ -45,7 +45,7 @@ class AnimationClip : Motion{}
 public enum WrapMode
 {
     Default = 0,
-    Once = 1,
+    Clamp = 1,
     Once = 1,
     Loop = 2,
     PingPong = 4,
@@ -74,7 +74,39 @@ public enum QueueMode
 
 class AnimationState : TrackedReference{}
 
-class Renderer : Component{}
+public enum ShadowCastingMode
+{
+    Off = 0,
+    On = 1,
+    TwoSided = 2,
+    ShadowsOnly = 3,
+};
+
+public enum MotionVectorGenerationMode
+{
+    Camera = 0,
+    Object = 1,
+    ForceNoMotion = 2,
+};
+
+public enum LightProbeUsage
+{
+    Off = 0,
+    BlendProbes = 1,
+    UseProxyVolume = 2,
+};
+
+public enum ReflectionProbeUsage
+{
+    Off = 0,
+    BlendProbes = 1,
+    BlendProbesAndSkybox = 2,
+    Simple = 3,
+};
+
+class Material : Object{}
+
+class MaterialPropertyBlock : Object{}
 
 public enum SkinQuality
 {
@@ -235,9 +267,9 @@ public enum KeyCode
     RightAlt = 307,
     LeftAlt = 308,
     RightApple = 309,
-    RightApple = 309,
+    RightCommand = 309,
     LeftCommand = 310,
-    LeftCommand = 310,
+    LeftApple = 310,
     LeftWindows = 311,
     RightWindows = 312,
     AltGr = 313,

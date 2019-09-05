@@ -79,8 +79,8 @@ public class TestD_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             TestD obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            obj.SetValue(arg0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            obj.SetValue(arg1);
         }
         catch(Exception e)
         {

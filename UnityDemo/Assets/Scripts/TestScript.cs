@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TestExport
-{    
+public class TestExport // 测试导出功能的类，没有实际意义
+{
     public enum ValueType
     {
         value_none,
@@ -37,16 +37,16 @@ public class TestExport
 
     void  Test()
     {
-        TestExport ret = this;
-        long v = FCGetObj.PushObj(TestExport.onPostRender);
-        FCDll.PushCallParam(v);
-        int[] buffer = new int[10];
-        unsafe
-        {
-            fixed (void* p = buffer)
-            {
-            }
-        }
+        //TestExport ret = this;
+        //long v = FCGetObj.PushObj(TestExport.onPostRender);
+        //FCDll.PushCallParam(v);
+        //int[] buffer = new int[10];
+        //unsafe
+        //{
+        //    fixed (void* p = buffer)
+        //    {
+        //    }
+        //}
         //this.GetRefList(ref arg0);
     }
 
@@ -55,7 +55,7 @@ public class TestExport
 }
 
 [AutoWrap]
-public class TestD
+public class TestD  // 测试导出功能的类，没有实际意义
 {
     [DontWrap]
     public int m_nValue;
@@ -70,7 +70,7 @@ public class TestD
 }
 
 [PartWrap]
-public class TestPart
+public class TestPart // 测试导出功能的类，没有实际意义
 {
     public int m_nValue;
     [PartWrap]
@@ -83,7 +83,7 @@ public class TestPart
     }
 }
 
-class onPostRender_deletate : FCDelegateBase
+class onPostRender_deletate : FCDelegateBase  // 手动编写的委托桥接，写wrap插件参照的代码，没有什么意义
 {
     public void   CallFunc(int nType)
     {
@@ -274,6 +274,58 @@ class TestScript : FCScriptLoader
         FCLibHelper.fc_push_intptr(nPtr);
         FCLibHelper.fc_call(0, "Test0");
     }
+    void TestFunc1()
+    {
+        GameObject obj = GameObject.Find("Empty");
+        if (obj == null)
+            obj = new GameObject("Empty");
+        //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
+        long nPtr = FCGetObj.PushObj(obj.transform);
+        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_call(0, "Test1");
+    }
+    void TestFunc2()
+    {
+        FCLibHelper.fc_call(0, "Test2");
+    }
+    void TestFunc3()
+    {
+        FCLibHelper.fc_call(0, "Test3");
+    }
+    void TestFunc4()
+    {
+        GameObject obj = GameObject.Find("Empty");
+        if (obj == null)
+            obj = new GameObject("Empty");
+        //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
+        long nPtr = FCGetObj.PushObj(obj.transform);
+        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_call(0, "Test4");
+    }
+    void TestFunc5()
+    {
+        FCLibHelper.fc_call(0, "Test5");
+    }
+    void TestFunc6()
+    {
+        FCLibHelper.fc_call(0, "Test6");
+    }
+    void TestFunc7()
+    {
+        FCLibHelper.fc_call(0, "Test7");
+    }
+    void TestFunc8()
+    {
+        FCLibHelper.fc_call(0, "Test8");
+    }
+    void TestFunc9()
+    {
+        FCLibHelper.fc_call(0, "Test9");
+    }
+    void TestFunc10()
+    {
+        FCLibHelper.fc_call(0, "Test10");
+    }
     void InvalidObjectScriptCall()
     {
         InitDll();
@@ -356,6 +408,21 @@ class TestScript : FCScriptLoader
         {
             TestFunc0();
         }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test1"))
+        {
+            TestFunc1();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test2"))
+        {
+            TestFunc2();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test3"))
+        {
+            TestFunc3();
+        }
         nLeft = 300;
         nTop += 80;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象不置空"))
@@ -372,6 +439,26 @@ class TestScript : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "调用对象函数"))
         {
             InvalidObjectScriptCall();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test4"))
+        {
+            TestFunc4();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test5"))
+        {
+            TestFunc5();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test6"))
+        {
+            TestFunc6();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test7"))
+        {
+            TestFunc7();
         }
         nLeft = 300;
         nTop += 80;
@@ -395,6 +482,21 @@ class TestScript : FCScriptLoader
         {
             if(FCLibHelper.fc_is_init())
                 FCLibHelper.fc_release();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test8"))
+        {
+            TestFunc7();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test9"))
+        {
+            TestFunc9();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test10"))
+        {
+            TestFunc10();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;
