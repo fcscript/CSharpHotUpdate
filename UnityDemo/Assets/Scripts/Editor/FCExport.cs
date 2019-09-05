@@ -37,6 +37,7 @@ public static class FCExport
         pWrap.WrapClass(typeof(UnityEngine.Object));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.Component));
+        pWrap.PushCurrentDontWrapName("alphaIsTransparency");
         pWrap.WrapClass(typeof(UnityEngine.Texture2D));
         AddTemplateSurport(pWrap); // 添加模板函数的wrap支持
         pWrap.WrapClass(typeof(UnityEngine.GameObject));
@@ -46,6 +47,7 @@ public static class FCExport
         pWrap.WrapClass(typeof(UnityEngine.Transform));
         pWrap.WrapClass(typeof(UnityEngine.Renderer));
         pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
+        pWrap.PushCurrentDontWrapName("IsJoystickPreconfigured");
         pWrap.WrapClass(typeof(UnityEngine.Input));
 
         pWrap.EndModleWrap();

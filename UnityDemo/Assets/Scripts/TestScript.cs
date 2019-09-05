@@ -486,7 +486,7 @@ class TestScript : FCScriptLoader
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test8"))
         {
-            TestFunc7();
+            TestFunc8();
         }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test9"))

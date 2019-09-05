@@ -25,7 +25,6 @@ public class Texture2D_wrap
         FCLibHelper.fc_register_class_attrib(nClassName,"format",get_format_wrap,null);
         FCLibHelper.fc_register_class_attrib(nClassName,"whiteTexture",get_whiteTexture_wrap,null);
         FCLibHelper.fc_register_class_attrib(nClassName,"blackTexture",get_blackTexture_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"alphaIsTransparency",get_alphaIsTransparency_wrap,set_alphaIsTransparency_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"CreateExternalTexture",CreateExternalTexture_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"UpdateExternalTexture",UpdateExternalTexture_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetPixel",SetPixel_wrap);
@@ -228,39 +227,6 @@ public class Texture2D_wrap
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Texture2D.blackTexture);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int get_alphaIsTransparency_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Texture2D ret = get_obj(nThisPtr);
-            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_bool(ret_ptr, ret.alphaIsTransparency);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int set_alphaIsTransparency_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Texture2D ret = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            ret.alphaIsTransparency = arg0;
         }
         catch(Exception e)
         {
