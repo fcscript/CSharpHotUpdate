@@ -21,7 +21,6 @@ class  Texture2D : Texture
     public TextureFormat format { get; }
     public static Texture2D whiteTexture { get; }
     public static Texture2D blackTexture { get; }
-    public bool alphaIsTransparency { get;  set; }
     public static Texture2D CreateExternalTexture(int width,int height,TextureFormat format,bool mipmap,bool linear,IntPtr nativeTex){ return default(Texture2D); }
     public void UpdateExternalTexture(IntPtr nativeTex){}
     public void SetPixel(int x,int y,Color color){}

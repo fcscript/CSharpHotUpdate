@@ -127,12 +127,15 @@ export void Test8()
     print("start call =================================");
     uint  nBegin = System.GetTickCount();
     int  total = 0;
+	int  k = 0;
     for(int i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
+		++k;
     }
     uint nEnd = System.GetTickCount();
     print("end call =================================");
+	print("total = {0}, k = {1}", total, k);
     PrintTime("Test8", nEnd - nBegin);
 }
 
@@ -150,7 +153,7 @@ export void Test9()
         for(int j = 0; j<1024; ++j)
         {
             //total = total + aNumb[i];
-            total += aNumb[i];
+            total += aNumb[j];
         }
     }
     uint nEnd = System.GetTickCount();
@@ -171,7 +174,7 @@ export void Test10(Transform transform)
         for(int j = 0; j<1024; ++j)
         {
             //total = total + aNumb[i];
-            total += aNumb[i];
+            total += aNumb[j];
         }
     }
     uint nEnd = System.GetTickCount();
