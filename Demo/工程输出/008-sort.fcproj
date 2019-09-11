@@ -1,13 +1,16 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)008-排序\
+    $(curpath)\..\008-排序\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
+<CSharpPath>
+</CSharpPath>
 <ExcutePath>
 </ExcutePath>
 <ExcuteFile>
 </ExcuteFile>
 <Breakpoint>
 </Breakpoint>
+<CopyPathName></CopyPathName>

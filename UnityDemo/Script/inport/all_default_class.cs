@@ -45,8 +45,8 @@ class AnimationClip : Motion{}
 public enum WrapMode
 {
     Default = 0,
-    Clamp = 1,
     Once = 1,
+    Clamp = 1,
     Loop = 2,
     PingPong = 4,
     ClampForever = 8,
@@ -268,8 +268,8 @@ public enum KeyCode
     LeftAlt = 308,
     RightApple = 309,
     RightCommand = 309,
-    LeftCommand = 310,
     LeftApple = 310,
+    LeftCommand = 310,
     LeftWindows = 311,
     RightWindows = 312,
     AltGr = 313,

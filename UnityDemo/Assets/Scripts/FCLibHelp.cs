@@ -152,6 +152,8 @@ class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_release_ref(int nClassNameID, fc_call_back_inport_class_func func);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_class_global_release_ref(fc_call_back_inport_class_func func);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_hash(int nClassNameID, fc_call_back_inport_class_func func);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_equal(int nClassNameID, fc_call_back_inport_class_equal func);
@@ -287,6 +289,12 @@ class FCLibHelper
     public static extern void fc_prepare_call(long pInsPtr, string pcsFuncName);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_call(long pInsPtr, string pcsFuncName);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_await(long L);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_continue(long pPtr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool fc_is_valid_await(long pPtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_serialize_msg_call(long pInsPtr, string pcsFuncName, byte[] msgPtr, int nStart, int nLen, bool bReadMode);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -523,4 +531,5 @@ class FCLibHelper
     public static extern int fc_inport_delegate_get_func_name_len(long pDelegatePtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern int fc_inport_delegate_get_func_name(long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
+
 }

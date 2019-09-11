@@ -1,7 +1,7 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)012-FCObject\
+    $(curpath)\..\012-FCObject\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
@@ -13,3 +13,4 @@
 </ExcuteFile>
 <Breakpoint>
 </Breakpoint>
+<CopyPathName></CopyPathName>

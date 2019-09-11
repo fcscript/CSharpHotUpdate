@@ -66,6 +66,16 @@ export void  csharp2fc_set_string(StringA v)
     print("C#传参 v={0}", v);
     fc2csharp_set_string(v);
 }
+
+// 测试C#中的await功能
+export void  TestAwait()
+{
+	print("test await.....");
+	fc2csharp_loadtask();
+	print("after await.....");
+}
+
+
 //
 //void  PrintTime(StringA szFunc, uint  nTime)
 //{

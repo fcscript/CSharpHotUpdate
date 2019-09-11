@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.IO;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +30,26 @@ public static class FCExport
         string szFCScriptPath = szDataPath.Substring(0, szDataPath.Length - 6) + "Script/inport/";
         FCClassWrap.DeletePath(szExportPath);
         FCClassWrap.DeletePath(szFCScriptPath);
+        MakeEmptyWrap(szExportPath);
     }
+    static void MakeEmptyWrap(string szExportPath)
+    {
+        string szPathName = szExportPath + "all_class_wrap.cs";
+        // 这里只导出一个
+        StringBuilder fileData = new StringBuilder(1024 * 1024 * 1);
+        fileData.AppendLine("using System;");
+        fileData.AppendLine("using UnityEngine;\r\n");
+        fileData.AppendLine("using UnityEngine.Rendering;\r\n");
+        fileData.AppendLine("");
+        fileData.AppendLine("public class all_class_wrap");
+        fileData.AppendLine("{");
+        fileData.AppendLine("    public static void Register()");
+        fileData.AppendLine("    {");
+        fileData.AppendLine("    }");
+        fileData.AppendLine("}");
+        File.WriteAllText(szPathName, fileData.ToString());
+    }
+
     static void WrapUnityClass(FCClassWrap pWrap)
     {
         pWrap.BeginModleWrap("Unity");
@@ -100,6 +121,10 @@ public static class FCExport
         Type []allps = nType1.GetInterfaces();
         Type  nt1 = nType1.GetInterface("Object");
         Type  b = nType1.BaseType;
+
+
+        FCValueType t0 = new FCValueType(typeof(System.Threading.Tasks.Task));
+        FCValueType t1 = new FCValueType(typeof(System.Threading.Tasks.Task<int>));
 
         FCValueType a0 = new FCValueType(typeof(Action));
         FCValueType a1 = new FCValueType(typeof(Action<int>));

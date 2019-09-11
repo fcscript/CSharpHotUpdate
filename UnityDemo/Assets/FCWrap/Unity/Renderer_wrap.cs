@@ -867,8 +867,8 @@ public class Renderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Renderer obj = get_obj(nThisPtr);
-            UnityEngine.MaterialPropertyBlock arg1 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,1));
-            obj.SetPropertyBlock(arg1);
+            UnityEngine.MaterialPropertyBlock arg0 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,0));
+            obj.SetPropertyBlock(arg0);
         }
         catch(Exception e)
         {
@@ -884,8 +884,8 @@ public class Renderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Renderer obj = get_obj(nThisPtr);
-            UnityEngine.MaterialPropertyBlock arg1 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,1));
-            obj.GetPropertyBlock(arg1);
+            UnityEngine.MaterialPropertyBlock arg0 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,0));
+            obj.GetPropertyBlock(arg0);
         }
         catch(Exception e)
         {
@@ -901,9 +901,9 @@ public class Renderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Renderer obj = get_obj(nThisPtr);
-            List<UnityEngine.Rendering.ReflectionProbeBlendInfo> arg1 = null;
-            arg1 = FCCustomParam.GetList(ref arg1,L,1);
-            obj.GetClosestReflectionProbes(arg1);
+            List<UnityEngine.Rendering.ReflectionProbeBlendInfo> arg0 = null;
+            arg0 = FCCustomParam.GetList(ref arg0,L,0);
+            obj.GetClosestReflectionProbes(arg0);
         }
         catch(Exception e)
         {

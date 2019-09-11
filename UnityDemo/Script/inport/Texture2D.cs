@@ -116,9 +116,9 @@ public enum TextureFormat
     R8 = 63,
     ETC_RGB4Crunched = 64,
     ETC2_RGBA8Crunched = 65,
-    PVRTC_4BPP_RGB = -127,
-    PVRTC_4BPP_RGBA = -127,
     PVRTC_2BPP_RGB = -127,
     PVRTC_2BPP_RGBA = -127,
+    PVRTC_4BPP_RGB = -127,
+    PVRTC_4BPP_RGBA = -127,
 };
 

@@ -12,6 +12,8 @@ class FCScriptLoader : MonoBehaviour
 {
     protected static string s_szFromFC = string.Empty;
     protected static List<string> m_ScriptLog = new List<string>();
+    protected static List<string> m_ThreadScriptLog = new List<string>();
+    protected static int m_nAddLogCount = 0;
 
     void Start()
     {
@@ -47,7 +49,28 @@ class FCScriptLoader : MonoBehaviour
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.LPCustomPrintCallback))]
     public static void print_error(string szInfo)
     {
-        m_ScriptLog.Add(szInfo);
+        lock(m_ThreadScriptLog)
+        {
+            m_ThreadScriptLog.Add(szInfo);
+            m_nAddLogCount++;
+        }
+        //m_ScriptLog.Add(szInfo);
+    }
+    protected  List<string>  ScriptLog
+    {
+        get
+        {
+            if(m_nAddLogCount > 0)
+            {
+                lock(m_ThreadScriptLog)
+                {
+                    m_ScriptLog.AddRange(m_ThreadScriptLog);
+                    m_ThreadScriptLog.Clear();
+                    m_nAddLogCount = 0;
+                }
+            }
+            return m_ScriptLog;
+        }
     }
 
     public static bool LoadBinText(ref byte[] fileData, AssetBundle bunlde)

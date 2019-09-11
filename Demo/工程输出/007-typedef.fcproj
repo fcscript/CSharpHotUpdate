@@ -1,13 +1,16 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)007-typedef\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
+<CSharpPath>
+    $(curpath)\..\007-typedef\
+</CSharpPath>
 <ExcutePath>
 </ExcutePath>
 <ExcuteFile>
 </ExcuteFile>
 <Breakpoint>
 </Breakpoint>
+<CopyPathName></CopyPathName>

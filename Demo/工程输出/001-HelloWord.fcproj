@@ -1,13 +1,16 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)001--HelloWorld\
+    $(curpath)\..\001--HelloWorld\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
+<CSharpPath>
+</CSharpPath>
 <ExcutePath>
 </ExcutePath>
 <ExcuteFile>
 </ExcuteFile>
 <Breakpoint>
 </Breakpoint>
+<CopyPathName></CopyPathName>

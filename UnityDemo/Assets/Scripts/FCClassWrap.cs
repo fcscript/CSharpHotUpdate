@@ -768,6 +768,12 @@ public class FCClassWrap
                 return;
         }
         FCValueType  ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
+        if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_task || ret_value.m_nKeyType == fc_value_type.fc_value_task)
+        {
+            PushTaskMethod(method);
+            return;
+        }
+
         PushNameSpace(method.ReturnType.Namespace);
 
         int nSameNameCount = 0;
@@ -823,7 +829,7 @@ public class FCClassWrap
         }
         for (int i = 0; i<nParamCount; ++i)
         {
-            int nParamIndex = i + nParamCount;
+            int nParamIndex = i + nParamOffset;
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
             szLeftName = string.Format("arg{0}", nParamIndex);
@@ -1019,5 +1025,198 @@ public class FCClassWrap
             }
         }
         fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<{3}>(FCLibHelper.fc_get_intptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
+    }
+
+    void  PushTaskMethod(MethodInfo method)
+    {
+        string szMethodName = method.ToString();
+        FCValueType ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
+        bool bStatic = method.IsStatic;
+
+        int nSameNameCount = 0;
+        if (m_CurSameName.TryGetValue(method.Name, out nSameNameCount))
+        {
+        }
+        m_CurSameName[method.Name] = nSameNameCount + 1;
+        int nFuncCount = 0;
+        m_CurFuncCount.TryGetValue(method.Name, out nFuncCount);
+
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_bAttrib = false;
+        func.m_szName = method.Name;
+        if (nSameNameCount > 0)
+            func.m_szGetName = func.m_szSetName = string.Format("{0}{1}_wrap", method.Name, nSameNameCount);
+        else
+            func.m_szGetName = func.m_szSetName = string.Format("{0}_wrap", method.Name);
+
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+
+        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        Type nRetType = method.ReturnType;   // 返回值
+        int nParamCount = allParams != null ? allParams.Length : 0;
+        bool bEqualFunc = func.m_szName == "Equals";
+
+        fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
+        fileData.AppendFormat("    public static int {0}(long L)\r\n", func.m_szSetName);
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+
+        if(!bStatic)
+        {
+            fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+            fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        }
+        fileData.AppendLine("            long nPtr = FCLibHelper.fc_await(L);");
+        fileData.AppendLine("            long nRetPtr = FCLibHelper.fc_get_return_ptr(L);");
+        // 处理函数参数
+        Type nParamType;
+        string szLeftName = string.Empty;
+        string szCallParam = string.Empty;
+        string szLeftType = string.Empty;
+        string szFullFuncName = method.Name;
+        for (int i = 0; i < nParamCount; ++i)
+        {
+            int nParamIndex = i;
+            ParameterInfo param = allParams[i];
+            nParamType = param.ParameterType;
+            szLeftName = string.Format("arg{0}", nParamIndex);
+            PushNameSpace(nParamType.Namespace);
+            FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
+            if (param.IsOut)
+            {
+                string szCSharpName = param_value.GetTypeName(true);
+                fileData.AppendFormat("            {0} {1};\r\n", szCSharpName, szLeftName);
+            }
+            else
+            {
+                SetMemberValue(fileData, "            ", param_value, szLeftName, "L", nParamIndex.ToString(), true, param.IsOut);
+            }
+            if (i > 0)
+                szCallParam += ',';
+            if (param.IsOut)
+            {
+                szCallParam += "out ";
+            }
+            else if (nParamType.IsByRef)
+            {
+                szCallParam += "ref ";
+            }
+            szCallParam += szLeftName;
+            szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(false);
+        }
+        // 处理返回值
+        if(nParamCount> 0)
+        {
+            if(bStatic)
+                fileData.AppendFormat("            {0}_bridge(nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
+            else
+                fileData.AppendFormat("            {0}_bridge(obj, nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
+        }
+        else
+        {
+            if (bStatic)
+                fileData.AppendFormat("            {0}_bridge(nPtr, nRetPtr);\r\n", func.m_szName);
+            else
+                fileData.AppendFormat("            {0}_bridge(obj, nPtr, nRetPtr);\r\n", func.m_szName);
+        }
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        return 0;");
+        fileData.AppendLine("    }");
+
+        func.m_szContent = fileData.ToString();
+        if (nFuncCount > 1)
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
+        else
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        m_CurClassFunc.Add(func);
+
+        PushBridgeMethod(method, szCallParam); // 创建桥接函数
+    }
+    void PushBridgeMethod(MethodInfo method, string szCallParam)
+    {
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+
+        bool bStatic = method.IsStatic;
+        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        int nParamCount = allParams != null ? allParams.Length : 0;
+        Type nParamType;
+        string szLeftName;
+        string szDeclare = string.Empty;
+        for (int i = 0; i < nParamCount; ++i)
+        {
+            int nParamIndex = i;
+            ParameterInfo param = allParams[i];
+            nParamType = param.ParameterType;
+            szLeftName = string.Format("arg{0}", nParamIndex);
+            PushNameSpace(nParamType.Namespace);
+            FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
+            string szCSharpName = param_value.GetTypeName(true);
+            szDeclare += ',';
+            if (param.IsOut)
+            {
+                szDeclare += "out ";
+            }
+            else if(nParamType.IsByRef)
+            {
+                szDeclare += "ref ";
+            }
+            szDeclare += szCSharpName;
+            szDeclare += " ";
+            szDeclare += szLeftName;
+        }
+        Type nRetType = method.ReturnType;   // 返回值
+        FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(nRetType);
+        
+        string szCallName = string.Empty;
+        if(bStatic)
+        {
+            fileData.AppendFormat("    static async void {0}_bridge(long nPtr, long nRetPtr{1})\r\n", method.Name, szDeclare);
+            szCallName = m_szCurClassName + "." + method.Name;
+        }
+        else
+        {
+            fileData.AppendFormat("    static async void {0}_bridge({1} obj, long nPtr, long nRetPtr{2})\r\n", method.Name, m_szCurClassName, szDeclare);
+            szCallName = "obj." + method.Name;
+        }
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+        if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_task)
+        {
+            if(ret_value.m_nValueType != fc_value_type.fc_value_void)
+                fileData.AppendFormat("            {0} nRes = await {1}({2});\r\n", ret_value.GetValueName(true), szCallName, szCallParam);
+            else
+                fileData.AppendFormat("            await {0}({1});\r\n", szCallName, szCallParam);
+            fileData.AppendLine("            if(FCLibHelper.fc_is_valid_await(nPtr))");
+            fileData.AppendLine("            {");
+            fileData.AppendLine("                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值");
+            fileData.AppendLine("                FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+            fileData.AppendLine("            }");
+        }
+        else
+        {
+            fileData.AppendFormat("            await {0}({1});\r\n", szCallName, szCallParam);
+            fileData.AppendLine("            FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+        }
+
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("    }");
+
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_szContent = fileData.ToString();
+        func.m_szName = func.m_szGetName = func.m_szSetName = string.Format("{0}_bridge", method.Name);
+        func.m_bAttrib = false;
+        m_CurClassFunc.Add(func);
     }
 }

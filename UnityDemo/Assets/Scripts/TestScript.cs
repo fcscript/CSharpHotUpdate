@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -20,19 +21,28 @@ public class TestExport // 测试导出功能的类，没有实际意义
     int m_nType = 0;
     public static TestCallback onPostRender; // 这个也于属性一样，有get, set
     public TestCallback onOwnPostRender; // 这个也于属性一样，有get, set
-    public TestCallback2 onCallFunc2;
-
-    //public void SetCallFunc(string szName, Action<int, float, string> func)
-    //{
-
-    //}
-    public Material[] materials { get; set; }
+    public TestCallback2 onCallFunc2;    
 
     [Obsolete("test dissable func", true)]
     public int  value
     {
         get { return m_nType; }
         set { m_nType = value; }
+    }
+
+    public static async Task<int> AsnycLoad(string szName)
+    {
+        return 0;
+    }
+
+    public static Task<int> LoadResource(string szName)
+    {
+        return Task.Run(() =>
+        {
+            System.Threading.Thread.Sleep(3000); //int nID = System.Threading.Thread.CurrentThread.ManagedThreadId;//print_error("RunTest thread id = " + nID);
+            return 10;
+        }
+        );
     }
 
     void  Test()
@@ -59,8 +69,9 @@ public class TestD  // 测试导出功能的类，没有实际意义
 {
     [DontWrap]
     public int m_nValue;
-    public void  SetValue(int nValue)
+    public int  SetValue(int nValue)
     {
+        return m_nValue;
     }
     [DontWrap]
     public void Update()
@@ -195,6 +206,7 @@ class TestScript : FCScriptLoader
         Vector3 v = Vector3.zero;
         FCLibHelper.fc_get_vector3(L, 0, ref v);
         print_error(string.Format("收到脚本回调：fc2csharp_set_vector3 ==>({0},{1},{2})", v.x, v.y, v.z));
+
         return 1;
     }
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back))]
@@ -211,9 +223,15 @@ class TestScript : FCScriptLoader
         string v = FCLibHelper.fc_get_string_a(L, 0);
         print_error(string.Format("收到脚本回调：fc2csharp_set_string ==>{0}", v));
         s_szFromFC = v;
+        int  nID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+        print_error("current thread id = " +nID);
         return 1;
     }
 
+    public static TestScript get_obj(long L)
+    {
+        return FCGetObj.GetObj<TestScript>(L);
+    }
     void  TestScriptFunc1()
     {
         try
@@ -326,6 +344,12 @@ class TestScript : FCScriptLoader
     {
         FCLibHelper.fc_call(0, "Test10");
     }
+    // 功能：测试C#await功能
+    void TestAwait()
+    {
+        FCLibHelper.fc_call(0, "TestAwait");
+    }
+    
     void InvalidObjectScriptCall()
     {
         InitDll();
@@ -498,11 +522,18 @@ class TestScript : FCScriptLoader
         {
             TestFunc10();
         }
+        nLeft = 300;
+        nTop += 80;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试await"))
+        {
+            TestAwait();
+        }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;
-        for(int i = 0; i<m_ScriptLog.Count; ++i)
+        List<string> aLog = ScriptLog;
+        for (int i = 0; i<aLog.Count; ++i)
         {
-            GUI.Label(new Rect(10.0f, fy, fWidth, 20.0f), m_ScriptLog[i]);
+            GUI.Label(new Rect(10.0f, fy, fWidth, 20.0f), aLog[i]);
             fy += 25;
         }
     }

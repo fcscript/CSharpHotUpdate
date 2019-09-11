@@ -22,7 +22,8 @@ public class TestExport_wrap
         FCLibHelper.fc_register_class_attrib(nClassName,"onPostRender",null,set_onPostRender_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"onOwnPostRender",null,set_onOwnPostRender_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"onCallFunc2",null,set_onCallFunc2_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"materials",get_materials_wrap,set_materials_wrap);
+        FCLibHelper.fc_register_class_func(nClassName,"AsnycLoad",AsnycLoad_wrap);
+        FCLibHelper.fc_register_class_func(nClassName,"LoadResource",LoadResource_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -137,13 +138,14 @@ public class TestExport_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int get_materials_wrap(long L)
+    public static int AsnycLoad_wrap(long L)
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            TestExport ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(ret.materials,L);
+            long nPtr = FCLibHelper.fc_await(L);
+            long nRetPtr = FCLibHelper.fc_get_return_ptr(L);
+            string arg0 = FCLibHelper.fc_get_string_a(L,0);
+            AsnycLoad_bridge(nPtr, nRetPtr, arg0);
         }
         catch(Exception e)
         {
@@ -151,22 +153,56 @@ public class TestExport_wrap
         }
         return 0;
     }
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int set_materials_wrap(long L)
+
+    static async void AsnycLoad_bridge(long nPtr, long nRetPtr,string arg0)
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            TestExport ret = get_obj(nThisPtr);
-            UnityEngine.Material[] arg0 = null;
-            arg0 = FCCustomParam.GetArray(ref arg0,L,0);
-            ret.materials = arg0;
+            int nRes = await TestExport.AsnycLoad(arg0);
+            if(FCLibHelper.fc_is_valid_await(nPtr))
+            {
+                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值
+                FCLibHelper.fc_continue(nPtr); // 唤醒脚本
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int LoadResource_wrap(long L)
+    {
+        try
+        {
+            long nPtr = FCLibHelper.fc_await(L);
+            long nRetPtr = FCLibHelper.fc_get_return_ptr(L);
+            string arg0 = FCLibHelper.fc_get_string_a(L,0);
+            LoadResource_bridge(nPtr, nRetPtr, arg0);
         }
         catch(Exception e)
         {
             Debug.LogException(e);
         }
         return 0;
+    }
+
+    static async void LoadResource_bridge(long nPtr, long nRetPtr,string arg0)
+    {
+        try
+        {
+            int nRes = await TestExport.LoadResource(arg0);
+            if(FCLibHelper.fc_is_valid_await(nPtr))
+            {
+                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值
+                FCLibHelper.fc_continue(nPtr); // 唤醒脚本
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-using UnityEngine;
+using System;
+using System.Threading.Tasks;
 
 
 class  TestExport : Object
@@ -14,6 +15,7 @@ class  TestExport : Object
     public static TestCallback onPostRender { set; }
     public TestCallback onOwnPostRender { set; }
     public TestCallback2 onCallFunc2 { set; }
-    public List<Material> materials { get;  set; }
+    public static Task<int> AsnycLoad(StringA szName){ return null; }
+    public static Task<int> LoadResource(StringA szName){ return null; }
 };
 

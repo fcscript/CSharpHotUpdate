@@ -3,6 +3,7 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
 using UnityEngine;
 
@@ -47,6 +48,7 @@ public enum  fc_value_type
     fc_value_delegate,  // 委托
     fc_value_action,    // Action
     fc_value_unity_action, // UnityAction
+    fc_value_task,         // Task<>
 };
 
 public enum fc_value_tempalte_type
@@ -55,6 +57,7 @@ public enum fc_value_tempalte_type
     template_array, // 数组
     template_list,  // list
     template_map,   // map/Dictionary
+    template_task,  // task<Type>
 };
 
 public class FCValueType
@@ -120,6 +123,14 @@ public class FCValueType
             m_nValueType = GetBaseFCType(m_value);
             return;
         }
+        if(szTypeName == "Task`1")
+        {
+            Type[] argtypes = nType.GetGenericArguments(); // 模板的参数
+            m_nTemplateType = fc_value_tempalte_type.template_task;
+            m_key = m_value = argtypes[0];
+            m_nKeyType = m_nValueType = GetBaseFCType(m_value);
+            return;
+        }
         m_nTemplateType = fc_value_tempalte_type.template_none;
         m_key = m_value = nType;
         m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -151,6 +162,8 @@ public class FCValueType
                     return string.Format("Dictionary<{0},{1}>", GetKeyName(bSharp, bFullName), GetValueName(bSharp, bFullName));
                 else
                     return string.Format("map<{0},{1}>", GetKeyName(bSharp, bFullName), GetValueName(bSharp, bFullName));
+            case fc_value_tempalte_type.template_task:
+                return string.Format("Task<{0}>", GetKeyName(bSharp, bFullName));
         }
         return GetBaseValueTypeName(m_nValueType, m_value, bSharp, bFullName);
     }
@@ -266,6 +279,7 @@ public class FCValueType
         s_BaseTypeFinder[typeof(Rect)] = fc_value_type.fc_value_rect;
         s_BaseTypeFinder[typeof(System.Object)] = fc_value_type.fc_value_system_object;
         s_BaseTypeFinder[typeof(UnityEngine.Object)] = fc_value_type.fc_value_unity_object;
+        s_BaseTypeFinder[typeof(Task)] = fc_value_type.fc_value_task;
     }
 
     public static fc_value_type GetBaseFCType(Type nType)
@@ -445,6 +459,8 @@ public class FCValueType
                 {
                     return GetDeleteExportName(nType, bCSharp, bFullName);
                 }
+            case fc_value_type.fc_value_task:
+                return "Task";
             default:
                 break;
         }
