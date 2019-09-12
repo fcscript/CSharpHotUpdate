@@ -2,6 +2,6 @@
 CPU : Huawei Kirin 980
 
           Test0   Test1  Test2   Test3  Test4  Test5  Test6  Test7  Test8  Test9  Test10
-FCScrip    205     170    57      146    542    74     37     150    100   2657    268
+FCScript   205     170    57      146    542    74     37     150    100   2657    268
 JitULua    221     278    2       141    532    119    8       40     8     142    280
    ULua    247     286   426      132    526    130    121    490    110   2475    303
