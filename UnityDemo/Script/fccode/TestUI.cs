@@ -21,4 +21,10 @@ export class TestUI
                 break;
         }
     }
+	public static async void  AsyncLoad()
+	{
+        print("begin LoadResource");
+        int nRet = await TestExport.LoadResource("abc.txt");
+        print("after LoadResource, nRet = {0}", nRet);
+	}
 }

@@ -46,7 +46,7 @@ export class CTestD
     {
         //StopCoroutine(func1);
         StopCoroutine(CTestD, func1);
-    }
+    }	
 };
 
 export void  csharp2fc_set_vector3(Vector3 v)
@@ -70,11 +70,10 @@ export void  csharp2fc_set_string(StringA v)
 // 测试C#中的await功能
 export void  TestAwait()
 {
-	print("test await.....");
-	fc2csharp_loadtask();
-	print("after await.....");
+	print("begin TestAwait.....");
+	TestUI.AsyncLoad();
+	print("after TestAwait.....");
 }
-
 
 //
 //void  PrintTime(StringA szFunc, uint  nTime)
