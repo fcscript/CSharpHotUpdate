@@ -341,6 +341,11 @@ class TestScript : FCScriptLoader
     }
     void TestFunc10()
     {
+        GameObject obj = GameObject.Find("Empty");
+        if (obj == null)
+            obj = new GameObject("Empty");
+        long nPtr = FCGetObj.PushObj(obj.transform);
+        FCLibHelper.fc_push_intptr(nPtr);
         FCLibHelper.fc_call(0, "Test10");
     }
     // 功能：测试C#await功能
@@ -408,9 +413,9 @@ class TestScript : FCScriptLoader
 
     void OnGUI()
     {
-        int nLeft = 300;
+        int nLeft = 200;
         int nTop = 200;
-        nLeft = 300;
+        nLeft = 200;
         nTop += 80;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试脚本接口"))
         {
@@ -427,6 +432,46 @@ class TestScript : FCScriptLoader
             TestObjectScript();
         }
         nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象不置空"))
+        {
+            FCLibHelper.fc_relese_ins(m_nTestPtr);
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象并置空"))
+        {
+            FCLibHelper.fc_relese_ins(m_nTestPtr);
+            m_nTestPtr = 0;
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "调用对象函数"))
+        {
+            InvalidObjectScriptCall();
+        }
+        nLeft = 200;
+        nTop += 80;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "清空LOG"))
+        {
+            m_ScriptLog.Clear();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试图形对象"))
+        {
+            TestGraphicCall();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "初始化DLL"))
+        {
+            if (!FCLibHelper.fc_is_init())
+                FCLibHelper.fc_init();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "释放DLL"))
+        {
+            if (FCLibHelper.fc_is_init())
+                FCLibHelper.fc_release();
+        }
+        nLeft = 200;
+        nTop += 80;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test0"))
         {
             TestFunc0();
@@ -446,23 +491,6 @@ class TestScript : FCScriptLoader
         {
             TestFunc3();
         }
-        nLeft = 300;
-        nTop += 80;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象不置空"))
-        {
-            FCLibHelper.fc_relese_ins(m_nTestPtr);
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象并置空"))
-        {
-            FCLibHelper.fc_relese_ins(m_nTestPtr);
-            m_nTestPtr = 0;
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "调用对象函数"))
-        {
-            InvalidObjectScriptCall();
-        }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test4"))
         {
@@ -473,7 +501,8 @@ class TestScript : FCScriptLoader
         {
             TestFunc5();
         }
-        nLeft += 160;
+        nLeft = 200;
+        nTop += 80;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test6"))
         {
             TestFunc6();
@@ -482,29 +511,6 @@ class TestScript : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test7"))
         {
             TestFunc7();
-        }
-        nLeft = 300;
-        nTop += 80;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "清空LOG"))
-        {
-            m_ScriptLog.Clear();
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试图形对象"))
-        {
-            TestGraphicCall();
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "初始化DLL"))
-        {
-            if(!FCLibHelper.fc_is_init())
-                FCLibHelper.fc_init();
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "释放DLL"))
-        {
-            if(FCLibHelper.fc_is_init())
-                FCLibHelper.fc_release();
         }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test8"))
@@ -521,8 +527,7 @@ class TestScript : FCScriptLoader
         {
             TestFunc10();
         }
-        nLeft = 300;
-        nTop += 80;
+        nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试await"))
         {
             TestAwait();

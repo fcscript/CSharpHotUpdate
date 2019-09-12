@@ -9,5 +9,6 @@ public class Custom_wrap
     public static void Register()
     {
         TestExport_wrap.Register();
+        UserClass_wrap.Register();
     }
 }

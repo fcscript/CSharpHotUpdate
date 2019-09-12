@@ -760,6 +760,10 @@ public class FCClassWrap
         {
             return;
         }
+        if (m_CurDontWrapName.ContainsKey(method.Name))
+        {
+            return;
+        }
         string szMethodName = method.ToString();
         bool bTemplateFunc = IsTemplateFunc(method);
         // 模板函数暂时不导出吧

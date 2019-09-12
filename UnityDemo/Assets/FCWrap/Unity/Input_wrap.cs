@@ -57,7 +57,6 @@ public class Input_wrap
         FCLibHelper.fc_register_class_func(nClassName,"GetKeyUp_StringA",GetKeyUp_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetKeyUp_KeyCode",GetKeyUp1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetJoystickNames",GetJoystickNames_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"IsJoystickPreconfigured",IsJoystickPreconfigured_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetMouseButton",GetMouseButton_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetMouseButtonDown",GetMouseButtonDown_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetMouseButtonUp",GetMouseButtonUp_wrap);
@@ -883,25 +882,6 @@ public class Input_wrap
             string[] ret = Input.GetJoystickNames();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret,ret_ptr);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int IsJoystickPreconfigured_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            bool ret = Input.IsJoystickPreconfigured(arg0);
-            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_bool(ret_ptr, ret);
         }
         catch(Exception e)
         {

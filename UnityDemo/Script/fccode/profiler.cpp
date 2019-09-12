@@ -1,22 +1,31 @@
 ﻿
 // https://blog.csdn.net/u011467512/article/details/72716376/?tdsourcetag=s_pcqq_aiomsg
 
+uint  s_nTotalTime = 0;
+uint  s_nTestCount = 0;
+StringA  s_nLastFunc;
+
 void  PrintTime(StringA szFunc, uint  nTime)
 {
-    print("{0}花费时间：{1}秒{2}毫秒", szFunc, nTime/1000, nTime % 1000);
+	if(s_nLastFunc != szFunc)
+	{
+		s_nTotalTime = 0;
+		s_nTestCount = 0;
+		s_nLastFunc = szFunc;
+	}
+	s_nTotalTime += nTime;
+	++s_nTestCount;
+	print("{0}花费时间：{1}秒{2}毫秒, 平均：{3}毫秒, 共{4}次", szFunc, nTime/1000, nTime % 1000, s_nTotalTime/s_nTestCount, s_nTestCount);
 }
 
 export void Test0(Transform transform)
 {
-    print("start call =================================");
     uint  nBegin = System.GetTickCount();
-
     for(int i = 0; i<200000; ++i)
     {
         transform.position = transform.position;
     }
     uint nEnd = System.GetTickCount();
-    print("end  call =================================");
     PrintTime("Test0", nEnd - nBegin);
 }
 
@@ -55,10 +64,14 @@ export void Test2()
 
 export void  Test3()
 {
+    List<GameObject>  aTemp = new List<GameObject>();
+    aTemp.resize(20000);
+
     uint  nBegin = System.GetTickCount();
     for(int i = 0; i<20000; ++i)
     {
         GameObject  obj = new GameObject(); // 这样写，其实是会立即释放的
+        aTemp[i] = obj;
     }
     uint nEnd = System.GetTickCount();
     PrintTime("Test3", nEnd - nBegin);
@@ -66,6 +79,8 @@ export void  Test3()
 
 export void Test4(Transform transform)
 {
+    List<GameObject>  aTemp = new List<GameObject>();
+    aTemp.resize(20000);
     uint  nBegin = System.GetTickCount();
     //SkinnedMeshRenderer  nType = typeof(SkinnedMeshRenderer);
 	//GameObject  obj = new GameObject();  // 这样写，其实也是会立即释放的, 需要保存起来
@@ -75,6 +90,7 @@ export void Test4(Transform transform)
         obj.AddComponent<SkinnedMeshRenderer>();
         SkinnedMeshRenderer c = obj.GetComponent<SkinnedMeshRenderer>();
         c.receiveShadows = false;
+        aTemp[i] = obj;
     }
     uint nEnd = System.GetTickCount();
     PrintTime("Test4", nEnd - nBegin);
@@ -124,18 +140,17 @@ export void Test7()
 
 export void Test8()
 {
-    print("start call =================================");
+    //print("start call =================================");
     uint  nBegin = System.GetTickCount();
     int  total = 0;
-	int  k = 0;
-    for(int i = 0; i<1000000; ++i)
+	int  i = 0;
+    for(i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
-		++k;
     }
     uint nEnd = System.GetTickCount();
-    print("end call =================================");
-	print("total = {0}, k = {1}", total, k);
+    //print("end call =================================");
+	//print("total = {0}, i = {1}", total, i);
     PrintTime("Test8", nEnd - nBegin);
 }
 
@@ -160,7 +175,7 @@ export void Test9()
     PrintTime("Test9", nEnd - nBegin);
 }
 
-export void Test10(Transform transform)
+export void Test91(Transform transform)
 {
     List<float>  aNumb = new List<float>();
     for(int i = 0; i<1024; ++i)
@@ -177,6 +192,18 @@ export void Test10(Transform transform)
             total += aNumb[j];
         }
     }
+    uint nEnd = System.GetTickCount();
+    PrintTime("Test91", nEnd - nBegin);
+}
+
+export void Test10(Transform transform)
+{    
+    uint  nBegin = System.GetTickCount();
+	
+    for(int i = 0; i<200000; ++i)
+    {
+		UserClass.TestFunc1(1, "123", transform.position, transform);
+    }		
     uint nEnd = System.GetTickCount();
     PrintTime("Test10", nEnd - nBegin);
 }

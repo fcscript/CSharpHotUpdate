@@ -78,7 +78,8 @@ public static class FCExport
         pWrap.BeginModleWrap("Custom");
 
         pWrap.WrapClass(typeof(TestExport)); // 导出一个测试的类
-
+        pWrap.WrapClass(typeof(UserClass));
+        
         pWrap.EndModleWrap();
     }
 
