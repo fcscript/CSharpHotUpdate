@@ -88,7 +88,8 @@ public class SkinnedMeshRenderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             SkinnedMeshRenderer ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(ret.bones,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret.bones,ret_ptr);
         }
         catch(Exception e)
         {

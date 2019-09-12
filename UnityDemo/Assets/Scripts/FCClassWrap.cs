@@ -678,7 +678,8 @@ public class FCClassWrap
             fileData.AppendLine("        {");
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
-            FCValueType.PushReturnValue(fileData, "            ", ret_value, "L", szLeftName, true);
+            fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
+            FCValueType.PushReturnValue(fileData, "            ", ret_value, "ret_ptr", szLeftName, true);
             fileData.AppendLine("        }");
             fileData.AppendLine("        catch(Exception e)");
             fileData.AppendLine("        {");
@@ -896,7 +897,10 @@ public class FCClassWrap
             if (bTemplateFunc)
                 PushTemplateFuncWrap(method, szCallParam);
             else
-                FCValueType.PushReturnValue(fileData, "            ", ret_value, "L", "ret", false);
+            {
+                fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
+                FCValueType.PushReturnValue(fileData, "            ", ret_value, "ret_ptr", "ret", false);
+            }
         }
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
@@ -1191,14 +1195,20 @@ public class FCClassWrap
         if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_task)
         {
             if(ret_value.m_nValueType != fc_value_type.fc_value_void)
+            {
                 fileData.AppendFormat("            {0} nRes = await {1}({2});\r\n", ret_value.GetValueName(true), szCallName, szCallParam);
+                fileData.AppendLine("            if(FCLibHelper.fc_is_valid_await(nPtr))");
+                fileData.AppendLine("            {");
+                fileData.AppendLine("                // 设置返回值");
+                FCValueType.PushReturnValue(fileData, "                ", ret_value, "nRetPtr", "nRes", false); // 设置返回值
+                fileData.AppendLine("                FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+                fileData.AppendLine("            }");
+            }
             else
+            {
                 fileData.AppendFormat("            await {0}({1});\r\n", szCallName, szCallParam);
-            fileData.AppendLine("            if(FCLibHelper.fc_is_valid_await(nPtr))");
-            fileData.AppendLine("            {");
-            fileData.AppendLine("                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值");
-            fileData.AppendLine("                FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
-            fileData.AppendLine("            }");
+                fileData.AppendLine("            FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+            }
         }
         else
         {

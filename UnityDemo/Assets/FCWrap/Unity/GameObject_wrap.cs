@@ -500,7 +500,8 @@ public class GameObject_wrap
             GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponents(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -537,7 +538,8 @@ public class GameObject_wrap
             GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponentsInChildren(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -556,7 +558,8 @@ public class GameObject_wrap
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             Component[] ret = obj.GetComponentsInChildren(arg0,arg1);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -574,7 +577,8 @@ public class GameObject_wrap
             GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponentsInParent(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -593,7 +597,8 @@ public class GameObject_wrap
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             Component[] ret = obj.GetComponentsInParent(arg0,arg1);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -687,7 +692,8 @@ public class GameObject_wrap
             GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             GameObject[] ret = GameObject.FindGameObjectsWithTag(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {

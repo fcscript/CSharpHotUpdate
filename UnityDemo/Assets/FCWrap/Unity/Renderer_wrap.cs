@@ -801,7 +801,8 @@ public class Renderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Renderer ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(ret.materials,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret.materials,ret_ptr);
         }
         catch(Exception e)
         {
@@ -834,7 +835,8 @@ public class Renderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Renderer ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(ret.sharedMaterials,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret.sharedMaterials,ret_ptr);
         }
         catch(Exception e)
         {

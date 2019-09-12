@@ -547,7 +547,8 @@ public class Texture2D_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
             byte[] ret = obj.GetRawTextureData();
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -564,7 +565,8 @@ public class Texture2D_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
             Color[] ret = obj.GetPixels();
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -582,7 +584,8 @@ public class Texture2D_wrap
             Texture2D obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color[] ret = obj.GetPixels(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -604,7 +607,8 @@ public class Texture2D_wrap
             int arg3 = FCLibHelper.fc_get_int(L,3);
             int arg4 = FCLibHelper.fc_get_int(L,4);
             Color[] ret = obj.GetPixels(arg0,arg1,arg2,arg3,arg4);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -625,7 +629,8 @@ public class Texture2D_wrap
             int arg2 = FCLibHelper.fc_get_int(L,2);
             int arg3 = FCLibHelper.fc_get_int(L,3);
             Color[] ret = obj.GetPixels(arg0,arg1,arg2,arg3);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -643,7 +648,8 @@ public class Texture2D_wrap
             Texture2D obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color32[] ret = obj.GetPixels32(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -660,7 +666,8 @@ public class Texture2D_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Texture2D obj = get_obj(nThisPtr);
             Color32[] ret = obj.GetPixels32();
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -792,7 +799,8 @@ public class Texture2D_wrap
             int arg2 = FCLibHelper.fc_get_int(L,2);
             bool arg3 = FCLibHelper.fc_get_bool(L,3);
             Rect[] ret = obj.PackTextures(arg0,arg1,arg2,arg3);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -813,7 +821,8 @@ public class Texture2D_wrap
             int arg1 = FCLibHelper.fc_get_int(L,1);
             int arg2 = FCLibHelper.fc_get_int(L,2);
             Rect[] ret = obj.PackTextures(arg0,arg1,arg2);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -833,7 +842,8 @@ public class Texture2D_wrap
             arg0 = FCCustomParam.GetArray(ref arg0,L,0);
             int arg1 = FCLibHelper.fc_get_int(L,1);
             Rect[] ret = obj.PackTextures(arg0,arg1);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {

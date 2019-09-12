@@ -237,7 +237,8 @@ public class UnityObject_wrap
             UnityObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             UnityObject[] ret = UnityObject.FindObjectsOfType(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {

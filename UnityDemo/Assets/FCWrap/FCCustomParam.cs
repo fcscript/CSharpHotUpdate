@@ -372,12 +372,11 @@ class FCCustomParam
         }
         return rList;
     }
-    public static void ReturnArray(byte []rList, long L)
+    public static void ReturnArray(byte []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_byte(ptr, rList, 0, nCount);
         }
         catch(Exception e)
@@ -385,12 +384,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnList(List<byte> rList, long L)
+    public static void ReturnList(List<byte> rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Count : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -403,12 +401,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityObject []rList, long L)
+    public static void ReturnArray(UnityObject []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -420,12 +417,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Component []rList, long L)
+    public static void ReturnArray(Component []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -437,12 +433,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Color []rList, long L)
+    public static void ReturnArray(Color []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_color(ptr, rList, 0, nCount);
         }
         catch(Exception e)
@@ -450,12 +445,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Color32 []rList, long L)
+    public static void ReturnArray(Color32 []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_color32(ptr, rList, 0, nCount);
         }
         catch(Exception e)
@@ -463,12 +457,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Rect []rList, long L)
+    public static void ReturnArray(Rect []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_rect(ptr, rList, 0, nCount);
         }
         catch(Exception e)
@@ -476,12 +469,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(GameObject []rList, long L)
+    public static void ReturnArray(GameObject []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -493,12 +485,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Material []rList, long L)
+    public static void ReturnArray(Material []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -510,12 +501,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Transform []rList, long L)
+    public static void ReturnArray(Transform []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -527,12 +517,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(AccelerationEvent []rList, long L)
+    public static void ReturnArray(AccelerationEvent []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -544,12 +533,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Touch []rList, long L)
+    public static void ReturnArray(Touch []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
@@ -561,12 +549,11 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(string []rList, long L)
+    public static void ReturnArray(string []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            long ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_array_size(ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {

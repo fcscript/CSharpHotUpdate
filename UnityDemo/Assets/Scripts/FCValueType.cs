@@ -346,21 +346,21 @@ public class FCValueType
             return;
         }        
         string szType = value.GetTypeName(true, true);
-        fileData.AppendFormat("{0}long ret_ptr = FCLibHelper.fc_get_return_ptr(L);\r\n", szLeftEmpty);
+        //fileData.AppendFormat("{0}long ret_ptr = FCLibHelper.fc_get_return_ptr(L);\r\n", szLeftEmpty);
         if (IsBaseType(value.m_nValueType))
         {
             string szFuncAddr = GetFCLibFuncShortName(value.m_nValueType);
             if (IsRefType(value.m_nValueType))
             {
                 fileData.AppendFormat("{0}{1} temp_ret = {2};\r\n", szLeftEmpty, szType, szValueName);
-                fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}(ret_ptr, ref temp_ret);\r\n", szLeftEmpty, szFuncAddr);
+                fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, ref temp_ret);\r\n", szLeftEmpty, szFuncAddr, Ptr);
                 return;
             }
-            fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}(ret_ptr, {2});\r\n", szLeftEmpty, szFuncAddr, szValueName);
+            fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, {3});\r\n", szLeftEmpty, szFuncAddr, Ptr, szValueName);
             return;
         }
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
-        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr(ret_ptr, v);\r\n", szLeftEmpty);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr({1}, v);\r\n", szLeftEmpty, Ptr);
     }
     public static string ModifyScriptCallParam(string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
     {

@@ -161,7 +161,8 @@ public class TestExport_wrap
             int nRes = await TestExport.AsnycLoad(arg0);
             if(FCLibHelper.fc_is_valid_await(nPtr))
             {
-                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值
+                // 设置返回值
+                FCLibHelper.fc_set_value_int(nRetPtr, nRes);
                 FCLibHelper.fc_continue(nPtr); // 唤醒脚本
             }
         }
@@ -195,7 +196,8 @@ public class TestExport_wrap
             int nRes = await TestExport.LoadResource(arg0);
             if(FCLibHelper.fc_is_valid_await(nPtr))
             {
-                FCLibHelper.fc_set_value_int(nRetPtr, nRes); // 设置返回值
+                // 设置返回值
+                FCLibHelper.fc_set_value_int(nRetPtr, nRes);
                 FCLibHelper.fc_continue(nPtr); // 唤醒脚本
             }
         }

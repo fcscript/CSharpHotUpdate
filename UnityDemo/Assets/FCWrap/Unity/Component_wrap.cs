@@ -257,7 +257,8 @@ public class Component_wrap
             Component obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponentsInChildren(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -276,7 +277,8 @@ public class Component_wrap
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             Component[] ret = obj.GetComponentsInChildren(arg0,arg1);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -314,7 +316,8 @@ public class Component_wrap
             Component obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponentsInParent(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -333,7 +336,8 @@ public class Component_wrap
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             Component[] ret = obj.GetComponentsInParent(arg0,arg1);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -351,7 +355,8 @@ public class Component_wrap
             Component obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
             Component[] ret = obj.GetComponents(arg0);
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {

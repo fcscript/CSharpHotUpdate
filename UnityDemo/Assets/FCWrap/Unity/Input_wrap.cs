@@ -329,7 +329,8 @@ public class Input_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Input ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(Input.accelerationEvents,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(Input.accelerationEvents,ret_ptr);
         }
         catch(Exception e)
         {
@@ -362,7 +363,8 @@ public class Input_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Input ret = get_obj(nThisPtr);
-            FCCustomParam.ReturnArray(Input.touches,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(Input.touches,ret_ptr);
         }
         catch(Exception e)
         {
@@ -879,7 +881,8 @@ public class Input_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             Input obj = get_obj(nThisPtr);
             string[] ret = Input.GetJoystickNames();
-            FCCustomParam.ReturnArray(ret,L);
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCCustomParam.ReturnArray(ret,ret_ptr);
         }
         catch(Exception e)
         {
