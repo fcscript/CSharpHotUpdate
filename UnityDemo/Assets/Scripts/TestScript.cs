@@ -348,6 +348,25 @@ class TestScript : FCScriptLoader
         FCLibHelper.fc_push_intptr(nPtr);
         FCLibHelper.fc_call(0, "Test10");
     }
+    void TestFunc11()
+    {
+        // 测试空函数调用
+        long  nBeginTime = DateTime.Now.Ticks / 10000;
+        for (int i = 0; i< 200000; ++i)
+        {
+            FCLibHelper.fc_call(0, "EmptyFunc");
+        }
+        long  nEndTime = DateTime.Now.Ticks / 10000;
+        long nCostTime = nEndTime - nBeginTime;
+        int nTotalCount = 200000;
+        string szTips = string.Format("Test11 花费总时间={0}秒,平均时间={1}毫秒,总调用次数={2}", nCostTime / 1000, nCostTime / nTotalCount, nTotalCount);        
+        print_error(szTips);
+        FCLibHelper.fc_call(0, "PrintV0");
+    }
+    void TestFunc12()
+    {
+        FCLibHelper.fc_call(0, "Test12");
+    }
     // 功能：测试C#await功能
     void TestAwait()
     {
@@ -470,6 +489,11 @@ class TestScript : FCScriptLoader
             if (FCLibHelper.fc_is_init())
                 FCLibHelper.fc_release();
         }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试await"))
+        {
+            TestAwait();
+        }
         nLeft = 200;
         nTop += 80;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test0"))
@@ -528,9 +552,15 @@ class TestScript : FCScriptLoader
             TestFunc10();
         }
         nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试await"))
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test11"))
         {
-            TestAwait();
+            TestFunc11();
+        }
+        nLeft = 200;
+        nTop += 80;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test12"))
+        {
+            TestFunc12();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;

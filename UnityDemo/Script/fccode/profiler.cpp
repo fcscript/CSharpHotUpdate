@@ -17,6 +17,16 @@ void  PrintTime(StringA szFunc, uint  nTime)
 	++s_nTestCount;
 	print("{0}花费时间：{1}秒{2}毫秒, 平均：{3}毫秒, 共{4}次", szFunc, nTime/1000, nTime % 1000, s_nTotalTime/s_nTestCount, s_nTestCount);
 }
+int  _V0 = 0;
+export void EmptyFunc()
+{
+    _V0 = _V0 + 1;
+}
+
+export void  PrintV0()
+{
+    print("_V0={0}", _V0);
+}
 
 export void Test0(Transform transform)
 {
@@ -206,4 +216,15 @@ export void Test10(Transform transform)
     }		
     uint nEnd = System.GetTickCount();
     PrintTime("Test10", nEnd - nBegin);
+}
+
+export void  Test12()
+{
+    uint  nBegin = System.GetTickCount();
+    for(int i = 0; i<200000; ++i)
+    {
+        EmptyFunc();
+    }
+    uint nEnd = System.GetTickCount();
+    PrintTime("Test12", nEnd - nBegin);
 }
