@@ -1,4 +1,4 @@
-local UnityEngine = CS.UnityEngine
+ï»¿local UnityEngine = CS.UnityEngine
 local up = UnityEngine.Vector3.up
 local GameObject = UnityEngine.GameObject
 local SkinnedMeshRenderer = UnityEngine.SkinnedMeshRenderer
@@ -127,7 +127,7 @@ function Test10(trans)
     return os.clock() - t
 end
 
-// ¿Õµ÷ÓÃ, ÔÚC#ÖÐÁ¬ÐøÖ´ÐÐ200000´Î
+// ç©ºè°ƒç”¨, åœ¨C#ä¸­è¿žç»­æ‰§è¡Œ200000æ¬¡
 function Test11()
     _V0 = _V0 + 1
 end
