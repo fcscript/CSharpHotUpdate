@@ -1,0 +1,143 @@
+local UnityEngine = CS.UnityEngine
+local up = UnityEngine.Vector3.up
+local GameObject = UnityEngine.GameObject
+local SkinnedMeshRenderer = UnityEngine.SkinnedMeshRenderer
+local Vector3 = UnityEngine.Vector3
+local Quaternion = UnityEngine.Quaternion
+local Normalize = UnityEngine.Vector3.Normalize
+local Input = UnityEngine.Input
+local UserClass = CS.UserClass
+
+_V0 = 1
+_V1 = "12345"
+_V2 = GameObject()
+_V3 = Vector3(1, 2, 3)
+_V4 = {1, 2, 3}
+
+function EmptyFunc()
+    _V0 = _V0 + 1
+end
+
+function GC()
+    collectgarbage()
+end
+
+function Test0(transform)
+    local t = os.clock()
+    for i = 1,200000 do
+        transform.position = transform.position
+    end
+    return os.clock() - t
+end
+
+function Test1(transform)
+    local t = os.clock()
+    for i = 1,200000 do
+        transform:Rotate(up, 1)
+    end
+    return os.clock() - t
+end
+
+function Test2()
+    local t = os.clock()
+    for i = 1, 2000000 do
+        local v = Vector3(i, i, i)
+        local x,y,z = v.x, v.y, v.z
+    end
+    return os.clock() - t
+end
+
+function Test3()
+    local t = os.clock()
+    for i = 1,20000 do
+        GameObject()
+    end
+    return os.clock() - t
+end
+
+function Test4()
+    local t = os.clock()
+    local tp = typeof(SkinnedMeshRenderer)
+    for i = 1,20000 do
+        local go = GameObject()
+        go:AddComponent(tp)
+        local c = go:GetComponent(tp)
+        c.receiveShadows=false
+    end
+    return os.clock() - t
+end
+    
+function Test5()
+    local t = os.clock()
+    for i = 1,200000 do
+        local p = Input.mousePosition
+        --Physics.RayCast
+    end
+    return os.clock() - t
+end
+
+function Test6()
+    local t = os.clock()
+    for i = 1, 200000 do
+        local v = Vector3(i,i,i)
+        Vector3.Normalize(v)
+    end
+    return os.clock() - t
+end
+
+function Test7()
+    local t = os.clock()
+    for i=1,200000 do
+        local q1 = Quaternion.Euler(i, i, i)
+        local q2 = Quaternion.Euler(i * 2, i * 2, i * 2)
+        Quaternion.Slerp(Quaternion.identity, q1, 0.5)
+    end
+    return os.clock() - t
+end
+
+function Test8()
+    local total = 0
+    local t = os.clock()
+    for i = 0, 1000000, 1 do
+        total = total + i - (i/2) * (i + 3) / (i + 5)
+    end
+    return os.clock() - t
+end
+
+function Test9()
+    local array = {}
+    for i = 1, 1024 do
+        array[i] = i
+    end
+    local total = 0
+    local t = os.clock()
+    for j = 1, 100000 do
+        for i = 1, 1024 do
+            total = total + array[i]
+        end
+    end
+    return os.clock() - t
+end
+
+function Test10(trans)
+    local t = os.clock()
+    for i = 1, 200000 do
+        UserClass.TestFunc1(1, "123", trans.position, trans)
+    end
+    return os.clock() - t
+end
+
+// 空调用, 在C#中连续执行200000次
+function Test11()
+    _V0 = _V0 + 1
+end
+
+function Test12()
+    local t = os.clock()
+    for i = 1, 200000 do
+        EmptyFunc();
+    end
+    return os.clock() - t
+end
+
+
