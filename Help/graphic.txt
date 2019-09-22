@@ -24,6 +24,7 @@ public:
     Vector2 operator / (Vector2 left, float right);
     float operator * (Vector2 left, Vector2 right);
     friend float Length(Vector2 v1, Vector2 v2);
+    friend float Distance(Vector2 v1, Vector2 v2);
     friend float GetDistSQ(Vector2 v1, Vector2 v2);
     friend bool  Equals( const Vector2 &v1, const Vector2 &v2 );
     friend float Dot(const Vector2 &v1, const Vector2 &v2 );
@@ -51,7 +52,9 @@ public:
     friend Vector3 operator / (Vector3 left, float fScale);
     friend float operator * (Vector3 left, Vector3 right);  // 点乘
 
-    friend float Length(Vector3 v1, Vector3 v2);
+
+    friend float Length(Vector3 v1, Vector3 v2); 
+    friend float Distance(Vector3 v1, Vector3 v2);
     friend float GetDistSQ(Vector3 v1, Vector3 v2);
     friend bool  Equals( const Vector3 &v1, const Vector3 &v );
     friend float Dot(const Vector3 &v1, const Vector3 &v2 );
@@ -169,10 +172,105 @@ struct BundBox
     bool   GetIntersectPoint( Vector3 &vPickPoint, const Vector3 &vRayOrg, const Vector3 &vRayDir );
     bool   IsIntersectRay( const Vector3 &vRayOrg, const Vector3 &vRayDir, float fLineMax ) const
     void   Transform(const GLMatrix* pMat);
-
-    bool  GetIntersectPoint( Vector3 &vPickPt, const Vector3& v0, const Vector3& v1, const Vector3& v2 );
-    bool  IntersectTriangle( const Vector3& v0, const Vector3& v1, const Vector3& v2, float* t, float* u, float* v );
 };
 
-  FrustumBox, Sphere, IntRect, Rect, Color, Color32, Bezier2D, Bezier3D
-  这些对象目前暂时没有实现，需要的话，可以加上
+struct Bounds
+{
+    Vector3  center;  // 中心点
+    Vector3  extents; // 大小
+    void Set(Vector3 vMin, Vector3 vMax);
+    float Width()
+    float Height();
+    float Length();
+    Vector3  GetCenter();
+    void   AddVector(const Vector3 &p);
+    void   AddBoudBox( const Bounds &sBox );
+
+    void   SetLineBox( const Vector3 &vBegin, const Vector3 &vEnd, float fLineSize )
+    bool   IsContain( const Bounds &sBox);
+    bool   IsContain( const Bounds &sBox, float fStep );
+    bool   IsContain( const Vector3 &sPoint );
+    bool   IsContain( const Vector3 &sPoint, float fStep );
+    bool   GetIntersectPoint( Vector3 &vPickPoint, const Vector3 &vRayOrg, const Vector3 &vRayDir );
+    bool   IsIntersectRay( const Vector3 &vRayOrg, const Vector3 &vRayDir, float fLineMax ) const;
+    void   Transform(const Matrix* pMat);
+};
+
+struct Ray
+{
+    Vector3 org; // 射线的起点
+    Vector3 dir; // 射线的方向
+    bool  GetIntersectPoint( Vector3 &vPickPt, const Vector3& v0, const Vector3& v1, const Vector3& v2 ) const;
+    bool  IntersectTriangle( const Vector3& v0, const Vector3& v1, const Vector3& v2, float* t, float* u, float* v ) const;
+};
+
+struct Color32
+{
+    BYTE  r, g, b, a;
+    void  Set(BYTE _r, BYTE _g, BYTE _b, BYTE _a);
+    void  operator = (uint c); 
+    uint  ToInt32();
+};
+
+struct Color
+{
+    float  r, g, b, a;
+    void  Set(float _r, float _g, float _b, float _a);
+    void  operator = (uint c); 
+    uint  ToInt32();
+};
+
+struct Quaternion
+{
+    float  x, y, z, w;
+    void Identity();
+    void Set(float _x, float _y, float _z, float _w);
+    void SetAxisAngle(const Vector3 &axis, float angle);
+    void SetEulerAngles(const Vector3 &Euler);
+    void SetEulerAngles(float fYaw, float fPitch, float fRoll);
+    void SetFromToRotation( const Vector3& from, const Vector3& to );
+    void Lerp(Quaternion q1, Quaternion p2, float fLerp);
+    void Slerp(Quaternion q1, Quaternion p2, float fLerp);
+    void ToAngleAxis(Vector3& axis, float &angle);
+    Vector3 ToEuler();
+    friend Vector3 operator *(Quaternion q, Vector3 v);
+    friend Quaternion operator *(Quaternion q1, Quaternion p2);    
+};
+
+struct  Bezier2D
+{
+    Vector2   begin, end, p1, p2;
+    void Set(Vector2 begin, Vector2 end, Vector2 p1, Vector2 p2);
+    Vector2 Lerp(float fLerp);
+};
+
+struct  Bezier3D
+{
+    Vector3   begin, end, p1, p2;
+    void Set(Vector3 begin, Vector3 end, Vector3 p1, Vector3 p2);
+    Vector3 Lerp(float fLerp);
+};
+
+struct IntRect
+{
+    int  left, top, right, bottom;
+    void Set(int _left, int _top, int _right, int _bottom);
+    void AddPoint(int x, int y);
+    int  width{get ;}
+    int  height(get;}
+    bool IsContain(int x, int y) const;
+    bool IsContain(const IntRect &r) const;
+    bool IsIntersect(const IntRect &r) const;
+};
+
+struct Rect
+{
+    float  left, top, right, bottom;
+    void Set(float _left, float _top, float _right, float _bottom);
+    void AddPoint(float x, float y);
+    float  width{get ;}
+    float  height{get;}
+    bool IsContain(float x, float y) const;
+    bool IsContain(const Rect &r) const;
+    bool IsIntersect(const Rect &r) const;
+};
