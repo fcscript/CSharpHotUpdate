@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 // 原本这个类名，叫System, 但这个关键字被C#本身占用了，所以用os也是一样的
 class os

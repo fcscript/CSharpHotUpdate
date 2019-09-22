@@ -1,0 +1,16 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+    $(curpath)\..\013--委托\
+</IncludePath>
+<IncludeFile>
+</IncludeFile>
+<CSharpPath>
+</CSharpPath>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>
+<CopyPathName></CopyPathName>
