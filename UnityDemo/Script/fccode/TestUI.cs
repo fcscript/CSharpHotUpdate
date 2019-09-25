@@ -1,7 +1,8 @@
 ﻿
-export class TestUI
+[export]
+class TestUI
 {
-    export void OnButtonClicked(string szName)
+    void OnButtonClicked(string szName)
     {
         print("you clicked button : {0}----", szName);
         // to do
@@ -24,7 +25,7 @@ export class TestUI
 	public static async void  AsyncLoad()
 	{
         print("begin LoadResource");
-        int nRet = await TestExport.LoadResource("abc.txt");
-        print("after LoadResource, nRet = {0}", nRet);
+        //int nRet = await TestExport.LoadResource("abc.txt");
+        //print("after LoadResource, nRet = {0}", nRet);
 	}
 }

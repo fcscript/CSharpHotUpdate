@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+using UnityEngine.UI;
 
 public class Component_wrap
 {
@@ -23,7 +24,8 @@ public class Component_wrap
         FCLibHelper.fc_register_class_attrib(nClassName,"gameObject",get_gameObject_wrap,null);
         FCLibHelper.fc_register_class_attrib(nClassName,"tag",get_tag_wrap,set_tag_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetComponent_Type",GetComponent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_StringA",GetComponent1_wrap);
+        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_T",GetComponent1_wrap);
+        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_StringA",GetComponent2_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetComponentInChildren_Type_bool",GetComponentInChildren_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetComponentInChildren_Type",GetComponentInChildren1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetComponentsInChildren_Type",GetComponentsInChildren_wrap);
@@ -189,6 +191,66 @@ public class Component_wrap
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int GetComponent1_wrap(long L)
+    {
+        try
+        {
+            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
+            Component obj = get_obj(nThisPtr);
+            string arg0 = FCLibHelper.fc_get_string_a(L, 0);
+            long nRetPtr = 0;
+            switch(arg0)
+            {
+                case "SkinnedMeshRenderer":
+                {
+                    SkinnedMeshRenderer ret_obj = obj.GetComponent<SkinnedMeshRenderer>();
+                    nRetPtr = FCGetObj.PushObj<SkinnedMeshRenderer>(ret_obj);
+                }
+                break;
+                case "MeshRenderer":
+                {
+                    MeshRenderer ret_obj = obj.GetComponent<MeshRenderer>();
+                    nRetPtr = FCGetObj.PushObj<MeshRenderer>(ret_obj);
+                }
+                break;
+                case "Animation":
+                {
+                    Animation ret_obj = obj.GetComponent<Animation>();
+                    nRetPtr = FCGetObj.PushObj<Animation>(ret_obj);
+                }
+                break;
+                case "Light":
+                {
+                    Light ret_obj = obj.GetComponent<Light>();
+                    nRetPtr = FCGetObj.PushObj<Light>(ret_obj);
+                }
+                break;
+                case "Button":
+                {
+                    Button ret_obj = obj.GetComponent<Button>();
+                    nRetPtr = FCGetObj.PushObj<Button>(ret_obj);
+                }
+                break;
+                case "Text":
+                {
+                    Text ret_obj = obj.GetComponent<Text>();
+                    nRetPtr = FCGetObj.PushObj<Text>(ret_obj);
+                }
+                break;
+                default:
+                break;
+            }
+            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            FCLibHelper.fc_set_value_intptr(ret_ptr, nRetPtr);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int GetComponent2_wrap(long L)
     {
         try
         {

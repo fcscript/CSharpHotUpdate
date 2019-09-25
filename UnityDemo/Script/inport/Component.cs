@@ -10,6 +10,7 @@ class  Component : UnityObject
     public GameObject gameObject { get; }
     public StringA tag { get;  set; }
     public Component GetComponent(Type type){ return default(Component); }
+    public T GetComponent<T>(){ return default(T); }
     public Component GetComponent(StringA type){ return default(Component); }
     public Component GetComponentInChildren(Type t,bool includeInactive){ return default(Component); }
     public Component GetComponentInChildren(Type t){ return default(Component); }

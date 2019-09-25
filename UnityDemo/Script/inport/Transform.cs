@@ -16,8 +16,8 @@ class  Transform : Component
     public Quaternion localRotation { get;  set; }
     public Vector3 localScale { get;  set; }
     public Transform parent { get;  set; }
-    public Matrix4x4 worldToLocalMatrix { get; }
-    public Matrix4x4 localToWorldMatrix { get; }
+    public Matrix worldToLocalMatrix { get; }
+    public Matrix localToWorldMatrix { get; }
     public Transform root { get; }
     public int childCount { get; }
     public Vector3 lossyScale { get; }

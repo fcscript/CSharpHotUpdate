@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameObject_wrap
@@ -395,6 +396,36 @@ public class GameObject_wrap
                 {
                     SkinnedMeshRenderer ret_obj = obj.GetComponent<SkinnedMeshRenderer>();
                     nRetPtr = FCGetObj.PushObj<SkinnedMeshRenderer>(ret_obj);
+                }
+                break;
+                case "MeshRenderer":
+                {
+                    MeshRenderer ret_obj = obj.GetComponent<MeshRenderer>();
+                    nRetPtr = FCGetObj.PushObj<MeshRenderer>(ret_obj);
+                }
+                break;
+                case "Animation":
+                {
+                    Animation ret_obj = obj.GetComponent<Animation>();
+                    nRetPtr = FCGetObj.PushObj<Animation>(ret_obj);
+                }
+                break;
+                case "Light":
+                {
+                    Light ret_obj = obj.GetComponent<Light>();
+                    nRetPtr = FCGetObj.PushObj<Light>(ret_obj);
+                }
+                break;
+                case "Button":
+                {
+                    Button ret_obj = obj.GetComponent<Button>();
+                    nRetPtr = FCGetObj.PushObj<Button>(ret_obj);
+                }
+                break;
+                case "Text":
+                {
+                    Text ret_obj = obj.GetComponent<Text>();
+                    nRetPtr = FCGetObj.PushObj<Text>(ret_obj);
                 }
                 break;
                 default:
@@ -953,6 +984,36 @@ public class GameObject_wrap
                 {
                     SkinnedMeshRenderer ret_obj = obj.AddComponent<SkinnedMeshRenderer>();
                     nRetPtr = FCGetObj.PushObj<SkinnedMeshRenderer>(ret_obj);
+                }
+                break;
+                case "MeshRenderer":
+                {
+                    MeshRenderer ret_obj = obj.AddComponent<MeshRenderer>();
+                    nRetPtr = FCGetObj.PushObj<MeshRenderer>(ret_obj);
+                }
+                break;
+                case "Animation":
+                {
+                    Animation ret_obj = obj.AddComponent<Animation>();
+                    nRetPtr = FCGetObj.PushObj<Animation>(ret_obj);
+                }
+                break;
+                case "Light":
+                {
+                    Light ret_obj = obj.AddComponent<Light>();
+                    nRetPtr = FCGetObj.PushObj<Light>(ret_obj);
+                }
+                break;
+                case "Button":
+                {
+                    Button ret_obj = obj.AddComponent<Button>();
+                    nRetPtr = FCGetObj.PushObj<Button>(ret_obj);
+                }
+                break;
+                case "Text":
+                {
+                    Text ret_obj = obj.AddComponent<Text>();
+                    nRetPtr = FCGetObj.PushObj<Text>(ret_obj);
                 }
                 break;
                 default:

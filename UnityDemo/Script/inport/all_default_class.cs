@@ -16,16 +16,16 @@ public enum HideFlags
 
 class Type{}
 
-public enum Space
-{
-    World = 0,
-    Self = 1,
-};
-
 public enum SendMessageOptions
 {
     RequireReceiver = 0,
     DontRequireReceiver = 1,
+};
+
+public enum Space
+{
+    World = 0,
+    Self = 1,
 };
 
 class Texture : Object{}
@@ -104,9 +104,9 @@ public enum ReflectionProbeUsage
     Simple = 3,
 };
 
-class Material : Object{}
-
 class MaterialPropertyBlock : Object{}
+
+class Mesh : Object{}
 
 public enum SkinQuality
 {
@@ -115,8 +115,6 @@ public enum SkinQuality
     Bone2 = 2,
     Bone4 = 4,
 };
-
-class Mesh : Object{}
 
 class Gyroscope : Object{}
 
@@ -465,5 +463,128 @@ public enum KeyCode
     Joystick8Button17 = 507,
     Joystick8Button18 = 508,
     Joystick8Button19 = 509,
+};
+
+public enum LightShadows
+{
+    None = 0,
+    Hard = 1,
+    Soft = 2,
+};
+
+public enum LightShadowResolution
+{
+    Low = 0,
+    Medium = 1,
+    High = 2,
+    VeryHigh = 3,
+    FromQualitySettings = -1,
+};
+
+public enum LightRenderMode
+{
+    Auto = 0,
+    ForcePixel = 1,
+    ForceVertex = 2,
+};
+
+public enum LightType
+{
+    Spot = 0,
+    Directional = 1,
+    Point = 2,
+    Area = 3,
+};
+
+class Flare : Object{}
+
+public enum LightEvent
+{
+    BeforeShadowMap = 0,
+    AfterShadowMap = 1,
+    BeforeScreenspaceMask = 2,
+    AfterScreenspaceMask = 3,
+    BeforeShadowMapPass = 4,
+    AfterShadowMapPass = 5,
+};
+
+class CommandBuffer : Object{}
+
+public enum ShadowMapPass
+{
+    PointlightPositiveX = 1,
+    PointlightNegativeX = 2,
+    PointlightPositiveY = 4,
+    PointlightNegativeY = 8,
+    PointlightPositiveZ = 16,
+    PointlightNegativeZ = 32,
+    Pointlight = 63,
+    DirectionalCascade0 = 64,
+    DirectionalCascade1 = 128,
+    DirectionalCascade2 = 256,
+    DirectionalCascade3 = 512,
+    Directional = 960,
+    Spotlight = 1024,
+    All = 2047,
+};
+
+class Shader : Object{}
+
+public enum MaterialGlobalIlluminationFlags
+{
+    None = 0,
+    RealtimeEmissive = 1,
+    BakedEmissive = 2,
+    AnyEmissive = 3,
+    EmissiveIsBlack = 4,
+};
+
+class ComputeBuffer : Object{}
+
+class Selectable : UIBehaviour{}
+
+class ButtonClickedEvent : UnityEvent{}
+
+class PointerEventData : BaseEventData{}
+
+class BaseEventData : AbstractEventData{}
+
+class MaskableGraphic : Graphic{}
+
+class TextGenerator : Object{}
+
+class Font : Object{}
+
+public enum TextAnchor
+{
+    UpperLeft = 0,
+    UpperCenter = 1,
+    UpperRight = 2,
+    MiddleLeft = 3,
+    MiddleCenter = 4,
+    MiddleRight = 5,
+    LowerLeft = 6,
+    LowerCenter = 7,
+    LowerRight = 8,
+};
+
+public enum HorizontalWrapMode
+{
+    Wrap = 0,
+    Overflow = 1,
+};
+
+public enum VerticalWrapMode
+{
+    Truncate = 0,
+    Overflow = 1,
+};
+
+public enum FontStyle
+{
+    Normal = 0,
+    Bold = 1,
+    Italic = 2,
+    BoldAndItalic = 3,
 };
 
