@@ -10,7 +10,7 @@ public class FCEnumerator : System.Collections.IEnumerator
     public FCEnumerator(System.Object obj, params object[] args)
     {
     }
-    Object System.Collections.IEnumerator.Current
+    System.Object System.Collections.IEnumerator.Current
     {
         get
         {
@@ -44,7 +44,7 @@ public class FCEnumerator : System.Collections.IEnumerator
         return ins;
     }
     // 功能：启动一个协程
-    public static FCEnumerator StartCoroutine(System.Object obj, params object[] args)
+    public static FCEnumerator StartCoroutine(System.Object obj, params System.Object[] args)
     {
         // 如 : FCEnumerator.StartCoroutine(ins, func(函数参数));
         FCEnumerator ins = new FCEnumerator(obj, args);
@@ -79,7 +79,7 @@ public sealed class WaitForSeconds
 
 public class Delegate
 {
-    public Delegate(System.Object obj, params object[] args)
+    public Delegate(System.Object obj, params System.Object[] args)
     {
     }
     public void Release() { }

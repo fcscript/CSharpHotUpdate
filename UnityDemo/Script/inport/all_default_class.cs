@@ -30,8 +30,6 @@ public enum Space
 
 class Texture{}
 
-class IntPtr{}
-
 class Scene{}
 
 public enum PrimitiveType

@@ -11,6 +11,6 @@ public class HelloWord : FCScriptLoader
         Transform tfChild = transform.Find("Text");
         UnityEngine.UI.Text  text = tfChild.GetComponent<UnityEngine.UI.Text>();
         FCDll.PushCallObjectParam(text);
-        FCLibHelper.fc_call(0, "HelloWorld");
+        FCLibHelper.fc_call(0, "HelloWord.SetText");
     }    
 }

@@ -1,6 +1,6 @@
 ﻿
 [export]
-internal class TestCube
+class TestCube
 {
     Transform transform;
     Material mat;

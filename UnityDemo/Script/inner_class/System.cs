@@ -126,7 +126,7 @@ class os
     // 参数：pXmlRoot - 这个必须是class, 并在成员变量声明中添加[XmlElementAttribute]字段
     //       szRootName - XML表根节点的名字
     //       szFileData - XML文件数据
-    public bool ReadXml<_Ty>(_Ty pXmlRoot, StringA szRootName, StringA szFileData)
+    public static bool ReadXml<_Ty>(_Ty pXmlRoot, StringA szRootName, StringA szFileData)
     {
         return true;
     }
@@ -134,21 +134,27 @@ class os
     // 参数：pXmlRoot - 这个必须是class, 并在成员变量声明中添加[XmlElementAttribute]字段
     //       szRootName - XML表根节点的名字
     //       szFileData - XML输出数据
-    public bool WriteXml<_Ty>(_Ty pXmlRoot,StringA szRootName, StringA szFileData)
+    public static bool WriteXml<_Ty>(_Ty pXmlRoot,StringA szRootName, StringA szFileData)
     {
         return true;
     }
     // 功能：从一个二进制流中读取XML配置
     // 说明：这个目前写的是测试指令，测试发现这个速度比ReadXml要慢，而且文件还比XML要大，所以这个二进制流的接口是没有意义的，请不要使用
-    public bool ReadBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
+    public static bool ReadBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
     {
         return true;
     }
     // 功能：将XML配置按二进制流的格式写入到文件
     // 说明：这个目前写的是测试指令，测试发现这个速度比ReadXml要慢，而且文件还比XML要大，所以这个二进制流的接口是没有意义的，请不要使用
-    public bool XmlToBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
+    public static bool XmlToBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
     {
         return true;
+    }
+
+    // 功能：打印到命令行
+    public static void print(StringA szFormat, params System.Object[] args)
+    {
+
     }
 };
 
@@ -173,3 +179,5 @@ public class inlineAttribute : System.Attribute
     {
     }
 }
+
+struct IntPtr { }

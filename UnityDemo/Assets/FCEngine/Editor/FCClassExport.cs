@@ -60,6 +60,9 @@ class FCClassExport
             if (nType.Name == "T")
                 continue;
 
+            if (nType == typeof(IntPtr))
+                continue;
+
             if(nType == typeof(Type))
             {
                 m_szFileBuilder.AppendLine("class Type{}");

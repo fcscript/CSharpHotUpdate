@@ -1,8 +1,10 @@
 ﻿
 
-
-export void  HelloWorld(Text lab)
+[export]
+class HelloWord
 {
-    //print("call helloworld");
-    lab.text = "Hello world. welcome to here.";
+    static public void SetText(Text lab)
+    {
+        lab.text = "Hello world. welcome to here.";
+    }
 }
