@@ -67,20 +67,12 @@ public class Material_wrap
         FCLibHelper.fc_register_class_func(nClassName,"SetTextureScale_int_Vector2",SetTextureScale1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_StringA_List<float>",SetFloatArray_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_int_List<float>",SetFloatArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_StringA_List<float>",SetFloatArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_int_List<float>",SetFloatArray3_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_StringA_List<Color>",SetColorArray_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_int_List<Color>",SetColorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_StringA_List<Color>",SetColorArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_int_List<Color>",SetColorArray3_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_StringA_List<Vector4>",SetVectorArray_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_int_List<Vector4>",SetVectorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_StringA_List<Vector4>",SetVectorArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_int_List<Vector4>",SetVectorArray3_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_StringA_List<Matrix>",SetMatrixArray_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_int_List<Matrix>",SetMatrixArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_StringA_List<Matrix>",SetMatrixArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_int_List<Matrix>",SetMatrixArray3_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetFloat_StringA",GetFloat_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetFloat_int",GetFloat1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetInt_StringA",GetInt_wrap);
@@ -1220,44 +1212,6 @@ public class Material_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetFloatArray2_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            float[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetFloatArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetFloatArray3_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            float[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetFloatArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int SetColorArray_wrap(long L)
     {
         try
@@ -1286,44 +1240,6 @@ public class Material_wrap
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Color> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
-            obj.SetColorArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetColorArray2_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            Color[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetColorArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetColorArray3_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            Color[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
             obj.SetColorArray(arg0,arg1);
         }
         catch(Exception e)
@@ -1372,44 +1288,6 @@ public class Material_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetVectorArray2_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            Vector4[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetVectorArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetVectorArray3_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            Vector4[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetVectorArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int SetMatrixArray_wrap(long L)
     {
         try
@@ -1438,44 +1316,6 @@ public class Material_wrap
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Matrix4x4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
-            obj.SetMatrixArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetMatrixArray2_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            Matrix4x4[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
-            obj.SetMatrixArray(arg0,arg1);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int SetMatrixArray3_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
-            int arg0 = FCLibHelper.fc_get_int(L,0);
-            Matrix4x4[] arg1 = null;
-            arg1 = FCCustomParam.GetArray(ref arg1,L,1);
             obj.SetMatrixArray(arg0,arg1);
         }
         catch(Exception e)

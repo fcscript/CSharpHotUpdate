@@ -1,6 +1,4 @@
-using UnityEngine;
 using System;
-using UnityEngine.Rendering;
 
 
 class  Light : Behaviour

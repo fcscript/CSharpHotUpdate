@@ -413,21 +413,6 @@ class FCCustomParam
         }
         return rList;
     }
-    public static float[] GetArray(ref float[] rList, long L, int nIndex)
-    {
-        try
-        {
-            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
-            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new float[nArraySize];
-            FCLibHelper.fc_get_array_float(ptr, rList, 0, nArraySize);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return rList;
-    }
     public static List<Color> GetList(ref List<Color> rList, long L, int nIndex)
     {
         try
@@ -441,21 +426,6 @@ class FCCustomParam
             Color[] buffer = new Color[nArraySize];
             FCLibHelper.fc_get_array_color(ptr, buffer, 0, nArraySize);
             rList.AddRange(buffer);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return rList;
-    }
-    public static Vector4[] GetArray(ref Vector4[] rList, long L, int nIndex)
-    {
-        try
-        {
-            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
-            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Vector4[nArraySize];
-            FCLibHelper.fc_get_array_vector4(ptr, rList, 0, nArraySize);
         }
         catch(Exception e)
         {
@@ -479,27 +449,6 @@ class FCCustomParam
                 Matrix4x4 item = new Matrix4x4();
                 FCLibHelper.fc_get_value_matrix(item_ptr, ref item);
                 rList.Add(item);
-            }
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return rList;
-    }
-    public static Matrix4x4[] GetArray(ref Matrix4x4[] rList, long L, int nIndex)
-    {
-        try
-        {
-            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
-            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Matrix4x4[nArraySize];
-            for (int i = 0; i < nArraySize; ++i)
-            {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Matrix4x4 item = new Matrix4x4();
-                FCLibHelper.fc_get_value_matrix(item_ptr, ref item);
-                rList[i] = item;
             }
         }
         catch(Exception e)

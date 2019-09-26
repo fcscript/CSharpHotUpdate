@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 
 class  UnityObject : Object
@@ -15,7 +14,7 @@ class  UnityObject : Object
     public static void DontDestroyOnLoad(UnityObject target){}
     public static void DestroyObject(UnityObject obj,float t){}
     public static void DestroyObject(UnityObject obj){}
-    public StringA ToString(){ return default(string); }
+    public StringA ToString(){ return default(StringA); }
     public int GetInstanceID(){ return default(int); }
     public int GetHashCode(){ return default(int); }
     public bool Equals(Object other){ return default(bool); }

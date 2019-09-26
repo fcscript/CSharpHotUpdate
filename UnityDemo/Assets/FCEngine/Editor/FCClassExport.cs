@@ -26,6 +26,9 @@ class FCClassExport
     Dictionary<string, int> m_CurDontWrapName = new Dictionary<string, int>();
     Dictionary<string, List<Type>> m_CurSupportTemplateFunc = new Dictionary<string, List<Type>>();
 
+    Dictionary<string, MethodInfo> m_CurValidMethods = new Dictionary<string, MethodInfo>();
+    List<MethodInfo> m_CurMethods = new List<MethodInfo>();
+
     public void ExportDefaultClass(string szPath)
     {
         m_szFileBuilder.Length = 0;
@@ -41,9 +44,10 @@ class FCClassExport
             }
             if (nType.IsArray)
                 continue;
-            if(!nType.IsClass)
+            if (!nType.IsClass)
             {
-                continue;
+                if (!nType.IsValueType)  // 如果不是结构体
+                    continue;
             }
             FCValueType value = FCValueType.TransType(nType);
             if (value.m_nTemplateType != fc_value_tempalte_type.template_none)
@@ -70,7 +74,8 @@ class FCClassExport
             }
             else
             {
-                m_szFileBuilder.AppendFormat("class {0} : {1}{{}}\r\n", nType.Name, nType.BaseType.Name);
+                //m_szFileBuilder.AppendFormat("class {0} : {1}{{}}\r\n", nType.Name, nType.BaseType.Name);
+                m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
             }
             m_szFileBuilder.AppendLine();
         }
@@ -111,6 +116,8 @@ class FCClassExport
         m_szFileBuilder.Length = 0;
         foreach(string szNameSpace in m_CurRefNameSpace)
         {
+            if (szNameSpace.IndexOf("UnityEngine") != -1)
+                continue;
             m_szFileBuilder.AppendFormat("using {0};\r\n", szNameSpace);
         }
         m_szFileBuilder.AppendLine();
@@ -136,11 +143,24 @@ class FCClassExport
         if (m_CurRefNameSpacesFlags.ContainsKey(szNameSpace))
             return;
         m_CurRefNameSpacesFlags[szNameSpace] = 1;
-        m_CurRefNameSpace.Add(szNameSpace);        
+        m_CurRefNameSpace.Add(szNameSpace);
     }
     void PushRefType(Type nType)
     {
-        m_AllRefType[nType] = 1;
+        FCValueType value = FCValueType.TransType(nType);
+        if(value.IsArray || value.IsList)
+        {
+            m_AllRefType[value.m_value] = 1;
+        }
+        else if(value.IsMap)
+        {
+            m_AllRefType[value.m_key] = 1;
+            m_AllRefType[value.m_value] = 1;
+        }
+        else
+        {
+            m_AllRefType[nType] = 1;
+        }
     }
     void PushConstructor(ConstructorInfo cons)
     {
@@ -284,7 +304,24 @@ class FCClassExport
         MethodInfo[] allMethods = FCValueType.GetMethods(m_nClassType, m_bOnlyThisAPI);// m_nClassType.GetMethods();  // 函数+get/set方法
         if (allMethods == null)
             return;
-        foreach(MethodInfo method in allMethods)
+        m_CurMethods.Clear();
+        m_CurValidMethods.Clear();
+        string szDeclareName = string.Empty;
+        foreach (MethodInfo method in allMethods)
+        {
+            // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
+            szDeclareName = FCValueType.GetMethodDeclare(method);
+            if (m_CurValidMethods.ContainsKey(szDeclareName))
+            {
+                // 必要的话，这里做个替换
+                FCValueType.ReplaceMethod(m_CurValidMethods, m_CurMethods, szDeclareName, method);
+                continue;
+            }
+            m_CurValidMethods[szDeclareName] = method;
+            m_CurMethods.Add(method);
+        }
+
+        foreach (MethodInfo method in m_CurMethods)
         {
             PushMethodInfo(method);
         }
@@ -359,7 +396,7 @@ class FCClassExport
         }
         else
         {
-            string szRetCShaprName = ret_value.GetTypeName(true);
+            string szRetCShaprName = ret_value.GetTypeName(false);
             m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return default({4}); }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szRetCShaprName);
         }
     }

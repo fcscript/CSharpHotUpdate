@@ -591,4 +591,66 @@ public class FCValueType
         else
             return nType.GetMethods();
     }
+    // 功能：返回函数的名字+调用参数
+    public static string GetMethodDeclare(MethodInfo method)
+    {
+        string szFullName = method.Name;
+        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        string szCallParam = string.Empty;
+        if (allParams != null)
+        {
+            Type nParamType;
+            string szParamType = string.Empty;
+            for (int i = 0; i < allParams.Length; ++i)
+            {
+                nParamType = allParams[i].ParameterType;
+                if (i > 0)
+                {
+                    szCallParam += ',';
+                }
+                FCValueType value = TransType(nParamType);
+                szCallParam += value.GetTypeName(false);
+                szCallParam += " ";
+                szCallParam += allParams[i].Name;
+            }
+        }
+        return szFullName + szCallParam;
+    }
+    static bool  IsCanReplaceMethod(MethodInfo method_old, MethodInfo method_new)
+    {
+        ParameterInfo[] allParams1 = method_old.GetParameters();  // 函数参数
+        ParameterInfo[] allParams2 = method_new.GetParameters();  // 函数参数
+        Type nParamType1;
+        Type nParamType2;
+        for (int i = 0; i<allParams1.Length; ++i)
+        {
+            nParamType1 = allParams1[i].ParameterType;
+            nParamType2 = allParams2[i].ParameterType;
+            FCValueType value1 = TransType(nParamType1);
+            FCValueType value2 = TransType(nParamType2);
+            if(value1.IsArray && value2.IsList)
+            {
+                // 可以替换
+                return true;
+            }
+        }
+        return false;
+    }
+    public static void  ReplaceMethod(Dictionary<string, MethodInfo> methodFlags, List<MethodInfo> curMethods, string szDeclareName, MethodInfo method)
+    {
+        MethodInfo old = null;
+        if(methodFlags.TryGetValue(szDeclareName, out old))
+        {
+            if(IsCanReplaceMethod(old, method))
+            {
+                for(int i = 0; i<curMethods.Count; ++i)
+                {
+                    if(curMethods[i] == old)
+                    {
+                        curMethods[i] = method;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -28,7 +28,11 @@ public enum Space
     Self = 1,
 };
 
-class Texture : Object{}
+class Texture{}
+
+class IntPtr{}
+
+class Scene{}
 
 public enum PrimitiveType
 {
@@ -40,7 +44,7 @@ public enum PrimitiveType
     Quad = 5,
 };
 
-class AnimationClip : Motion{}
+class AnimationClip{}
 
 public enum WrapMode
 {
@@ -72,7 +76,7 @@ public enum QueueMode
     PlayNow = 2,
 };
 
-class AnimationState : TrackedReference{}
+class AnimationState{}
 
 public enum ShadowCastingMode
 {
@@ -104,9 +108,11 @@ public enum ReflectionProbeUsage
     Simple = 3,
 };
 
-class MaterialPropertyBlock : Object{}
+class MaterialPropertyBlock{}
 
-class Mesh : Object{}
+class ReflectionProbeBlendInfo{}
+
+class Mesh{}
 
 public enum SkinQuality
 {
@@ -116,11 +122,15 @@ public enum SkinQuality
     Bone4 = 4,
 };
 
-class Gyroscope : Object{}
+class Gyroscope{}
 
-class LocationService : Object{}
+class AccelerationEvent{}
 
-class Compass : Object{}
+class Touch{}
+
+class LocationService{}
+
+class Compass{}
 
 public enum DeviceOrientation
 {
@@ -496,7 +506,9 @@ public enum LightType
     Area = 3,
 };
 
-class Flare : Object{}
+class Flare{}
+
+class LightBakingOutput{}
 
 public enum LightEvent
 {
@@ -508,7 +520,7 @@ public enum LightEvent
     AfterShadowMapPass = 5,
 };
 
-class CommandBuffer : Object{}
+class CommandBuffer{}
 
 public enum ShadowMapPass
 {
@@ -528,7 +540,7 @@ public enum ShadowMapPass
     All = 2047,
 };
 
-class Shader : Object{}
+class Shader{}
 
 public enum MaterialGlobalIlluminationFlags
 {
@@ -539,21 +551,21 @@ public enum MaterialGlobalIlluminationFlags
     EmissiveIsBlack = 4,
 };
 
-class ComputeBuffer : Object{}
+class ComputeBuffer{}
 
-class Selectable : UIBehaviour{}
+class Selectable{}
 
-class ButtonClickedEvent : UnityEvent{}
+class ButtonClickedEvent{}
 
-class PointerEventData : BaseEventData{}
+class PointerEventData{}
 
-class BaseEventData : AbstractEventData{}
+class BaseEventData{}
 
-class MaskableGraphic : Graphic{}
+class MaskableGraphic{}
 
-class TextGenerator : Object{}
+class TextGenerator{}
 
-class Font : Object{}
+class Font{}
 
 public enum TextAnchor
 {
@@ -587,4 +599,6 @@ public enum FontStyle
     Italic = 2,
     BoldAndItalic = 3,
 };
+
+class TextGenerationSettings{}
 

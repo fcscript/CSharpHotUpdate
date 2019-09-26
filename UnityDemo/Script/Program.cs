@@ -34,14 +34,3 @@ namespace FCProj
         }
     }
 }
-
-
-//自动导出标签 [export]
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
-public class exportAttribute : System.Attribute
-{
-    // 自动导出标签[export]
-    public exportAttribute()
-    {
-    }
-}

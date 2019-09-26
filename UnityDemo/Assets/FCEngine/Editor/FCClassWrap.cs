@@ -32,6 +32,8 @@ public class FCClassWrap
     List<WrapFuncDesc> m_CurClassFunc = new List<WrapFuncDesc>();
     Dictionary<string, int> m_CurSameName = new Dictionary<string, int>();
     Dictionary<string, int> m_CurFuncCount = new Dictionary<string, int>();
+    Dictionary<string, MethodInfo> m_CurValidMethods = new Dictionary<string, MethodInfo>();
+    List<MethodInfo> m_CurMethods = new List<MethodInfo>();
     List<string> m_CurRefNameSpace = new List<string>();
     Dictionary<string, int> m_CurRefNameSpacesFlags = new Dictionary<string, int>();
     List<string> m_AllRefNameSpace = new List<string>();
@@ -222,16 +224,30 @@ public class FCClassWrap
         if(allMethods != null)
         {
             m_CurFuncCount.Clear();
+            m_CurMethods.Clear();
+            m_CurValidMethods.Clear();
             string szFuncName = string.Empty;
+            string szDeclareName = string.Empty;
             int nFuncCount = 0;
             foreach (MethodInfo method in allMethods)
             {
+                // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
+                szDeclareName = FCValueType.GetMethodDeclare(method);
+                if(m_CurValidMethods.ContainsKey(szDeclareName))
+                {
+                    // 必要的话，这里做个替换
+                    FCValueType.ReplaceMethod(m_CurValidMethods, m_CurMethods, szDeclareName, method);
+                    continue;
+                }
+                m_CurValidMethods[szDeclareName] = method;
+                m_CurMethods.Add(method);
+
                 szFuncName = method.Name;
                 nFuncCount = 0;
                 m_CurFuncCount.TryGetValue(szFuncName, out nFuncCount);
                 m_CurFuncCount[szFuncName] = nFuncCount + 1;
             }
-            foreach (MethodInfo method in allMethods)
+            foreach (MethodInfo method in m_CurMethods)
             {
                 PushMethodInfo(method);
             }
@@ -744,7 +760,7 @@ public class FCClassWrap
         }
         return true;
     }    
-
+    
     // 功能：添加函数调用的方法
     void PushMethodInfo(MethodInfo method)
     {
