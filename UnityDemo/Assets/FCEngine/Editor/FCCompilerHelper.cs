@@ -15,12 +15,12 @@ class FCCompilerHelper
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void fc_compiler_result(Int64 nUserData, bool bSuc);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void fc_compiler_print(string szError);
+    public delegate void fc_compiler_print(Int64 nUserData, string szError);
 #else
     public delegate bool fc_compiler_isneedstop(Int64 nUserData);
     public delegate void fc_compiler_progress(Int64 nUserData, float fPos);
     public delegate void fc_compiler_result(Int64 nUserData, bool bSuc);
-    public delegate void fc_compiler_print(string szError);        
+    public delegate void fc_compiler_print(Int64 nUserData, string szError);        
 #endif
 
 
@@ -59,7 +59,7 @@ class FCCompilerHelper
         else
             Debug.LogError("编译失败," + s_nCompilerErrorCount + "错误！");
     }
-    static void  CompilerPrint(string szError)
+    static void  CompilerPrint(Int64 nUserData, string szError)
     {
         ++s_nCompilerErrorCount;
         Debug.LogError(szError);
