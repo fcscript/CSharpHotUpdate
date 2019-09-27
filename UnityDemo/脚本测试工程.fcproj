@@ -16,3 +16,4 @@
     $(curpath)\Script\fccode\test.cpp:124:
 </Breakpoint>
 <CopyPathName>$(curpath)\Assets\StreamingAssets\test.code</CopyPathName>
+<ErrorLogPathName>$(curpath)\cmd_log.txt</ErrorLogPathName>
