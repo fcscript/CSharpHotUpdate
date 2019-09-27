@@ -189,6 +189,16 @@ public class FCDll
     {
         FCLibHelper.fc_push_sphere(ref v);
     }
+    public static void PushCallParam(UnityEngine.Object obj)
+    {
+        long nPtr = FCGetObj.PushObj(obj);
+        FCLibHelper.fc_push_intptr(nPtr);
+    }
+    public static void PushCallParam(System.Object obj)
+    {
+        long nPtr = FCGetObj.PushObj(obj);
+        FCLibHelper.fc_push_intptr(nPtr);
+    }
     public static void PushCallObjectParam<_Ty>(_Ty obj)
     {
         long  nPtr = FCGetObj.PushObj(obj);

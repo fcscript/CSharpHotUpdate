@@ -125,5 +125,14 @@ public static class FCExport
 
         pWrap.PushTemplateFuncWrapSupport("AddComponent", aSupportType);
         pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
-    }    
+    }
+
+    [MenuItem("FCScript/编译脚本", false, 5)]
+    static void CompilerScript()
+    {
+        string szPath = Application.dataPath;
+        szPath = szPath.Substring(0, szPath.Length - 6);
+        szPath += "脚本测试工程.fcproj";
+        FCCompilerHelper.CompilerProj(szPath);
+    }
 }
