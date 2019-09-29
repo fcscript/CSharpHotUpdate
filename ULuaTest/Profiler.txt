@@ -24,3 +24,11 @@ json.net   32            15
 FCScript   6             0
 LitJson    71            20
 
+Json在手机上的测试
+CPU : Huawei Kirin 980
+
+           读            写
+json.net   20            9
+FCScript   6             1
+LitJson    28            9
+
