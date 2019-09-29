@@ -658,7 +658,7 @@ GameObject:
   - component: {fileID: 1559681437}
   - component: {fileID: 1559681436}
   m_Layer: 0
-  m_Name: fc_obj
+  m_Name: json_obj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -672,9 +672,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1559681435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61b37894618471c45a78bc540a37ea7f, type: 3}
+  m_Script: {fileID: 11500000, guid: b1a0fc8db1d9a3d46a6083fb1b6ae546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ItemCfg: {fileID: 4900000, guid: 7e6ebd243d9ec2c4d80a83ba73e69f7d, type: 3}
 --- !u!4 &1559681437
 Transform:
   m_ObjectHideFlags: 0

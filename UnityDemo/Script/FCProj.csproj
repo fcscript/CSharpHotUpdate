@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="fccode\001_Helloworld.cs" />
     <Compile Include="fccode\002_cube.cs" />
+    <Compile Include="fccode\003_Json.cs" />
     <Compile Include="fccode\TestUI.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

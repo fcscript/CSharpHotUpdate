@@ -14,8 +14,6 @@ using UnityEngine.Networking;
 
 class TestProfiler: FCScriptLoader
 {
-    public TextAsset m_ItemCfg;
-
     // 记录脚本的LOG
     protected override bool IsRecrodLog()
     {
@@ -107,22 +105,6 @@ class TestProfiler: FCScriptLoader
     void TestFunc12()
     {
         FCLibHelper.fc_call(0, "Test12");
-    }    
-    void TestFunc13()
-    {
-        string szJson = m_ItemCfg.text;
-
-        long nBeginTime = DateTime.Now.Ticks / 10000;
-        for (int i = 0; i < 100; ++i)
-        {
-            FCLibHelper.fc_push_string_a(szJson);
-            FCLibHelper.fc_call(0, "JsonLoader.TestLoad");
-        }
-        long nEndTime = DateTime.Now.Ticks / 10000;
-        long nCostTime = nEndTime - nBeginTime;
-        int nTotalCount = 200000;
-        string szTips = string.Format("Test13 花费总时间={0}秒,平均时间={1}毫秒,总调用次数={2}", nCostTime / 1000, nCostTime / nTotalCount, nTotalCount);
-        print_error(szTips);
     }
     void OnGUI()
     {
@@ -201,11 +183,6 @@ class TestProfiler: FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test12"))
         {
             TestFunc12();
-        }
-        nLeft += 160;
-        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test13"))
-        {
-            TestFunc13();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;

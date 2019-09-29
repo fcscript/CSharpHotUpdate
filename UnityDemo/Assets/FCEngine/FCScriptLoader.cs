@@ -19,7 +19,7 @@ public class FCScriptLoader : MonoBehaviour
     protected static bool m_bLoadScript = false;
     protected static LPInitCallback m_InitCallback = null;
 
-    void Start()
+    protected void Start()
     {
         InitDll();
     }

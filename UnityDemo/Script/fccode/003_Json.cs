@@ -28,7 +28,7 @@ class JsonLoader
     {
         ItemCfg data = null;
         bool bSuc = os.ReadJson(data, szJson);
-        StringA szData = os.WriteJson(data);
+        //StringA szData = os.WriteJson(data);
         //StringA szSub = szData.Left(100);
         //os.print(szSub);
         //StringA szLeft = szJson.Mid(10, 100);
@@ -47,8 +47,8 @@ class JsonLoader
         }
         uint nEndTime = os.GetTickCount();
         uint nTotalTime = nEndTime - nStartTime;
-        os.print("WriteJson , Total Time:{0}, av:{1}", nTotalTime, nTotalTime / 100);
-        StringA szLeft = szData.Mid(0, 100);
-        os.print(szLeft);
+        //os.print("WriteJson , Total Time:{0}, av:{1}", nTotalTime, nTotalTime / 100);
+        //StringA szLeft = szData.Mid(0, 100);
+        //os.print(szLeft);
     }
 }
