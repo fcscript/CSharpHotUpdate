@@ -34,4 +34,21 @@ class JsonLoader
         //StringA szLeft = szJson.Mid(10, 100);
         //os.print(szLeft);
     }
+    public static void TestWrite(StringA szJson)
+    {
+        ItemCfg data = null;
+        bool bSuc = os.ReadJson(data, szJson);
+
+        StringA szData;
+        uint nStartTime = os.GetTickCount();
+        for(int i = 0; i<100; ++i)
+        {
+            szData = os.WriteJson(data, 400*1024);
+        }
+        uint nEndTime = os.GetTickCount();
+        uint nTotalTime = nEndTime - nStartTime;
+        os.print("WriteJson , Total Time:{0}, av:{1}", nTotalTime, nTotalTime / 100);
+        StringA szLeft = szData.Mid(0, 100);
+        os.print(szLeft);
+    }
 }

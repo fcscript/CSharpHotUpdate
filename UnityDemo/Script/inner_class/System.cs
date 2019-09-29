@@ -14,7 +14,7 @@ class os
         return 0;
     }
     // 功能：返回当前系统时钟，单位是毫秒(1000毫秒 = 1秒)
-    public static Int64 GetTickCount()
+    public static uint GetTickCount()
     {
         return 0;
     }
@@ -158,6 +158,13 @@ class os
     }
     // 功能：将Json对象转换成Json字符串
     public static StringA  WriteJson<_Ty>(_Ty pJsonRoot)
+    {
+        return "";
+    }
+    // 功能：将Json对象转换成Json字符串
+    // 参数：nPrepareJsonSize - 要转换的Json字符串预分配的大小，指定这个可以提升性能
+    // 没有指定的话，默认按1K预分配
+    public static StringA WriteJson<_Ty>(_Ty pJsonRoot, int nPrepareJsonSize)
     {
         return "";
     }
