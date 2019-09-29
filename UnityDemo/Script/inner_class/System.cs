@@ -191,4 +191,14 @@ public class inlineAttribute : System.Attribute
     }
 }
 
+//Json对象标签 [json]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
+public class jsonAttribute : System.Attribute
+{
+    // Json对象[json]
+    public jsonAttribute()
+    {
+    }
+}
+
 struct IntPtr { }
