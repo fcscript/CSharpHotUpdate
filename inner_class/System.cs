@@ -150,6 +150,17 @@ class os
     {
         return true;
     }
+    // 功能：读取一个Json配置
+    // 说明：
+    public static bool ReadJson<_Ty>(_Ty pJsonRoot, StringA szJson)
+    {
+        return true;
+    }
+    // 功能：将Json对象转换成Json字符串
+    public static StringA  WriteJson<_Ty>(_Ty pJsonRoot)
+    {
+        return "";
+    }
 
     // 功能：打印到命令行
     public static void print(StringA szFormat, params System.Object[] args)
