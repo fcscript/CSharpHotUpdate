@@ -551,9 +551,9 @@ public enum MaterialGlobalIlluminationFlags
 
 class ComputeBuffer{}
 
-class Selectable{}
+class UnityEventBase{}
 
-class ButtonClickedEvent{}
+class Selectable{}
 
 class PointerEventData{}
 

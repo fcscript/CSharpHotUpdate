@@ -25,7 +25,9 @@ public class FCClassWrap
     string m_szFCScriptPath; // 脚本导出路径
     bool m_bPartWrap = false;
     bool m_bOnlyThisAPI = false;
+    bool m_bInnerClass = false;
     Type m_nCurClassType;
+    Type m_nCurParentType;
 
     List<string> m_AllWrapClassName = new List<string>(); // 所有wrap的类名
     List<string> m_CurWrapClassNames = new List<string>(); // 当前模块wrap的类名
@@ -163,19 +165,35 @@ public class FCClassWrap
 
     public void  WrapClass(Type nClassType, bool bPartWrap = false)
     {
-        WrapClassEx(nClassType, bPartWrap, true);
+        Type[] allInnerTypes = nClassType.GetNestedTypes();
+        // 先导出嵌套的类型
+        if (allInnerTypes != null && allInnerTypes.Length > 0)
+        {
+            foreach (Type nInnerType in allInnerTypes)
+            {
+                if (nInnerType.IsEnum)
+                    continue;
+                WrapClassEx(nInnerType, bPartWrap, true, true, nClassType);
+            }
+        }
+        WrapClassEx(nClassType, bPartWrap, true, false, nClassType);
     }
-    public void WrapClassEx(Type nClassType, bool bPartWrap, bool bOnlyThisApi)
+    void WrapClassEx(Type nClassType, bool bPartWrap, bool bOnlyThisApi, bool bInnerClass, Type nParentType)
     {
         m_bPartWrap = bPartWrap;
+        m_bInnerClass = bInnerClass;
+        m_nCurParentType = nParentType;
         m_bOnlyThisAPI = bOnlyThisApi;
         m_szTempBuilder.Length = 0;
         string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
         m_CurWrapClassNames.Add(szWrapName);
         m_szCurClassName = FCValueType.GetClassName(nClassType);
+        string szClassFileName = m_szCurClassName;
+        if (bInnerClass)
+            m_szCurClassName = FCValueType.GetClassName(nParentType) + '.' + m_szCurClassName;
         m_nCurClassType = nClassType;
         WrapSubClass(m_szTempBuilder, nClassType);
-        m_export.ExportClass(nClassType, m_szFCScriptPath + m_szCurClassName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc);
+        m_export.ExportClass(nClassType, m_szFCScriptPath + szClassFileName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc);
         m_CurDontWrapName.Clear();
         m_CurSupportTemplateFunc.Clear();
     }
@@ -207,7 +225,8 @@ public class FCClassWrap
         FieldInfo[] allFields = FCValueType.GetFields(nClassType, m_bOnlyThisAPI);
         PropertyInfo[] allProperties = FCValueType.GetProperties(nClassType, m_bOnlyThisAPI);
         MethodInfo[] allMethods = FCValueType.GetMethods(nClassType, m_bOnlyThisAPI);
-        if(allFields != null)
+        Type  []allInnerTypes = nClassType.GetNestedTypes();
+        if (allFields != null)
         {
             foreach(FieldInfo field in allFields)
             {

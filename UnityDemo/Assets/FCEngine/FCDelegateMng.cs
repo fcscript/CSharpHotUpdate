@@ -41,15 +41,15 @@ class FCDelegateMng
     // 功能：根据脚本所传的参数，动态获取或创建一个关联的委托对象
     public T  GetDelegate<T>(long L, int nIndex = 0) where T : FCDelegateBase, new()
     {
-        long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L); // 得到脚本对象地址
-        long pDelegatePtr = FCLibHelper.fc_get_intptr(L, nIndex); // 得到脚本委托参数（临时的，不可保留)
+        long pDelegatePtr = FCLibHelper.fc_get_param_ptr(L, nIndex); // 得到脚本委托参数（临时的，不可保留)
+        long nObjPtr = FCLibHelper.fc_inport_delegate_get_obj_ptr(pDelegatePtr); // 得到脚本对象地址
         int nClassNameID = FCLibHelper.fc_inport_delegate_get_class_name_id(pDelegatePtr);  // 类名
         int nFuncNameID = FCLibHelper.fc_inport_delegate_get_func_name_id(pDelegatePtr); // 函数名
-        if (0 == nThisPtr && 0 == nClassNameID && 0 == nFuncNameID)
+        if (0 == nObjPtr && 0 == nClassNameID && 0 == nFuncNameID)
             return default(T); // 返回空指针
 
         FCDelegateKey key = new FCDelegateKey();
-        key.nThisPtr = nThisPtr;
+        key.nThisPtr = nObjPtr;
         key.nClassName = nClassNameID;
         key.nFuncName = nFuncNameID;
 
@@ -59,7 +59,7 @@ class FCDelegateMng
             return (T)obj;
         }
         T pObj = new T();
-        pObj.m_nThisPtr = nThisPtr;
+        pObj.m_nThisPtr = nObjPtr;
         pObj.m_szFuncName = GetDelegateFuncName(pDelegatePtr);
         pObj.m_nClassName = nClassNameID;
         pObj.m_nFuncName = nFuncNameID;

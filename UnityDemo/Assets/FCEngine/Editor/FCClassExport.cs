@@ -120,7 +120,10 @@ class FCClassExport
         foreach(string szNameSpace in m_CurRefNameSpace)
         {
             if (szNameSpace.IndexOf("UnityEngine") != -1)
-                continue;
+            {
+                if (szNameSpace != "UnityEngine.Events")
+                    continue;
+            }
             m_szFileBuilder.AppendFormat("using {0};\r\n", szNameSpace);
         }
         m_szFileBuilder.AppendLine();

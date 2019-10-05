@@ -23,5 +23,6 @@ public class Unity_wrap
         Input_wrap.Register();
         Light_wrap.Register();
         Material_wrap.Register();
+        UnityEvent_wrap.Register();
     }
 }

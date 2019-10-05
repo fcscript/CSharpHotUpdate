@@ -77,6 +77,7 @@ public static class FCExport
         pWrap.PushCurrentDontWrapName("lightmapBakeType");
         pWrap.WrapClass(typeof(UnityEngine.Light));
         pWrap.WrapClass(typeof(UnityEngine.Material));
+        pWrap.WrapClass(typeof(UnityEngine.Events.UnityEvent));
 
         pWrap.EndModleWrap();
     }

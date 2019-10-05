@@ -531,5 +531,4 @@ public class FCLibHelper
     public static extern int fc_inport_delegate_get_func_name_len(long pDelegatePtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern int fc_inport_delegate_get_func_name(long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
-
 }
