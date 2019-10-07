@@ -14,3 +14,8 @@
 <p>解决iterator模板的问题，兼容C#泛型写法</p>
 <p>2019-9-29</p>
 <p>增加JSON的支持</p>
+<p>2019-10-06</p>
+<p>重新实现对象引用机制，解决class与List, Map, Delegate, IEnumerator之间循环引用的释放的问题</p>
+<p>修正StopCoroutine接口空指针崩溃的BUG</p>
+<p>修正脚本与C#委托对象赋值不生效的BUG</p>
+<p>修改C#导出插件,增加内嵌类的自动wrap</p>
