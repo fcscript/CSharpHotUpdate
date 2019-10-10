@@ -18,9 +18,22 @@ public class FCRefClassCfg
 
     public static FCRefClassCfg  LoadCfg(string szPathName)
     {
-        StreamReader stream = new StreamReader(szPathName, Encoding.UTF8);
-        XmlSerializer xs = new XmlSerializer(typeof(FCRefClassCfg));
-        FCRefClassCfg  cfg = xs.Deserialize(stream) as FCRefClassCfg;
+        FCRefClassCfg cfg = null;
+        try
+        {
+            if(!File.Exists(szPathName))
+            {
+                Debug.Log(szPathName + "不存在，请先编译或手动配置。");
+                return null;
+            }
+            StreamReader stream = new StreamReader(szPathName, Encoding.UTF8);
+            XmlSerializer xs = new XmlSerializer(typeof(FCRefClassCfg));
+            cfg = xs.Deserialize(stream) as FCRefClassCfg;
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
         return cfg;
     }
     public static void SaveCfg(FCRefClassCfg cfg, string szPathName)
