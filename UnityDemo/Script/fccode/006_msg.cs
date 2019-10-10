@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 
-[export]
 class ItemMsg
 {
     public int ID; // 道具的ID
@@ -22,7 +21,6 @@ class ItemMsg
     }
 };
 
-[export]
 class ItemPackMsg
 {
     public List<ItemMsg> Items;
@@ -32,6 +30,27 @@ class ItemPackMsg
         for(int i = 0; i<Items.Length; ++i)
         {
             Items[i].PrintMsg();
+        }
+    }
+}
+
+class ItemPack2
+{
+    public map<int, ItemMsg> Items;
+    public map<int, StringA> Names;
+
+    public void PrintMsg()
+    {
+        os.print("Item count:{0}", Items.Length);
+        for(iterator<int, ItemMsg> it = Items.begin(); it; ++it)
+        {
+            it.value.PrintMsg();
+        }
+        os.print("-------------------");
+        os.print("Names count:{0}", Names.Length);
+        for(iterator<int, StringA> itName = Names.begin(); itName; ++itName)
+        {
+            os.print("({0},{1})", itName.key, itName.value);
         }
     }
 }
@@ -65,6 +84,12 @@ class TestSerialize
     public static void ReceiveItemMsg(CSerialize ar)
     {
         ItemPackMsg msg = new ItemPackMsg();
+        ar.ReadWrite(msg);
+        msg.PrintMsg();// 显示到屏幕
+    }
+    public static void ReceiveItemMsg2(CSerialize ar)
+    {
+        ItemPack2 msg = new ItemPack2();
         ar.ReadWrite(msg);
         msg.PrintMsg();// 显示到屏幕
     }

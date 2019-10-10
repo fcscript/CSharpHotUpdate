@@ -40,6 +40,29 @@ class LoginMsg
     }
 };
 
+class ItemPack2
+{
+    public Dictionary<int, ItemMsg> Items;
+    public Dictionary<int, string>  Names;
+    public void Serialize(CSerialize ar)
+    {
+        ar.SerializeDictionary(ref Items, SerializeItemMsg);
+        ar.SerializeDictionary(ref Names, SerializeFunc2);
+    }
+    void SerializeItemMsg(CSerialize ar, ref int key, ref ItemMsg value)
+    {
+        ar.ReadWriteValue(ref key);
+        if (value == null)
+            value = new ItemMsg();
+        value.Serialize(ar);
+    }
+    void SerializeFunc2(CSerialize ar, ref int key, ref string value)
+    {
+        ar.ReadWriteValue(ref key);
+        ar.ReadWriteValue(ref value);
+    }
+}
+
 public class TestMsg : FCScriptLoader
 {
     // 记录脚本的LOG
@@ -73,8 +96,11 @@ public class TestMsg : FCScriptLoader
         item = new ItemMsg();
         item.ID = 2;
         item.Name = "大力丸";
+        item.Attribs = new List<int>();
+        item.Attribs.Add(11);
+        item.Attribs.Add(12);
         msg.Items.Add(item);
-
+        
         item = new ItemMsg();
         item.ID = 3;
         item.Name = "回生丸";
@@ -84,6 +110,33 @@ public class TestMsg : FCScriptLoader
         msg.Serialize(ar);
 
         FCLibHelper.fc_serialize_msg_call(0, "TestSerialize.ReceiveItemMsg", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
+    }
+
+    void TestFunc2()
+    {
+        ItemPack2 msg = new ItemPack2();
+        msg.Items = new Dictionary<int, ItemMsg>();
+        msg.Names = new Dictionary<int, string>();
+
+        ItemMsg item = new ItemMsg();
+        item.ID = 1;
+        item.Name = "无忧草";
+        msg.Items[item.ID] = item;
+        msg.Names[item.ID] = item.Name;
+
+        item = new ItemMsg();
+        item.ID = 2;
+        item.Name = "大力丸";
+        item.Attribs = new List<int>();
+        item.Attribs.Add(11);
+        item.Attribs.Add(12);
+        msg.Items[item.ID] = item;
+        msg.Names[item.ID] = item.Name;
+
+        CSerialize ar = new CSerialize(SerializeType.write);
+        msg.Serialize(ar);
+
+        FCLibHelper.fc_serialize_msg_call(0, "TestSerialize.ReceiveItemMsg2", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
     }
 
     void OnGUI()
@@ -106,6 +159,11 @@ public class TestMsg : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test1"))
         {
             TestFunc1();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test2"))
+        {
+            TestFunc2();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;
