@@ -23,7 +23,6 @@ public class FCGetObj
         FCRefObj ref_obj = null;
         if(m_AllObj.TryGetValue(nIntPtr, out ref_obj))
         {
-            Type nType = typeof(_Ty);
             _Ty ret = (_Ty)ref_obj.m_obj;
             return ret;
         }
@@ -103,17 +102,6 @@ public class FCGetObj
         m_Obj2ID[ref_obj.m_obj] = ref_obj;
         return nPtr;
     }
-    // 功能：脚本层调用强制转换的接口
-    public static void CastObj(long L)
-    {
-        long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-        int nCastNameID = FCLibHelper.fc_get_int(L, 0);
-        FCRefObj ref_obj = null;
-        if (m_AllObj.TryGetValue(nThisPtr, out ref_obj))
-        {
-        }
-    }
-
     // 功能：调用delete删除对象，这个对象是由new 出来的
     public static void DelObj(long nIntPtr)
     {

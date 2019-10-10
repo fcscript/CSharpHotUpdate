@@ -128,6 +128,12 @@ public class FCRefClass
     public bool FindMember(string szName)
     {
         if (m_namesFinder == null)
+        {
+            MakeNamesFinder(names);
+            m_TemplateFinder = null;
+            MakeTemplateFinder(TemplateParams);
+        }
+        if (m_namesFinder.Count == 0)
             return true;
         return m_namesFinder.ContainsKey(szName);
     }
