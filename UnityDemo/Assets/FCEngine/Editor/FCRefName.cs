@@ -68,6 +68,8 @@ public class FCRefClassCfg
         // 合并
         m_Finder = null;
         MakerFinder(RefClass);
+        if (other == null)
+            return;
         MakerFinder(other.RefClass);
     }
     public FCRefClass  FindClass(string szClassName)

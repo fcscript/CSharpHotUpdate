@@ -751,8 +751,11 @@ public class FCClassWrap
             fileData.AppendLine("    {");
             fileData.AppendLine("        try");
             fileData.AppendLine("        {");
-            fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
-            fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
+            if(!bStatic)
+            {
+                fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+                fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
+            }
             fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
             FCValueType.PushReturnValue(fileData, "            ", ret_value, "ret_ptr", szLeftName, true);
             fileData.AppendLine("        }");
@@ -771,8 +774,11 @@ public class FCClassWrap
             fileData.AppendLine("    {");
             fileData.AppendLine("        try");
             fileData.AppendLine("        {");
-            fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
-            fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
+            if(!bStatic)
+            {
+                fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+                fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
+            }
             SetMemberValue(fileData, "            ", ret_value, "arg0", "L", "0", true, false);
             fileData.AppendFormat("            {0} = arg0;\r\n", szLeftName);
             fileData.AppendLine("        }");
@@ -879,6 +885,7 @@ public class FCClassWrap
         Type nRetType = method.ReturnType;   // 返回值
         int nParamCount = allParams != null ? allParams.Length : 0;
         bool bEqualFunc = func.m_szName == "Equals";
+        bool bStatic = method.IsStatic;
 
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
         fileData.AppendFormat("    public static int {0}(long L)\r\n", func.m_szSetName);
@@ -886,8 +893,11 @@ public class FCClassWrap
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
 
-        fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
-        fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        if(!bStatic)
+        {
+            fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+            fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        }
         if(bTemplateFunc)
         {
             fileData.AppendLine("            string arg0 = FCLibHelper.fc_get_string_a(L, 0);");
@@ -897,7 +907,6 @@ public class FCClassWrap
         string szLeftName = string.Empty;
         string szCallParam = string.Empty;
         string szLeftType = string.Empty;
-        bool bStatic = method.IsStatic;
         string szFullFuncName = method.Name;
         int nParamOffset = bTemplateFunc ? 1 : 0;
         if(bTemplateFunc)
