@@ -253,7 +253,7 @@ public class FCClassWrap
         FieldInfo[] allFields = FCValueType.GetFields(nClassType, m_bOnlyThisAPI);
         PropertyInfo[] allProperties = FCValueType.GetProperties(nClassType, m_bOnlyThisAPI);
         MethodInfo[] allMethods = FCValueType.GetMethods(nClassType, m_bOnlyThisAPI);
-        Type  []allInnerTypes = nClassType.GetNestedTypes();
+        //Type  []allInnerTypes = nClassType.GetNestedTypes();
         if (allFields != null)
         {
             foreach(FieldInfo field in allFields)
@@ -884,7 +884,6 @@ public class FCClassWrap
         ParameterInfo[] allParams = method.GetParameters();  // 函数参数
         Type nRetType = method.ReturnType;   // 返回值
         int nParamCount = allParams != null ? allParams.Length : 0;
-        bool bEqualFunc = func.m_szName == "Equals";
         bool bStatic = method.IsStatic;
 
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
@@ -906,7 +905,6 @@ public class FCClassWrap
         Type nParamType;
         string szLeftName = string.Empty;
         string szCallParam = string.Empty;
-        string szLeftType = string.Empty;
         string szFullFuncName = method.Name;
         int nParamOffset = bTemplateFunc ? 1 : 0;
         if(bTemplateFunc)
@@ -1125,8 +1123,7 @@ public class FCClassWrap
 
     void  PushTaskMethod(MethodInfo method)
     {
-        string szMethodName = method.ToString();
-        FCValueType ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
+        //FCValueType ret_value = m_templateWrap.PushReturnTypeWrap(method.ReturnType);
         bool bStatic = method.IsStatic;
 
         int nSameNameCount = 0;
@@ -1151,7 +1148,6 @@ public class FCClassWrap
         ParameterInfo[] allParams = method.GetParameters();  // 函数参数
         Type nRetType = method.ReturnType;   // 返回值
         int nParamCount = allParams != null ? allParams.Length : 0;
-        bool bEqualFunc = func.m_szName == "Equals";
 
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
         fileData.AppendFormat("    public static int {0}(long L)\r\n", func.m_szSetName);
@@ -1170,7 +1166,6 @@ public class FCClassWrap
         Type nParamType;
         string szLeftName = string.Empty;
         string szCallParam = string.Empty;
-        string szLeftType = string.Empty;
         string szFullFuncName = method.Name;
         for (int i = 0; i < nParamCount; ++i)
         {

@@ -550,10 +550,18 @@ class FCTemplateWrap
     }
     void MakeOutListElement(FCValueType value)
     {
+        StringBuilder fileData = m_szTempBuilder;
+        if (fc_value_type.fc_value_system_object == value.m_nValueType
+            || fc_value_type.fc_value_object == value.m_nValueType
+            || fc_value_type.fc_value_unity_object == value.m_nValueType)
+        {
+            fileData.AppendLine("                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));");
+            return;
+        }
+
         string szName = FCValueType.GetFCLibFuncShortName(value.m_nValueType);
         if (string.IsNullOrEmpty(szName))
             return;
-        StringBuilder fileData = m_szTempBuilder;
 
         if (FCValueType.IsRefType(value.m_nValueType))
         {

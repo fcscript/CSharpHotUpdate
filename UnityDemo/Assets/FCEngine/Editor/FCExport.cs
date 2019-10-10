@@ -160,51 +160,11 @@ public static class FCExport
         FCCompilerHelper.CompilerProj(szPath);
     }
     //[MenuItem("FCScript/测试", false, 5)]
-    static void TestXml()
-    {
-        Assembly assembly = Assembly.Load("UnityEngine.UI");
-        Type t1 = assembly.GetType("Button");
-        Type t2 = assembly.GetType("UnityEngine.UI.Button");
-        Type t3 = assembly.GetType("UnityEngine.Button");
-
-        string szPath = Application.dataPath;
-        szPath = szPath.Substring(0, szPath.Length - 6);
-        FCRefClassCfg  ins = FCRefClassCfg.LoadCfg(szPath + "ref_name.xml");
-
-        string szCfgPathName = szPath + "test_name.xml";
-        if (File.Exists(szCfgPathName))
-        {
-            File.Delete(szCfgPathName);
-        }
-        //FileStream stream = new FileStream(szCfgPathName, FileMode.Create, FileAccess.Write);
-        UTF8Encoding utf8 = new UTF8Encoding(false);
-        StreamWriter stream = new StreamWriter(szCfgPathName, false, utf8);
-        System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(FCRefClassCfg));
-        FCRefClassCfg cfg = new FCRefClassCfg();
-
-        cfg.RefClass = new List<FCRefClass>();
-        FCRefClass node = new FCRefClass();
-        node.ClassName = "GameObject";
-        node.names.Add("Find");
-        node.names.Add("tag");
-
-        cfg.RefClass.Add(node);
-        node = new FCRefClass();
-        node.ClassName = "Button";
-        node.names.Add("Enable");
-        node.names.Add("Active");
-
-        node.TemplateParams = new List<FCTemplateParams>();
-        FCTemplateParams sParam = new FCTemplateParams();
-        sParam.FuncName = "AddCompent";
-        sParam.names.Add("Button");
-        sParam.names.Add("Text");
-        sParam.names.Add("Sprite");
-        node.TemplateParams.Add(sParam);
-
-        cfg.RefClass.Add(node);
-
-        xs.Serialize(stream, cfg);
-        stream.Close();        
-    }
+    //static void TestXml()
+    //{
+    //    Assembly assembly = Assembly.Load("UnityEngine.UI");
+    //    Type t1 = assembly.GetType("Button");
+    //    Type t2 = assembly.GetType("UnityEngine.UI.Button");
+    //    Type t3 = assembly.GetType("UnityEngine.Button");                
+    //}
 }

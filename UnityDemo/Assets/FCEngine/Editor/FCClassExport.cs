@@ -387,7 +387,6 @@ class FCClassExport
         if(allParams != null)
         {
             Type nParamType;
-            string szParamType = string.Empty;
             for (int i = 0; i < allParams.Length; ++i)
             {
                 nParamType = allParams[i].ParameterType;
