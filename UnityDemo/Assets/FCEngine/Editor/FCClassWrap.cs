@@ -1013,6 +1013,10 @@ public class FCClassWrap
         {
             return;
         }
+        // 纠正一下要导出的模板参数
+        if (m_pRefClass != null)
+            aSupportType = m_pRefClass.AdjustExportType(method.Name, aSupportType);
+
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("            long nRetPtr = 0;");
         fileData.AppendLine("            switch(arg0)");

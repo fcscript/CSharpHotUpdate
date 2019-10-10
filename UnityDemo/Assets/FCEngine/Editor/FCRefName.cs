@@ -134,8 +134,28 @@ public class FCRefClass
             MakeTemplateFinder(TemplateParams);
         }
         if (m_namesFinder.Count == 0)
-            return true;
+            return false;
         return m_namesFinder.ContainsKey(szName);
+    }
+    public FCTemplateParams  FindTemplate(string szName)
+    {
+        if (m_TemplateFinder == null)
+        {
+            MakeNamesFinder(names);
+            m_TemplateFinder = null;
+            MakeTemplateFinder(TemplateParams);
+        }
+        FCTemplateParams ptr = null;
+        if (m_TemplateFinder.TryGetValue(szName, out ptr))
+            return ptr;
+        return null;
+    }
+    public List<Type> AdjustExportType(string szFuncName, List<Type> rList)
+    {
+        FCTemplateParams func = FindTemplate(szFuncName);
+        if (func != null)
+            return func.AdjustExportType(rList);
+        return rList;
     }
 
     public void MergeFinder(FCRefClass other)
@@ -143,9 +163,12 @@ public class FCRefClass
         m_namesFinder = null;
         m_TemplateFinder = null;
         MakeNamesFinder(names);
-        MakeNamesFinder(other.names);
         MakeTemplateFinder(TemplateParams);
-        MakeTemplateFinder(other.TemplateParams);
+        if(other != null)
+        {
+            MakeNamesFinder(other.names);
+            MakeTemplateFinder(other.TemplateParams);
+        }
     }
 };
 [XmlRootAttribute("TemplateParams")]
@@ -173,6 +196,32 @@ public class FCTemplateParams
     {
         m_namesFinder = null;
         MakeNamesFinder(names);
-        MakeNamesFinder(other.names);
+        if(other != null)
+            MakeNamesFinder(other.names);
+    }
+    public bool IsHaveTemplateParam(string szName)
+    {
+        if(m_namesFinder == null)
+        {
+            MakeNamesFinder(names);
+        }
+        return m_namesFinder.ContainsKey(szName);
+    }
+    public List<Type> AdjustExportType(List<Type> rList)
+    {
+        if (m_namesFinder == null)
+        {
+            MakeNamesFinder(names);
+        }
+        List<Type> rNewList = new List<Type>();
+        rNewList.Capacity = rList.Count;
+        foreach(Type nType in rList)
+        {
+            if(m_namesFinder.ContainsKey(nType.Name))
+            {
+                rNewList.Add(nType);
+            }
+        }
+        return rNewList;
     }
 };
