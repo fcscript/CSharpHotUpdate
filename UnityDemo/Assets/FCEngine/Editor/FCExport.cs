@@ -30,7 +30,8 @@ public static class FCExport
         szPath = szPath.Substring(0, szPath.Length - 6);
         FCRefClassCfg used_cfg = FCRefClassCfg.LoadCfg(szPath + "ref_name.xml");
         FCRefClassCfg custom = FCRefClassCfg.LoadCfg(szPath + "custom_name.xml");
-        used_cfg.MergeFinder(custom);
+        if(used_cfg != null)
+            used_cfg.MergeFinder(custom);
 
         FCClassWrap pWrap = new FCClassWrap();
         pWrap.BeginExport("");
