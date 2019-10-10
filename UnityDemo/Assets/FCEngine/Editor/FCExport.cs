@@ -22,6 +22,28 @@ public static class FCExport
 
         pWrap.EndExport();
     }
+    [MenuItem("FCScript/精简导出脚本类", false, 5)]
+    static void ExportSimple()
+    {
+        // 先加载配置表
+        string szPath = Application.dataPath;
+        szPath = szPath.Substring(0, szPath.Length - 6);
+        FCRefClassCfg used_cfg = FCRefClassCfg.LoadCfg(szPath + "ref_name.xml");
+        FCRefClassCfg custom = FCRefClassCfg.LoadCfg(szPath + "custom_name.xml");
+        used_cfg.MergeFinder(custom);
+
+        FCClassWrap pWrap = new FCClassWrap();
+        pWrap.BeginExport("");
+
+        pWrap.SetRefClassCfg(used_cfg);
+        WrapUnityClass(pWrap);
+        pWrap.SetRefClassCfg(used_cfg);
+        WrapUIClass(pWrap);
+        pWrap.SetRefClassCfg(null);
+        WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
+
+        pWrap.EndExport();
+    }
     [MenuItem("FCScript/清除Wrap脚本", false, 5)]
     static void ClearWrapFile()
     {

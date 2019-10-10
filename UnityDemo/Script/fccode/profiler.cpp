@@ -228,3 +228,45 @@ export void  Test12()
     uint nEnd = System.GetTickCount();
     PrintTime("Test12", nEnd - nBegin);
 }
+
+export void  Test13()
+{
+    List<StringA>   text = new List<StringA>();
+    text.push_back("The");
+    text.push_back("quick");
+    text.push_back("brown");
+    text.push_back("fox");
+    text.push_back("jumped");
+    text.push_back("over");
+    text.push_back("the");
+    text.push_back("lazy");
+    text.push_back("dog");
+    text.push_back("at");
+    text.push_back("a");
+    text.push_back("restaurant");
+    text.push_back("near");
+    text.push_back("the");
+    text.push_back("lake");
+    text.push_back("of");
+    text.push_back("ab");
+    text.push_back("new");
+    text.push_back("era");
+
+    map<StringA, int>   cnt = new map<StringA, int>();
+    int  nArraySize = text.size();
+    uint  nBeginTime = os.GetTickCount();
+    for(int i = 0; i<1000000; ++i)
+    {
+        for(int k = 0; k<nArraySize; ++k)
+        {
+            cnt[text[k]] += 1;
+        }
+    }
+    uint  nEndTime = os.GetTickCount();
+    uint  nTime = nEndTime - nBeginTime;
+    print("cost time : {0}", nTime);
+    //for(iterator it = cnt.begin(); it; ++it)
+    //{
+    //    print("{0}:{1}", it.key, it.value);
+    //}	
+}

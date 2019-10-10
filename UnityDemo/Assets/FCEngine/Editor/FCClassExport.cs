@@ -29,6 +29,8 @@ class FCClassExport
     Dictionary<string, MethodInfo> m_CurValidMethods = new Dictionary<string, MethodInfo>();
     List<MethodInfo> m_CurMethods = new List<MethodInfo>();
 
+    FCRefClass m_pRefClass;
+
     public void ExportDefaultClass(string szPath)
     {
         m_szFileBuilder.Length = 0;
@@ -85,13 +87,21 @@ class FCClassExport
         string szPathName = szPath + "all_default_class.cs";
         File.WriteAllText(szPathName, m_szFileBuilder.ToString());
     }
-    
-    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi, Dictionary<string, int> aDontWrapName, Dictionary<string, List<Type>> aTemplateFunc)
+
+    bool IsNeedExportMember(string szName)
+    {
+        if (m_pRefClass == null)
+            return true;
+        return m_pRefClass.FindMember(szName);
+    }
+
+    public void ExportClass(Type nClassType, string szPathName, bool bPartWrap, bool bOnlyThisApi, Dictionary<string, int> aDontWrapName, Dictionary<string, List<Type>> aTemplateFunc, FCRefClass  pRefClass)
     {
         m_bPartWrap = bPartWrap;
         m_bOnlyThisAPI = bOnlyThisApi;
         m_nClassType = nClassType;
         m_szPathName = szPathName;
+        m_pRefClass = pRefClass;
         m_DelayType.Clear();
         m_szTempBuilder.Length = 0;
         m_CurRefNameSpace.Clear();
@@ -200,14 +210,16 @@ class FCClassExport
         {
             foreach (FieldInfo field in allFields)
             {
-                PushFieldInfo(field);
+                if(IsNeedExportMember(field.Name))
+                    PushFieldInfo(field);
             }
         }
         if (allProperties != null)
         {
             foreach (PropertyInfo property in allProperties)
             {
-                PushPropertyInfo(property);
+                if(IsNeedExportMember(property.Name))
+                    PushPropertyInfo(property);
             }
         }
     }
@@ -315,6 +327,8 @@ class FCClassExport
         string szDeclareName = string.Empty;
         foreach (MethodInfo method in allMethods)
         {
+            if (!IsNeedExportMember(method.Name))
+                continue;
             // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
             szDeclareName = FCValueType.GetMethodDeclare(method);
             if (m_CurValidMethods.ContainsKey(szDeclareName))

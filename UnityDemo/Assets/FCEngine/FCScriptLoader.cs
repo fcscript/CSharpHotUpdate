@@ -66,7 +66,7 @@ public class FCScriptLoader : MonoBehaviour
             {
                 print_error(e.ToString());
             }
-            StartCoroutine(LoadByteCode());
+            LoadByteCode(OnLoadScriptCallback);
         }
     }
 
@@ -122,29 +122,20 @@ public class FCScriptLoader : MonoBehaviour
         return false;
     }
 
-    bool LoadByteCodeByFile()
+    protected bool LoadByteCodeByFile(OnLoadScriptByteCode pCallBack)
     {
         string szPathName = "test.code";
         print_error("开始加载, 路径：" + szPathName);
         try
         {
             BetterStreamingAssets.Initialize();
-
             byte[] fileData = BetterStreamingAssets.ReadAllBytes(szPathName);
-            if (fileData != null && fileData.Length > 0)
+            if(fileData != null && fileData.Length > 0)
             {
-                print_error("加载成功:" + szPathName + ", 字节大小：" + fileData.Length.ToString());
-                m_bLoadScript = true;
-                FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
-                all_class_wrap.Register(); // 动态wrap
-                OnAfterLoadScriptData();
-                if(m_InitCallback != null)
-                {
-                    m_InitCallback();
-                    m_InitCallback = null;
-                }
-                return true;
+                print_error("加载成功, Path:" + szPathName + ", 文件大小：" + fileData.Length);
             }
+            pCallBack(fileData);
+            return true;
         }
         catch (Exception e)
         {
@@ -154,12 +145,30 @@ public class FCScriptLoader : MonoBehaviour
         return false;
     }
 
-    IEnumerator LoadByteCode()
+    protected virtual void OnLoadScriptCallback(byte[] fileData)
     {
-        if (LoadByteCodeByFile())
-            yield break;
+        if (fileData != null && fileData.Length > 0)
+        {
+            m_bLoadScript = true;
+            FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
+
+            all_class_wrap.Register(); // 动态wrap
+            OnAfterLoadScriptData();
+            if (m_InitCallback != null)
+            {
+                m_InitCallback();
+                m_InitCallback = null;
+            }
+        }
     }
 
+    // 功能：重载这个接口, 可以自己实现字节码文件的加载
+    public delegate void OnLoadScriptByteCode(byte []fileData);
+    protected virtual void LoadByteCode(OnLoadScriptByteCode pCallBack)
+    {
+        LoadByteCodeByFile(pCallBack);
+    }
+    
     protected virtual void OnAfterLoadScriptData()
     {
 

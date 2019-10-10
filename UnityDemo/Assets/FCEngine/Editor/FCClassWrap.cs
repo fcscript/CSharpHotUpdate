@@ -50,9 +50,31 @@ public class FCClassWrap
     FCTemplateWrap m_templateWrap;
     FCDelegateWrap m_deleteWrap;
 
+    FCRefClassCfg m_refClassCfg;  // 引用的配置
+    FCRefClass m_pRefClass;
+
     // 功能：
     public FCClassWrap()
     {
+    }
+    
+    public void  SetRefClassCfg(FCRefClassCfg cfg )
+    {
+        m_refClassCfg = cfg;
+    }
+    
+    bool  IsNeedExportClass(Type nType)
+    {
+        if (m_refClassCfg == null)
+            return true;
+        FCRefClass  pClass = m_refClassCfg.FindClass(nType.Name);
+        return pClass != null;
+    }
+    bool  IsNeedExportMember(string szName)
+    {
+        if (m_pRefClass == null)
+            return true;
+        return m_pRefClass.FindMember(szName);
     }
 
     // 功能：删除指定目录下的所有文件
@@ -180,6 +202,12 @@ public class FCClassWrap
     }
     void WrapClassEx(Type nClassType, bool bPartWrap, bool bOnlyThisApi, bool bInnerClass, Type nParentType)
     {
+        if (!IsNeedExportClass(nClassType))
+            return;
+        m_pRefClass = null;
+        if (m_refClassCfg != null)
+            m_pRefClass = m_refClassCfg.FindClass(nClassType.Name);
+
         m_bPartWrap = bPartWrap;
         m_bInnerClass = bInnerClass;
         m_nCurParentType = nParentType;
@@ -193,7 +221,7 @@ public class FCClassWrap
             m_szCurClassName = FCValueType.GetClassName(nParentType) + '.' + m_szCurClassName;
         m_nCurClassType = nClassType;
         WrapSubClass(m_szTempBuilder, nClassType);
-        m_export.ExportClass(nClassType, m_szFCScriptPath + szClassFileName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc);
+        m_export.ExportClass(nClassType, m_szFCScriptPath + szClassFileName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc, m_pRefClass);
         m_CurDontWrapName.Clear();
         m_CurSupportTemplateFunc.Clear();
     }
@@ -230,14 +258,16 @@ public class FCClassWrap
         {
             foreach(FieldInfo field in allFields)
             {
-                PushFieldInfo(field);
+                if(IsNeedExportMember(field.Name))
+                    PushFieldInfo(field);
             }
         }
         if(allProperties != null)
         {
             foreach(PropertyInfo property in allProperties)
             {
-                PushPropertyInfo(property);
+                if(IsNeedExportMember(property.Name))
+                    PushPropertyInfo(property);
             }
         }
         if(allMethods != null)
@@ -250,6 +280,8 @@ public class FCClassWrap
             int nFuncCount = 0;
             foreach (MethodInfo method in allMethods)
             {
+                if (!IsNeedExportMember(method.Name))
+                    continue;
                 // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
                 szDeclareName = FCValueType.GetMethodDeclare(method);
                 if(m_CurValidMethods.ContainsKey(szDeclareName))
