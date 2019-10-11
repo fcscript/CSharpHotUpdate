@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 class  Material : UnityObject
 {
-    public Material(StringA contents){}
     public Material(Shader shader){}
     public Material(Material source){}
     public Shader shader { get;  set; }
