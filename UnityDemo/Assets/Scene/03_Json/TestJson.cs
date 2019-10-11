@@ -25,7 +25,7 @@ public class TestJson : FCScriptLoader
 
     void  NetJsonLoad()
     {
-        // 测试空函数调用
+        // 测试空函数调用
         long nBeginTime = DateTime.Now.Ticks / 10000;
         int nTotalCount = 100;
         for (int i = 0; i < nTotalCount; ++i)
@@ -45,13 +45,12 @@ public class TestJson : FCScriptLoader
             m_data = JsonConvert.DeserializeObject<GoodsCfg>(m_ItemCfg.text);
         }
 
-        // 测试空函数调用
-        string szFileData;
+        // 测试空函数调用
         long nBeginTime = DateTime.Now.Ticks / 10000;
         int nTotalCount = 100;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            szFileData = JsonConvert.SerializeObject(m_data);
+            JsonConvert.SerializeObject(m_data);
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;
@@ -89,7 +88,7 @@ public class TestJson : FCScriptLoader
     }
     void LitJsonLoad()
     {
-        // 测试空函数调用
+        // 测试空函数调用
         long nBeginTime = DateTime.Now.Ticks / 10000;
         int nTotalCount = 100;
         for (int i = 0; i < nTotalCount; ++i)
@@ -108,12 +107,12 @@ public class TestJson : FCScriptLoader
         {
             m_data = JsonMapper.ToObject<GoodsCfg>(m_ItemCfg.text);
         }
-        // 测试空函数调用
+        // 测试空函数调用
         long nBeginTime = DateTime.Now.Ticks / 10000;
         int nTotalCount = 100;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            string szData = JsonMapper.ToJson(m_data);
+            JsonMapper.ToJson(m_data);
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;

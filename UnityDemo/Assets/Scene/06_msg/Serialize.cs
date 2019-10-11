@@ -929,6 +929,7 @@ public class CSerialize
             }
             catch (Exception e)
             {
+                Debug.LogException(e);
             }
         }
     }
@@ -1032,16 +1033,12 @@ public class CSerialize
     }
     public void Read(ref Vector3 tValue)
     {
-        if (tValue == null)
-            tValue = Vector3.zero;
         m_arFile.ReadInt(ref tValue.x);
         m_arFile.ReadInt(ref tValue.y);
         m_arFile.ReadInt(ref tValue.z);
     }
     public void Read(ref Quaternion tValue)
     {
-        if (tValue == null)
-            tValue = new Quaternion();
         m_arFile.ReadInt(ref tValue.x);
         m_arFile.ReadInt(ref tValue.y);
         m_arFile.ReadInt(ref tValue.z);
@@ -1049,8 +1046,6 @@ public class CSerialize
     }
     public void Read(ref Rect tValue)
     {
-        if (tValue == null)
-            tValue = new Rect();
         float xMin = 0.0f, yMin = 0.0f, xMax = 0.0f, yMax = 0.0f;
         m_arFile.ReadInt(ref xMin);
         m_arFile.ReadInt(ref yMin);
@@ -1063,8 +1058,6 @@ public class CSerialize
     }
     public void Read(ref Bounds tValue)
     {
-        if (tValue == null)
-            tValue = new Bounds();
         Vector3 vMin = new Vector3(0.0f, 0.0f, 0.0f);
         Vector3 vMax = new Vector3(0.0f, 0.0f, 0.0f);
         Read(ref vMin);

@@ -14,9 +14,6 @@ public class Material_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("Material");
-        FCLibHelper.fc_register_class_func(nClassName, "Material", obj_new3);
-        FCLibHelper.fc_register_class_func(nClassName, "Material", obj_new2);
-        FCLibHelper.fc_register_class_func(nClassName, "Material", obj_new1);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -105,60 +102,6 @@ public class Material_wrap
         FCLibHelper.fc_register_class_func(nClassName,"GetTextureOffset_int",GetTextureOffset1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetTextureScale_StringA",GetTextureScale_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"GetTextureScale_int",GetTextureScale1_wrap);
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_new3(long L)
-    {
-        try
-        {
-            UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
-            Material obj = new Material(arg0);
-            long nPtr = FCGetObj.PushNewObj<Material>(obj);
-            long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_intptr(ret, nPtr);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_new2(long L)
-    {
-        try
-        {
-            UnityEngine.Shader arg0 = FCGetObj.GetObj<UnityEngine.Shader>(FCLibHelper.fc_get_intptr(L,0));
-            Material obj = new Material(arg0);
-            long nPtr = FCGetObj.PushNewObj<Material>(obj);
-            long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_intptr(ret, nPtr);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_new1(long L)
-    {
-        try
-        {
-            string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            Material obj = new Material(arg0);
-            long nPtr = FCGetObj.PushNewObj<Material>(obj);
-            long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_intptr(ret, nPtr);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]

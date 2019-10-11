@@ -15,7 +15,6 @@ public class Component_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("Component");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -48,15 +47,6 @@ public class Component_wrap
         FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA_Object",BroadcastMessage1_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA",BroadcastMessage2_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA_SendMessageOptions",BroadcastMessage3_wrap);
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_new(long L)
-    {
-        long nPtr = FCGetObj.NewObj<Component>();
-        long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
-        return 0;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]

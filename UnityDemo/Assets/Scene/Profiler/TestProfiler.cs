@@ -109,7 +109,6 @@ class TestProfiler: FCScriptLoader
     {
         FCLibHelper.fc_call(0, "Test13");
     }
-    string m_szSwitchTips = "Swith模式";
     void OnGUI()
     {
         int nLeft = 200;

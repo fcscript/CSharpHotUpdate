@@ -4,19 +4,19 @@ using UnityEngine;
 
 class GoodsData
 {
-    public string Quality;
-    public string IconName;
-    public string TextName;
-    public string OrigName;
-    public string Index;
+    public string Quality = string.Empty;
+    public string IconName = string.Empty;
+    public string TextName = string.Empty;
+    public string OrigName = string.Empty;
+    public string Index = string.Empty;
 };
 
 class GoodsList
 {
-    public List<GoodsData> goods;
+    public List<GoodsData> goods = new List<GoodsData>();
 };
 
 class GoodsCfg
 {
-    public GoodsList list;
+    public GoodsList list = new GoodsList();
 }

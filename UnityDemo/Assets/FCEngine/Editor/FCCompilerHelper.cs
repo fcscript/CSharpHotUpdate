@@ -50,7 +50,6 @@ class FCCompilerHelper
 #endif
 
     static Int64 s_nUserData = 0;
-    static bool s_bCompilerSuc = false;
     static int s_nCompilerErrorCount = 0;
     static void  GetResult(Int64 nUserData, bool bSuc)
     {

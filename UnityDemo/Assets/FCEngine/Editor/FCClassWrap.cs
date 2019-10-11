@@ -25,9 +25,9 @@ public class FCClassWrap
     string m_szFCScriptPath; // 脚本导出路径
     bool m_bPartWrap = false;
     bool m_bOnlyThisAPI = false;
-    bool m_bInnerClass = false;
+    //bool m_bInnerClass = false;
     Type m_nCurClassType;
-    Type m_nCurParentType;
+    //Type m_nCurParentType;
 
     List<string> m_AllWrapClassName = new List<string>(); // 所有wrap的类名
     List<string> m_CurWrapClassNames = new List<string>(); // 当前模块wrap的类名
@@ -209,8 +209,8 @@ public class FCClassWrap
             m_pRefClass = m_refClassCfg.FindClass(nClassType.Name);
 
         m_bPartWrap = bPartWrap;
-        m_bInnerClass = bInnerClass;
-        m_nCurParentType = nParentType;
+        //m_bInnerClass = bInnerClass;
+        //m_nCurParentType = nParentType;
         m_bOnlyThisAPI = bOnlyThisApi;
         m_szTempBuilder.Length = 0;
         string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
@@ -407,6 +407,27 @@ public class FCClassWrap
     }
     void MakeParamNew(ConstructorInfo conInfo, int nFuncIndex)
     {
+        if (0 != (MethodAttributes.SpecialName & conInfo.Attributes))
+        {
+            return;
+        }
+        if (m_bPartWrap)
+        {
+            if (!conInfo.IsDefined(typeof(PartWrapAttribute), false))
+            {
+                return;
+            }
+        }
+        // 如果该函数有不导出的标记
+        if (conInfo.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (conInfo.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
+
         ParameterInfo[] allParams = conInfo.GetParameters();
         if(allParams == null || allParams.Length == 0)
         {
