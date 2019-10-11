@@ -28,7 +28,7 @@ public enum Space
     Self = 1,
 };
 
-class Texture{}
+class Texture:Object{}
 
 class Scene{}
 
@@ -106,11 +106,11 @@ public enum ReflectionProbeUsage
     Simple = 3,
 };
 
-class MaterialPropertyBlock{}
+class MaterialPropertyBlock:Object{}
 
 class ReflectionProbeBlendInfo{}
 
-class Mesh{}
+class Mesh:Object{}
 
 public enum SkinQuality
 {
@@ -120,15 +120,15 @@ public enum SkinQuality
     Bone4 = 4,
 };
 
-class Gyroscope{}
+class Gyroscope:Object{}
 
 class AccelerationEvent{}
 
 class Touch{}
 
-class LocationService{}
+class LocationService:Object{}
 
-class Compass{}
+class Compass:Object{}
 
 public enum DeviceOrientation
 {
@@ -504,7 +504,7 @@ public enum LightType
     Area = 3,
 };
 
-class Flare{}
+class Flare:Object{}
 
 public enum LightEvent
 {
@@ -516,7 +516,7 @@ public enum LightEvent
     AfterShadowMapPass = 5,
 };
 
-class CommandBuffer{}
+class CommandBuffer:Object{}
 
 public enum ShadowMapPass
 {
@@ -536,7 +536,7 @@ public enum ShadowMapPass
     All = 2047,
 };
 
-class Shader{}
+class Shader:Object{}
 
 public enum MaterialGlobalIlluminationFlags
 {
@@ -547,21 +547,27 @@ public enum MaterialGlobalIlluminationFlags
     EmissiveIsBlack = 4,
 };
 
-class ComputeBuffer{}
+class ComputeBuffer:Object{}
 
-class UnityEventBase{}
+class UnityEventBase:Object{}
 
-class Selectable{}
+class Selectable:UIBehaviour{}
 
-class PointerEventData{}
+class UIBehaviour:MonoBehaviour{}
+
+class MonoBehaviour:Behaviour{}
+
+class PointerEventData:BaseEventData{}
 
 class BaseEventData{}
 
-class MaskableGraphic{}
+class MaskableGraphic:Graphic{}
 
-class TextGenerator{}
+class Graphic:UIBehaviour{}
 
-class Font{}
+class TextGenerator:Object{}
+
+class Font:Object{}
 
 public enum TextAnchor
 {

@@ -80,7 +80,11 @@ class FCClassExport
             else
             {
                 //m_szFileBuilder.AppendFormat("class {0} : {1}{{}}\r\n", nType.Name, nType.BaseType.Name);
-                m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
+                Type nParentType = nType.BaseType;
+                if(nParentType != null && m_AllRefType.ContainsKey(nParentType))
+                    m_szFileBuilder.AppendFormat("class {0}:{1}{{}}\r\n", nType.Name, nParentType.Name);
+                else
+                    m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
             }
             m_szFileBuilder.AppendLine();
         }
@@ -113,6 +117,7 @@ class FCClassExport
         m_AllExportType[nClassType] = 1;
         Type nParentType = nClassType.BaseType;
         m_AllRefType[nParentType] = 1;
+        PushParentType(nParentType);
 
         m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", FCValueType.GetClassName(nClassType), FCValueType.GetClassName(nParentType));
         m_szTempBuilder.AppendLine("{");
@@ -163,20 +168,42 @@ class FCClassExport
     }
     void PushRefType(Type nType)
     {
-        FCValueType value = FCValueType.TransType(nType);
-        if(value.IsArray || value.IsList)
+        try
         {
-            m_AllRefType[value.m_value] = 1;
+            FCValueType value = FCValueType.TransType(nType);
+            if (value.IsArray || value.IsList)
+            {
+                m_AllRefType[value.m_value] = 1;
+            }
+            else if (value.IsMap)
+            {
+                m_AllRefType[value.m_key] = 1;
+                m_AllRefType[value.m_value] = 1;
+            }
+            else
+            {
+                m_AllRefType[nType] = 1;
+            }
         }
-        else if(value.IsMap)
+        catch(Exception e)
         {
-            m_AllRefType[value.m_key] = 1;
-            m_AllRefType[value.m_value] = 1;
+            Debug.LogException(e);
         }
-        else
-        {
-            m_AllRefType[nType] = 1;
-        }
+    }
+    void  PushParentType(Type nType)
+    {
+        if (nType == null)
+            return;
+        PushRefType(nType);
+        Type nParentType = nType.BaseType;
+        if (nParentType == null)
+            return;
+        if (nParentType == typeof(System.Object))
+            return;
+        if (nParentType == typeof(UnityEngine.Object))
+            return;
+        //Type  []allParent = nType.GetInterfaces(); // 接口类
+        PushParentType(nParentType);
     }
     void PushConstructor(ConstructorInfo cons)
     {
