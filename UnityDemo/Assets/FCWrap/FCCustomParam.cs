@@ -496,6 +496,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -512,6 +513,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -564,6 +566,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -580,6 +583,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -596,6 +600,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -612,6 +617,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -628,6 +634,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -661,6 +668,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -677,6 +685,7 @@ class FCCustomParam
             for(int i = 0; i<nCount; ++i)
             {
                 long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)

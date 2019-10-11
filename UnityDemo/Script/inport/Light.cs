@@ -23,7 +23,6 @@ class  Light : Behaviour
     public float shadowNearPlane { get;  set; }
     public float range { get;  set; }
     public Flare flare { get;  set; }
-    public LightBakingOutput bakingOutput { get;  set; }
     public int cullingMask { get;  set; }
     public void AddCommandBuffer(LightEvent evt,CommandBuffer buffer){}
     public void AddCommandBuffer(LightEvent evt,CommandBuffer buffer,ShadowMapPass shadowPassMask){}

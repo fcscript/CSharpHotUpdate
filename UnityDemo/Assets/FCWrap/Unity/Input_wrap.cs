@@ -120,8 +120,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.compensateSensors);
         }
@@ -136,8 +134,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             Input.compensateSensors = arg0;
         }
@@ -153,8 +149,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Input.gyro);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -171,8 +165,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector3 temp_ret = Input.mousePosition;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
@@ -189,8 +181,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector2 temp_ret = Input.mouseScrollDelta;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
@@ -207,8 +197,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.mousePresent);
         }
@@ -224,8 +212,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.simulateMouseWithTouches);
         }
@@ -240,8 +226,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             Input.simulateMouseWithTouches = arg0;
         }
@@ -257,8 +241,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.anyKey);
         }
@@ -274,8 +256,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.anyKeyDown);
         }
@@ -291,8 +271,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, Input.inputString);
         }
@@ -308,8 +286,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector3 temp_ret = Input.acceleration;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
@@ -326,8 +302,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(Input.accelerationEvents,ret_ptr);
         }
@@ -343,8 +317,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, Input.accelerationEventCount);
         }
@@ -360,8 +332,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(Input.touches,ret_ptr);
         }
@@ -377,8 +347,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, Input.touchCount);
         }
@@ -394,8 +362,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.touchPressureSupported);
         }
@@ -411,8 +377,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.stylusTouchSupported);
         }
@@ -428,8 +392,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.touchSupported);
         }
@@ -445,8 +407,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.multiTouchEnabled);
         }
@@ -461,8 +421,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             Input.multiTouchEnabled = arg0;
         }
@@ -478,8 +436,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Input.location);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -496,8 +452,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Input.compass);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -514,8 +468,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Input.deviceOrientation);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -532,8 +484,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(Input.imeCompositionMode);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -549,8 +499,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             UnityEngine.IMECompositionMode arg0 = (UnityEngine.IMECompositionMode)(FCLibHelper.fc_get_int(L,0));
             Input.imeCompositionMode = arg0;
         }
@@ -566,8 +514,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, Input.compositionString);
         }
@@ -583,8 +529,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.imeIsSelected);
         }
@@ -600,8 +544,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector2 temp_ret = Input.compositionCursorPos;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
@@ -617,8 +559,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             Vector2 arg0 = new Vector2();
             FCLibHelper.fc_get_vector2(L,0,ref arg0);
             Input.compositionCursorPos = arg0;
@@ -635,8 +575,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Input.backButtonLeavesApp);
         }
@@ -651,8 +589,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             Input.backButtonLeavesApp = arg0;
         }
@@ -668,8 +604,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float ret = Input.GetAxis(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -687,8 +621,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float ret = Input.GetAxisRaw(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -706,8 +638,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetButton(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -725,8 +655,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetButtonDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -744,8 +672,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetButtonUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -763,8 +689,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetKey(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -782,8 +706,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = Input.GetKey(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -801,8 +723,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetKeyDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -820,8 +740,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = Input.GetKeyDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -839,8 +757,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = Input.GetKeyUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -858,8 +774,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = Input.GetKeyUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -877,8 +791,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             string[] ret = Input.GetJoystickNames();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret,ret_ptr);
@@ -895,8 +807,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = Input.GetMouseButton(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -914,8 +824,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = Input.GetMouseButtonDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -933,8 +841,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = Input.GetMouseButtonUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -952,8 +858,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             Input.ResetInputAxes();
         }
         catch(Exception e)
@@ -968,8 +872,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             AccelerationEvent ret = Input.GetAccelerationEvent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -988,8 +890,6 @@ public class Input_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Input obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Touch ret = Input.GetTouch(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);

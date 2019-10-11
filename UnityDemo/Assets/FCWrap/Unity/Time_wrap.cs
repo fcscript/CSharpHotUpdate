@@ -94,8 +94,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.time);
         }
@@ -111,8 +109,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.timeSinceLevelLoad);
         }
@@ -128,8 +124,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.deltaTime);
         }
@@ -145,8 +139,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedTime);
         }
@@ -162,8 +154,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.unscaledTime);
         }
@@ -179,8 +169,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedUnscaledTime);
         }
@@ -196,8 +184,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.unscaledDeltaTime);
         }
@@ -213,8 +199,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedUnscaledDeltaTime);
         }
@@ -230,8 +214,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedDeltaTime);
         }
@@ -246,8 +228,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
             Time.fixedDeltaTime = arg0;
         }
@@ -263,8 +243,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.maximumDeltaTime);
         }
@@ -279,8 +257,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
             Time.maximumDeltaTime = arg0;
         }
@@ -296,8 +272,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.smoothDeltaTime);
         }
@@ -313,8 +287,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.maximumParticleDeltaTime);
         }
@@ -329,8 +301,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
             Time.maximumParticleDeltaTime = arg0;
         }
@@ -346,8 +316,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.timeScale);
         }
@@ -362,8 +330,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
             Time.timeScale = arg0;
         }
@@ -379,8 +345,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, Time.frameCount);
         }
@@ -396,8 +360,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, Time.renderedFrameCount);
         }
@@ -413,8 +375,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, Time.realtimeSinceStartup);
         }
@@ -430,8 +390,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, Time.captureFramerate);
         }
@@ -446,8 +404,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Time.captureFramerate = arg0;
         }
@@ -463,8 +419,6 @@ public class Time_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Time ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, Time.inFixedTimeStep);
         }

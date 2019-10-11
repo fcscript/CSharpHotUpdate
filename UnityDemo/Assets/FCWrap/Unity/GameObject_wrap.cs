@@ -346,8 +346,6 @@ public class GameObject_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            GameObject obj = get_obj(nThisPtr);
             UnityEngine.PrimitiveType arg0 = (UnityEngine.PrimitiveType)(FCLibHelper.fc_get_int(L,0));
             GameObject ret = GameObject.CreatePrimitive(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -679,8 +677,6 @@ public class GameObject_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             GameObject ret = GameObject.FindGameObjectWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -699,8 +695,6 @@ public class GameObject_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             GameObject ret = GameObject.FindWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -719,8 +713,6 @@ public class GameObject_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             GameObject[] ret = GameObject.FindGameObjectsWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1034,8 +1026,6 @@ public class GameObject_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             GameObject ret = GameObject.Find(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);

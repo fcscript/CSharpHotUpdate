@@ -16,7 +16,6 @@ class  Renderer : Component
     public StringA sortingLayerName { get;  set; }
     public int sortingLayerID { get;  set; }
     public int sortingOrder { get;  set; }
-    public bool allowOcclusionWhenDynamic { get;  set; }
     public bool isPartOfStaticBatch { get; }
     public Matrix worldToLocalMatrix { get; }
     public Matrix localToWorldMatrix { get; }

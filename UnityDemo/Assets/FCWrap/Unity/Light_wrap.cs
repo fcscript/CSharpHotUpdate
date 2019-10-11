@@ -39,7 +39,6 @@ public class Light_wrap
         FCLibHelper.fc_register_class_attrib(nClassName,"shadowNearPlane",get_shadowNearPlane_wrap,set_shadowNearPlane_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"range",get_range_wrap,set_range_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"flare",get_flare_wrap,set_flare_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"bakingOutput",get_bakingOutput_wrap,set_bakingOutput_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"cullingMask",get_cullingMask_wrap,set_cullingMask_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"AddCommandBuffer_LightEvent_CommandBuffer",AddCommandBuffer_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"AddCommandBuffer_LightEvent_CommandBuffer_ShadowMapPass",AddCommandBuffer1_wrap);
@@ -720,40 +719,6 @@ public class Light_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int get_bakingOutput_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Light ret = get_obj(nThisPtr);
-            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.bakingOutput);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int set_bakingOutput_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Light ret = get_obj(nThisPtr);
-            UnityEngine.LightBakingOutput arg0 = FCGetObj.GetObj<UnityEngine.LightBakingOutput>(FCLibHelper.fc_get_intptr(L,0));
-            ret.bakingOutput = arg0;
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int get_cullingMask_wrap(long L)
     {
         try
@@ -898,8 +863,6 @@ public class Light_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Light obj = get_obj(nThisPtr);
             UnityEngine.LightType arg0 = (UnityEngine.LightType)(FCLibHelper.fc_get_int(L,0));
             int arg1 = FCLibHelper.fc_get_int(L,1);
             Light[] ret = Light.GetLights(arg0,arg1);

@@ -91,6 +91,7 @@ public static class FCExport
         pWrap.PushCurrentDontWrapName("Item");
         pWrap.WrapClass(typeof(UnityEngine.Animation));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
+        pWrap.PushCurrentDontWrapName("allowOcclusionWhenDynamic");
         pWrap.WrapClass(typeof(UnityEngine.Renderer));
         pWrap.WrapClass(typeof(UnityEngine.MeshRenderer));
         pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
@@ -98,6 +99,7 @@ public static class FCExport
         pWrap.WrapClass(typeof(UnityEngine.Input));
         pWrap.PushCurrentDontWrapName("areaSize");
         pWrap.PushCurrentDontWrapName("lightmapBakeType");
+        pWrap.PushCurrentDontWrapName("bakingOutput");
         pWrap.WrapClass(typeof(UnityEngine.Light));
         pWrap.WrapClass(typeof(UnityEngine.Material));
         pWrap.WrapClass(typeof(UnityEngine.Events.UnityEvent));

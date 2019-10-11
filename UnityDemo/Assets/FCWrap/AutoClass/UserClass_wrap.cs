@@ -77,8 +77,6 @@ public class UserClass_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UserClass obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             Vector3 arg2 = new Vector3();

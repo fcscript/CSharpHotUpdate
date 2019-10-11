@@ -506,8 +506,6 @@ public enum LightType
 
 class Flare{}
 
-class LightBakingOutput{}
-
 public enum LightEvent
 {
     BeforeShadowMap = 0,

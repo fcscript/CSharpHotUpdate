@@ -31,7 +31,6 @@ public class Renderer_wrap
         FCLibHelper.fc_register_class_attrib(nClassName,"sortingLayerName",get_sortingLayerName_wrap,set_sortingLayerName_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"sortingLayerID",get_sortingLayerID_wrap,set_sortingLayerID_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"sortingOrder",get_sortingOrder_wrap,set_sortingOrder_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"allowOcclusionWhenDynamic",get_allowOcclusionWhenDynamic_wrap,set_allowOcclusionWhenDynamic_wrap);
         FCLibHelper.fc_register_class_attrib(nClassName,"isPartOfStaticBatch",get_isPartOfStaticBatch_wrap,null);
         FCLibHelper.fc_register_class_attrib(nClassName,"worldToLocalMatrix",get_worldToLocalMatrix_wrap,null);
         FCLibHelper.fc_register_class_attrib(nClassName,"localToWorldMatrix",get_localToWorldMatrix_wrap,null);
@@ -428,39 +427,6 @@ public class Renderer_wrap
             Renderer ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.sortingOrder = arg0;
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int get_allowOcclusionWhenDynamic_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
-            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_bool(ret_ptr, ret.allowOcclusionWhenDynamic);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int set_allowOcclusionWhenDynamic_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            ret.allowOcclusionWhenDynamic = arg0;
         }
         catch(Exception e)
         {

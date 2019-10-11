@@ -757,8 +757,6 @@ public class Text_wrap
     {
         try
         {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Text obj = get_obj(nThisPtr);
             UnityEngine.TextAnchor arg0 = (UnityEngine.TextAnchor)(FCLibHelper.fc_get_int(L,0));
             Vector2 ret = Text.GetTextAnchorPivot(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
