@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 功能：加载脚本
+/// 功能：加载脚本
 /// </summary>
 
 public class FCScriptLoader : MonoBehaviour

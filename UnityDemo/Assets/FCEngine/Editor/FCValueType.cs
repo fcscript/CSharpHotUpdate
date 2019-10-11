@@ -38,14 +38,14 @@ public enum  fc_value_type
     fc_value_intrect,  // IntRect
     fc_value_rect,  // Rect
     
-    fc_value_system_object, // System.Objectä¸
+    fc_value_system_object, // System.ObjectÓë
     fc_value_unity_object,  // Unity.Object
-    fc_value_object, // æ™®é€šçš„ç±»
+    fc_value_object, // ÆÕÍ¨µÄÀà
 
-    fc_value_enum,   // æšä¸¾
+    fc_value_enum,   // Ã¶¾Ù
     fc_value_int_ptr, // IntPtr
     
-    fc_value_delegate,  // å§”æ‰˜
+    fc_value_delegate,  // Î¯ÍĞ
     fc_value_action,    // Action
     fc_value_unity_action, // UnityAction
     fc_value_task,         // Task<>
@@ -53,8 +53,8 @@ public enum  fc_value_type
 
 public enum fc_value_tempalte_type
 {
-    template_none,  // æ™®é€šå˜é‡
-    template_array, // æ•°ç»„
+    template_none,  // ÆÕÍ¨±äÁ¿
+    template_array, // Êı×é
     template_list,  // list
     template_map,   // map/Dictionary
     template_task,  // task<Type>
@@ -63,8 +63,8 @@ public enum fc_value_tempalte_type
 public class FCValueType
 {
     public fc_value_tempalte_type m_nTemplateType;
-    public fc_value_type m_nKeyType;   // keyç±»å‹
-    public fc_value_type m_nValueType; // valueç±»å‹
+    public fc_value_type m_nKeyType;   // keyÀàĞÍ
+    public fc_value_type m_nValueType; // valueÀàĞÍ
     public Type m_key;
     public Type m_value;
 
@@ -90,7 +90,7 @@ public class FCValueType
     {
         get { return fc_value_tempalte_type.template_map == m_nTemplateType; }
     }
-    // åŠŸèƒ½ï¼šåˆ†æç±»å‹
+    // ¹¦ÄÜ£º·ÖÎöÀàĞÍ
     public void SetType(Type nType)
     {
         if(nType.IsArray)
@@ -106,7 +106,7 @@ public class FCValueType
         if (szTypeName == "List`1"
             || szTypeName == "List`1&")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // æ¨¡æ¿çš„å‚æ•°
+            Type[] argtypes = nType.GetGenericArguments(); // Ä£°åµÄ²ÎÊı
             m_nTemplateType = fc_value_tempalte_type.template_list;
             m_key = m_value = argtypes[0];
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -115,7 +115,7 @@ public class FCValueType
         if (szTypeName == "Dictionary`2"
             || szTypeName == "Dictionary`2&")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // æ¨¡æ¿çš„å‚æ•°
+            Type[] argtypes = nType.GetGenericArguments(); // Ä£°åµÄ²ÎÊı
             m_nTemplateType = fc_value_tempalte_type.template_map;
             m_key = argtypes[0];
             m_value = argtypes[1];
@@ -125,7 +125,7 @@ public class FCValueType
         }
         if(szTypeName == "Task`1")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // æ¨¡æ¿çš„å‚æ•°
+            Type[] argtypes = nType.GetGenericArguments(); // Ä£°åµÄ²ÎÊı
             m_nTemplateType = fc_value_tempalte_type.template_task;
             m_key = m_value = argtypes[0];
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -143,7 +143,7 @@ public class FCValueType
     {
         return GetBaseValueTypeName(m_nValueType, m_value, bCSharp, bFullName);
     }
-    // å¾—åˆ°ç±»å‹çš„åå­—
+    // µÃµ½ÀàĞÍµÄÃû×Ö
     public string GetTypeName(bool bSharp, bool bFullName = false)
     {
         switch(m_nTemplateType)
@@ -169,7 +169,7 @@ public class FCValueType
     }
     public string GetDelegateName(bool bSharp)
     {
-        // æ£€æµ‹
+        // ¼ì²â
         return GetDelegateTypeName(m_value, bSharp);
     }
     public static string GetClassName(Type nType)
@@ -204,7 +204,7 @@ public class FCValueType
         if (bBaseDelegate)
         {
             MethodInfo method = nType.GetMethod("Invoke");
-            ParameterInfo[] allParams = method.GetParameters();  // å‡½æ•°å‚æ•°
+            ParameterInfo[] allParams = method.GetParameters();  // º¯Êı²ÎÊı
             if (allParams != null)
             {
                 szName += "_";
@@ -326,7 +326,7 @@ public class FCValueType
         return false;
     }
 
-    // åŠŸèƒ½ï¼šæ·»åŠ è¿”å›å€¼
+    // ¹¦ÄÜ£ºÌí¼Ó·µ»ØÖµ
     public static void PushReturnValue(StringBuilder fileData, string szLeftEmpty, FCValueType value, string Ptr, string szValueName, bool bAttrib)
     {
         // fc_push_return_intptr(L, pPtr.nPtr);
@@ -393,7 +393,7 @@ public class FCValueType
         return nValueType == fc_value_type.fc_value_system_object || nValueType == fc_value_type.fc_value_object || nValueType == fc_value_type.fc_value_unity_object;
     }    
 
-    // åŠŸèƒ½ï¼šå¾—åˆ°å˜é‡çš„ç±»å‹å
+    // ¹¦ÄÜ£ºµÃµ½±äÁ¿µÄÀàĞÍÃû
     public static string GetBaseValueTypeName(fc_value_type nFCType, Type nType, bool bCSharp, bool bFullName)
     {
         switch(nFCType)
@@ -486,7 +486,7 @@ public class FCValueType
         if (bBaseDelegate)
         {
             MethodInfo method = nType.GetMethod("Invoke");
-            ParameterInfo[] allParams = method.GetParameters();  // å‡½æ•°å‚æ•°
+            ParameterInfo[] allParams = method.GetParameters();  // º¯Êı²ÎÊı
             if (allParams != null)
             {
                 szName += "<";
@@ -591,11 +591,11 @@ public class FCValueType
         else
             return nType.GetMethods();
     }
-    // åŠŸèƒ½ï¼šè¿”å›å‡½æ•°çš„åå­—+è°ƒç”¨å‚æ•°
+    // ¹¦ÄÜ£º·µ»Øº¯ÊıµÄÃû×Ö+µ÷ÓÃ²ÎÊı
     public static string GetMethodDeclare(MethodInfo method)
     {
         string szFullName = method.Name;
-        ParameterInfo[] allParams = method.GetParameters();  // å‡½æ•°å‚æ•°
+        ParameterInfo[] allParams = method.GetParameters();  // º¯Êı²ÎÊı
         string szCallParam = string.Empty;
         if (allParams != null)
         {
@@ -617,8 +617,8 @@ public class FCValueType
     }
     static bool  IsCanReplaceMethod(MethodInfo method_old, MethodInfo method_new)
     {
-        ParameterInfo[] allParams1 = method_old.GetParameters();  // å‡½æ•°å‚æ•°
-        ParameterInfo[] allParams2 = method_new.GetParameters();  // å‡½æ•°å‚æ•°
+        ParameterInfo[] allParams1 = method_old.GetParameters();  // º¯Êı²ÎÊı
+        ParameterInfo[] allParams2 = method_new.GetParameters();  // º¯Êı²ÎÊı
         Type nParamType1;
         Type nParamType2;
         for (int i = 0; i<allParams1.Length; ++i)
@@ -629,7 +629,7 @@ public class FCValueType
             FCValueType value2 = TransType(nParamType2);
             if(value1.IsArray && value2.IsList)
             {
-                // å¯ä»¥æ›¿æ¢
+                // ¿ÉÒÔÌæ»»
                 return true;
             }
         }

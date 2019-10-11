@@ -55,7 +55,7 @@ public class FCGetObj
         m_Obj2ID[ref_obj.m_obj] = ref_obj;
         return nPtr;
     }
-    // 功能：添加一个对象
+    // 功能：添加一个对象
     // 说明：这里并不检测容器是不是已经缓存该对象，那样效率不高，但这个接口也可能造成误用
     // 比如在脚本中每调用一次get_obj接口，就会生成一个FCRefObj对象, 如果连续调用多次，会造成瞬时内存增长
     // 解决方法是可以像ulua一样，添加一个反向列表，通过obj查找已经存在的IntPtr, 但这个会增加额外的开销
@@ -64,7 +64,7 @@ public class FCGetObj
         FCRefObj ref_obj;
         if (m_Obj2ID.TryGetValue(obj, out ref_obj))
         {
-            ref_obj.m_nRef++;    // 增加一下引用计数
+            ref_obj.m_nRef++;    // 增加一下引用计数
             return ref_obj.m_nPtr;
         }
         ref_obj = new FCRefObj();
@@ -78,7 +78,7 @@ public class FCGetObj
         m_Obj2ID[obj] = ref_obj;
         return nPtr;
     }
-    // 功能:添加一个new出来的对象
+    // 功能:添加一个new出来的对象
     public static long PushNewObj<_Ty>(_Ty obj)
     {
         FCRefObj ref_obj = new FCRefObj();
@@ -102,7 +102,7 @@ public class FCGetObj
         m_Obj2ID[ref_obj.m_obj] = ref_obj;
         return nPtr;
     }
-    // 功能：调用delete删除对象，这个对象是由new 出来的
+    // 功能：调用delete删除对象，这个对象是由new 出来的
     public static void DelObj(long nIntPtr)
     {
         ReleaseRef(nIntPtr);

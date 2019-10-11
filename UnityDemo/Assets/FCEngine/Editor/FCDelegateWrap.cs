@@ -12,7 +12,7 @@ class FCDelegateWrap
     string m_szExportPath;
     StringBuilder m_szTempBuilder;
 
-    Dictionary<Type, string> m_DelegateTypes = new Dictionary<Type, string>(); // 临时转换的
+    Dictionary<Type, string> m_DelegateTypes = new Dictionary<Type, string>(); // 临时转换的
     
     public void BeginExport(string szPath)
     {
@@ -50,7 +50,7 @@ class FCDelegateWrap
     }
     void  MakeDeleteCallFunc(Type nClassType)
     {
-        // 得到委托的参数
+        // 得到委托的参数
         MethodInfo method = nClassType.GetMethod("Invoke");
         ParameterInfo[] allParams = method.GetParameters();  // 函数参数
         FCValueType ret_value = FCValueType.TransType(method.ReturnType);
