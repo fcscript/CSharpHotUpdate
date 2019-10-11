@@ -407,8 +407,10 @@ public class FCClassWrap
     }
     void MakeParamNew(ConstructorInfo conInfo, int nFuncIndex)
     {
-        if (0 != (MethodAttributes.SpecialName & conInfo.Attributes))
+        ParameterInfo[] allParams = conInfo.GetParameters();
+        if(allParams == null || allParams.Length == 0)
         {
+            MakeDefNew();
             return;
         }
         if (m_bPartWrap)
@@ -425,13 +427,6 @@ public class FCClassWrap
         }
         if (conInfo.IsDefined(typeof(ObsoleteAttribute), false))
         {
-            return;
-        }
-
-        ParameterInfo[] allParams = conInfo.GetParameters();
-        if(allParams == null || allParams.Length == 0)
-        {
-            MakeDefNew();
             return;
         }
 

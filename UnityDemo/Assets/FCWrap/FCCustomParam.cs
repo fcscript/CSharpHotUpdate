@@ -251,6 +251,26 @@ class FCCustomParam
         }
         return rList;
     }
+    public static Type[] GetArray(ref Type[] rList, long L, int nIndex)
+    {
+        try
+        {
+            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
+            int nArraySize = FCLibHelper.fc_get_array_size(ptr);
+            rList = new Type[nArraySize];
+            for (int i = 0; i < nArraySize; ++i)
+            {
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                Type item = FCGetObj.GetObj<Type>(item_ptr);
+                rList[i] = item;
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return rList;
+    }
     public static Material[] GetArray(ref Material[] rList, long L, int nIndex)
     {
         try

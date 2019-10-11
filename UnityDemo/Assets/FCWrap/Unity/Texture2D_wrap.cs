@@ -14,6 +14,9 @@ public class Texture2D_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("Texture2D");
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new3);
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new2);
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new1);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -56,6 +59,68 @@ public class Texture2D_wrap
         FCLibHelper.fc_register_class_func(nClassName,"GenerateAtlas",GenerateAtlas_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"ReadPixels_Rect_int_int_bool",ReadPixels_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"ReadPixels_Rect_int_int",ReadPixels1_wrap);
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int  obj_new3(long L)
+    {
+        try
+        {
+            int arg0 = FCLibHelper.fc_get_int(L,0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            UnityEngine.TextureFormat arg2 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,2));
+            bool arg3 = FCLibHelper.fc_get_bool(L,3);
+            bool arg4 = FCLibHelper.fc_get_bool(L,4);
+            Texture2D obj = new Texture2D(arg0,arg1,arg2,arg3,arg4);
+            long nPtr = FCGetObj.PushNewObj<Texture2D>(obj);
+            long ret = FCLibHelper.fc_get_return_ptr(L);
+            FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int  obj_new2(long L)
+    {
+        try
+        {
+            int arg0 = FCLibHelper.fc_get_int(L,0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            UnityEngine.TextureFormat arg2 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,2));
+            bool arg3 = FCLibHelper.fc_get_bool(L,3);
+            Texture2D obj = new Texture2D(arg0,arg1,arg2,arg3);
+            long nPtr = FCGetObj.PushNewObj<Texture2D>(obj);
+            long ret = FCLibHelper.fc_get_return_ptr(L);
+            FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int  obj_new1(long L)
+    {
+        try
+        {
+            int arg0 = FCLibHelper.fc_get_int(L,0);
+            int arg1 = FCLibHelper.fc_get_int(L,1);
+            Texture2D obj = new Texture2D(arg0,arg1);
+            long nPtr = FCGetObj.PushNewObj<Texture2D>(obj);
+            long ret = FCLibHelper.fc_get_return_ptr(L);
+            FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        return 0;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]

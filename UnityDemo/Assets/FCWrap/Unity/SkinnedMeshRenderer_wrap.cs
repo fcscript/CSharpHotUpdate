@@ -14,6 +14,7 @@ public class SkinnedMeshRenderer_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("SkinnedMeshRenderer");
+        FCLibHelper.fc_register_class_new(nClassName, obj_new);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -28,6 +29,15 @@ public class SkinnedMeshRenderer_wrap
         FCLibHelper.fc_register_class_func(nClassName,"GetBlendShapeWeight",GetBlendShapeWeight_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"SetBlendShapeWeight",SetBlendShapeWeight_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"BakeMesh",BakeMesh_wrap);
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int  obj_new(long L)
+    {
+        long nPtr = FCGetObj.NewObj<SkinnedMeshRenderer>();
+        long ret = FCLibHelper.fc_get_return_ptr(L);
+        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        return 0;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]

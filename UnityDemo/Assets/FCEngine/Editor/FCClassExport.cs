@@ -181,6 +181,26 @@ class FCClassExport
     void PushConstructor(ConstructorInfo cons)
     {
         ParameterInfo[] allParams = cons.GetParameters();
+        // 如果是有参数的，就要考虑要不是导出
+        if(allParams != null && allParams.Length > 0)
+        {
+            if (m_bPartWrap)
+            {
+                if (!cons.IsDefined(typeof(PartWrapAttribute), false))
+                {
+                    return;
+                }
+            }
+            // 如果该函数有不导出的标记
+            if (cons.IsDefined(typeof(DontWrapAttribute), false))
+            {
+                return;
+            }
+            if (cons.IsDefined(typeof(ObsoleteAttribute), false))
+            {
+                return;
+            }
+        }
         string szCallParam = string.Empty;
         Type nParamType;
         if(allParams != null)

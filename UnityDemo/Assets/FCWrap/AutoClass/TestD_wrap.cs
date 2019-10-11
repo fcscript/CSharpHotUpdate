@@ -14,11 +14,21 @@ public class TestD_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("TestD");
+        FCLibHelper.fc_register_class_new(nClassName, obj_new);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
         FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
         FCLibHelper.fc_register_class_func(nClassName,"SetValue",SetValue_wrap);
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
+    public static int  obj_new(long L)
+    {
+        long nPtr = FCGetObj.NewObj<TestD>();
+        long ret = FCLibHelper.fc_get_return_ptr(L);
+        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        return 0;
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
