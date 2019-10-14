@@ -64,6 +64,10 @@ class FCClassExport
 
             if (nType == typeof(IntPtr))
                 continue;
+            if (nType.Name.IndexOf("UnityEvent`") != -1)
+                continue;
+            if (nType.Name.IndexOf('&') != -1)
+                continue;
 
             if(nType == typeof(Type))
             {
@@ -289,17 +293,22 @@ class FCClassExport
         {
             return;
         }
+        if (m_CurDontWrapName.ContainsKey(value.Name))
+        {
+            return;
+        }
         PushNameSpace(value.FieldType.Namespace);
         PushRefType(value.FieldType);
+        bool bCanWrite = !(value.IsInitOnly || value.IsLiteral);
         // 生成get_value, set_value方法
         FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(value.FieldType);
         if (ret_value.m_nTemplateType == fc_value_tempalte_type.template_none
             && ret_value.m_nValueType == fc_value_type.fc_value_delegate)
         {
-            PushPropertyFunc(value.FieldType, value.Name, false, true, value.IsStatic);
+            PushPropertyFunc(value.FieldType, value.Name, false, bCanWrite, value.IsStatic);
         }
         else
-            PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
+            PushPropertyFunc(value.FieldType, value.Name, true, bCanWrite, value.IsStatic);
     }
     // 功能：添加get-set方法
     void PushPropertyInfo(PropertyInfo property)
@@ -334,18 +343,28 @@ class FCClassExport
         MethodInfo metGet = property.GetGetMethod();
         MethodInfo metSet = property.GetSetMethod();
         bool bStatic = false;
+        bool bCanRead = false;
+        bool bCanWrite = false;
         try
         {
             if (property.CanRead)
-                bStatic = metGet.IsStatic;
+            {
+                bCanRead = metGet != null;
+                if (metGet != null)
+                    bStatic = metGet.IsStatic;
+            }
             if (property.CanWrite)
-                bStatic = metSet.IsStatic;
+            {
+                bCanWrite = metSet != null;
+                if(metSet != null)
+                    bStatic = metSet.IsStatic;
+            }
         }
         catch (Exception e)
         {
             Debug.LogException(e);
         }
-        PushPropertyFunc(nVaueType, property.Name, property.CanRead, property.CanWrite, bStatic);
+        PushPropertyFunc(nVaueType, property.Name, bCanRead, bCanWrite, bStatic);
     }
     void PushPropertyFunc(Type nVaueType, string szName, bool bCanGet, bool bCanSet, bool bStatic)
     {
@@ -375,6 +394,8 @@ class FCClassExport
         foreach (MethodInfo method in allMethods)
         {
             if (!IsNeedExportMember(method.Name))
+                continue;
+            if (m_CurDontWrapName.ContainsKey(method.Name))
                 continue;
             // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
             szDeclareName = FCValueType.GetMethodDeclare(method);

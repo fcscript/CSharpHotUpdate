@@ -10,8 +10,8 @@ using UnityEditor;
 
 public static class FCExport
 {
-    [MenuItem("FCScript/导出脚本类", false, 5)]
-    static void ExportAll()
+    [MenuItem("FCScript/示例导出脚本类", false, 5)]
+    static void ExportSpecial()
     {
         FCClassWrap pWrap = new FCClassWrap();
         pWrap.BeginExport("");
@@ -22,6 +22,20 @@ public static class FCExport
 
         pWrap.EndExport();
     }
+    [MenuItem("FCScript/全部导出脚本类", false, 5)]
+    static void ExportAll()
+    {
+        FCClassWrap pWrap = new FCClassWrap();
+        pWrap.BeginExport("");
+
+        Dictionary<string, List<Type>> allExportTypes = FCExclude.GetAllExportType();
+        foreach(var v in allExportTypes)
+        {
+            WrapAllClass(pWrap, v.Key, v.Value);
+        }
+        WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
+        pWrap.EndExport();
+    }
     [MenuItem("FCScript/精简导出脚本类", false, 5)]
     static void ExportSimple()
     {
@@ -30,7 +44,7 @@ public static class FCExport
         szPath = szPath.Substring(0, szPath.Length - 6);
         FCRefClassCfg used_cfg = FCRefClassCfg.LoadCfg(szPath + "ref_name.xml");
         FCRefClassCfg custom = FCRefClassCfg.LoadCfg(szPath + "custom_name.xml");
-        if(used_cfg != null)
+        if (used_cfg != null)
             used_cfg.MergeFinder(custom);
 
         FCClassWrap pWrap = new FCClassWrap();
@@ -137,22 +151,58 @@ public static class FCExport
         }
         pWrap.EndModleWrap();
     }
+
+    // 功能：导出这个模块下的所有类
+    static void WrapAllClass(FCClassWrap pWrap, string szNamespace, List<Type> rList)
+    {
+        string szModleName = szNamespace.Replace('.', '_');
+        pWrap.BeginModleWrap(szModleName);
+        int nIndex = 0;
+        foreach(Type t in rList)
+        {
+            ++nIndex;
+            try
+            {
+                PrepareWrap(pWrap, t);
+                pWrap.WrapClass(t);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("导出异常, nIndex = " + nIndex);
+                Debug.LogException(e);
+            }
+        }                
+        pWrap.EndModleWrap();
+    }
+
+    static void PrepareWrap(FCClassWrap pWrap, Type nClassType)
+    {
+        // 添加黑名单函数
+        List<string> rList = FCExclude.GetClassBlackList(nClassType);
+        if(rList != null)
+        {
+            foreach(string funcName in rList)
+            {
+                pWrap.PushCurrentDontWrapName(funcName);
+            }
+        }
+        // 目前只有两个类型支持模板函数，其他的需要用户自己扩展
+        if(nClassType == typeof(UnityEngine.Component)
+            || nClassType == typeof(UnityEngine.GameObject))
+        {
+            List<Type> aSupportType = FCExclude.SupportTemplateTypes;
+            pWrap.PushTemplateFuncWrapSupport("AddComponent", aSupportType);
+            pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
+        }
+    }
+    
     static void AddTemplateSurport(FCClassWrap pWrap)
     {
-        List<Type> aSupportType = new List<Type>();
-        aSupportType.Add(typeof(UnityEngine.SkinnedMeshRenderer));
-        aSupportType.Add(typeof(UnityEngine.MeshRenderer));
-        aSupportType.Add(typeof(UnityEngine.Animation));
-        aSupportType.Add(typeof(UnityEngine.Light));
-
-        aSupportType.Add(typeof(UnityEngine.UI.Button));
-        aSupportType.Add(typeof(UnityEngine.UI.Text));
-        // 在这里添加其他的类的吧
-
+        List<Type> aSupportType = FCExclude.SupportTemplateTypes;
         pWrap.PushTemplateFuncWrapSupport("AddComponent", aSupportType);
         pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
     }
-
+        
     [MenuItem("FCScript/编译脚本 _F7", false, 5)]
     static void CompilerScript()
     {
@@ -162,11 +212,15 @@ public static class FCExport
         FCCompilerHelper.CompilerProj(szPath);
     }
     //[MenuItem("FCScript/测试", false, 5)]
-    //static void TestXml()
+    //static void TestExport()
     //{
-    //    Assembly assembly = Assembly.Load("UnityEngine.UI");
-    //    Type t1 = assembly.GetType("Button");
-    //    Type t2 = assembly.GetType("UnityEngine.UI.Button");
-    //    Type t3 = assembly.GetType("UnityEngine.Button");                
+    //    FCClassWrap pWrap = new FCClassWrap();
+    //    pWrap.BeginExport("");
+
+    //    pWrap.BeginModleWrap("AutoClass");
+    //    pWrap.WrapClass(typeof(UnityEngine.GL));
+    //    pWrap.EndModleWrap();
+
+    //    pWrap.EndExport();
     //}
 }

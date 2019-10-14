@@ -38,14 +38,14 @@ public enum  fc_value_type
     fc_value_intrect,  // IntRect
     fc_value_rect,  // Rect
     
-    fc_value_system_object, // System.Object与
+    fc_value_system_object, //
     fc_value_unity_object,  // Unity.Object
-    fc_value_object, // 普通的类
+    fc_value_object, //
 
-    fc_value_enum,   // 枚举
+    fc_value_enum,   //
     fc_value_int_ptr, // IntPtr
     
-    fc_value_delegate,  // 委托
+    fc_value_delegate,  //
     fc_value_action,    // Action
     fc_value_unity_action, // UnityAction
     fc_value_task,         // Task<>
@@ -53,8 +53,8 @@ public enum  fc_value_type
 
 public enum fc_value_tempalte_type
 {
-    template_none,  // 普通变量
-    template_array, // 数组
+    template_none,  //
+    template_array, //
     template_list,  // list
     template_map,   // map/Dictionary
     template_task,  // task<Type>
@@ -63,8 +63,8 @@ public enum fc_value_tempalte_type
 public class FCValueType
 {
     public fc_value_tempalte_type m_nTemplateType;
-    public fc_value_type m_nKeyType;   // key类型
-    public fc_value_type m_nValueType; // value类型
+    public fc_value_type m_nKeyType;   //
+    public fc_value_type m_nValueType; //
     public Type m_key;
     public Type m_value;
 
@@ -90,7 +90,6 @@ public class FCValueType
     {
         get { return fc_value_tempalte_type.template_map == m_nTemplateType; }
     }
-    // 功能：分析类型
     public void SetType(Type nType)
     {
         if(nType.IsArray)
@@ -106,7 +105,7 @@ public class FCValueType
         if (szTypeName == "List`1"
             || szTypeName == "List`1&")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // 模板的参数
+            Type[] argtypes = nType.GetGenericArguments();
             m_nTemplateType = fc_value_tempalte_type.template_list;
             m_key = m_value = argtypes[0];
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -115,7 +114,7 @@ public class FCValueType
         if (szTypeName == "Dictionary`2"
             || szTypeName == "Dictionary`2&")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // 模板的参数
+            Type[] argtypes = nType.GetGenericArguments();
             m_nTemplateType = fc_value_tempalte_type.template_map;
             m_key = argtypes[0];
             m_value = argtypes[1];
@@ -125,7 +124,7 @@ public class FCValueType
         }
         if(szTypeName == "Task`1")
         {
-            Type[] argtypes = nType.GetGenericArguments(); // 模板的参数
+            Type[] argtypes = nType.GetGenericArguments();
             m_nTemplateType = fc_value_tempalte_type.template_task;
             m_key = m_value = argtypes[0];
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -141,9 +140,14 @@ public class FCValueType
     }
     public string GetValueName(bool bCSharp, bool bFullName = false)
     {
+        if (s_TypeFullName != null)
+        {
+            string szFullName = string.Empty;
+            if (s_TypeFullName.TryGetValue(m_value, out szFullName))
+                return szFullName;
+        }
         return GetBaseValueTypeName(m_nValueType, m_value, bCSharp, bFullName);
     }
-    // 得到类型的名字
     public string GetTypeName(bool bSharp, bool bFullName = false)
     {
         switch(m_nTemplateType)
@@ -169,15 +173,22 @@ public class FCValueType
     }
     public string GetDelegateName(bool bSharp)
     {
-        // 检测
         return GetDelegateTypeName(m_value, bSharp);
     }
-    public static string GetClassName(Type nType)
+    public static string GetClassName(Type nType, bool bCSharp = false)
     {
         if (nType == typeof(UnityEngine.Object))
             return "UnityObject";
         else
+        {
+            if(bCSharp)
+            {
+                string szName = nType.FullName;
+                szName = szName.Replace('+', '.');
+                return szName;
+            }
             return nType.Name;
+        }
     }
     static string GetDelegateTypeName(Type nType, bool bSharp)
     {
@@ -190,6 +201,7 @@ public class FCValueType
             default:
                 break;
         }
+        bool bFuncDelegate = false;
         bool bBaseDelegate = false;
         if (szName.IndexOf("Action`") != -1)
         {
@@ -201,12 +213,21 @@ public class FCValueType
             bBaseDelegate = true;
             szName = "UnityAction";
         }
+        else if(szName.IndexOf("Func`") != -1)
+        {
+            bFuncDelegate = true;
+            bBaseDelegate = true;
+            szName = "Func";
+        }
+
         if (bBaseDelegate)
         {
             MethodInfo method = nType.GetMethod("Invoke");
-            ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+            ParameterInfo[] allParams = method.GetParameters();
+            int nParamCount = 0;
             if (allParams != null)
             {
+                nParamCount = allParams.Length;
                 szName += "_";
                 for (int i = 0; i<allParams.Length; ++i)
                 {
@@ -216,11 +237,25 @@ public class FCValueType
                     szName += value_param.GetTypeName(true, true);
                 }
             }
+            if(bFuncDelegate)
+            {
+                FCValueType value_param = TransType(method.ReturnType);
+                if (nParamCount > 0)
+                    szName += "_";
+                szName += value_param.GetTypeName(true, true);
+            }
         }
         string szCSharpName = szName.Replace('+', '.');
         return szCSharpName;
     }
 
+    static Dictionary<Type, string> s_TypeFullName;
+    public static void RegisterTypeFullName(Type nType ,string szFullName)
+    {
+        if (s_TypeFullName == null)
+            s_TypeFullName = new Dictionary<Type, string>();
+        s_TypeFullName[nType] = szFullName;
+    }
     static Dictionary<Type, FCValueType> s_TransType;
     public static FCValueType TransType(Type nType)
     {
@@ -325,8 +360,7 @@ public class FCValueType
         }
         return false;
     }
-
-    // 功能：添加返回值
+        
     public static void PushReturnValue(StringBuilder fileData, string szLeftEmpty, FCValueType value, string Ptr, string szValueName, bool bAttrib)
     {
         // fc_push_return_intptr(L, pPtr.nPtr);
@@ -392,8 +426,7 @@ public class FCValueType
     {
         return nValueType == fc_value_type.fc_value_system_object || nValueType == fc_value_type.fc_value_object || nValueType == fc_value_type.fc_value_unity_object;
     }    
-
-    // 功能：得到变量的类型名
+    
     public static string GetBaseValueTypeName(fc_value_type nFCType, Type nType, bool bCSharp, bool bFullName)
     {
         switch(nFCType)
@@ -417,9 +450,9 @@ public class FCValueType
             case fc_value_type.fc_value_double:
                 return "double";
             case fc_value_type.fc_value_int64:
-                return bCSharp ? "long": "int64";
+                return bCSharp ? "long": "long";
             case fc_value_type.fc_value_uint64:
-                return bCSharp ? "ulong" : "uint64";
+                return bCSharp ? "ulong" : "ulong";
             case fc_value_type.fc_value_string_a:
                 return bCSharp ? "string" : "StringA";
             case fc_value_type.fc_value_void:
@@ -465,7 +498,25 @@ public class FCValueType
                 break;
         }
         string szCSharpName = bFullName ? nType.FullName : nType.Name;
+        if(string.IsNullOrEmpty(szCSharpName))
+        {
+            return string.Empty;
+        }
+        if(!bFullName && !bCSharp)
+        {            
+            if(nType.IsNested && nType.IsEnum)
+            {
+                string szFullName = nType.FullName;
+                int nIndex = szFullName.LastIndexOf('.');
+                if(nIndex != -1)
+                {
+                    szCSharpName = szFullName.Substring(nIndex + 1);
+                }
+            }
+        }
+
         szCSharpName = szCSharpName.Replace('+', '.');
+        szCSharpName = szCSharpName.Replace("&", "");
         return szCSharpName;
     }
 
@@ -473,6 +524,7 @@ public class FCValueType
     {
         string szName = bFullName ? nType.FullName : nType.Name;
         bool bBaseDelegate = false;
+        bool bFuncDelegate = false;
         if (szName.IndexOf("Action`") != -1)
         {
             bBaseDelegate = true;
@@ -483,10 +535,16 @@ public class FCValueType
             bBaseDelegate = true;
             szName = "UnityAction";
         }
+        else if (szName.IndexOf("Func`") != -1)
+        {
+            bFuncDelegate = true;
+            bBaseDelegate = true;
+            szName = "Func";
+        }
         if (bBaseDelegate)
         {
             MethodInfo method = nType.GetMethod("Invoke");
-            ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+            ParameterInfo[] allParams = method.GetParameters();
             if (allParams != null)
             {
                 szName += "<";
@@ -495,6 +553,13 @@ public class FCValueType
                     FCValueType value_param = TransType(allParams[i].ParameterType);
                     if (i > 0)
                         szName += ",";
+                    szName += value_param.GetTypeName(true, true);
+                }
+                if(bFuncDelegate)
+                {
+                    if(allParams.Length > 0)
+                        szName += ",";
+                    FCValueType value_param = TransType(method.ReturnType);
                     szName += value_param.GetTypeName(true, true);
                 }
                 szName += ">";
@@ -591,11 +656,10 @@ public class FCValueType
         else
             return nType.GetMethods();
     }
-    // 功能：返回函数的名字+调用参数
     public static string GetMethodDeclare(MethodInfo method)
     {
         string szFullName = method.Name;
-        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        ParameterInfo[] allParams = method.GetParameters();
         string szCallParam = string.Empty;
         if (allParams != null)
         {
@@ -617,8 +681,8 @@ public class FCValueType
     }
     static bool  IsCanReplaceMethod(MethodInfo method_old, MethodInfo method_new)
     {
-        ParameterInfo[] allParams1 = method_old.GetParameters();  // 函数参数
-        ParameterInfo[] allParams2 = method_new.GetParameters();  // 函数参数
+        ParameterInfo[] allParams1 = method_old.GetParameters();
+        ParameterInfo[] allParams2 = method_new.GetParameters();
         Type nParamType1;
         Type nParamType2;
         for (int i = 0; i<allParams1.Length; ++i)
@@ -629,7 +693,6 @@ public class FCValueType
             FCValueType value2 = TransType(nParamType2);
             if(value1.IsArray && value2.IsList)
             {
-                // 可以替换
                 return true;
             }
         }

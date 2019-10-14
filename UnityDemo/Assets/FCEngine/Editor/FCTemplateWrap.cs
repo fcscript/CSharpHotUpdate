@@ -20,6 +20,8 @@ class FCTemplateWrap
     string m_szExportPath;
     StringBuilder m_szTempBuilder;
 
+    Dictionary<string, bool> m_ExportFlags = new Dictionary<string, bool>();
+
     static FCTemplateWrap s_pIns;
     public static FCTemplateWrap Instance
     {
@@ -127,13 +129,23 @@ class FCTemplateWrap
         PushNameSapce(nType.Namespace);
         return value;
     }
-    
+
+    bool  TrySetExportFlag(string szFuncDeclare)
+    {
+        if (m_ExportFlags.ContainsKey(szFuncDeclare))
+            return true;
+        m_ExportFlags[szFuncDeclare] = true;
+        return false;
+    }
     void  MakeListWrap(FCValueType value)
     {
         StringBuilder fileData = m_szTempBuilder;
 
-        string szCharpName = value.GetValueName(true);
-        fileData.AppendFormat("    public static List<{0}> GetList(ref List<{0}> rList, long L, int nIndex)\r\n", szCharpName, szCharpName);
+        string szCharpName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static List<{0}> GetList(ref List<{0}> rList, long L, int nIndex)", szCharpName, szCharpName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -303,7 +315,7 @@ class FCTemplateWrap
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
                     fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
-                    fileData.AppendFormat("               {0} item = ({1})FCLibHelper.fc_set_array_int(item_ptr);\r\n", szCharpName, szCharpName);
+                    fileData.AppendFormat("                {0} item = ({1})FCLibHelper.fc_get_value_int(item_ptr);\r\n", szCharpName, szCharpName);
                     if (bList)
                         fileData.AppendLine("                rList.Add(item);");
                     else
@@ -337,8 +349,11 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
 
-        string szCharpName = value.GetValueName(true);
-        fileData.AppendFormat("    public static {0}[] GetArray(ref {1}[] rList, long L, int nIndex)\r\n", szCharpName, szCharpName);
+        string szCharpName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static {0}[] GetArray(ref {1}[] rList, long L, int nIndex)", szCharpName, szCharpName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -360,9 +375,12 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
 
-        string szKeyName = value.GetKeyName(true);
-        string szValeuName = value.GetValueName(true);
-        fileData.AppendFormat("    public static Dictionary<{0},{1}> GetDictionary(ref Dictionary<{2},{3}> rList, long L, int nIndex)\r\n", szKeyName, szValeuName, szKeyName, szValeuName);
+        string szKeyName = value.GetKeyName(true, true);
+        string szValeuName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static Dictionary<{0},{1}> GetDictionary(ref Dictionary<{2},{3}> rList, long L, int nIndex)", szKeyName, szValeuName, szKeyName, szValeuName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -477,8 +495,11 @@ class FCTemplateWrap
         }
 
         StringBuilder fileData = m_szTempBuilder;
-        string szTypeName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void OutArray({0} []rList, long L, int nIndex)\r\n", szTypeName);
+        string szTypeName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void OutArray({0} []rList, long L, int nIndex)", szTypeName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -504,8 +525,11 @@ class FCTemplateWrap
     void MakeOutFastArray(FCValueType value)
     {
         StringBuilder fileData = m_szTempBuilder;
-        string szTypeName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void OutArray({0} []rList, long L, int nIndex)\r\n", szTypeName);
+        string szTypeName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void OutArray({0} []rList, long L, int nIndex)", szTypeName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -523,9 +547,12 @@ class FCTemplateWrap
     void MakeOutList(FCValueType value)
     {
         StringBuilder fileData = m_szTempBuilder;
-        string szTypeName = value.GetTypeName(true);
+        string szTypeName = value.GetTypeName(true, true);
 
-        fileData.AppendFormat("    public static void OutList({0} rList, long L, int nIndex)\r\n", szTypeName);
+        string szFuncDeclare = string.Format("    public static void OutList({0} rList, long L, int nIndex)", szTypeName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -575,9 +602,12 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
         
-        string szKeyName = value.GetKeyName(true);
-        string szValeuName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void OutDictionary(Dictionary<{0}, {1}> rList, long L, int nIndex)\r\n", szKeyName, szValeuName);
+        string szKeyName = value.GetKeyName(true, true);
+        string szValeuName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void OutDictionary(Dictionary<{0}, {1}> rList, long L, int nIndex)", szKeyName, szValeuName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -671,8 +701,11 @@ class FCTemplateWrap
         }
 
         StringBuilder fileData = m_szTempBuilder;
-        string szValueName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void ReturnArray({0} []rList, long ptr)\r\n", szValueName);
+        string szValueName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void ReturnArray({0} []rList, long ptr)", szValueName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -699,8 +732,11 @@ class FCTemplateWrap
     void MakeReturnFastArray(FCValueType value)
     {
         StringBuilder fileData = m_szTempBuilder;
-        string szTypeName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void ReturnArray({0} []rList, long ptr)\r\n", szTypeName);
+        string szTypeName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void ReturnArray({0} []rList, long ptr)", szTypeName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -717,8 +753,11 @@ class FCTemplateWrap
     void MakeReturnList(FCValueType value)
     {
         StringBuilder fileData = m_szTempBuilder;
-        string szValueName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void ReturnList(List<{0}> rList, long ptr)\r\n", szValueName);
+        string szValueName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void ReturnList(List<{0}> rList, long ptr)", szValueName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
@@ -745,9 +784,12 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
 
-        string szKeyName = value.GetKeyName(true);
-        string szValeuName = value.GetValueName(true);
-        fileData.AppendFormat("    public static void ReturnDictionary(Dictionary<{0}, {1}> rList, long ptr)\r\n", szKeyName, szValeuName);
+        string szKeyName = value.GetKeyName(true, true);
+        string szValeuName = value.GetValueName(true, true);
+        string szFuncDeclare = string.Format("    public static void ReturnDictionary(Dictionary<{0}, {1}> rList, long ptr)", szKeyName, szValeuName);
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");

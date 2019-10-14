@@ -195,6 +195,10 @@ public class FCClassWrap
             {
                 if (nInnerType.IsEnum)
                     continue;
+                if (nInnerType.IsDefined(typeof(ObsoleteAttribute), false))
+                    continue;
+                if (IsDelegate(nInnerType))
+                    continue;
                 WrapClassEx(nInnerType, bPartWrap, true, true, nClassType);
             }
         }
@@ -204,6 +208,12 @@ public class FCClassWrap
     {
         if (!IsNeedExportClass(nClassType))
             return;
+        if(nClassType.IsNested)
+        {
+            if (!bInnerClass)
+                return ;
+        }
+
         m_pRefClass = null;
         if (m_refClassCfg != null)
             m_pRefClass = m_refClassCfg.FindClass(nClassType.Name);
@@ -213,15 +223,14 @@ public class FCClassWrap
         //m_nCurParentType = nParentType;
         m_bOnlyThisAPI = bOnlyThisApi;
         m_szTempBuilder.Length = 0;
-        string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
+        string szClassWrapName = FCValueType.GetClassName(nClassType);
+        string szWrapName = szClassWrapName + "_wrap";
         m_CurWrapClassNames.Add(szWrapName);
-        m_szCurClassName = FCValueType.GetClassName(nClassType);
-        string szClassFileName = m_szCurClassName;
-        if (bInnerClass)
-            m_szCurClassName = FCValueType.GetClassName(nParentType) + '.' + m_szCurClassName;
+        m_szCurClassName = FCValueType.GetClassName(nClassType, true);
+
         m_nCurClassType = nClassType;
         WrapSubClass(m_szTempBuilder, nClassType);
-        m_export.ExportClass(nClassType, m_szFCScriptPath + szClassFileName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc, m_pRefClass);
+        m_export.ExportClass(nClassType, m_szFCScriptPath + szClassWrapName + ".cs", bPartWrap, bOnlyThisApi, m_CurDontWrapName, m_CurSupportTemplateFunc, m_pRefClass);
         m_CurDontWrapName.Clear();
         m_CurSupportTemplateFunc.Clear();
     }
@@ -359,6 +368,8 @@ public class FCClassWrap
 
     void MakeGetObj()
     {
+        if (m_nCurClassType.IsAbstract && m_nCurClassType.IsSealed) // 抽象类不能实例化
+            return;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendFormat("    public static {0} get_obj(long L)\r\n", m_szCurClassName);
@@ -377,6 +388,8 @@ public class FCClassWrap
         ConstructorInfo[] allConInfos = m_nCurClassType.GetConstructors(); // 得到构造函数信息
         // 先检测空的构造
         if (allConInfos == null)
+            return;
+        if (m_nCurClassType.IsAbstract) // 抽象类不能实例化
             return;
         int nCount = 0;
         foreach(ConstructorInfo conInfo in allConInfos)
@@ -492,6 +505,8 @@ public class FCClassWrap
     }
     void MakeDel()
     {
+        if (m_nCurClassType.IsAbstract) // 抽象类不能实例化
+            return;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
@@ -510,6 +525,8 @@ public class FCClassWrap
     }
     void MakeReleaseRef()
     {
+        if (m_nCurClassType.IsAbstract) // 抽象类不能实例化
+            return;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
@@ -528,17 +545,27 @@ public class FCClassWrap
     }
     void MakeHash()
     {
+        if (m_nCurClassType.IsAbstract) // 抽象类不能实例化
+            return;
+        bool bStruct = m_nCurClassType.IsValueType;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
         fileData.AppendLine("    public static int  obj_hash(long L)");
         fileData.AppendLine("    {");
         fileData.AppendFormat("        {0} obj = FCGetObj.GetObj<{0}>(L);\r\n", m_szCurClassName, m_szCurClassName);
-        fileData.AppendLine("        if(obj != null)");
-        fileData.AppendLine("        {");
-        fileData.AppendLine("            return obj.GetHashCode();");
-        fileData.AppendLine("        }");
-        fileData.AppendLine("        return 0;");
+        if(bStruct)
+        {
+            fileData.AppendLine("        return obj.GetHashCode();");
+        }
+        else
+        {
+            fileData.AppendLine("        if(obj != null)");
+            fileData.AppendLine("        {");
+            fileData.AppendLine("            return obj.GetHashCode();");
+            fileData.AppendLine("        }");
+            fileData.AppendLine("        return 0;");
+        }
         fileData.AppendLine("    }");
 
         WrapFuncDesc func = new WrapFuncDesc();
@@ -550,6 +577,9 @@ public class FCClassWrap
     }
     void MakeEqual()
     {
+        if (m_nCurClassType.IsAbstract) // 抽象类不能实例化
+            return;
+        bool bStruct = m_nCurClassType.IsValueType;
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]");
@@ -557,15 +587,22 @@ public class FCClassWrap
         fileData.AppendLine("    {");
         fileData.AppendFormat("        {0} left  = FCGetObj.GetObj<{0}>(L);\r\n", m_szCurClassName, m_szCurClassName);
         fileData.AppendFormat("        {0} right = FCGetObj.GetObj<{0}>(R);\r\n", m_szCurClassName, m_szCurClassName);
-        fileData.AppendLine("        if(left != null)");
-        fileData.AppendLine("        {");
-        fileData.AppendLine("            return left.Equals(right);");
-        fileData.AppendLine("        }");
-        fileData.AppendLine("        if(right != null)");
-        fileData.AppendLine("        {");
-        fileData.AppendLine("            return right.Equals(left);");
-        fileData.AppendLine("        }");
-        fileData.AppendLine("        return true;");
+        if(bStruct)
+        {
+            fileData.AppendLine("        return left.Equals(right);");
+        }
+        else
+        {
+            fileData.AppendLine("        if(left != null)");
+            fileData.AppendLine("        {");
+            fileData.AppendLine("            return left.Equals(right);");
+            fileData.AppendLine("        }");
+            fileData.AppendLine("        if(right != null)");
+            fileData.AppendLine("        {");
+            fileData.AppendLine("            return right.Equals(left);");
+            fileData.AppendLine("        }");
+            fileData.AppendLine("        return true;");
+        }
         fileData.AppendLine("    }");
 
         WrapFuncDesc func = new WrapFuncDesc();
@@ -615,18 +652,18 @@ public class FCClassWrap
         {
             return;
         }
-
         PushNameSpace(value.FieldType.Namespace);
 
+        bool bCanWrite = !(value.IsInitOnly || value.IsLiteral);
         // 生成get_value, set_value方法
         FCValueType ret_value = FCTemplateWrap.Instance.PushGetTypeWrap(value.FieldType);
         if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_none
             && ret_value.m_nValueType == fc_value_type.fc_value_delegate)
         {
-            PushPropertyDelegate(ret_value, value.Name, false, true, value.IsStatic); // // 委托只能set, 不可get
+            PushPropertyDelegate(ret_value, value.Name, false, bCanWrite, value.IsStatic); // // 委托只能set, 不可get
         }
         else
-            PushPropertyFunc(value.FieldType, value.Name, true, true, value.IsStatic);
+            PushPropertyFunc(value.FieldType, value.Name, true, bCanWrite, value.IsStatic);
     }
     void PushPropertyDelegate(FCValueType ret_value, string szName, bool bCanGet, bool bCanSet, bool bStatic)
     {
@@ -723,18 +760,28 @@ public class FCClassWrap
         MethodInfo  metGet = property.GetGetMethod();
         MethodInfo  metSet = property.GetSetMethod();
         bool bStatic = false;
+        bool bCanRead = false;
+        bool bCanWrite = false;
         try
         {
             if (property.CanRead)
-                bStatic = metGet.IsStatic;
+            {
+                bCanRead = metGet != null;
+                if (metGet != null)
+                    bStatic = metGet.IsStatic;
+            }
             if (property.CanWrite)
-                bStatic = metSet.IsStatic;
+            {
+                bCanWrite = metSet != null;
+                if (metSet != null)
+                    bStatic = metSet.IsStatic;
+            }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogException(e);
         }
-        PushPropertyFunc(nVaueType, property.Name, property.CanRead, property.CanWrite, bStatic);
+        PushPropertyFunc(nVaueType, property.Name, bCanRead, bCanWrite, bStatic);
     }
 
     void  PushPropertyFunc(Type nVaueType, string  szName, bool bCanGet, bool bCanSet, bool bStatic)
@@ -972,7 +1019,7 @@ public class FCClassWrap
             }
             else
             {
-                string szCShareRetName = ret_value.GetTypeName(true);
+                string szCShareRetName = ret_value.GetTypeName(true, true);
                 if (bStatic)
                     fileData.AppendFormat("            {0} ret = {1}.{2}({3});\r\n", szCShareRetName, m_szCurClassName, func.m_szName, szCallParam);
                 else

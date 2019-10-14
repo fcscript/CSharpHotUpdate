@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [AutoWrap]
 public class UserClass
@@ -33,5 +34,12 @@ public class TestPart // 测试导出功能的类，没有实际意义
     public void SetValue(int nValue)
     {
         m_nValue = nValue;
+    }
+}
+
+public class TestFunc
+{
+    public void WaitWhile(Func<int> predicate)
+    {
     }
 }
