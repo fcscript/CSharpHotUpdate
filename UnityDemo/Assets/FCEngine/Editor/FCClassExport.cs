@@ -123,7 +123,11 @@ class FCClassExport
         m_AllRefType[nParentType] = 1;
         PushParentType(nParentType);
 
-        m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", FCValueType.GetClassName(nClassType), FCValueType.GetClassName(nParentType));
+        string szParentName = FCValueType.GetClassName(nParentType);
+        if (szParentName == "UnityEvent`1")
+            szParentName = "UnityEventBase";
+
+        m_szTempBuilder.AppendFormat("\r\nclass  {0} : {1}\r\n", FCValueType.GetClassName(nClassType), szParentName);
         m_szTempBuilder.AppendLine("{");
 
         MakeInnerEnum();  // 分析内部的枚举类
@@ -413,6 +417,29 @@ class FCClassExport
         {
             PushMethodInfo(method);
         }
+
+        // 特殊导出UnityEvent<T>模板类
+        Type nBaseType = m_nClassType.BaseType;
+        if(nBaseType != null && nBaseType.Name == "UnityEvent`1")
+        {
+            PushUnityEventTemplateFunc(m_nClassType);
+        }
+    }
+
+    // 定制UnityEvent<T>模板函数的导出
+    void PushUnityEventTemplateFunc(Type nClassType)
+    {
+        Type nBaseType = nClassType.BaseType;
+        Type[] argTypes = nBaseType.GenericTypeArguments;
+        if (argTypes == null || argTypes.Length == 0)
+            return;
+        Type nParamType = argTypes[0];
+        FCValueType nParamValue = FCValueType.TransType(nParamType);
+        string szParamName = nParamValue.GetValueName(false);
+        
+        m_szTempBuilder.AppendFormat("    public void AddListener(UnityAction<{0}> call){{}}\r\n", szParamName);
+        m_szTempBuilder.AppendFormat("    public void Invoke({0} arg0){{}}\r\n", szParamName);
+        m_szTempBuilder.AppendFormat("    public void RemoveListener(UnityAction<{0}> call){{}}\r\n", szParamName);
     }
     // 功能：添加函数调用的方法
     void PushMethodInfo(MethodInfo method)

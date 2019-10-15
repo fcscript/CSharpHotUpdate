@@ -200,19 +200,24 @@ class FCExclude
                     continue;
                 if (string.IsNullOrEmpty(t.Namespace))
                     continue;
-                List<Type> rList = null;
-                if(allExportType.TryGetValue(t.Namespace, out rList))
-                {
-                    rList.Add(t);
-                }
-                else
-                {
-                    rList = new List<Type>();
-                    rList.Add(t);
-                    allExportType[t.Namespace] = rList;
-                }
+                PushExportType(allExportType, t);
             }
         }
+        PushExportType(allExportType, typeof(UnityEngine.Events.UnityEvent));
         return allExportType;
+    }
+    static void PushExportType(Dictionary<string, List<Type>> allExportType, Type t)
+    {
+        List<Type> rList = null;
+        if (allExportType.TryGetValue(t.Namespace, out rList))
+        {
+            rList.Add(t);
+        }
+        else
+        {
+            rList = new List<Type>();
+            rList.Add(t);
+            allExportType[t.Namespace] = rList;
+        }
     }
 }

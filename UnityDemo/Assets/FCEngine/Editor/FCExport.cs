@@ -211,16 +211,16 @@ public static class FCExport
         szPath += "脚本测试工程.fcproj";
         FCCompilerHelper.CompilerProj(szPath);
     }
-    //[MenuItem("FCScript/测试", false, 5)]
-    //static void TestExport()
-    //{
-    //    FCClassWrap pWrap = new FCClassWrap();
-    //    pWrap.BeginExport("");
+    [MenuItem("FCScript/测试", false, 5)]
+    static void TestExport()
+    {
+        //FCClassWrap pWrap = new FCClassWrap();
+        //pWrap.BeginExport("");
 
-    //    pWrap.BeginModleWrap("AutoClass");
-    //    pWrap.WrapClass(typeof(UnityEngine.GL));
-    //    pWrap.EndModleWrap();
+        //pWrap.BeginModleWrap("AutoClass");
+        //pWrap.WrapClass(typeof(UnityEngine.UI.Scrollbar.ScrollEvent));
+        //pWrap.EndModleWrap();
 
-    //    pWrap.EndExport();
-    //}
+        //pWrap.EndExport();
+    }
 }

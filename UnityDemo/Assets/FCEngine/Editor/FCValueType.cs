@@ -715,4 +715,48 @@ public class FCValueType
             }
         }
     }
+    public static string GetDelegateName(Type nParamType)
+    {
+        FCValueType v = TransType(nParamType);
+        string szName = v.GetValueName(true);
+        return "UnityAction_" + szName + "_delegate";
+    }
+    public static Type GetDelegeteType(Type nClassType, Type nParamType)
+    {
+        FCValueType v = TransType(nParamType);
+        switch (v.m_nValueType)
+        {
+            case fc_value_type.fc_value_bool:
+                return typeof(UnityEngine.Events.UnityAction<bool>);
+            case fc_value_type.fc_value_byte:
+                return typeof(UnityEngine.Events.UnityAction<byte>);
+            case fc_value_type.fc_value_char:
+                return typeof(UnityEngine.Events.UnityAction<char>);
+            case fc_value_type.fc_value_short:
+                return typeof(UnityEngine.Events.UnityAction<short>);
+            case fc_value_type.fc_value_ushort:
+                return typeof(UnityEngine.Events.UnityAction<ushort>);
+            case fc_value_type.fc_value_int:
+                return typeof(UnityEngine.Events.UnityAction<int>);
+            case fc_value_type.fc_value_uint:
+                return typeof(UnityEngine.Events.UnityAction<uint>);
+            case fc_value_type.fc_value_int64:
+                return typeof(UnityEngine.Events.UnityAction<long>);
+            case fc_value_type.fc_value_uint64:
+                return typeof(UnityEngine.Events.UnityAction<ulong>);
+            case fc_value_type.fc_value_float:
+                return typeof(UnityEngine.Events.UnityAction<float>);
+            case fc_value_type.fc_value_double:
+                return typeof(UnityEngine.Events.UnityAction<double>);
+            case fc_value_type.fc_value_string_a:
+                return typeof(UnityEngine.Events.UnityAction<string>);
+            case fc_value_type.fc_value_vector2:
+                return typeof(UnityEngine.Events.UnityAction<Vector2>);
+            case fc_value_type.fc_value_vector3:
+                return typeof(UnityEngine.Events.UnityAction<Vector3>);
+            default:
+                break;
+        }
+        return nClassType;
+    }
 }

@@ -176,7 +176,10 @@ class os
     }
 };
 
-
+// 只是为了兼容UnityEngine.Events.UnityAction
+class UnityAction<T>
+{
+};
 
 //自动导出标签 [export]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]

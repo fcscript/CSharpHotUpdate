@@ -312,6 +312,12 @@ public class FCClassWrap
                 PushMethodInfo(method);
             }
         }
+        // 特殊导出UnityEvent<T>模板类
+        if(nClassType.BaseType.Name == "UnityEvent`1")
+        {
+            PushUnityEventTemplateFunc(nClassType);
+        }
+
         MakeEqual();
         MakeHash();
         MakeReleaseRef();
@@ -685,7 +691,7 @@ public class FCClassWrap
         if (bStatic)
             szLeftName = string.Format("{0}.{1}", m_szCurClassName, szName);
         
-        string szDelegateClassName = string.Format("{0}_deletate", ret_value.GetDelegateName(true));
+        string szDelegateClassName = string.Format("{0}_delegate", ret_value.GetDelegateName(true));
         m_deleteWrap.PushDelegateWrap(ret_value.m_value, szDelegateClassName);
 
         if (bCanSet)
@@ -1152,7 +1158,7 @@ public class FCClassWrap
             }
             if (value.m_nValueType == fc_value_type.fc_value_delegate)
             {
-                string szDelegateClassName = string.Format("{0}_deletate", value.GetDelegateName(true));
+                string szDelegateClassName = string.Format("{0}_delegate", value.GetDelegateName(true));
                 m_deleteWrap.PushDelegateWrap(value.m_value, szDelegateClassName);
 
                 fileData.AppendFormat("{0}{1} func{2} = FCDelegateMng.Instance.GetDelegate<{3}>({4},{5});\r\n", szLeftEmpty, szDelegateClassName, szIndex, szDelegateClassName, Ptr, szIndex);
@@ -1376,6 +1382,134 @@ public class FCClassWrap
         WrapFuncDesc func = new WrapFuncDesc();
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = string.Format("{0}_bridge", method.Name);
+        func.m_bAttrib = false;
+        m_CurClassFunc.Add(func);
+    }
+    // 定制UnityEvent<T>模板函数的导出
+    void  PushUnityEventTemplateFunc(Type nClassType)
+    {
+        Type nBaseType = nClassType.BaseType;
+        Type[] argTypes = nBaseType.GenericTypeArguments;
+        if (argTypes == null)
+            return;
+        OnAddListener(nClassType, argTypes[0]);
+        OnInvoke(nClassType, argTypes[0]);
+        OnRemoveListener(nClassType, argTypes[0]);
+    }
+    void  OnAddListener(Type nClassType, Type nParamType)
+    {
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+
+        Type nDelegateType = FCValueType.GetDelegeteType(nClassType, nParamType);
+
+        string szDelegateName = FCValueType.GetDelegateName(nParamType);
+        m_deleteWrap.PushDelegateWrap(nDelegateType, szDelegateName);
+
+        fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
+        fileData.AppendLine("    public static int AddListener_wrap(long L)");
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+        fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        fileData.AppendFormat("            {0} func0 = FCDelegateMng.Instance.GetDelegate<{1}>(L,0);\r\n", szDelegateName, szDelegateName);
+        fileData.AppendLine("            if(func0 != null)");
+        fileData.AppendLine("                obj.AddListener(func0.CallFunc);");
+        fileData.AppendLine("            // 强制记录一下指针，用于自动删除");
+        //fileData.AppendLine("            if(func0 != null && obj != null)");
+        //fileData.AppendLine("                FCDelegateMng.Instance.RecordDelegate(func0, obj);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        return 0;");
+        fileData.AppendLine("    }");
+
+        string szFuncName = "AddListener_wrap";
+        int nFuncCount = 0;
+        m_CurFuncCount.TryGetValue(szFuncName, out nFuncCount);        
+        m_CurFuncCount[szFuncName] = nFuncCount + 1;
+
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_szContent = fileData.ToString();
+        func.m_szName = func.m_szGetName = func.m_szSetName = "AddListener_wrap";
+        func.m_bAttrib = false;
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        m_CurClassFunc.Add(func);
+    }
+    void OnInvoke(Type nClassType, Type nParamType)
+    {
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+        FCValueType v = FCValueType.TransType(nParamType);
+
+        fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
+        fileData.AppendLine("    public static int Invoke_wrap(long L)");
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+        fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        SetMemberValue(fileData, "            ", v, "arg0", "L", "0", true, false);
+        fileData.AppendLine("            obj.Invoke(arg0);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        return 0;");
+        fileData.AppendLine("    }");
+        
+        string szFuncName = "Invoke_wrap";
+        int nFuncCount = 0;
+        m_CurFuncCount.TryGetValue(szFuncName, out nFuncCount);
+        m_CurFuncCount[szFuncName] = nFuncCount + 1;
+
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_szContent = fileData.ToString();
+        func.m_szName = func.m_szGetName = func.m_szSetName = "Invoke_wrap";
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        func.m_bAttrib = false;
+        m_CurClassFunc.Add(func);
+    }
+    void OnRemoveListener(Type nClassType, Type nParamType)
+    {
+        m_szTempBuilder.Length = 0;
+        StringBuilder fileData = m_szTempBuilder;
+        string szDelegateName = FCValueType.GetDelegateName(nParamType);
+
+        fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
+        fileData.AppendLine("    public static int RemoveListener_wrap(long L)");
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
+        fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
+        fileData.AppendFormat("            {0} func0 = FCDelegateMng.Instance.GetDelegate<{1}>(L,0);\r\n", szDelegateName, szDelegateName);
+        fileData.AppendLine("            if(func0 != null)");
+        fileData.AppendLine("                obj.RemoveListener(func0.CallFunc);");
+        fileData.AppendLine("            // 自动删除管理器中的委托对象");
+        //fileData.AppendLine("            if(func0 != null && obj != null)");
+        //fileData.AppendLine("                FCDelegateMng.Instance.RecordDelegate(func0, null);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        return 0;");
+        fileData.AppendLine("    }");
+        
+        string szFuncName = "RemoveListener_wrap";
+        int nFuncCount = 0;
+        m_CurFuncCount.TryGetValue(szFuncName, out nFuncCount);
+        m_CurFuncCount[szFuncName] = nFuncCount + 1;
+
+        WrapFuncDesc func = new WrapFuncDesc();
+        func.m_szContent = fileData.ToString();
+        func.m_szName = func.m_szGetName = func.m_szSetName = "RemoveListener_wrap";
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         func.m_bAttrib = false;
         m_CurClassFunc.Add(func);
     }
