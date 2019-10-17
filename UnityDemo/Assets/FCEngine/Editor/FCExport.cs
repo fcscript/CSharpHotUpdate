@@ -21,6 +21,7 @@ public static class FCExport
         WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
 
         pWrap.EndExport();
+        MakeFCProj();
     }
     [MenuItem("FCScript/全部导出脚本类", false, 5)]
     static void ExportAll()
@@ -35,6 +36,7 @@ public static class FCExport
         }
         WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
         pWrap.EndExport();
+        MakeFCProj();
     }
     [MenuItem("FCScript/精简导出脚本类", false, 5)]
     static void ExportSimple()
@@ -58,6 +60,7 @@ public static class FCExport
         WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
 
         pWrap.EndExport();
+        MakeFCProj();
     }
     [MenuItem("FCScript/清除Wrap脚本", false, 5)]
     static void ClearWrapFile()
@@ -202,7 +205,58 @@ public static class FCExport
         pWrap.PushTemplateFuncWrapSupport("AddComponent", aSupportType);
         pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
     }
-        
+
+    static void MakeFCProj()
+    {
+        string szRoot = Application.dataPath;
+        szRoot = szRoot.Substring(0, szRoot.Length - 6);
+        string szPath = szRoot + "Script/inport/";
+        string [] allPathFileNames = Directory.GetFiles(szPath, "*.cs", SearchOption.AllDirectories);
+        string szProjPathName = szRoot + "Script/FCProj.csproj";
+        if (!File.Exists(szProjPathName))
+            return;
+        StreamReader file = new StreamReader(szProjPathName);
+        bool bFindInner = false;
+        bool bAdd = false;
+        StringBuilder fileData = new StringBuilder(1024 * 1024 * 2);
+        while(true)
+        {
+            string szLine = file.ReadLine();
+            if (string.IsNullOrEmpty(szLine))
+                break;
+            if(szLine.IndexOf("inner_class\\") != -1)
+            {
+                bFindInner = true;
+                fileData.AppendLine(szLine);
+                continue;
+            }
+            if (szLine.IndexOf("Include=\"inport\\") != -1)
+            {
+                continue;
+            }
+            if (bFindInner && !bAdd)
+            {
+                bAdd = true;
+                string szInportLine = string.Empty;
+                string szFileName = string.Empty;
+                Dictionary<string, bool> fileFlags = new Dictionary<string, bool>();
+                foreach (string szPathName in allPathFileNames)
+                {
+                    szFileName = szPathName.Substring(szPath.Length);
+                    if (fileFlags.ContainsKey(szFileName))
+                        continue;
+                    fileFlags[szFileName] = true;
+                    szInportLine = string.Format("    <Compile Include=\"inport\\{0}\" />", szFileName);
+                    fileData.AppendLine(szInportLine);
+                }
+            }
+            fileData.AppendLine(szLine);
+        }
+        file.Close();
+        File.Delete(szProjPathName);
+        File.WriteAllText(szProjPathName, fileData.ToString());
+    }
+
     [MenuItem("FCScript/编译脚本 _F7", false, 5)]
     static void CompilerScript()
     {
@@ -218,7 +272,7 @@ public static class FCExport
         //pWrap.BeginExport("");
 
         //pWrap.BeginModleWrap("AutoClass");
-        //pWrap.WrapClass(typeof(UnityEngine.UI.Scrollbar.ScrollEvent));
+        //pWrap.WrapClass(typeof(UnityEngine.WheelCollider));
         //pWrap.EndModleWrap();
 
         //pWrap.EndExport();

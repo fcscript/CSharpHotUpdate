@@ -21,7 +21,7 @@ class TestCoroutine
         FCEnumerator.StopCoroutine("Step1");
         FCEnumerator.StartCoroutine(this, Step1());
     }
-    IEnumerator  Step1()
+    IEnumerator Step1()
     {
         ++m_nClickCount;
         m_text.text = "开始执行协程" + m_nClickCount;

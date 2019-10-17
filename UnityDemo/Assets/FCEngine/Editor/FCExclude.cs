@@ -220,4 +220,33 @@ class FCExclude
             allExportType[t.Namespace] = rList;
         }
     }
+
+    static Dictionary<Type, bool> s_InnerType;
+    static void InitInnerType()
+    {
+        // 内部支持的类，不能导出
+        s_InnerType = new Dictionary<Type, bool>();
+        s_InnerType[typeof(IntPtr)] = true;
+        s_InnerType[typeof(System.Collections.IEnumerator)] = true;
+        s_InnerType[typeof(UnityEngine.Vector2)] = true;
+        s_InnerType[typeof(UnityEngine.Vector3)] = true;
+        s_InnerType[typeof(UnityEngine.Vector4)] = true;
+        s_InnerType[typeof(UnityEngine.Matrix4x4)] = true;
+        s_InnerType[typeof(UnityEngine.Plane)] = true;
+        s_InnerType[typeof(UnityEngine.Color32)] = true;
+        s_InnerType[typeof(UnityEngine.Color)] = true;
+        s_InnerType[typeof(UnityEngine.Rect)] = true;
+        s_InnerType[typeof(UnityEngine.Quaternion)] = true;
+        s_InnerType[typeof(UnityEngine.Ray)] = true;
+        s_InnerType[typeof(UnityEngine.Bounds)] = true;
+        s_InnerType[typeof(UnityEngine.WaitForSeconds)] = true;
+    }
+    public static bool IsDontExportClass(Type nType)
+    {
+        if(s_InnerType == null)
+        {
+            InitInnerType();
+        }
+        return s_InnerType.ContainsKey(nType);
+    }
 }

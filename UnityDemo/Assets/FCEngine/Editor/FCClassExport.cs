@@ -29,6 +29,8 @@ class FCClassExport
     Dictionary<string, MethodInfo> m_CurValidMethods = new Dictionary<string, MethodInfo>();
     List<MethodInfo> m_CurMethods = new List<MethodInfo>();
 
+    Dictionary<Type, int> m_CurDelegate = new Dictionary<Type, int>(); // 当前引用的委托
+
     FCRefClass m_pRefClass;
 
     public void ExportDefaultClass(string szPath)
@@ -48,8 +50,8 @@ class FCClassExport
                 continue;
             if (!nType.IsClass)
             {
-                if (!nType.IsValueType)  // 如果不是结构体
-                    continue;
+                //if (!nType.IsValueType && !nType.IsInterface)  // 如果不是结构体, 也是接口类
+                //    continue;
             }
             FCValueType value = FCValueType.TransType(nType);
             if (value.m_nTemplateType != fc_value_tempalte_type.template_none)
@@ -59,11 +61,16 @@ class FCClassExport
             if (FCValueType.IsBaseType(value.m_nValueType))
                 continue;
 
-            if (nType.Name == "T")
+            // 如果是内部的类，不需要再导出了
+            if (FCExclude.IsDontExportClass(nType))
                 continue;
+            //if (nType == typeof(IntPtr))
+            //    continue;
+            //if (nType == typeof(IEnumerator))
+            //    continue;
 
-            if (nType == typeof(IntPtr))
-                continue;
+            if (nType.Name == "T")
+                continue;            
             if (nType.Name.IndexOf("UnityEvent`") != -1)
                 continue;
             if (nType.Name.IndexOf('&') != -1)
@@ -83,7 +90,6 @@ class FCClassExport
             }
             else
             {
-                //m_szFileBuilder.AppendFormat("class {0} : {1}{{}}\r\n", nType.Name, nType.BaseType.Name);
                 Type nParentType = nType.BaseType;
                 if(nParentType != null && m_AllRefType.ContainsKey(nParentType))
                     m_szFileBuilder.AppendFormat("class {0}:{1}{{}}\r\n", nType.Name, nParentType.Name);
@@ -114,6 +120,7 @@ class FCClassExport
         m_szTempBuilder.Length = 0;
         m_CurRefNameSpace.Clear();
         m_CurRefNameSpacesFlags.Clear();
+        m_CurDelegate.Clear();
 
         m_CurDontWrapName = aDontWrapName;
         m_CurSupportTemplateFunc = aTemplateFunc;
@@ -134,6 +141,7 @@ class FCClassExport
         MakeConstructor();  // 分析构造函数
         MakeProperty();  // 分析get - set方法
         MakeMethod();  // 分析函数
+        MakeDelegate(); // 成生委托声明
         m_szTempBuilder.AppendLine("};\r\n");
 
         // 导出类外的枚举
@@ -160,9 +168,10 @@ class FCClassExport
         ConstructorInfo[] allConInfos = m_nClassType.GetConstructors(); // 得到构造函数信息
         if (allConInfos == null)
             return;
-        foreach(ConstructorInfo cons in allConInfos)
+        string szParentInitCall = GetParentInitCall();
+        foreach (ConstructorInfo cons in allConInfos)
         {
-            PushConstructor(cons);
+            PushConstructor(cons, szParentInitCall);
         }
     }
     void PushNameSpace(string szNameSpace)
@@ -202,6 +211,7 @@ class FCClassExport
     {
         if (nType == null)
             return;
+        PushDelegateType(nType);
         PushRefType(nType);
         Type nParentType = nType.BaseType;
         if (nParentType == null)
@@ -213,7 +223,53 @@ class FCClassExport
         //Type  []allParent = nType.GetInterfaces(); // 接口类
         PushParentType(nParentType);
     }
-    void PushConstructor(ConstructorInfo cons)
+    void PushDelegateType(Type nType)
+    {
+        if (nType.BaseType != null && nType.BaseType == typeof(MulticastDelegate))
+        {
+            m_CurDelegate[nType] = 1;
+        }
+    }
+    string GetParentInitCall()
+    {
+        Type nBaseType = m_nClassType.BaseType;
+        if (nBaseType == null)
+            return string.Empty;
+        ConstructorInfo[] allConInfos = nBaseType.GetConstructors(); // 得到构造函数信息
+        if (allConInfos == null)
+            return string.Empty;
+        // 先检测构造参数
+        int nMinParamCount = 10000;
+        ConstructorInfo pCon = null;
+        foreach(ConstructorInfo cons in allConInfos)
+        {
+            ParameterInfo[] allParams = cons.GetParameters();
+            int nCurParamCount = allParams != null ? allParams.Length : 0;
+            if(nMinParamCount > nCurParamCount)
+            {
+                nMinParamCount = nCurParamCount;
+                pCon = cons;
+            }
+        }
+        if (nMinParamCount == 0 || pCon == null)
+            return string.Empty;
+        ParameterInfo[] Params = pCon.GetParameters();
+        string szParamDesc = string.Empty;
+        for(int i = 0; i< Params.Length; ++i)
+        {
+            if (i > 0)
+                szParamDesc += ',';
+            FCValueType value = FCValueType.TransType(Params[i].ParameterType);
+            if (value.m_nValueType == fc_value_type.fc_value_string_a)
+                szParamDesc += "string.Empty";
+            else if(value.m_nValueType == fc_value_type.fc_value_system_object)
+                szParamDesc += "null";
+            else
+                szParamDesc += string.Format("default({0})", value.GetValueName(false));
+        }
+        return string.Format("base({0})", szParamDesc);
+    }
+    void PushConstructor(ConstructorInfo cons, string szParentInitCall)
     {
         ParameterInfo[] allParams = cons.GetParameters();
         // 如果是有参数的，就要考虑要不是导出
@@ -246,6 +302,7 @@ class FCClassExport
                 nParamType = param.ParameterType;
                 PushNameSpace(nParamType.Namespace);
                 PushDelayType(nParamType);
+                PushDelegateType(nParamType);
                 PushRefType(nParamType);
                 if (i > 0)
                     szCallParam += ',';
@@ -254,7 +311,10 @@ class FCClassExport
                 szCallParam = szCallParam + " " + param.Name;
             }
         }
-        m_szTempBuilder.AppendFormat("    public {0}({1}){{}}\r\n", FCValueType.GetClassName(m_nClassType), szCallParam);
+        if(string.IsNullOrEmpty(szParentInitCall))
+            m_szTempBuilder.AppendFormat("    public {0}({1}){{}}\r\n", FCValueType.GetClassName(m_nClassType), szCallParam);
+        else
+            m_szTempBuilder.AppendFormat("    public {0}({1}):{2}{{}}\r\n", FCValueType.GetClassName(m_nClassType), szCallParam, szParentInitCall);
     }
 
     void MakeProperty()
@@ -302,6 +362,7 @@ class FCClassExport
             return;
         }
         PushNameSpace(value.FieldType.Namespace);
+        PushDelegateType(value.FieldType);
         PushRefType(value.FieldType);
         bool bCanWrite = !(value.IsInitOnly || value.IsLiteral);
         // 生成get_value, set_value方法
@@ -342,6 +403,7 @@ class FCClassExport
         //    return;
         //}
         PushNameSpace(property.PropertyType.Namespace);
+        PushDelegateType(property.PropertyType);
         PushRefType(property.PropertyType);
         Type nVaueType = property.PropertyType;
         MethodInfo metGet = property.GetGetMethod();
@@ -382,6 +444,10 @@ class FCClassExport
             szSetBody = " set; ";
         if (bStatic)
             szStatic = "static ";
+        if(!bCanGet && bCanSet)
+        {
+            szSetBody = szSetBody.Replace(";", "{}");
+        }
         FCValueType value = FCValueType.TransType(nVaueType);
         string szValueType = value.GetTypeName(false);
         m_szTempBuilder.AppendFormat("    public {0}{1} {2} {{{3}{4}}}\r\n", szStatic, szValueType, szName, szGetBody, szSetBody);
@@ -490,6 +556,7 @@ class FCClassExport
                     szCallParam += ',';
                 }
                 PushNameSpace(nParamType.Namespace);
+                PushDelegateType(nParamType);
                 PushRefType(nParamType);
                 FCValueType value = FCValueType.TransType(nParamType);
                 szCallParam += value.GetTypeName(false);
@@ -498,6 +565,7 @@ class FCClassExport
             }
         }
         PushNameSpace(method.ReturnType.Namespace);
+        PushDelegateType(method.ReturnType);
         PushRefType(method.ReturnType);
         FCValueType ret_value = FCValueType.TransType(method.ReturnType);
         if(ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
@@ -570,7 +638,11 @@ class FCClassExport
 
         // 只支持枚举的导出
         if (!bEnum)
+        {
+            // 如果是委托
+            PushDelegateType(nClassType);
             return;
+        }
         string szEnumName = nClassType.Name;
         fileBuilder.AppendFormat("{0}public enum {1}\r\n", szLeft, szEnumName);
         fileBuilder.AppendLine(szLeft + "{");
@@ -588,5 +660,34 @@ class FCClassExport
             ++nIndex;
         }
         fileBuilder.AppendLine(szLeft + "};\r\n");
+    }
+    void MakeDelegate()
+    {
+        foreach(Type nType in m_CurDelegate.Keys)
+        {
+            PushDelegateType(m_szTempBuilder, "    ", nType);
+        }
+    }
+    void PushDelegateType(StringBuilder fileBuilder, string szLeft, Type nClassType)
+    {
+        ConstructorInfo[] c1 = nClassType.GetConstructors();
+        MethodInfo method = nClassType.GetMethod("Invoke");
+
+        ParameterInfo[] allParams = method.GetParameters();
+        string szParamDesc = string.Empty;
+        if (allParams != null)
+        {
+            for (int i = 0; i < allParams.Length; ++i)
+            {
+                PushRefType(allParams[i].ParameterType);
+                FCValueType value_param = FCValueType.TransType(allParams[i].ParameterType);
+                if (i > 0)
+                    szParamDesc += ",";
+                szParamDesc += value_param.GetTypeName(false);
+                szParamDesc += " arg" + i;
+            }
+        }
+        FCValueType value_ret = FCValueType.TransType(method.ReturnType);
+        fileBuilder.AppendFormat("{0}public delegate {1} {2}({3});\r\n", szLeft, value_ret.GetValueName(false), nClassType.Name, szParamDesc);
     }
 }
