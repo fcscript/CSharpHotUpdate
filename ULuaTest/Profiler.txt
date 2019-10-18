@@ -1,4 +1,4 @@
-与ULua的最终对比测试结果，每个单例平均测试10次，取平均值.
+与几个主流的LUA最终对比测试结果，每个单例平均测试10次，取平均值(毫秒)。 以下测试，时间单位均为毫秒。
 CPU : Huawei Kirin 980
 
            Test0   Test1  Test2   Test3  Test4  Test5  Test6  Test7  Test8  Test9  Test10  Test11  Test12
