@@ -500,13 +500,15 @@ public class FCClassWrap
         fileData.AppendLine("        }");
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
-        
+
+        string szClassWrapName = FCValueType.GetClassName(m_nCurClassType);
+
         WrapFuncDesc func = new WrapFuncDesc();
         func.m_szName = m_szCurClassName;
         func.m_szGetName = func.m_szSetName = string.Format("obj_new{0}", nFuncIndex);
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName, \"{0}\", {1});", m_szCurClassName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName, \"{0}\", {1});", szClassWrapName, func.m_szGetName);
         m_CurClassFunc.Insert(0, func);
     }
     void MakeDel()
