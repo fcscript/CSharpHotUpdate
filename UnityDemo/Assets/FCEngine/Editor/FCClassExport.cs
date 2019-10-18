@@ -187,6 +187,12 @@ class FCClassExport
     {
         try
         {
+            if (nType.IsByRef)
+            {
+                Type nRealType = nType.GetElementType();
+                if (nRealType != null)
+                    nType = nRealType;
+            }
             FCValueType value = FCValueType.TransType(nType);
             if (value.IsArray || value.IsList)
             {
@@ -545,12 +551,14 @@ class FCClassExport
             szStatic = "static ";
         ParameterInfo[] allParams = method.GetParameters();  // 函数参数
         string szCallParam = string.Empty;
+        string szBody = string.Empty;
         if(allParams != null)
         {
             Type nParamType;
             for (int i = 0; i < allParams.Length; ++i)
             {
-                nParamType = allParams[i].ParameterType;
+                ParameterInfo param = allParams[i];
+                nParamType = param.ParameterType;
                 if (i > 0)
                 {
                     szCallParam += ',';
@@ -559,6 +567,15 @@ class FCClassExport
                 PushDelegateType(nParamType);
                 PushRefType(nParamType);
                 FCValueType value = FCValueType.TransType(nParamType);
+                if (param.IsOut)
+                {
+                    szCallParam += "out ";
+                    szBody += string.Format("{0}=default({1});", allParams[i].Name, value.GetTypeName(false));
+                }
+                else if (nParamType.IsByRef)
+                {
+                    szCallParam += "ref ";
+                }
                 szCallParam += value.GetTypeName(false);
                 szCallParam += " ";
                 szCallParam += allParams[i].Name;
@@ -570,16 +587,16 @@ class FCClassExport
         FCValueType ret_value = FCValueType.TransType(method.ReturnType);
         if(ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
         {
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return null; }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ {4}return null; }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szBody);
         }
         else if(ret_value.m_nValueType == fc_value_type.fc_value_void)
         {
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{}}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{{4}}}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szBody);
         }
         else
         {
             string szRetCShaprName = ret_value.GetTypeName(false);
-            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ return default({4}); }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szRetCShaprName);
+            m_szTempBuilder.AppendFormat("    public {0}{1} {2}({3}){{ {4}return default({5}); }}\r\n", szStatic, ret_value.GetTypeName(false), GetMeshName(method, bTemplateFunc), szCallParam, szBody, szRetCShaprName);
         }
     }
     string  GetMeshName(MethodInfo method, bool bTemplateFunc)

@@ -1036,14 +1036,14 @@ public class FCClassWrap
         // 处理输出参数
         for (int i = 0; i < nParamCount; ++i)
         {
-            int nParamIndex = i + nParamCount;
+            int nParamIndex = i;
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
             szLeftName = string.Format("arg{0}", nParamIndex);
             if (param.IsOut || nParamType.IsByRef)
             {
                 FCValueType value = PushOutParamWrap(nParamType);
-                fileData.Append(FCValueType.ModifyScriptCallParam("            ", value, szLeftName, "L", nParamIndex.ToString(), true));
+                FCValueType.OutputRefScriptParam(fileData, "            ", value, szLeftName, "L", nParamIndex.ToString(), true);
             }
         }
         // 处理返回值

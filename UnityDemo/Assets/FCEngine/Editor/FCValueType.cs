@@ -67,12 +67,14 @@ public class FCValueType
     public fc_value_type m_nValueType; //
     public Type m_key;
     public Type m_value;
+    public bool m_bRef;
 
     public FCValueType()
     {
         m_nTemplateType = fc_value_tempalte_type.template_none;
         m_nKeyType = fc_value_type.fc_value_unknow;
         m_nValueType = fc_value_type.fc_value_unknow;
+        m_bRef = false;
     }
     public FCValueType(Type nType)
     {
@@ -90,8 +92,22 @@ public class FCValueType
     {
         get { return fc_value_tempalte_type.template_map == m_nTemplateType; }
     }
+    public bool IsRef
+    {
+        get { return m_bRef; }
+    }
     public void SetType(Type nType)
     {
+        m_bRef = nType.IsByRef;
+        if(m_bRef)
+        {
+            Type nRealType = nType.GetElementType();
+            if (nRealType != null)
+            {
+                nType = nRealType;
+            }
+        }
+
         if(nType.IsArray)
         {
             m_nTemplateType = fc_value_tempalte_type.template_array;
@@ -396,23 +412,42 @@ public class FCValueType
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
         fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr({1}, v);\r\n", szLeftEmpty, Ptr);
     }
-    public static string ModifyScriptCallParam(string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
+    public static void OutputRefScriptParam(StringBuilder fileData, string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
     {
         if(value.IsArray)
         {
-            return szLeftEmpty + string.Format("FCCustomParam.OutArray({0}, {1}, {2});\r\n", szLeftName, Ptr, szIndex);
+            fileData.AppendFormat("{0}FCCustomParam.OutArray({1}, {2}, {3});\r\n", szLeftEmpty, szLeftName, Ptr, szIndex);
+            return;
         }
         else if(value.IsList)
         {
-            return szLeftEmpty + string.Format("FCCustomParam.OutList({0}, {1}, {2});\r\n", szLeftName, Ptr, szIndex);
+            fileData.AppendFormat("{0}FCCustomParam.OutList({1}, {2}, {3});\r\n", szLeftEmpty, szLeftName, Ptr, szIndex);
+            return;
         }
         else if(value.IsMap)
         {
-            return szLeftEmpty + string.Format("FCCustomParam.OutDictionary({0}, {1}, {2});\r\n", szLeftName, Ptr, szIndex);
+            fileData.AppendFormat("{0}FCCustomParam.OutDictionary({1}, {2}, {3});\r\n", szLeftEmpty, szLeftName, Ptr, szIndex);
+            return;
         }
-        return string.Empty;
+        // 
+        string szOutPtr = string.Format("nOutPtr{0}", szIndex);
+        string szValueName = string.Format("arg{0}", szIndex);
+        fileData.AppendFormat("{0}long {1} = FCLibHelper.fc_get_param_ptr({2}, {3});\r\n", szLeftEmpty, szOutPtr, Ptr, szIndex);
+        string szType = value.GetTypeName(true, true);
+        if (IsBaseType(value.m_nValueType))
+        {
+            string szFuncAddr = GetFCLibFuncShortName(value.m_nValueType);
+            if (IsRefType(value.m_nValueType))
+            {
+                fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, ref {3});\r\n", szLeftEmpty, szFuncAddr, szOutPtr, szValueName);
+            }
+            else
+                fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, {3});\r\n", szLeftEmpty, szFuncAddr, szOutPtr, szValueName);
+            return;
+        }
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr({1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
     }
-    
+
     public static bool IsBaseType(fc_value_type nValueType)
     {
         return nValueType < fc_value_type.fc_value_system_object;
@@ -429,6 +464,17 @@ public class FCValueType
     
     public static string GetBaseValueTypeName(fc_value_type nFCType, Type nType, bool bCSharp, bool bFullName)
     {
+        if(nType.IsByRef)
+        {
+            Type nRealType = nType.GetElementType();
+            if (nRealType != null)
+            {
+                FCValueType v = TransType(nRealType);
+                nFCType = v.m_nValueType;
+                nType = nRealType;
+            }
+        }
+
         switch(nFCType)
         {
             case fc_value_type.fc_value_bool:
