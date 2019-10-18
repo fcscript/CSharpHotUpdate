@@ -895,3 +895,40 @@ public struct Rect
         return true;
     }
 };
+
+public struct Plane
+{
+    public float a, b, c, d;
+    public void Set(float _a, float _b, float _c, float _d)
+    {
+        a = _a; b = _b; c = _c; d = _d;
+    }
+    public void Normalize()
+    {
+    }
+    public Vector3 GetNormal()
+    {
+        return new Vector3(a, b, c);
+    }
+    // 功能：三点确定一个平面
+    public void InitFromPoints(Vector3 v1, Vector3 v2, Vector3 v3)
+    {
+    }
+    // 面法线+点确定一个平面
+    public void InitFromPointNormal(Vector3 vPoint, Vector3 vNormal)
+    {
+    }
+    // 检测一个点是不是在平面的前面
+    public bool IsFront(Vector3 vPoint)
+    {
+        return true;
+    }
+    // 功能：通过一射线与平面求交点
+    // 参数：vBegin - 射线的起点
+    //       vDir - 射线的方向
+    public bool IntersectLine(out Vector3 vPickPos, Vector3 vBegin, Vector3 vDir)
+    {
+        vPickPos = new Vector3();
+        return true;
+    }
+};

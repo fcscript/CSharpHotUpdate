@@ -14,7 +14,7 @@ class os
         return 0;
     }
     // 功能：返回当前系统时钟，单位是毫秒(1000毫秒 = 1秒)
-    public static Int64 GetTickCount()
+    public static uint GetTickCount()
     {
         return 0;
     }
@@ -161,6 +161,13 @@ class os
     {
         return "";
     }
+    // 功能：将Json对象转换成Json字符串
+    // 参数：nPrepareJsonSize - 要转换的Json字符串预分配的大小，指定这个可以提升性能
+    // 没有指定的话，默认按1K预分配
+    public static StringA WriteJson<_Ty>(_Ty pJsonRoot, int nPrepareJsonSize)
+    {
+        return "";
+    }
 
     // 功能：打印到命令行
     public static void print(StringA szFormat, params System.Object[] args)
@@ -169,7 +176,10 @@ class os
     }
 };
 
-
+// 只是为了兼容UnityEngine.Events.UnityAction
+class UnityAction<T>
+{
+};
 
 //自动导出标签 [export]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
@@ -187,6 +197,16 @@ public class inlineAttribute : System.Attribute
 {
     // 自动导出标签[export]
     public inlineAttribute()
+    {
+    }
+}
+
+//Json对象标签 [json]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
+public class jsonAttribute : System.Attribute
+{
+    // Json对象[json]
+    public jsonAttribute()
     {
     }
 }
