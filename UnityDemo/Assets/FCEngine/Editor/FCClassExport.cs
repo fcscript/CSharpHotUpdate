@@ -37,6 +37,7 @@ class FCClassExport
     {
         m_szFileBuilder.Length = 0;
         m_szFileBuilder.AppendLine();
+        m_szFileBuilder.AppendLine("using System;");
         foreach (Type nType in m_AllRefType.Keys)
         {
             if (m_AllExportType.ContainsKey(nType))
@@ -82,7 +83,8 @@ class FCClassExport
             }
             else if(nType == typeof(System.Object))
             {
-                m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
+                //m_szFileBuilder.AppendFormat("class {0}{{}}\r\n", nType.Name);
+                continue;
             }
             else if(nType == typeof(UnityEngine.Object))
             {
@@ -472,6 +474,8 @@ class FCClassExport
             if (!IsNeedExportMember(method.Name))
                 continue;
             if (m_CurDontWrapName.ContainsKey(method.Name))
+                continue;
+            if (FCExclude.IsDontExportMethod(method))
                 continue;
             // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
             szDeclareName = FCValueType.GetMethodDeclare(method);

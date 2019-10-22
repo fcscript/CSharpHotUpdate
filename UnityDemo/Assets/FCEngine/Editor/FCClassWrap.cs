@@ -291,6 +291,8 @@ public class FCClassWrap
             {
                 if (!IsNeedExportMember(method.Name))
                     continue;
+                if (FCExclude.IsDontExportMethod(method))
+                    continue;
                 // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
                 szDeclareName = FCValueType.GetMethodDeclare(method);
                 if(m_CurValidMethods.ContainsKey(szDeclareName))
@@ -1150,7 +1152,8 @@ public class FCClassWrap
             }
             if (value.m_nValueType == fc_value_type.fc_value_system_object)
             {
-                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                //fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 return;
             }
             if(value.m_nValueType == fc_value_type.fc_value_unity_object)

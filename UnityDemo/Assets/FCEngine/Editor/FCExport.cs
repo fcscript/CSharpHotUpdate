@@ -265,17 +265,22 @@ public static class FCExport
         szPath += "脚本测试工程.fcproj";
         FCCompilerHelper.CompilerProj(szPath);
     }
-    //[MenuItem("FCScript/测试", false, 5)]
-    //static void TestExport()
-    //{
-    //    FCClassWrap pWrap = new FCClassWrap();
-    //    pWrap.BeginExport("");
+    [MenuItem("FCScript/测试", false, 5)]
+    static void TestExport()
+    {
+        Type t1 = typeof(IEnumerable<AssetBundle>);
+        FCValueType v1 = FCValueType.TransType(t1);
+        string s1 = v1.GetValueName(true);
+        int iiii = 0;
 
-    //    pWrap.BeginModleWrap("AutoClass");
-    //    pWrap.WrapClass(typeof(UnityEngine.WheelCollider));
-    //    pWrap.EndModleWrap();
+        FCClassWrap pWrap = new FCClassWrap();
+        pWrap.BeginExport("");
 
-    //    pWrap.EndExport();
-    //    MakeFCProj();
-    //}
+        pWrap.BeginModleWrap("AutoClass");
+        pWrap.WrapClass(typeof(UnityEngine.AssetBundle));
+        pWrap.EndModleWrap();
+
+        pWrap.EndExport();
+        MakeFCProj();
+    }
 }

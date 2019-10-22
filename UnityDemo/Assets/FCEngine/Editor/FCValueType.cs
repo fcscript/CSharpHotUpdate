@@ -58,6 +58,7 @@ public enum fc_value_tempalte_type
     template_list,  // list
     template_map,   // map/Dictionary
     template_task,  // task<Type>
+    template_ienumerable, // IEnumerable<Type>
 };
 
 public class FCValueType
@@ -146,6 +147,14 @@ public class FCValueType
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
             return;
         }
+        if(szTypeName == "IEnumerable`1")
+        {
+            Type[] argtypes = nType.GetGenericArguments();
+            m_nTemplateType = fc_value_tempalte_type.template_ienumerable;
+            m_key = m_value = argtypes[0];
+            m_nKeyType = m_nValueType = GetBaseFCType(m_value);
+            return;
+        }
         m_nTemplateType = fc_value_tempalte_type.template_none;
         m_key = m_value = nType;
         m_nKeyType = m_nValueType = GetBaseFCType(m_value);
@@ -184,6 +193,8 @@ public class FCValueType
                     return string.Format("map<{0},{1}>", GetKeyName(bSharp, bFullName), GetValueName(bSharp, bFullName));
             case fc_value_tempalte_type.template_task:
                 return string.Format("Task<{0}>", GetKeyName(bSharp, bFullName));
+            case fc_value_tempalte_type.template_ienumerable:
+                return string.Format("IEnumerable<{0}>", GetKeyName(bSharp, bFullName));
         }
         return GetBaseValueTypeName(m_nValueType, m_value, bSharp, bFullName);
     }

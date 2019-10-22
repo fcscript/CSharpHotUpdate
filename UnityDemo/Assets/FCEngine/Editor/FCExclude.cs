@@ -50,6 +50,7 @@ class FCExclude
         "DefaultControls", "HumanPoseHandler",
         "TerrainData", 
         "WaitForSeconds",
+        "NativeClassAttribute",
     };
 
     // 支持的模板函数的接口，需要其他的在这里扩展
@@ -248,5 +249,14 @@ class FCExclude
             InitInnerType();
         }
         return s_InnerType.ContainsKey(nType);
+    }
+    public static bool IsDontExportMethod(MethodInfo method)
+    {
+        // 先检查函数的返回值
+        FCValueType ret_value = FCValueType.TransType(method.ReturnType);
+        // 目前先暂不支持IEnumerable, 转换这个有点麻烦
+        if (ret_value.m_nTemplateType == fc_value_tempalte_type.template_ienumerable)
+            return true;
+        return false;
     }
 }

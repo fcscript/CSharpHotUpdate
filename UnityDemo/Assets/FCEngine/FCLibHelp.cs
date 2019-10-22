@@ -166,6 +166,12 @@ public class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_inport_obj_ptr(long L);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_get_value_type(long ptr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_get_map_value_type(long ptr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_get_value_template_type(long ptr);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern char fc_get_char(long L, int i);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool fc_get_bool(long L, int i);
