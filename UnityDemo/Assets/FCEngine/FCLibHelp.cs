@@ -137,6 +137,16 @@ public class FCLibHelper
     // 功能：设置脚本中用于打印调试的函数
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_debug_print_func(LPCustomPrintCallback pFunc);
+    // 功能：数据异或加密或解密
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_pack_data(byte[] pData, int nOffset, int nSize, long nKey);
+    // 功能：随机加密或解密（由3个密钥组成）
+    // 返回值：返回新的密钥
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern uint fc_rand_pack_data(byte[] pData, int nOffset, int nSize, uint nKey, uint key2, uint key3);
+    // 功能：产生一下随机的KEY
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_next_key(long nKey, ref uint nRandKey);
     //--------------------------------------------------------------------------------------------------
     // 以下fc_test开头的是测试代码接口，没有意义
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
