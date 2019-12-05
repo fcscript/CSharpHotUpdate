@@ -105,6 +105,7 @@ public static class FCExport
         AddTemplateSurport(pWrap); // 添加模板函数的wrap支持
         pWrap.WrapClass(typeof(UnityEngine.GameObject));
         pWrap.WrapClass(typeof(UnityEngine.Behaviour));
+        pWrap.WrapClass(typeof(UnityEngine.MonoBehaviour));
         pWrap.PushCurrentDontWrapName("Item");
         pWrap.WrapClass(typeof(UnityEngine.Animation));
         pWrap.WrapClass(typeof(UnityEngine.Transform));
@@ -265,22 +266,17 @@ public static class FCExport
         szPath += "脚本测试工程.fcproj";
         FCCompilerHelper.CompilerProj(szPath);
     }
-    [MenuItem("FCScript/测试", false, 5)]
-    static void TestExport()
-    {
-        Type t1 = typeof(IEnumerable<AssetBundle>);
-        FCValueType v1 = FCValueType.TransType(t1);
-        string s1 = v1.GetValueName(true);
-        int iiii = 0;
+    //[MenuItem("FCScript/测试", false, 5)]
+    //static void TestExport()
+    //{
+    //    FCClassWrap pWrap = new FCClassWrap();
+    //    pWrap.BeginExport("");
 
-        FCClassWrap pWrap = new FCClassWrap();
-        pWrap.BeginExport("");
+    //    pWrap.BeginModleWrap("AutoClass");
+    //    pWrap.WrapClass(typeof(UnityEngine.AssetBundle));
+    //    pWrap.EndModleWrap();
 
-        pWrap.BeginModleWrap("AutoClass");
-        pWrap.WrapClass(typeof(UnityEngine.AssetBundle));
-        pWrap.EndModleWrap();
-
-        pWrap.EndExport();
-        MakeFCProj();
-    }
+    //    pWrap.EndExport();
+    //    MakeFCProj();
+    //}
 }

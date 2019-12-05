@@ -62,6 +62,11 @@ public class ScriptMono : MonoBehaviour
             FCLibHelper.fc_call(m_nScriptInsPtr, "OnButtonClicked");
         }
     }
+    public long GetScriptPtr()
+    {
+        CreateScript(); // 延迟执行吧
+        return m_nScriptInsPtr;
+    }
     // 功能：设置脚本中的变量
     public void SetScriptValue(string szName, bool value)
     {

@@ -1394,7 +1394,7 @@ public class FCClassWrap
     void  PushUnityEventTemplateFunc(Type nClassType)
     {
         Type nBaseType = nClassType.BaseType;
-        Type[] argTypes = nBaseType.GenericTypeArguments;
+        Type[] argTypes = nBaseType.GetGenericArguments();// GenericTypeArguments;
         if (argTypes == null)
             return;
         OnAddListener(nClassType, argTypes[0]);

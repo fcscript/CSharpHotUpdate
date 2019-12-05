@@ -444,7 +444,7 @@ public class FCValueType
         string szOutPtr = string.Format("nOutPtr{0}", szIndex);
         string szValueName = string.Format("arg{0}", szIndex);
         fileData.AppendFormat("{0}long {1} = FCLibHelper.fc_get_param_ptr({2}, {3});\r\n", szLeftEmpty, szOutPtr, Ptr, szIndex);
-        string szType = value.GetTypeName(true, true);
+        //string szType = value.GetTypeName(true, true);
         if (IsBaseType(value.m_nValueType))
         {
             string szFuncAddr = GetFCLibFuncShortName(value.m_nValueType);

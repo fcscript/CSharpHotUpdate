@@ -506,7 +506,7 @@ class FCClassExport
     void PushUnityEventTemplateFunc(Type nClassType)
     {
         Type nBaseType = nClassType.BaseType;
-        Type[] argTypes = nBaseType.GenericTypeArguments;
+        Type[] argTypes = nBaseType.GetGenericArguments();// GenericTypeArguments;
         if (argTypes == null || argTypes.Length == 0)
             return;
         Type nParamType = argTypes[0];
@@ -691,7 +691,7 @@ class FCClassExport
     }
     void PushDelegateType(StringBuilder fileBuilder, string szLeft, Type nClassType)
     {
-        ConstructorInfo[] c1 = nClassType.GetConstructors();
+        //ConstructorInfo[] c1 = nClassType.GetConstructors();
         MethodInfo method = nClassType.GetMethod("Invoke");
 
         ParameterInfo[] allParams = method.GetParameters();

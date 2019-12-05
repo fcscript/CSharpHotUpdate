@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 
 class FCExclude
 {
@@ -57,8 +57,20 @@ class FCExclude
     public static List<Type> SupportTemplateTypes = new List<Type>
     {
         typeof(UnityEngine.SkinnedMeshRenderer),
+        typeof(UnityEngine.Renderer),
         typeof(UnityEngine.MeshRenderer),
         typeof(UnityEngine.Animation),
+        typeof(UnityEngine.Collider),
+        typeof(UnityEngine.BoxCollider),
+        typeof(UnityEngine.BoxCollider2D),
+        typeof(UnityEngine.MeshCollider),
+        typeof(UnityEngine.SphereCollider),
+        typeof(UnityEngine.Rigidbody),
+        typeof(UnityEngine.Camera),
+        typeof(UnityEngine.AudioSource),
+        typeof(UnityEngine.Transform),
+        typeof(UnityEngine.Component),
+        typeof(UnityEngine.ParticleSystem),
         typeof(UnityEngine.Light),
         typeof(UnityEngine.UI.Button),
         typeof(UnityEngine.UI.Text),
