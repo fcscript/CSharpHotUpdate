@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public class ButtonClickedEvent_wrap
 {
-    public static Button.ButtonClickedEvent get_obj(long L)
+    public static UnityEngine.UI.Button.ButtonClickedEvent get_obj(long L)
     {
-        return FCGetObj.GetObj<Button.ButtonClickedEvent>(L);
+        return FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(L);
     }
 
     public static void Register()
@@ -25,7 +25,7 @@ public class ButtonClickedEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_new(long L)
     {
-        long nPtr = FCGetObj.NewObj<Button.ButtonClickedEvent>();
+        long nPtr = FCGetObj.NewObj<UnityEngine.UI.Button.ButtonClickedEvent>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
         FCLibHelper.fc_set_value_intptr(ret, nPtr);
         return 0;
@@ -48,7 +48,7 @@ public class ButtonClickedEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        Button.ButtonClickedEvent obj = FCGetObj.GetObj<Button.ButtonClickedEvent>(L);
+        UnityEngine.UI.Button.ButtonClickedEvent obj = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -59,8 +59,8 @@ public class ButtonClickedEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        Button.ButtonClickedEvent left  = FCGetObj.GetObj<Button.ButtonClickedEvent>(L);
-        Button.ButtonClickedEvent right = FCGetObj.GetObj<Button.ButtonClickedEvent>(R);
+        UnityEngine.UI.Button.ButtonClickedEvent left  = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(L);
+        UnityEngine.UI.Button.ButtonClickedEvent right = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(R);
         if(left != null)
         {
             return left.Equals(right);

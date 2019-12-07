@@ -8,5 +8,6 @@ class  UnityEvent : UnityEventBase
     public void AddListener(UnityAction call){}
     public void RemoveListener(UnityAction call){}
     public void Invoke(){}
+    public delegate void UnityAction();
 };
 

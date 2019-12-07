@@ -15,6 +15,7 @@ public class Unity_wrap
         Texture2D_wrap.Register();
         GameObject_wrap.Register();
         Behaviour_wrap.Register();
+        MonoBehaviour_wrap.Register();
         Animation_wrap.Register();
         Transform_wrap.Register();
         Renderer_wrap.Register();

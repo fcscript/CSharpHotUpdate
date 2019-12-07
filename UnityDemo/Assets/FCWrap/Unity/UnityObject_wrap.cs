@@ -344,7 +344,7 @@ public class UnityObject_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityObject obj = get_obj(nThisPtr);
-            System.Object arg0 = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr(L,0));
+            System.Object arg0 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,0));
             bool ret = obj.Equals(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret);

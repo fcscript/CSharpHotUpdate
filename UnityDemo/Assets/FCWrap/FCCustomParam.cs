@@ -9,6 +9,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Threading.Tasks;
 
 
 class FCCustomParam
@@ -143,12 +144,12 @@ class FCCustomParam
         }
         return rList;
     }
-    public static List<Component> GetList(ref List<Component> rList, long L, int nIndex)
+    public static List<UnityEngine.Component> GetList(ref List<UnityEngine.Component> rList, long L, int nIndex)
     {
         try
         {
             if (rList == null)
-                rList = new List<Component>();
+                rList = new List<UnityEngine.Component>();
             else
                 rList.Clear();
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
@@ -156,7 +157,7 @@ class FCCustomParam
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Component item = FCGetObj.GetObj<Component>(item_ptr);
+                UnityEngine.Component item = FCGetObj.GetObj<UnityEngine.Component>(item_ptr);
                 rList.Add(item);
             }
         }
@@ -196,17 +197,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static Texture2D[] GetArray(ref Texture2D[] rList, long L, int nIndex)
+    public static UnityEngine.Texture2D[] GetArray(ref UnityEngine.Texture2D[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Texture2D[nArraySize];
+            rList = new UnityEngine.Texture2D[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Texture2D item = FCGetObj.GetObj<Texture2D>(item_ptr);
+                UnityEngine.Texture2D item = FCGetObj.GetObj<UnityEngine.Texture2D>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -251,17 +252,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static Type[] GetArray(ref Type[] rList, long L, int nIndex)
+    public static System.Type[] GetArray(ref System.Type[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Type[nArraySize];
+            rList = new System.Type[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Type item = FCGetObj.GetObj<Type>(item_ptr);
+                System.Type item = FCGetObj.GetObj<System.Type>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -271,17 +272,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static Material[] GetArray(ref Material[] rList, long L, int nIndex)
+    public static UnityEngine.Material[] GetArray(ref UnityEngine.Material[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Material[nArraySize];
+            rList = new UnityEngine.Material[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Material item = FCGetObj.GetObj<Material>(item_ptr);
+                UnityEngine.Material item = FCGetObj.GetObj<UnityEngine.Material>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -291,12 +292,12 @@ class FCCustomParam
         }
         return rList;
     }
-    public static List<ReflectionProbeBlendInfo> GetList(ref List<ReflectionProbeBlendInfo> rList, long L, int nIndex)
+    public static List<UnityEngine.Rendering.ReflectionProbeBlendInfo> GetList(ref List<UnityEngine.Rendering.ReflectionProbeBlendInfo> rList, long L, int nIndex)
     {
         try
         {
             if (rList == null)
-                rList = new List<ReflectionProbeBlendInfo>();
+                rList = new List<UnityEngine.Rendering.ReflectionProbeBlendInfo>();
             else
                 rList.Clear();
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
@@ -304,7 +305,7 @@ class FCCustomParam
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                ReflectionProbeBlendInfo item = FCGetObj.GetObj<ReflectionProbeBlendInfo>(item_ptr);
+                UnityEngine.Rendering.ReflectionProbeBlendInfo item = FCGetObj.GetObj<UnityEngine.Rendering.ReflectionProbeBlendInfo>(item_ptr);
                 rList.Add(item);
             }
         }
@@ -314,17 +315,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static Transform[] GetArray(ref Transform[] rList, long L, int nIndex)
+    public static UnityEngine.Transform[] GetArray(ref UnityEngine.Transform[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Transform[nArraySize];
+            rList = new UnityEngine.Transform[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Transform item = FCGetObj.GetObj<Transform>(item_ptr);
+                UnityEngine.Transform item = FCGetObj.GetObj<UnityEngine.Transform>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -334,17 +335,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static AccelerationEvent[] GetArray(ref AccelerationEvent[] rList, long L, int nIndex)
+    public static UnityEngine.AccelerationEvent[] GetArray(ref UnityEngine.AccelerationEvent[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new AccelerationEvent[nArraySize];
+            rList = new UnityEngine.AccelerationEvent[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                AccelerationEvent item = FCGetObj.GetObj<AccelerationEvent>(item_ptr);
+                UnityEngine.AccelerationEvent item = FCGetObj.GetObj<UnityEngine.AccelerationEvent>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -354,17 +355,17 @@ class FCCustomParam
         }
         return rList;
     }
-    public static Touch[] GetArray(ref Touch[] rList, long L, int nIndex)
+    public static UnityEngine.Touch[] GetArray(ref UnityEngine.Touch[] rList, long L, int nIndex)
     {
         try
         {
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
-            rList = new Touch[nArraySize];
+            rList = new UnityEngine.Touch[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
                 long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                Touch item = FCGetObj.GetObj<Touch>(item_ptr);
+                UnityEngine.Touch item = FCGetObj.GetObj<UnityEngine.Touch>(item_ptr);
                 rList[i] = item;
             }
         }
@@ -504,7 +505,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Component []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Component []rList, long ptr)
     {
         try
         {
@@ -557,7 +558,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(GameObject []rList, long ptr)
+    public static void ReturnArray(UnityEngine.GameObject []rList, long ptr)
     {
         try
         {
@@ -574,7 +575,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Material []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Material []rList, long ptr)
     {
         try
         {
@@ -591,7 +592,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Transform []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Transform []rList, long ptr)
     {
         try
         {
@@ -608,7 +609,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(AccelerationEvent []rList, long ptr)
+    public static void ReturnArray(UnityEngine.AccelerationEvent []rList, long ptr)
     {
         try
         {
@@ -625,7 +626,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Touch []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Touch []rList, long ptr)
     {
         try
         {
@@ -659,7 +660,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(CommandBuffer []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Rendering.CommandBuffer []rList, long ptr)
     {
         try
         {
@@ -676,7 +677,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Light []rList, long ptr)
+    public static void ReturnArray(UnityEngine.Light []rList, long ptr)
     {
         try
         {

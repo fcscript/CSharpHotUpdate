@@ -6,9 +6,9 @@ using UnityObject = UnityEngine.Object;
 
 public class MeshRenderer_wrap
 {
-    public static MeshRenderer get_obj(long L)
+    public static UnityEngine.MeshRenderer get_obj(long L)
     {
-        return FCGetObj.GetObj<MeshRenderer>(L);
+        return FCGetObj.GetObj<UnityEngine.MeshRenderer>(L);
     }
 
     public static void Register()
@@ -25,7 +25,7 @@ public class MeshRenderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_new(long L)
     {
-        long nPtr = FCGetObj.NewObj<MeshRenderer>();
+        long nPtr = FCGetObj.NewObj<UnityEngine.MeshRenderer>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
         FCLibHelper.fc_set_value_intptr(ret, nPtr);
         return 0;
@@ -48,7 +48,7 @@ public class MeshRenderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        MeshRenderer obj = FCGetObj.GetObj<MeshRenderer>(L);
+        UnityEngine.MeshRenderer obj = FCGetObj.GetObj<UnityEngine.MeshRenderer>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -59,8 +59,8 @@ public class MeshRenderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        MeshRenderer left  = FCGetObj.GetObj<MeshRenderer>(L);
-        MeshRenderer right = FCGetObj.GetObj<MeshRenderer>(R);
+        UnityEngine.MeshRenderer left  = FCGetObj.GetObj<UnityEngine.MeshRenderer>(L);
+        UnityEngine.MeshRenderer right = FCGetObj.GetObj<UnityEngine.MeshRenderer>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -78,7 +78,7 @@ public class MeshRenderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            MeshRenderer ret = get_obj(nThisPtr);
+            UnityEngine.MeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.additionalVertexStreams);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -95,7 +95,7 @@ public class MeshRenderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            MeshRenderer ret = get_obj(nThisPtr);
+            UnityEngine.MeshRenderer ret = get_obj(nThisPtr);
             UnityEngine.Mesh arg0 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_intptr(L,0));
             ret.additionalVertexStreams = arg0;
         }

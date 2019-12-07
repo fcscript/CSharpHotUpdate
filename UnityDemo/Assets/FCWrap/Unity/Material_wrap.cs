@@ -6,9 +6,9 @@ using UnityObject = UnityEngine.Object;
 
 public class Material_wrap
 {
-    public static Material get_obj(long L)
+    public static UnityEngine.Material get_obj(long L)
     {
-        return FCGetObj.GetObj<Material>(L);
+        return FCGetObj.GetObj<UnityEngine.Material>(L);
     }
 
     public static void Register()
@@ -112,8 +112,8 @@ public class Material_wrap
         try
         {
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
-            Material obj = new Material(arg0);
-            long nPtr = FCGetObj.PushNewObj<Material>(obj);
+            UnityEngine.Material obj = new UnityEngine.Material(arg0);
+            long nPtr = FCGetObj.PushNewObj<UnityEngine.Material>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_intptr(ret, nPtr);
         }
@@ -130,8 +130,8 @@ public class Material_wrap
         try
         {
             UnityEngine.Shader arg0 = FCGetObj.GetObj<UnityEngine.Shader>(FCLibHelper.fc_get_intptr(L,0));
-            Material obj = new Material(arg0);
-            long nPtr = FCGetObj.PushNewObj<Material>(obj);
+            UnityEngine.Material obj = new UnityEngine.Material(arg0);
+            long nPtr = FCGetObj.PushNewObj<UnityEngine.Material>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_intptr(ret, nPtr);
         }
@@ -159,7 +159,7 @@ public class Material_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        Material obj = FCGetObj.GetObj<Material>(L);
+        UnityEngine.Material obj = FCGetObj.GetObj<UnityEngine.Material>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -170,8 +170,8 @@ public class Material_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        Material left  = FCGetObj.GetObj<Material>(L);
-        Material right = FCGetObj.GetObj<Material>(R);
+        UnityEngine.Material left  = FCGetObj.GetObj<UnityEngine.Material>(L);
+        UnityEngine.Material right = FCGetObj.GetObj<UnityEngine.Material>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -189,7 +189,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.shader);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -206,7 +206,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             UnityEngine.Shader arg0 = FCGetObj.GetObj<UnityEngine.Shader>(FCLibHelper.fc_get_intptr(L,0));
             ret.shader = arg0;
         }
@@ -223,7 +223,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Color temp_ret = ret.color;
             FCLibHelper.fc_set_value_color(ret_ptr, ref temp_ret);
@@ -240,7 +240,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             Color arg0 = new Color();
             FCLibHelper.fc_get_color(L,0,ref arg0);
             ret.color = arg0;
@@ -258,7 +258,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.mainTexture);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -275,7 +275,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             UnityEngine.Texture arg0 = FCGetObj.GetObj<UnityEngine.Texture>(FCLibHelper.fc_get_intptr(L,0));
             ret.mainTexture = arg0;
         }
@@ -292,7 +292,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector2 temp_ret = ret.mainTextureOffset;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
@@ -309,7 +309,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             Vector2 arg0 = new Vector2();
             FCLibHelper.fc_get_vector2(L,0,ref arg0);
             ret.mainTextureOffset = arg0;
@@ -327,7 +327,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector2 temp_ret = ret.mainTextureScale;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
@@ -344,7 +344,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             Vector2 arg0 = new Vector2();
             FCLibHelper.fc_get_vector2(L,0,ref arg0);
             ret.mainTextureScale = arg0;
@@ -362,7 +362,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.passCount);
         }
@@ -379,7 +379,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.renderQueue);
         }
@@ -395,7 +395,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.renderQueue = arg0;
         }
@@ -412,7 +412,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret.shaderKeywords,ret_ptr);
         }
@@ -428,7 +428,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             string[] arg0 = null;
             arg0 = FCCustomParam.GetArray(ref arg0,L,0);
             ret.shaderKeywords = arg0;
@@ -446,7 +446,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.globalIlluminationFlags);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -463,7 +463,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             UnityEngine.MaterialGlobalIlluminationFlags arg0 = (UnityEngine.MaterialGlobalIlluminationFlags)(FCLibHelper.fc_get_int(L,0));
             ret.globalIlluminationFlags = arg0;
         }
@@ -480,7 +480,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.enableInstancing);
         }
@@ -496,7 +496,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             ret.enableInstancing = arg0;
         }
@@ -513,7 +513,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.doubleSidedGI);
         }
@@ -529,7 +529,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material ret = get_obj(nThisPtr);
+            UnityEngine.Material ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             ret.doubleSidedGI = arg0;
         }
@@ -546,7 +546,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = obj.HasProperty(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -565,7 +565,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = obj.HasProperty(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -584,7 +584,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             string arg2 = FCLibHelper.fc_get_string_a(L,2);
@@ -605,7 +605,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             string ret = obj.GetTag(arg0,arg1);
@@ -625,7 +625,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             obj.SetOverrideTag(arg0,arg1);
@@ -643,7 +643,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             obj.SetShaderPassEnabled(arg0,arg1);
@@ -661,7 +661,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = obj.GetShaderPassEnabled(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -680,7 +680,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
             UnityEngine.Material arg1 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,1));
             float arg2 = FCLibHelper.fc_get_float(L,2);
@@ -699,7 +699,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = obj.SetPass(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -718,7 +718,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             string ret = obj.GetPassName(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -737,7 +737,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             int ret = obj.FindPass(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -756,7 +756,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
             obj.CopyPropertiesFromMaterial(arg0);
         }
@@ -773,7 +773,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             obj.EnableKeyword(arg0);
         }
@@ -790,7 +790,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             obj.DisableKeyword(arg0);
         }
@@ -807,7 +807,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = obj.IsKeywordEnabled(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -826,7 +826,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float arg1 = FCLibHelper.fc_get_float(L,1);
             obj.SetFloat(arg0,arg1);
@@ -844,7 +844,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             float arg1 = FCLibHelper.fc_get_float(L,1);
             obj.SetFloat(arg0,arg1);
@@ -862,7 +862,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             int arg1 = FCLibHelper.fc_get_int(L,1);
             obj.SetInt(arg0,arg1);
@@ -880,7 +880,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             int arg1 = FCLibHelper.fc_get_int(L,1);
             obj.SetInt(arg0,arg1);
@@ -898,7 +898,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Color arg1 = new Color();
             FCLibHelper.fc_get_color(L,1,ref arg1);
@@ -917,7 +917,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color arg1 = new Color();
             FCLibHelper.fc_get_color(L,1,ref arg1);
@@ -936,7 +936,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector4 arg1 = new Vector4();
             FCLibHelper.fc_get_vector4(L,1,ref arg1);
@@ -955,7 +955,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector4 arg1 = new Vector4();
             FCLibHelper.fc_get_vector4(L,1,ref arg1);
@@ -974,7 +974,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Matrix4x4 arg1 = new Matrix4x4();
             FCLibHelper.fc_get_matrix(L,1,ref arg1);
@@ -993,7 +993,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Matrix4x4 arg1 = new Matrix4x4();
             FCLibHelper.fc_get_matrix(L,1,ref arg1);
@@ -1012,7 +1012,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.Texture arg1 = FCGetObj.GetObj<UnityEngine.Texture>(FCLibHelper.fc_get_intptr(L,1));
             obj.SetTexture(arg0,arg1);
@@ -1030,7 +1030,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.Texture arg1 = FCGetObj.GetObj<UnityEngine.Texture>(FCLibHelper.fc_get_intptr(L,1));
             obj.SetTexture(arg0,arg1);
@@ -1048,7 +1048,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.ComputeBuffer arg1 = FCGetObj.GetObj<UnityEngine.ComputeBuffer>(FCLibHelper.fc_get_intptr(L,1));
             obj.SetBuffer(arg0,arg1);
@@ -1066,7 +1066,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.ComputeBuffer arg1 = FCGetObj.GetObj<UnityEngine.ComputeBuffer>(FCLibHelper.fc_get_intptr(L,1));
             obj.SetBuffer(arg0,arg1);
@@ -1084,7 +1084,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector2 arg1 = new Vector2();
             FCLibHelper.fc_get_vector2(L,1,ref arg1);
@@ -1103,7 +1103,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector2 arg1 = new Vector2();
             FCLibHelper.fc_get_vector2(L,1,ref arg1);
@@ -1122,7 +1122,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector2 arg1 = new Vector2();
             FCLibHelper.fc_get_vector2(L,1,ref arg1);
@@ -1141,7 +1141,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector2 arg1 = new Vector2();
             FCLibHelper.fc_get_vector2(L,1,ref arg1);
@@ -1160,7 +1160,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<float> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1179,7 +1179,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<float> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1198,7 +1198,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Color> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1217,7 +1217,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Color> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1236,7 +1236,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Vector4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1255,7 +1255,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Vector4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1274,7 +1274,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Matrix4x4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1293,7 +1293,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Matrix4x4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1312,7 +1312,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float ret = obj.GetFloat(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1331,7 +1331,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             float ret = obj.GetFloat(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1350,7 +1350,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             int ret = obj.GetInt(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1369,7 +1369,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             int ret = obj.GetInt(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1388,7 +1388,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Color ret = obj.GetColor(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1408,7 +1408,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color ret = obj.GetColor(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1428,7 +1428,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector4 ret = obj.GetVector(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1448,7 +1448,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector4 ret = obj.GetVector(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1468,7 +1468,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Matrix4x4 ret = obj.GetMatrix(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1488,7 +1488,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Matrix4x4 ret = obj.GetMatrix(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1508,7 +1508,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<float> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1527,7 +1527,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<float> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1546,7 +1546,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float[] ret = obj.GetFloatArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1565,7 +1565,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             float[] ret = obj.GetFloatArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1584,7 +1584,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Vector4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1603,7 +1603,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Vector4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1622,7 +1622,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Color[] ret = obj.GetColorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1641,7 +1641,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color[] ret = obj.GetColorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1660,7 +1660,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Color> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1679,7 +1679,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Color> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1698,7 +1698,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector4[] ret = obj.GetVectorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1717,7 +1717,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector4[] ret = obj.GetVectorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1736,7 +1736,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             List<Matrix4x4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1755,7 +1755,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             List<Matrix4x4> arg1 = null;
             arg1 = FCCustomParam.GetList(ref arg1,L,1);
@@ -1774,7 +1774,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Matrix4x4[] ret = obj.GetMatrixArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1793,7 +1793,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Matrix4x4[] ret = obj.GetMatrixArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1812,9 +1812,9 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            Texture ret = obj.GetTexture(arg0);
+            UnityEngine.Texture ret = obj.GetTexture(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -1832,9 +1832,9 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
-            Texture ret = obj.GetTexture(arg0);
+            UnityEngine.Texture ret = obj.GetTexture(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -1852,7 +1852,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector2 ret = obj.GetTextureOffset(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1872,7 +1872,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector2 ret = obj.GetTextureOffset(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1892,7 +1892,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector2 ret = obj.GetTextureScale(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -1912,7 +1912,7 @@ public class Material_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Material obj = get_obj(nThisPtr);
+            UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector2 ret = obj.GetTextureScale(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);

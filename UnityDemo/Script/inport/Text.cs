@@ -32,6 +32,5 @@ class  Text : MaskableGraphic
     public static Vector2 GetTextAnchorPivot(TextAnchor anchor){ return default(Vector2); }
     public void CalculateLayoutInputHorizontal(){}
     public void CalculateLayoutInputVertical(){}
-    public void OnRebuildRequested(){}
 };
 

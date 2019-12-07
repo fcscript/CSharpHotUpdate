@@ -42,7 +42,6 @@ class  Input : Object
     public static bool GetKeyUp(StringA name){ return default(bool); }
     public static bool GetKeyUp(KeyCode key){ return default(bool); }
     public static List<StringA> GetJoystickNames(){ return null; }
-    public static bool IsJoystickPreconfigured(StringA joystickName){ return default(bool); }
     public static bool GetMouseButton(int button){ return default(bool); }
     public static bool GetMouseButtonDown(int button){ return default(bool); }
     public static bool GetMouseButtonUp(int button){ return default(bool); }

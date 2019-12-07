@@ -7,9 +7,9 @@ using UnityEngine.Rendering;
 
 public class Renderer_wrap
 {
-    public static Renderer get_obj(long L)
+    public static UnityEngine.Renderer get_obj(long L)
     {
-        return FCGetObj.GetObj<Renderer>(L);
+        return FCGetObj.GetObj<UnityEngine.Renderer>(L);
     }
 
     public static void Register()
@@ -52,7 +52,7 @@ public class Renderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_new(long L)
     {
-        long nPtr = FCGetObj.NewObj<Renderer>();
+        long nPtr = FCGetObj.NewObj<UnityEngine.Renderer>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
         FCLibHelper.fc_set_value_intptr(ret, nPtr);
         return 0;
@@ -75,7 +75,7 @@ public class Renderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        Renderer obj = FCGetObj.GetObj<Renderer>(L);
+        UnityEngine.Renderer obj = FCGetObj.GetObj<UnityEngine.Renderer>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -86,8 +86,8 @@ public class Renderer_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        Renderer left  = FCGetObj.GetObj<Renderer>(L);
-        Renderer right = FCGetObj.GetObj<Renderer>(R);
+        UnityEngine.Renderer left  = FCGetObj.GetObj<UnityEngine.Renderer>(L);
+        UnityEngine.Renderer right = FCGetObj.GetObj<UnityEngine.Renderer>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -105,7 +105,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Bounds temp_ret = ret.bounds;
             FCLibHelper.fc_set_value_bounds(ret_ptr, ref temp_ret);
@@ -123,7 +123,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.enabled);
         }
@@ -139,7 +139,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             ret.enabled = arg0;
         }
@@ -156,7 +156,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isVisible);
         }
@@ -173,7 +173,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.shadowCastingMode);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -190,7 +190,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Rendering.ShadowCastingMode arg0 = (UnityEngine.Rendering.ShadowCastingMode)(FCLibHelper.fc_get_int(L,0));
             ret.shadowCastingMode = arg0;
         }
@@ -207,7 +207,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.receiveShadows);
         }
@@ -223,7 +223,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             ret.receiveShadows = arg0;
         }
@@ -240,7 +240,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.motionVectorGenerationMode);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -257,7 +257,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.MotionVectorGenerationMode arg0 = (UnityEngine.MotionVectorGenerationMode)(FCLibHelper.fc_get_int(L,0));
             ret.motionVectorGenerationMode = arg0;
         }
@@ -274,7 +274,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.lightProbeUsage);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -291,7 +291,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Rendering.LightProbeUsage arg0 = (UnityEngine.Rendering.LightProbeUsage)(FCLibHelper.fc_get_int(L,0));
             ret.lightProbeUsage = arg0;
         }
@@ -308,7 +308,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.reflectionProbeUsage);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -325,7 +325,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Rendering.ReflectionProbeUsage arg0 = (UnityEngine.Rendering.ReflectionProbeUsage)(FCLibHelper.fc_get_int(L,0));
             ret.reflectionProbeUsage = arg0;
         }
@@ -342,7 +342,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, ret.sortingLayerName);
         }
@@ -358,7 +358,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             ret.sortingLayerName = arg0;
         }
@@ -375,7 +375,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.sortingLayerID);
         }
@@ -391,7 +391,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.sortingLayerID = arg0;
         }
@@ -408,7 +408,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.sortingOrder);
         }
@@ -424,7 +424,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.sortingOrder = arg0;
         }
@@ -441,7 +441,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isPartOfStaticBatch);
         }
@@ -458,7 +458,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Matrix4x4 temp_ret = ret.worldToLocalMatrix;
             FCLibHelper.fc_set_value_matrix(ret_ptr, ref temp_ret);
@@ -476,7 +476,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Matrix4x4 temp_ret = ret.localToWorldMatrix;
             FCLibHelper.fc_set_value_matrix(ret_ptr, ref temp_ret);
@@ -494,7 +494,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.lightProbeProxyVolumeOverride);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -511,7 +511,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.GameObject arg0 = FCGetObj.GetObj<UnityEngine.GameObject>(FCLibHelper.fc_get_intptr(L,0));
             ret.lightProbeProxyVolumeOverride = arg0;
         }
@@ -528,7 +528,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.probeAnchor);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -545,7 +545,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_intptr(L,0));
             ret.probeAnchor = arg0;
         }
@@ -562,7 +562,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.lightmapIndex);
         }
@@ -578,7 +578,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.lightmapIndex = arg0;
         }
@@ -595,7 +595,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.realtimeLightmapIndex);
         }
@@ -611,7 +611,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             ret.realtimeLightmapIndex = arg0;
         }
@@ -628,7 +628,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector4 temp_ret = ret.lightmapScaleOffset;
             FCLibHelper.fc_set_value_vector4(ret_ptr, ref temp_ret);
@@ -645,7 +645,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             Vector4 arg0 = new Vector4();
             FCLibHelper.fc_get_vector4(L,0,ref arg0);
             ret.lightmapScaleOffset = arg0;
@@ -663,7 +663,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             Vector4 temp_ret = ret.realtimeLightmapScaleOffset;
             FCLibHelper.fc_set_value_vector4(ret_ptr, ref temp_ret);
@@ -680,7 +680,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             Vector4 arg0 = new Vector4();
             FCLibHelper.fc_get_vector4(L,0,ref arg0);
             ret.realtimeLightmapScaleOffset = arg0;
@@ -698,7 +698,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.material);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -715,7 +715,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
             ret.material = arg0;
         }
@@ -732,7 +732,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.sharedMaterial);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -749,7 +749,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_intptr(L,0));
             ret.sharedMaterial = arg0;
         }
@@ -766,7 +766,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret.materials,ret_ptr);
         }
@@ -782,7 +782,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Material[] arg0 = null;
             arg0 = FCCustomParam.GetArray(ref arg0,L,0);
             ret.materials = arg0;
@@ -800,7 +800,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret.sharedMaterials,ret_ptr);
         }
@@ -816,7 +816,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer ret = get_obj(nThisPtr);
+            UnityEngine.Renderer ret = get_obj(nThisPtr);
             UnityEngine.Material[] arg0 = null;
             arg0 = FCCustomParam.GetArray(ref arg0,L,0);
             ret.sharedMaterials = arg0;
@@ -834,7 +834,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer obj = get_obj(nThisPtr);
+            UnityEngine.Renderer obj = get_obj(nThisPtr);
             UnityEngine.MaterialPropertyBlock arg0 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,0));
             obj.SetPropertyBlock(arg0);
         }
@@ -851,7 +851,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer obj = get_obj(nThisPtr);
+            UnityEngine.Renderer obj = get_obj(nThisPtr);
             UnityEngine.MaterialPropertyBlock arg0 = FCGetObj.GetObj<UnityEngine.MaterialPropertyBlock>(FCLibHelper.fc_get_intptr(L,0));
             obj.GetPropertyBlock(arg0);
         }
@@ -868,7 +868,7 @@ public class Renderer_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Renderer obj = get_obj(nThisPtr);
+            UnityEngine.Renderer obj = get_obj(nThisPtr);
             List<UnityEngine.Rendering.ReflectionProbeBlendInfo> arg0 = null;
             arg0 = FCCustomParam.GetList(ref arg0,L,0);
             obj.GetClosestReflectionProbes(arg0);

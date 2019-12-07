@@ -8,9 +8,9 @@ using UnityEngine.EventSystems;
 
 public class Button_wrap
 {
-    public static Button get_obj(long L)
+    public static UnityEngine.UI.Button get_obj(long L)
     {
-        return FCGetObj.GetObj<Button>(L);
+        return FCGetObj.GetObj<UnityEngine.UI.Button>(L);
     }
 
     public static void Register()
@@ -42,7 +42,7 @@ public class Button_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        Button obj = FCGetObj.GetObj<Button>(L);
+        UnityEngine.UI.Button obj = FCGetObj.GetObj<UnityEngine.UI.Button>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -53,8 +53,8 @@ public class Button_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        Button left  = FCGetObj.GetObj<Button>(L);
-        Button right = FCGetObj.GetObj<Button>(R);
+        UnityEngine.UI.Button left  = FCGetObj.GetObj<UnityEngine.UI.Button>(L);
+        UnityEngine.UI.Button right = FCGetObj.GetObj<UnityEngine.UI.Button>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -72,7 +72,7 @@ public class Button_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Button ret = get_obj(nThisPtr);
+            UnityEngine.UI.Button ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.onClick);
             FCLibHelper.fc_set_value_intptr(ret_ptr, v);
@@ -89,7 +89,7 @@ public class Button_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Button ret = get_obj(nThisPtr);
+            UnityEngine.UI.Button ret = get_obj(nThisPtr);
             UnityEngine.UI.Button.ButtonClickedEvent arg0 = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(FCLibHelper.fc_get_intptr(L,0));
             ret.onClick = arg0;
         }
@@ -106,7 +106,7 @@ public class Button_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Button obj = get_obj(nThisPtr);
+            UnityEngine.UI.Button obj = get_obj(nThisPtr);
             UnityEngine.EventSystems.PointerEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.PointerEventData>(FCLibHelper.fc_get_intptr(L,0));
             obj.OnPointerClick(arg0);
         }
@@ -123,7 +123,7 @@ public class Button_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            Button obj = get_obj(nThisPtr);
+            UnityEngine.UI.Button obj = get_obj(nThisPtr);
             UnityEngine.EventSystems.BaseEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.BaseEventData>(FCLibHelper.fc_get_intptr(L,0));
             obj.OnSubmit(arg0);
         }

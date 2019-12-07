@@ -1,6 +1,5 @@
 
-class Object{}
-
+using System;
 public enum HideFlags
 {
     None = 0,
@@ -41,6 +40,8 @@ public enum PrimitiveType
     Plane = 4,
     Quad = 5,
 };
+
+class Coroutine{}
 
 class AnimationClip{}
 
@@ -554,8 +555,6 @@ class UnityEventBase:Object{}
 class Selectable:UIBehaviour{}
 
 class UIBehaviour:MonoBehaviour{}
-
-class MonoBehaviour:Behaviour{}
 
 class PointerEventData:BaseEventData{}
 

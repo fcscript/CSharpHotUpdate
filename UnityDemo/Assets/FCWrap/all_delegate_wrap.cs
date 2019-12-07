@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 
-class UnityAction_deletate : FCDelegateBase
+class UnityAction_delegate : FCDelegateBase
 {
     public void  CallFunc()
     {

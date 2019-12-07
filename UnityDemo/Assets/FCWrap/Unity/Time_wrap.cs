@@ -6,9 +6,9 @@ using UnityObject = UnityEngine.Object;
 
 public class Time_wrap
 {
-    public static Time get_obj(long L)
+    public static UnityEngine.Time get_obj(long L)
     {
-        return FCGetObj.GetObj<Time>(L);
+        return FCGetObj.GetObj<UnityEngine.Time>(L);
     }
 
     public static void Register()
@@ -42,7 +42,7 @@ public class Time_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_new(long L)
     {
-        long nPtr = FCGetObj.NewObj<Time>();
+        long nPtr = FCGetObj.NewObj<UnityEngine.Time>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
         FCLibHelper.fc_set_value_intptr(ret, nPtr);
         return 0;
@@ -65,7 +65,7 @@ public class Time_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        Time obj = FCGetObj.GetObj<Time>(L);
+        UnityEngine.Time obj = FCGetObj.GetObj<UnityEngine.Time>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -76,8 +76,8 @@ public class Time_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        Time left  = FCGetObj.GetObj<Time>(L);
-        Time right = FCGetObj.GetObj<Time>(R);
+        UnityEngine.Time left  = FCGetObj.GetObj<UnityEngine.Time>(L);
+        UnityEngine.Time right = FCGetObj.GetObj<UnityEngine.Time>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -95,7 +95,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.time);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.time);
         }
         catch(Exception e)
         {
@@ -110,7 +110,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.timeSinceLevelLoad);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.timeSinceLevelLoad);
         }
         catch(Exception e)
         {
@@ -125,7 +125,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.deltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.deltaTime);
         }
         catch(Exception e)
         {
@@ -140,7 +140,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedTime);
         }
         catch(Exception e)
         {
@@ -155,7 +155,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.unscaledTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.unscaledTime);
         }
         catch(Exception e)
         {
@@ -170,7 +170,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedUnscaledTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedUnscaledTime);
         }
         catch(Exception e)
         {
@@ -185,7 +185,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.unscaledDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.unscaledDeltaTime);
         }
         catch(Exception e)
         {
@@ -200,7 +200,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedUnscaledDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedUnscaledDeltaTime);
         }
         catch(Exception e)
         {
@@ -215,7 +215,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.fixedDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedDeltaTime);
         }
         catch(Exception e)
         {
@@ -229,7 +229,7 @@ public class Time_wrap
         try
         {
             float arg0 = FCLibHelper.fc_get_float(L,0);
-            Time.fixedDeltaTime = arg0;
+            UnityEngine.Time.fixedDeltaTime = arg0;
         }
         catch(Exception e)
         {
@@ -244,7 +244,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.maximumDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.maximumDeltaTime);
         }
         catch(Exception e)
         {
@@ -258,7 +258,7 @@ public class Time_wrap
         try
         {
             float arg0 = FCLibHelper.fc_get_float(L,0);
-            Time.maximumDeltaTime = arg0;
+            UnityEngine.Time.maximumDeltaTime = arg0;
         }
         catch(Exception e)
         {
@@ -273,7 +273,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.smoothDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.smoothDeltaTime);
         }
         catch(Exception e)
         {
@@ -288,7 +288,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.maximumParticleDeltaTime);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.maximumParticleDeltaTime);
         }
         catch(Exception e)
         {
@@ -302,7 +302,7 @@ public class Time_wrap
         try
         {
             float arg0 = FCLibHelper.fc_get_float(L,0);
-            Time.maximumParticleDeltaTime = arg0;
+            UnityEngine.Time.maximumParticleDeltaTime = arg0;
         }
         catch(Exception e)
         {
@@ -317,7 +317,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.timeScale);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.timeScale);
         }
         catch(Exception e)
         {
@@ -331,7 +331,7 @@ public class Time_wrap
         try
         {
             float arg0 = FCLibHelper.fc_get_float(L,0);
-            Time.timeScale = arg0;
+            UnityEngine.Time.timeScale = arg0;
         }
         catch(Exception e)
         {
@@ -346,7 +346,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_int(ret_ptr, Time.frameCount);
+            FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.frameCount);
         }
         catch(Exception e)
         {
@@ -361,7 +361,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_int(ret_ptr, Time.renderedFrameCount);
+            FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.renderedFrameCount);
         }
         catch(Exception e)
         {
@@ -376,7 +376,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_float(ret_ptr, Time.realtimeSinceStartup);
+            FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.realtimeSinceStartup);
         }
         catch(Exception e)
         {
@@ -391,7 +391,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_int(ret_ptr, Time.captureFramerate);
+            FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.captureFramerate);
         }
         catch(Exception e)
         {
@@ -405,7 +405,7 @@ public class Time_wrap
         try
         {
             int arg0 = FCLibHelper.fc_get_int(L,0);
-            Time.captureFramerate = arg0;
+            UnityEngine.Time.captureFramerate = arg0;
         }
         catch(Exception e)
         {
@@ -420,7 +420,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_bool(ret_ptr, Time.inFixedTimeStep);
+            FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Time.inFixedTimeStep);
         }
         catch(Exception e)
         {

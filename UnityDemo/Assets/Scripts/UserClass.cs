@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Threading.Tasks;
 
 [AutoWrap]
 public class UserClass
@@ -23,6 +24,25 @@ public class TestD  // 测试导出功能的类，没有实际意义
     public void Update()
     {
 
+    }
+    public static Task<int>  LoadPrefab(string szAssetName)
+    {
+        Task<int> r = Task.Run(() =>
+        {
+            System.Threading.Thread.Sleep(3000);
+            return 1;
+        });
+        return r;
+    }
+    public static Task<GameObject> LoadPrefabObj(string szAssetName)
+    {
+        GameObject obj = new GameObject(szAssetName);
+        Task<GameObject> r = Task.Run(() =>
+        {
+            System.Threading.Thread.Sleep(3000);
+            return obj;
+        });
+        return r;
     }
 }
 

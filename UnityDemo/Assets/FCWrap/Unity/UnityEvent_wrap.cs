@@ -7,9 +7,9 @@ using UnityEngine.Events;
 
 public class UnityEvent_wrap
 {
-    public static UnityEvent get_obj(long L)
+    public static UnityEngine.Events.UnityEvent get_obj(long L)
     {
-        return FCGetObj.GetObj<UnityEvent>(L);
+        return FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(L);
     }
 
     public static void Register()
@@ -28,7 +28,7 @@ public class UnityEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_new(long L)
     {
-        long nPtr = FCGetObj.NewObj<UnityEvent>();
+        long nPtr = FCGetObj.NewObj<UnityEngine.Events.UnityEvent>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
         FCLibHelper.fc_set_value_intptr(ret, nPtr);
         return 0;
@@ -51,7 +51,7 @@ public class UnityEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
     public static int  obj_hash(long L)
     {
-        UnityEvent obj = FCGetObj.GetObj<UnityEvent>(L);
+        UnityEngine.Events.UnityEvent obj = FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(L);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -62,8 +62,8 @@ public class UnityEvent_wrap
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_equal))]
     public static bool  obj_equal(long L, long R)
     {
-        UnityEvent left  = FCGetObj.GetObj<UnityEvent>(L);
-        UnityEvent right = FCGetObj.GetObj<UnityEvent>(R);
+        UnityEngine.Events.UnityEvent left  = FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(L);
+        UnityEngine.Events.UnityEvent right = FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(R);
         if(left != null)
         {
             return left.Equals(right);
@@ -81,8 +81,8 @@ public class UnityEvent_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UnityEvent obj = get_obj(nThisPtr);
-            UnityAction_deletate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_deletate>(L,0);
+            UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
+            UnityAction_delegate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_delegate>(L,0);
             UnityEngine.Events.UnityAction arg0 = null;
             if(func0 != null)
                 arg0 = func0.CallFunc;
@@ -103,8 +103,8 @@ public class UnityEvent_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UnityEvent obj = get_obj(nThisPtr);
-            UnityAction_deletate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_deletate>(L,0);
+            UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
+            UnityAction_delegate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_delegate>(L,0);
             UnityEngine.Events.UnityAction arg0 = null;
             if(func0 != null)
                 arg0 = func0.CallFunc;
@@ -125,7 +125,7 @@ public class UnityEvent_wrap
         try
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UnityEvent obj = get_obj(nThisPtr);
+            UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
             obj.Invoke();
         }
         catch(Exception e)
