@@ -446,6 +446,10 @@ public class FCClassWrap
         {
             return;
         }
+        if (conInfo.IsDefined(typeof(ManualWrapAttribute), false))
+        {
+            return;
+        }
         if (conInfo.IsDefined(typeof(ObsoleteAttribute), false))
         {
             return;
@@ -658,7 +662,11 @@ public class FCClassWrap
         {
             return;
         }
-        if(value.IsDefined(typeof(ObsoleteAttribute), false))
+        if (value.IsDefined(typeof(ManualWrapAttribute), false))
+        {
+            return;
+        }
+        if (value.IsDefined(typeof(ObsoleteAttribute), false))
         {
             return;
         }
@@ -749,6 +757,10 @@ public class FCClassWrap
         }
         // 如果该变量有不导出的标记
         if (property.IsDefined(typeof(DontWrapAttribute), false))
+        {
+            return;
+        }
+        if (property.IsDefined(typeof(ManualWrapAttribute), false))
         {
             return;
         }
@@ -911,6 +923,10 @@ public class FCClassWrap
             return;
         }
         if (method.IsDefined(typeof(ObsoleteAttribute), false))
+        {
+            return;
+        }
+        if (method.IsDefined(typeof(ManualWrapAttribute), false))
         {
             return;
         }

@@ -32,3 +32,13 @@ public class DontWrapAttribute : System.Attribute
     {
     }
 }
+
+// 手动导出标签[ManualWrap]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
+public class ManualWrapAttribute : System.Attribute
+{
+    // 手动导出标签[ManualWrap]
+    public ManualWrapAttribute()
+    {
+    }
+}
