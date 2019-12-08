@@ -17,3 +17,5 @@
 </Breakpoint>
 <CopyPathName>$(curpath)\Assets\StreamingAssets\test.code</CopyPathName>
 <ErrorLogPathName>$(curpath)\cmd_log.txt</ErrorLogPathName>
+//以下是项目字节码加密的KEY，零表示不加密，非零是简单加密, 一定要修改FCLibHelper.fc_set_code_data启动参数
+<ProjCode>0</ProjCode>

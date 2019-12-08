@@ -37,6 +37,12 @@ public class FCScriptLoader : MonoBehaviour
         return false;
     }
 
+    // 功能：得到工程加密的KEY
+    protected virtual int  GetProjCode()
+    {
+        return 0;
+    }
+
     protected void InitDll()
     {
         if (!FCDll.IsInitDll())
@@ -150,7 +156,7 @@ public class FCScriptLoader : MonoBehaviour
         if (fileData != null && fileData.Length > 0)
         {
             m_bLoadScript = true;
-            FCLibHelper.fc_set_code_data(fileData, fileData.Length, 0);
+            FCLibHelper.fc_set_code_data(fileData, fileData.Length, GetProjCode());
 
             all_class_wrap.Register(); // 动态wrap
             OnAfterLoadScriptData();
