@@ -99,14 +99,18 @@ public class FCClassWrap
     }
 
     // 功能：开始导出
-    public void BeginExport(string szExportPath)
+    public void BeginExport(string szExportPath, bool bDebugPath = false)
     {
         m_szExportPath = szExportPath;
         if (string.IsNullOrEmpty(m_szExportPath))
         {
-            //m_szExportPath = Application.dataPath;
-            //m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "FCWrap/";
-            m_szExportPath = Application.dataPath + "/FCWrap/";
+            if(bDebugPath)
+            {
+                m_szExportPath = Application.dataPath;
+                m_szExportPath = m_szExportPath.Substring(0, m_szExportPath.Length - 6) + "FCWrap/";
+            }
+            else
+                m_szExportPath = Application.dataPath + "/FCWrap/";
         }
         m_szFCScriptPath = Application.dataPath;
         m_szFCScriptPath = m_szFCScriptPath.Substring(0, m_szFCScriptPath.Length - 6) + "Script/inport/";
@@ -702,9 +706,9 @@ public class FCClassWrap
         string szLeftName = string.Format("ret.{0}", szName);
         if (bStatic)
             szLeftName = string.Format("{0}.{1}", m_szCurClassName, szName);
-        
+
         string szDelegateClassName = string.Format("{0}_delegate", ret_value.GetDelegateName(true));
-        m_deleteWrap.PushDelegateWrap(ret_value.m_value, szDelegateClassName);
+        szDelegateClassName = m_deleteWrap.PushDelegateWrap(ret_value.m_value, szDelegateClassName);
 
         if (bCanSet)
         {
@@ -1180,7 +1184,7 @@ public class FCClassWrap
             if (value.m_nValueType == fc_value_type.fc_value_delegate)
             {
                 string szDelegateClassName = string.Format("{0}_delegate", value.GetDelegateName(true));
-                m_deleteWrap.PushDelegateWrap(value.m_value, szDelegateClassName);
+                szDelegateClassName = m_deleteWrap.PushDelegateWrap(value.m_value, szDelegateClassName);
 
                 fileData.AppendFormat("{0}{1} func{2} = FCDelegateMng.Instance.GetDelegate<{3}>({4},{5});\r\n", szLeftEmpty, szDelegateClassName, szIndex, szDelegateClassName, Ptr, szIndex);
                 fileData.AppendFormat("{0}{1} arg{2} = null;\r\n", szLeftEmpty, szCSharpName, szIndex);
@@ -1425,7 +1429,7 @@ public class FCClassWrap
         Type nDelegateType = FCValueType.GetDelegeteType(nClassType, nParamType);
 
         string szDelegateName = FCValueType.GetDelegateName(nParamType);
-        m_deleteWrap.PushDelegateWrap(nDelegateType, szDelegateName);
+        szDelegateName = m_deleteWrap.PushDelegateWrap(nDelegateType, szDelegateName);
 
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
         fileData.AppendLine("    public static int AddListener_wrap(long L)");

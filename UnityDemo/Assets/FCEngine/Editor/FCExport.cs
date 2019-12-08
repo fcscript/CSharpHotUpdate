@@ -270,11 +270,11 @@ public static class FCExport
     //static void TestExport()
     //{
     //    FCClassWrap pWrap = new FCClassWrap();
-    //    pWrap.BeginExport("");
+    //    pWrap.BeginExport("", true);
 
-    //    pWrap.BeginModleWrap("AutoClass");
-    //    pWrap.WrapClass(typeof(UnityEngine.AssetBundle));
-    //    pWrap.EndModleWrap();
+    //    WrapUnityClass(pWrap);
+    //    WrapUIClass(pWrap);
+    //    WrapCustomAttribClass(pWrap); // 导出打有[ClassAutoWrap]标签的类
 
     //    pWrap.EndExport();
     //    MakeFCProj();

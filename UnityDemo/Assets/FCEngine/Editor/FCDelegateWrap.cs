@@ -12,8 +12,11 @@ class FCDelegateWrap
     string m_szExportPath;
     StringBuilder m_szTempBuilder;
 
-    Dictionary<Type, string> m_DelegateTypes = new Dictionary<Type, string>(); // 临时转换的
-    
+    Dictionary<Type, string> m_DelegateTypes = new Dictionary<Type, string>(); // 临时转换的
+    Dictionary<string, Type> m_NameToType = new Dictionary<string, Type>();
+    Dictionary<string, string> m_FullToShortName = new Dictionary<string, string>(); // 长名字转短名字
+
+
     public void BeginExport(string szPath)
     {
         m_szExportPath = szPath;
@@ -36,9 +39,121 @@ class FCDelegateWrap
         string szPathName = m_szExportPath + "all_delegate_wrap.cs";
         File.WriteAllText(szPathName, m_szTempBuilder.ToString());
     }
-    public void  PushDelegateWrap(Type nType, string szClassWrapName)
+    string  GetDelegateWrapName(Type nType)
     {
-        m_DelegateTypes[nType] = szClassWrapName;
+        // 第一个，按
+        string szName = nType.Name;
+        szName = szName.Replace("`", "");
+
+        switch(szName)
+        {
+            case "Action":
+            case "UnityAction":
+            case "Func":
+            case "Comparer":
+                break;
+            default:
+                szName = "Custom";
+                break;
+        }
+
+        MethodInfo method = nType.GetMethod("Invoke");
+        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        int nParamCount = allParams != null ? allParams.Length : 0;
+        for (int i = 0; i<nParamCount; ++i)
+        {
+            FCValueType value_param = FCValueType.TransType(allParams[i].ParameterType);
+            szName += "_";
+            szName += value_param.GetTypeName(true, true);
+        }
+        FCValueType ret_value = FCValueType.TransType(method.ReturnType);
+        if(ret_value.m_nValueType != fc_value_type.fc_value_void)
+        {
+            string szRetName = ret_value.GetValueName(true, true);
+            szName = szName + "__" + szRetName;
+        }
+        return szName;
+    }
+    bool  IsSameDelegateType(Type t1, Type t2)
+    {
+        if (t1 == t2)
+            return true;
+
+        MethodInfo method1 = t1.GetMethod("Invoke");
+        MethodInfo method2 = t2.GetMethod("Invoke");
+        ParameterInfo[] allParams1 = method1.GetParameters();  // 函数参数
+        ParameterInfo[] allParams2 = method2.GetParameters();  // 函数参数
+        int nParamCount1 = allParams1 != null ? allParams1.Length : 0;
+        int nParamCount2 = allParams2 != null ? allParams2.Length : 0;
+        if (nParamCount1 != nParamCount2)
+            return false;
+        if (method1.ReturnType != method2.ReturnType)
+            return false;
+        for(int i = 0; i<nParamCount1; ++i)
+        {
+            Type nParam1 = allParams1[i].ParameterType;
+            Type nParam2 = allParams2[i].ParameterType;
+            if (nParam1 != nParam2)
+                return false;
+        }
+        return true;
+    }
+
+    public string PushDelegateWrap(Type nType, string szCustomName)
+    {
+        if(m_DelegateTypes.ContainsKey(nType))
+        {
+            return m_DelegateTypes[nType];
+        }
+        string szFullDelegateName = GetDelegateWrapName(nType);
+        if(m_FullToShortName.ContainsKey(szFullDelegateName))
+        {
+            string szShortName = m_FullToShortName[szFullDelegateName];
+            if(m_NameToType.ContainsKey(szShortName))
+            {
+                Type nRealType = m_NameToType[szShortName];
+                if (IsSameDelegateType(nRealType, nType))
+                    return szShortName;
+            }
+        }
+
+        if (m_NameToType.ContainsKey(szCustomName))
+        {
+            Type nOldType = m_NameToType[szCustomName];
+            if (IsSameDelegateType(nOldType, nType))
+                return szCustomName;
+
+            string szTestName1 = GetDelegateWrapName(nOldType);
+            string szTestName2 = GetDelegateWrapName(nType);
+
+            string szTempName = string.Empty;
+            for(int i = 0; i<100;++i)
+            {
+                szTempName = 'd' + i.ToString() + '_' + szCustomName;
+                if(m_NameToType.ContainsKey(szTempName))
+                {
+                    nOldType = m_NameToType[szTempName];
+                    if (IsSameDelegateType(nOldType, nType))
+                        return szTempName;
+                    continue;
+                }
+                else
+                {
+                    szCustomName = szTempName;
+                    m_DelegateTypes[nType] = szCustomName;
+                    m_NameToType[szCustomName] = nType;
+                    m_FullToShortName[szFullDelegateName] = szCustomName;
+                    return szCustomName;
+                }
+            }
+            string szFullName = nType.FullName;
+            szFullName = szFullName.Replace('+', '_');
+            szCustomName = szFullName + '_' + szCustomName;
+        }        
+        m_DelegateTypes[nType] = szCustomName;
+        m_NameToType[szCustomName] = nType;
+        m_FullToShortName[szFullDelegateName] = szCustomName;
+        return szCustomName;
     }
     void  MakeDelegetClassWrap(Type nType, string szClassWrapName)
     {
