@@ -76,8 +76,10 @@ class FCClassExport
                 continue;
             if (nType.Name.IndexOf('&') != -1)
                 continue;
+            if (nType.Name.IndexOf('`') != -1)
+                continue;
 
-            if(nType == typeof(Type))
+            if (nType == typeof(Type))
             {
                 m_szFileBuilder.AppendLine("class Type{}");
             }
@@ -369,6 +371,9 @@ class FCClassExport
         {
             return;
         }
+        if (FCExclude.IsDontExportFieldInfo(value))
+            return;
+
         PushNameSpace(value.FieldType.Namespace);
         PushDelegateType(value.FieldType);
         PushRefType(value.FieldType);
@@ -406,6 +411,8 @@ class FCClassExport
         {
             return;
         }
+        if (FCExclude.IsDontExportPropertyInfo(property))
+            return;
         //if (property.IsDefined(typeof(DefaultMemberAttribute), false))
         //{
         //    return;
@@ -458,6 +465,8 @@ class FCClassExport
         }
         FCValueType value = FCValueType.TransType(nVaueType);
         string szValueType = value.GetTypeName(false);
+        if (szValueType.IndexOf('`') != -1)
+            return ;
         m_szTempBuilder.AppendFormat("    public {0}{1} {2} {{{3}{4}}}\r\n", szStatic, szValueType, szName, szGetBody, szSetBody);
     }
 

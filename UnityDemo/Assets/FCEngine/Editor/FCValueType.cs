@@ -59,6 +59,7 @@ public enum fc_value_tempalte_type
     template_map,   // map/Dictionary
     template_task,  // task<Type>
     template_ienumerable, // IEnumerable<Type>
+    template_other, // 其他模板
 };
 
 public class FCValueType
@@ -69,6 +70,7 @@ public class FCValueType
     public Type m_key;
     public Type m_value;
     public bool m_bRef;
+    public bool m_bCustomTemplate; // 是不是自定义的模板
 
     public FCValueType()
     {
@@ -76,6 +78,7 @@ public class FCValueType
         m_nKeyType = fc_value_type.fc_value_unknow;
         m_nValueType = fc_value_type.fc_value_unknow;
         m_bRef = false;
+        m_bCustomTemplate = false;
     }
     public FCValueType(Type nType)
     {
@@ -155,9 +158,34 @@ public class FCValueType
             m_nKeyType = m_nValueType = GetBaseFCType(m_value);
             return;
         }
+        m_bCustomTemplate = IsCustomTemplate(szTypeName);
+
         m_nTemplateType = fc_value_tempalte_type.template_none;
         m_key = m_value = nType;
         m_nKeyType = m_nValueType = GetBaseFCType(m_value);
+    }
+    public static bool  IsCustomTemplate(string szTypeName)
+    {
+        int nIndex = szTypeName.IndexOf('`');
+        if (nIndex == -1)
+            return false;
+        string szName = szTypeName.Substring(0, nIndex);
+        switch(szName)
+        {
+            case "List":
+            case "Dictionary":
+            case "Task":
+            case "IEnumerable":
+            case "Comparer":
+            case "Comparison":
+            case "Action":
+            case "UnityAction":
+            case "Func":
+                return false;
+            default:
+                break;
+        }
+        return true;
     }
     public string GetKeyName(bool bCSharp, bool bFullName = false)
     {

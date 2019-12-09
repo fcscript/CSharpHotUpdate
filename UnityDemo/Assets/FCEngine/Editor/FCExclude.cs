@@ -264,11 +264,46 @@ class FCExclude
     }
     public static bool IsDontExportMethod(MethodInfo method)
     {
+        if (0 != (MethodAttributes.SpecialName & method.Attributes))
+            return true;
+        // 如果该函数有不导出的标记
+        if (method.IsDefined(typeof(DontWrapAttribute), false))
+            return true;
+        if (method.IsDefined(typeof(ObsoleteAttribute), false))
+            return true;
+
         // 先检查函数的返回值
-        FCValueType ret_value = FCValueType.TransType(method.ReturnType);
+        if (IsDontExportType(method.ReturnType))
+            return true;
+        // 必要的，检查一下参数，看参数有没有不符合的
+        ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+        int nParamCount = allParams != null ? allParams.Length : 0;
+        for (int i = 0; i < nParamCount; ++i)
+        {
+            ParameterInfo param = allParams[i];
+            if (IsDontExportType(param.ParameterType))
+                return true;
+        }
+        return false;
+    }
+    public static bool IsDontExportFieldInfo(FieldInfo value)
+    {
+        return IsDontExportType(value.FieldType);
+    }
+    public static bool IsDontExportPropertyInfo(PropertyInfo property)
+    {
+        return IsDontExportType(property.PropertyType);
+    }
+    public static bool  IsDontExportType(Type nType)
+    {
+        FCValueType ret_value = FCValueType.TransType(nType);
         // 目前先暂不支持IEnumerable, 转换这个有点麻烦
         if (ret_value.m_nTemplateType == fc_value_tempalte_type.template_ienumerable)
             return true;
+        // 返回值是自定义模板的，也不支持，自动转换的代码太复杂，先不写了
+        if (ret_value.m_bCustomTemplate)
+            return true;
+
         return false;
     }
 }

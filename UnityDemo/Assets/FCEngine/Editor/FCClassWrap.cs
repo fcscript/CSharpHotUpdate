@@ -674,6 +674,9 @@ public class FCClassWrap
         {
             return;
         }
+        if (FCExclude.IsDontExportFieldInfo(value))
+            return;
+
         PushNameSpace(value.FieldType.Namespace);
 
         bool bCanWrite = !(value.IsInitOnly || value.IsLiteral);
@@ -776,6 +779,8 @@ public class FCClassWrap
         {
             return;
         }
+        if (FCExclude.IsDontExportPropertyInfo(property))
+            return;
         //if(property.IsDefined(typeof(DefaultMemberAttribute), false))
         //{
         //    return;
