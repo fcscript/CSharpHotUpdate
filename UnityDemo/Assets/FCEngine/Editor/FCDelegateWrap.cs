@@ -197,6 +197,14 @@ class FCDelegateWrap
             FCValueType value_param = FCValueType.TransType(allParams[i].ParameterType);
             if(value_param.m_nTemplateType != fc_value_tempalte_type.template_none)
             {
+                if(value_param.m_nTemplateType == fc_value_tempalte_type.template_array)
+                {
+                    if(value_param.m_nValueType == fc_value_type.fc_value_byte)
+                    {
+                        m_szTempBuilder.AppendFormat("            FCDll.PushCallParam({0});\r\n", szArg);
+                        continue;
+                    }
+                }
                 Debug.LogError(nClassType.FullName + "参数不支持模板");
                 continue;
             }
