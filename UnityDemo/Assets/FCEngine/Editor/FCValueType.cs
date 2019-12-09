@@ -228,49 +228,10 @@ public class FCValueType
             default:
                 break;
         }
-        bool bFuncDelegate = false;
-        bool bBaseDelegate = false;
-        if (szName.IndexOf("Action`") != -1)
+        int nPos = szName.IndexOf('`');
+        if (nPos != -1)
         {
-            bBaseDelegate = true;
-            szName = "Action";
-        }
-        else if (szName.IndexOf("UnityAction`") != -1)
-        {
-            bBaseDelegate = true;
-            szName = "UnityAction";
-        }
-        else if(szName.IndexOf("Func`") != -1)
-        {
-            bFuncDelegate = true;
-            bBaseDelegate = true;
-            szName = "Func";
-        }
-
-        if (bBaseDelegate)
-        {
-            MethodInfo method = nType.GetMethod("Invoke");
-            ParameterInfo[] allParams = method.GetParameters();
-            int nParamCount = 0;
-            if (allParams != null)
-            {
-                nParamCount = allParams.Length;
-                szName += "_";
-                for (int i = 0; i<allParams.Length; ++i)
-                {
-                    FCValueType value_param = TransType(allParams[i].ParameterType);
-                    if (i > 0)
-                        szName += "_";
-                    szName += value_param.GetTypeName(true, true);
-                }
-            }
-            if(bFuncDelegate)
-            {
-                FCValueType value_param = TransType(method.ReturnType);
-                if (nParamCount > 0)
-                    szName += "_";
-                szName += value_param.GetTypeName(true, true);
-            }
+            szName = szName.Replace("`", "");
         }
         string szCSharpName = szName.Replace('+', '.');
         return szCSharpName;

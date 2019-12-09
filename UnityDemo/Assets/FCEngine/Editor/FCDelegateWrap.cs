@@ -122,10 +122,7 @@ class FCDelegateWrap
             Type nOldType = m_NameToType[szCustomName];
             if (IsSameDelegateType(nOldType, nType))
                 return szCustomName;
-
-            string szTestName1 = GetDelegateWrapName(nOldType);
-            string szTestName2 = GetDelegateWrapName(nType);
-
+            
             string szTempName = string.Empty;
             for(int i = 0; i<100;++i)
             {
@@ -146,9 +143,8 @@ class FCDelegateWrap
                     return szCustomName;
                 }
             }
-            string szFullName = nType.FullName;
-            szFullName = szFullName.Replace('+', '_');
-            szCustomName = szFullName + '_' + szCustomName;
+            szCustomName = szFullDelegateName;
+            szCustomName = szCustomName.Replace('.', '_');
         }        
         m_DelegateTypes[nType] = szCustomName;
         m_NameToType[szCustomName] = nType;
