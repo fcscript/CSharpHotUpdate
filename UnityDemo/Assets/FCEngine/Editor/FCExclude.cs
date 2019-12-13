@@ -128,7 +128,9 @@ class FCExclude
         PushBlackName(typeof(UnityEngine.AudioRenderer), "Render");
         PushBlackName(typeof(UnityEngine.HumanPoseHandler), "GetHumanPose");
         PushBlackName(typeof(UnityEngine.Sprite), "OverridePhysicsShape");
-        PushBlackName(typeof(UnityEngine.UI.GraphicRegistry), "GetGraphicsForCanvas");        
+        PushBlackName(typeof(UnityEngine.UI.GraphicRegistry), "GetGraphicsForCanvas");
+
+        PushBlackName(typeof(UnityEngine.UI.Text), "OnRebuildRequested");
     }
 
     public static List<string> GetClassBlackList(Type nClassType)

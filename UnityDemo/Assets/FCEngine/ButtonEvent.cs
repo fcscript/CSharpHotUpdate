@@ -14,7 +14,7 @@ class ButtonEvent : MonoBehaviour
             UIMono = transform.GetComponentInParent<ScriptMono>();
         }
     }
-    public void OnClicked()
+    public void OnClick()
     {
         if (UIMono != null)
             UIMono.OnButtonClicked(name);

@@ -93,44 +93,38 @@ public static class FCExport
     static void WrapUnityClass(FCClassWrap pWrap)
     {
         pWrap.BeginModleWrap("Unity");
-
-        //pWrap.WrapClass(typeof(System.Type));
-        pWrap.WrapClass(typeof(UnityEngine.Time));
-        pWrap.WrapClass(typeof(UnityEngine.Object));
-        AddTemplateSurport(pWrap); // 添加模板函数的wrap支持
-        pWrap.WrapClass(typeof(UnityEngine.Component));
-        pWrap.WrapClass(typeof(UnityEngine.Transform));
-        pWrap.PushCurrentDontWrapName("alphaIsTransparency");
-        pWrap.WrapClass(typeof(UnityEngine.Texture2D));
-        AddTemplateSurport(pWrap); // 添加模板函数的wrap支持
-        pWrap.WrapClass(typeof(UnityEngine.GameObject));
-        pWrap.WrapClass(typeof(UnityEngine.Behaviour));
-        pWrap.WrapClass(typeof(UnityEngine.MonoBehaviour));
-        pWrap.PushCurrentDontWrapName("Item");
-        pWrap.WrapClass(typeof(UnityEngine.Animation));
-        pWrap.WrapClass(typeof(UnityEngine.Transform));
-        pWrap.PushCurrentDontWrapName("allowOcclusionWhenDynamic");
-        pWrap.WrapClass(typeof(UnityEngine.Renderer));
-        pWrap.WrapClass(typeof(UnityEngine.MeshRenderer));
-        pWrap.WrapClass(typeof(UnityEngine.SkinnedMeshRenderer));
-        pWrap.PushCurrentDontWrapName("IsJoystickPreconfigured");
-        pWrap.WrapClass(typeof(UnityEngine.Input));
-        pWrap.PushCurrentDontWrapName("areaSize");
-        pWrap.PushCurrentDontWrapName("lightmapBakeType");
-        pWrap.PushCurrentDontWrapName("bakingOutput");
-        pWrap.WrapClass(typeof(UnityEngine.Light));
-        pWrap.WrapClass(typeof(UnityEngine.Material));
-        pWrap.WrapClass(typeof(UnityEngine.Events.UnityEvent));
-
+        
+        WrapType(pWrap, typeof(UnityEngine.Time));
+        WrapType(pWrap, typeof(UnityEngine.Object));
+        WrapType(pWrap, typeof(UnityEngine.Component));
+        WrapType(pWrap, typeof(UnityEngine.Transform));
+        WrapType(pWrap, typeof(UnityEngine.Texture2D));
+        WrapType(pWrap, typeof(UnityEngine.GameObject));
+        WrapType(pWrap, typeof(UnityEngine.Behaviour));
+        WrapType(pWrap, typeof(UnityEngine.MonoBehaviour));
+        WrapType(pWrap, typeof(UnityEngine.Animation));
+        WrapType(pWrap, typeof(UnityEngine.Renderer));
+        WrapType(pWrap, typeof(UnityEngine.MeshRenderer));
+        WrapType(pWrap, typeof(UnityEngine.SkinnedMeshRenderer));
+        WrapType(pWrap, typeof(UnityEngine.Input));
+        WrapType(pWrap, typeof(UnityEngine.Light));
+        WrapType(pWrap, typeof(UnityEngine.Material));
+        WrapType(pWrap, typeof(UnityEngine.Events.UnityEvent));
+        
         pWrap.EndModleWrap();
     }
+    static void WrapType(FCClassWrap pWrap, Type nType)
+    {
+        PrepareWrap(pWrap, nType);
+        pWrap.WrapClass(nType);
+    }
+
     static void WrapUIClass(FCClassWrap pWrap)
     {
         pWrap.BeginModleWrap("UnityUI");
         // 导出UI类
-        pWrap.WrapClass(typeof(UnityEngine.UI.Button));
-        pWrap.PushCurrentDontWrapName("OnRebuildRequested");
-        pWrap.WrapClass(typeof(UnityEngine.UI.Text));
+        WrapType(pWrap, typeof(UnityEngine.UI.Button));
+        WrapType(pWrap, typeof(UnityEngine.UI.Text));
 
         pWrap.EndModleWrap();
 

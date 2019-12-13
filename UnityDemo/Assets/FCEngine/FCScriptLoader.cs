@@ -24,6 +24,11 @@ public class FCScriptLoader : MonoBehaviour
         InitDll();
     }
 
+    private void OnApplicationQuit()
+    {
+        FCDll.ReleaseDll();
+    }
+
     public static void InitCall(LPInitCallback pFunc)
     {
         if (m_bLoadScript)
