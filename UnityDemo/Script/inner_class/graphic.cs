@@ -899,6 +899,11 @@ public struct Rect
 public struct Plane
 {
     public float a, b, c, d;
+    public Plane(float _a, float _b, float _c, float _d)
+    {
+        a = _a; b = _b; c = _c; d = _d;
+    }
+
     public void Set(float _a, float _b, float _c, float _d)
     {
         a = _a; b = _b; c = _c; d = _d;
@@ -926,9 +931,46 @@ public struct Plane
     // 功能：通过一射线与平面求交点
     // 参数：vBegin - 射线的起点
     //       vDir - 射线的方向
-    public bool IntersectLine(out Vector3 vPickPos, Vector3 vBegin, Vector3 vDir)
+    public bool IntersectLine(ref Vector3 vPickPos, Vector3 vBegin, Vector3 vDir)
     {
-        vPickPos = new Vector3();
         return true;
     }
 };
+
+public struct Sphere
+{
+    public Vector3 center;
+    public float radius;
+
+    public Sphere(Vector3 _center, float _radius)
+    {
+        center = _center;
+        radius = _radius;
+    }
+
+    public void Set(Vector3 _center, float _radius)
+    {
+        center = _center;
+        radius = _radius;
+    }
+    // 功能：将一个包围盒转换成球体
+    public void Set(Bounds  box)
+    {
+    }
+
+    // 功能：检测射线是不是与球相交
+    public bool IsIntersect(Vector3 vRayPos, Vector3 vRayDir)
+    {
+        return false;
+    }
+    // 功能：求射线与球体的交点
+    // 参数: vPick - 输出选中的位置
+    //       vRayPos - 射线的起点
+    //       vRayDir - 射线的方向
+    //       bSelectNear - 是不是选择离相机更近的交点（有可能存在两个交点）
+    // 返回值：如果有交点, 返回true; 没有就返回false
+    public bool GetIntersectPoint(ref Vector3 vPick, Vector3 vRayPos, Vector3 vRayDir, bool bSelectNear)
+    {
+        return false;
+    }
+}
