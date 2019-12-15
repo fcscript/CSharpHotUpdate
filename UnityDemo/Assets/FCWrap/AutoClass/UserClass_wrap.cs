@@ -27,7 +27,7 @@ public class UserClass_wrap
     {
         long nPtr = FCGetObj.NewObj<UserClass>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -81,7 +81,7 @@ public class UserClass_wrap
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             Vector3 arg2 = new Vector3();
             FCLibHelper.fc_get_vector3(L,2,ref arg2);
-            UnityEngine.Transform arg3 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_intptr(L,3));
+            UnityEngine.Transform arg3 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,3));
             UserClass.TestFunc1(arg0,arg1,arg2,arg3);
         }
         catch(Exception e)

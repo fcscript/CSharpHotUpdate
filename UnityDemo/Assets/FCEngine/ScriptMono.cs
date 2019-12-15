@@ -52,6 +52,10 @@ public class ScriptMono : MonoBehaviour
             m_nScriptInsPtr = 0;
         }
     }
+    public void OnReloadResource()
+    {
+        m_nScriptInsPtr = 0;
+    }
     public void OnButtonClicked(string szName)
     {
         CreateScript(); // 延迟执行吧
@@ -146,7 +150,7 @@ public class ScriptMono : MonoBehaviour
         {
             long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
             long obj_ptr = FCGetObj.PushObj(value);
-            FCLibHelper.fc_set_value_intptr(ptr, obj_ptr);
+            FCLibHelper.fc_set_value_wrap_objptr(ptr, obj_ptr);
         }
     }
     public void SetScriptValue(string szName, UnityEngine.Object value)
@@ -155,7 +159,7 @@ public class ScriptMono : MonoBehaviour
         {
             long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
             long obj_ptr = FCGetObj.PushObj(value);
-            FCLibHelper.fc_set_value_intptr(ptr, obj_ptr);
+            FCLibHelper.fc_set_value_wrap_objptr(ptr, obj_ptr);
         }
     }
     public void SetScriptValue(string szName, Vector2 value)

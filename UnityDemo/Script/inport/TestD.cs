@@ -8,5 +8,6 @@ class  TestD : Object
     public int SetValue(int nValue){ return default(int); }
     public static Task<int> LoadPrefab(StringA szAssetName){ return null; }
     public static Task<GameObject> LoadPrefabObj(StringA szAssetName){ return null; }
+    public static Task<GameObject> WaitLoadPrefab(StringA szAssetName,float fWaitTime){ return null; }
 };
 

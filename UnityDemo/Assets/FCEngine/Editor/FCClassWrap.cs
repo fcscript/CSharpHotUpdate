@@ -419,7 +419,7 @@ public class FCClassWrap
         fileData.AppendLine("    {");
         fileData.AppendFormat("        long nPtr = FCGetObj.NewObj<{0}>();\r\n", m_szCurClassName);
         fileData.AppendLine("        long ret = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("        FCLibHelper.fc_set_value_intptr(ret, nPtr);");
+        fileData.AppendLine("        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);");
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
 
@@ -502,7 +502,7 @@ public class FCClassWrap
         fileData.AppendFormat("            {0} obj = new {1}({2});\r\n", m_szCurClassName, m_szCurClassName, szCallParam);
         fileData.AppendFormat("            long nPtr = FCGetObj.PushNewObj<{0}>(obj);\r\n", m_szCurClassName);
         fileData.AppendLine("            long ret = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_value_intptr(ret, nPtr);");        
+        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);");        
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
         fileData.AppendLine("        {");
@@ -1130,7 +1130,7 @@ public class FCClassWrap
         fileData.AppendLine("                break;");
         fileData.AppendLine("            }");
         fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_value_intptr(ret_ptr, nRetPtr);");
+        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, nRetPtr);");
     }
 
     // 添加回传的参数的wrap
@@ -1172,18 +1172,17 @@ public class FCClassWrap
             }
             if (value.m_nValueType == fc_value_type.fc_value_int_ptr)
             {
-                fileData.AppendFormat("{0}{1}{2} = ({3})(FCLibHelper.fc_get_intptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
+                fileData.AppendFormat("{0}{1}{2} = ({3})(FCLibHelper.fc_get_void_ptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
                 return;
             }
             if (value.m_nValueType == fc_value_type.fc_value_system_object)
             {
-                //fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<System.Object>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 return;
             }
             if(value.m_nValueType == fc_value_type.fc_value_unity_object)
             {
-                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 return;
             }
             if (value.m_nValueType == fc_value_type.fc_value_delegate)
@@ -1217,7 +1216,7 @@ public class FCClassWrap
                 return;
             }
         }
-        fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<{3}>(FCLibHelper.fc_get_intptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
+        fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetObj<{3}>(FCLibHelper.fc_get_wrap_objptr({4},{5}));\r\n", szLeftEmpty, szDefine, szLeftName, szCSharpName, Ptr, szIndex);
     }
 
     void  PushTaskMethod(MethodInfo method)

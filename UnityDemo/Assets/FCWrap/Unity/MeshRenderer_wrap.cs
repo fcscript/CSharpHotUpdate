@@ -27,7 +27,7 @@ public class MeshRenderer_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.MeshRenderer>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -81,7 +81,7 @@ public class MeshRenderer_wrap
             UnityEngine.MeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.additionalVertexStreams);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -96,7 +96,7 @@ public class MeshRenderer_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MeshRenderer ret = get_obj(nThisPtr);
-            UnityEngine.Mesh arg0 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.Mesh arg0 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_wrap_objptr(L,0));
             ret.additionalVertexStreams = arg0;
         }
         catch(Exception e)

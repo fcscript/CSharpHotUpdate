@@ -174,6 +174,22 @@ class os
     {
 
     }
+
+    // 功能：得到对象的数据地址
+    // 说明：如果对象是List，就返回数组的首地址
+    //       如果对象是字符串，就返回字符串的首地址
+    // 使用这个方法，可以将List数组快速与其他平台的接口做数据交互
+    public IntPtr GetDataPtr<_Ty>(_Ty obj)
+    {
+        return new IntPtr();
+    }
+    // 功能：得到对象自已的地址
+    // 说明：这个接口一般用于调试，没有实际用途
+    //       
+    public IntPtr GetObjPtr<_Ty>(_Ty obj)
+    {
+        return new IntPtr();
+    }
 };
 
 // 只是为了兼容UnityEngine.Events.UnityAction

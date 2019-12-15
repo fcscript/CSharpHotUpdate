@@ -29,8 +29,6 @@ public enum Space
 
 class Texture:Object{}
 
-class Scene{}
-
 public enum PrimitiveType
 {
     Sphere = 0,
@@ -41,7 +39,7 @@ public enum PrimitiveType
     Quad = 5,
 };
 
-class Coroutine{}
+class Coroutine:YieldInstruction{}
 
 class AnimationClip{}
 
@@ -109,7 +107,7 @@ public enum ReflectionProbeUsage
 
 class MaterialPropertyBlock:Object{}
 
-class ReflectionProbeBlendInfo{}
+class ReflectionProbeBlendInfo:ValueType{}
 
 class Mesh:Object{}
 
@@ -123,9 +121,9 @@ public enum SkinQuality
 
 class Gyroscope:Object{}
 
-class AccelerationEvent{}
+class AccelerationEvent:ValueType{}
 
-class Touch{}
+class Touch:ValueType{}
 
 class LocationService:Object{}
 
@@ -552,6 +550,16 @@ class ComputeBuffer:Object{}
 
 class UnityEventBase:Object{}
 
+class YieldInstruction:Object{}
+
+class ValueType:Object{}
+
+public enum LoadSceneMode
+{
+    Single = 0,
+    Additive = 1,
+};
+
 class Selectable:UIBehaviour{}
 
 class UIBehaviour:MonoBehaviour{}
@@ -601,5 +609,5 @@ public enum FontStyle
     BoldAndItalic = 3,
 };
 
-class TextGenerationSettings{}
+class TextGenerationSettings:ValueType{}
 

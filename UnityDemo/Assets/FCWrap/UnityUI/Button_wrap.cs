@@ -75,7 +75,7 @@ public class Button_wrap
             UnityEngine.UI.Button ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.onClick);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -90,7 +90,7 @@ public class Button_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button ret = get_obj(nThisPtr);
-            UnityEngine.UI.Button.ButtonClickedEvent arg0 = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.UI.Button.ButtonClickedEvent arg0 = FCGetObj.GetObj<UnityEngine.UI.Button.ButtonClickedEvent>(FCLibHelper.fc_get_wrap_objptr(L,0));
             ret.onClick = arg0;
         }
         catch(Exception e)
@@ -107,7 +107,7 @@ public class Button_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button obj = get_obj(nThisPtr);
-            UnityEngine.EventSystems.PointerEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.PointerEventData>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.EventSystems.PointerEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.PointerEventData>(FCLibHelper.fc_get_wrap_objptr(L,0));
             obj.OnPointerClick(arg0);
         }
         catch(Exception e)
@@ -124,7 +124,7 @@ public class Button_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button obj = get_obj(nThisPtr);
-            UnityEngine.EventSystems.BaseEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.BaseEventData>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.EventSystems.BaseEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.BaseEventData>(FCLibHelper.fc_get_wrap_objptr(L,0));
             obj.OnSubmit(arg0);
         }
         catch(Exception e)

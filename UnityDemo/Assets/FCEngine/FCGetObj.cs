@@ -49,6 +49,14 @@ public class FCGetObj
         FC_VALUE_TYPE_QUATERNION,      // Quaternion
         FC_VALUE_TYPE_BEZIER2D,        // Bezier2D
         FC_VALUE_TYPE_BEZIER3D,        // Bezier3D
+
+        FC_VALUE_TYPE_THIS,            // this 指针
+        FC_VALUE_TYPE_RETURN,          // return 变量
+
+        FC_VALUE_TYPE_INPORT_DELEGATE, // 外部导入的委托
+        FC_VALUE_TYPE_TEMPLATE_PARAM,  // 模板参数
+
+        FC_VALUE_TYPE_INT_PTR,         // 平台对象指针
     };
 
     // 扩展模板容器类型
@@ -72,6 +80,11 @@ public class FCGetObj
     static Dictionary<System.Object, FCRefObj> m_Obj2ID = new Dictionary<object, FCRefObj>();
     static long m_nObjID = 0;
 
+    public static void OnReloadScript()
+    {
+        m_AllObj.Clear();
+        m_Obj2ID.Clear();
+    }
     public static _Ty  GetObj<_Ty>(long  nIntPtr)// where _Ty : class
     {
         FCRefObj ref_obj = null;
@@ -126,6 +139,9 @@ public class FCGetObj
                     return FCLibHelper.fc_get_value_string_a(nIntPtr);  // wrap接口中，其实只用到了这个
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_STRING_W:
                     return FCLibHelper.fc_get_value_string_a(nIntPtr);
+                case FC_VALUE_TYPE.FC_VALUE_TYPE_VOID:
+                case FC_VALUE_TYPE.FC_VALUE_TYPE_INT_PTR:
+                    return new IntPtr(nIntPtr);
                 default:
                     break; // 其他的先暂不写了，代码太多了
             }
@@ -160,7 +176,8 @@ public class FCGetObj
         m_Obj2ID[ref_obj.m_obj] = ref_obj;
         return nPtr;
     }
-    // 功能：添加一个对象
+    // 功能：添加一个对象
+
     // 说明：这里并不检测容器是不是已经缓存该对象，那样效率不高，但这个接口也可能造成误用
     // 比如在脚本中每调用一次get_obj接口，就会生成一个FCRefObj对象, 如果连续调用多次，会造成瞬时内存增长
     // 解决方法是可以像ulua一样，添加一个反向列表，通过obj查找已经存在的IntPtr, 但这个会增加额外的开销
@@ -172,7 +189,8 @@ public class FCGetObj
         FCRefObj ref_obj;
         if (m_Obj2ID.TryGetValue(obj, out ref_obj))
         {
-            ref_obj.m_nRef++;    // 增加一下引用计数
+            ref_obj.m_nRef++;    // 增加一下引用计数
+
             return ref_obj.m_nPtr;
         }
         ref_obj = new FCRefObj();
@@ -186,7 +204,8 @@ public class FCGetObj
         m_Obj2ID[obj] = ref_obj;
         return nPtr;
     }
-    // 功能:添加一个new出来的对象
+    // 功能:添加一个new出来的对象
+
     public static long PushNewObj<_Ty>(_Ty obj)
     {
         FCRefObj ref_obj = new FCRefObj();
@@ -210,7 +229,8 @@ public class FCGetObj
         m_Obj2ID[ref_obj.m_obj] = ref_obj;
         return nPtr;
     }
-    // 功能：调用delete删除对象，这个对象是由new 出来的
+    // 功能：调用delete删除对象，这个对象是由new 出来的
+
     public static void DelObj(long nIntPtr)
     {
         ReleaseRef(nIntPtr);

@@ -6,7 +6,6 @@ class  MonoBehaviour : Behaviour
 {
     public MonoBehaviour(){}
     public bool useGUILayout { get;  set; }
-    public bool runInEditMode { get;  set; }
     public void Invoke(StringA methodName,float time){}
     public void InvokeRepeating(StringA methodName,float time,float repeatRate){}
     public void CancelInvoke(){}

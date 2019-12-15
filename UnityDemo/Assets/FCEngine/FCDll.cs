@@ -117,7 +117,7 @@ public class FCDll
     }
     public static void PushCallParam(IntPtr v)
     {
-        FCLibHelper.fc_push_intptr(v.ToInt64());
+        FCLibHelper.fc_push_void_ptr(v);
     }
     public static void PushCallParam(string v)
     {
@@ -203,72 +203,6 @@ public class FCDll
     {
         long  nPtr = FCGetObj.PushObj(obj);
         FCLibHelper.fc_push_intptr(nPtr);
-    }
-
-    // 功能：调用FC脚本后，获取脚本函数的返回值
-    public static void GetReturnParam(ref bool v)
-    {
-        v = FCLibHelper.fc_get_return_bool();
-    }
-    public static void GetReturnParam(ref byte v)
-    {
-        v = FCLibHelper.fc_get_return_byte();
-    }
-    public static void GetReturnParam(ref char v)
-    {
-        v = FCLibHelper.fc_get_return_char();
-    }
-    public static void GetReturnParam(ref short v)
-    {
-        v = FCLibHelper.fc_get_return_short();
-    }
-    public static void GetReturnParam(ref ushort v)
-    {
-        v = FCLibHelper.fc_get_return_ushort();
-    }
-    public static void GetReturnParam(ref int v)
-    {
-        v = FCLibHelper.fc_get_return_int();
-    }
-    public static void GetReturnParam(ref uint v)
-    {
-        v = FCLibHelper.fc_get_return_uint();
-    }
-    public static void GetReturnParam(ref float v)
-    {
-        v = FCLibHelper.fc_get_return_float();
-    }
-    public static void GetReturnParam(ref double v)
-    {
-        v = FCLibHelper.fc_get_return_double();
-    }
-    public static void GetReturnParam(ref long v)
-    {
-        v = FCLibHelper.fc_get_return_int64();
-    }
-    public static void GetReturnParam(ref ulong v)
-    {
-        v = FCLibHelper.fc_get_return_uint64();
-    }
-    public static void GetReturnParam(ref string v)
-    {
-        v = FCLibHelper.fc_get_return_string_a();
-    }
-    //public static void GetReturnParam(ref byte[] v)
-    //{
-    //    FCLibHelper.fc_get_return_string_a();
-    //}
-    public static void GetReturnParam(ref Vector2 v)
-    {
-        FCLibHelper.fc_get_return_vector2(ref v);
-    }
-    public static void GetReturnParam(ref Vector3 v)
-    {
-        FCLibHelper.fc_get_return_vector3(ref v);
-    }
-    public static void GetReturnParam(ref Vector4 v)
-    {
-        FCLibHelper.fc_get_return_vector4(ref v);
     }
     //------------------------------------------------------------------------
 

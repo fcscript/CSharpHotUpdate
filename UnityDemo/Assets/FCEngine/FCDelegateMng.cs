@@ -37,6 +37,11 @@ class FCDelegateMng
             return s_pIns;
         }
     }
+    public void OnReloadScript()
+    {
+        m_Delegates.Clear();
+        m_Record.Clear();
+    }
 
     // 功能：根据脚本所传的参数，动态获取或创建一个关联的委托对象
     public T  GetDelegate<T>(long L, int nIndex = 0) where T : FCDelegateBase, new()

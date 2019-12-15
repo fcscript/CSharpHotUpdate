@@ -29,7 +29,7 @@ public class TestD_wrap
     {
         long nPtr = FCGetObj.NewObj<TestD>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -154,7 +154,7 @@ public class TestD_wrap
             {
                 // 设置返回值
                 long v = FCGetObj.PushObj(nRes);
-                FCLibHelper.fc_set_value_intptr(nRetPtr, v);
+                FCLibHelper.fc_set_value_wrap_objptr(nRetPtr, v);
                 FCLibHelper.fc_continue(nPtr); // 唤醒脚本
             }
         }

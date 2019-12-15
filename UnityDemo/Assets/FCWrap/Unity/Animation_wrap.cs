@@ -66,7 +66,7 @@ public class Animation_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Animation>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -120,7 +120,7 @@ public class Animation_wrap
             UnityEngine.Animation ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.clip);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -135,7 +135,7 @@ public class Animation_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Animation ret = get_obj(nThisPtr);
-            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_wrap_objptr(L,0));
             ret.clip = arg0;
         }
         catch(Exception e)
@@ -187,7 +187,7 @@ public class Animation_wrap
             UnityEngine.Animation ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.wrapMode);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -271,7 +271,7 @@ public class Animation_wrap
             UnityEngine.Animation ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.cullingType);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -630,7 +630,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.CrossFadeQueued(arg0,arg1,arg2,arg3);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -652,7 +652,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.CrossFadeQueued(arg0,arg1,arg2);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -673,7 +673,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.CrossFadeQueued(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -693,7 +693,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.CrossFadeQueued(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -715,7 +715,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.PlayQueued(arg0,arg1,arg2);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -736,7 +736,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.PlayQueued(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -756,7 +756,7 @@ public class Animation_wrap
             UnityEngine.AnimationState ret = obj.PlayQueued(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -772,7 +772,7 @@ public class Animation_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Animation obj = get_obj(nThisPtr);
-            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_wrap_objptr(L,0));
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             obj.AddClip(arg0,arg1);
         }
@@ -790,7 +790,7 @@ public class Animation_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Animation obj = get_obj(nThisPtr);
-            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_wrap_objptr(L,0));
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             int arg2 = FCLibHelper.fc_get_int(L,2);
             int arg3 = FCLibHelper.fc_get_int(L,3);
@@ -811,7 +811,7 @@ public class Animation_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Animation obj = get_obj(nThisPtr);
-            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_wrap_objptr(L,0));
             string arg1 = FCLibHelper.fc_get_string_a(L,1);
             int arg2 = FCLibHelper.fc_get_int(L,2);
             int arg3 = FCLibHelper.fc_get_int(L,3);
@@ -831,7 +831,7 @@ public class Animation_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Animation obj = get_obj(nThisPtr);
-            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.AnimationClip arg0 = FCGetObj.GetObj<UnityEngine.AnimationClip>(FCLibHelper.fc_get_wrap_objptr(L,0));
             obj.RemoveClip(arg0);
         }
         catch(Exception e)
@@ -903,7 +903,7 @@ public class Animation_wrap
             System.Collections.IEnumerator ret = obj.GetEnumerator();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -923,7 +923,7 @@ public class Animation_wrap
             UnityEngine.AnimationClip ret = obj.GetClip(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {

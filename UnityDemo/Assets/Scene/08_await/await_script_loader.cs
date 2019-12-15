@@ -73,7 +73,7 @@ public class await_script_loader : FCScriptLoader
                     v = FCGetObj.PushObj(obj);
                 }
                 // 必要的话，在这里设置返回值
-                FCLibHelper.fc_set_value_intptr(info.nReturnPtr, v);
+                FCLibHelper.fc_set_value_wrap_objptr(info.nReturnPtr, v);
 
                 FCLibHelper.fc_continue(info.nPtr); // 唤醒脚本
             }

@@ -582,7 +582,7 @@ class FCTemplateWrap
             || fc_value_type.fc_value_object == value.m_nValueType
             || fc_value_type.fc_value_unity_object == value.m_nValueType)
         {
-            fileData.AppendLine("                FCLibHelper.fc_set_value_intptr(pItem, FCGetObj.PushObj(rList[i]));");
+            fileData.AppendLine("                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));");
             return;
         }
 

@@ -17,7 +17,6 @@ public class Unity_wrap
         Behaviour_wrap.Register();
         MonoBehaviour_wrap.Register();
         Animation_wrap.Register();
-        Transform_wrap.Register();
         Renderer_wrap.Register();
         MeshRenderer_wrap.Register();
         SkinnedMeshRenderer_wrap.Register();
@@ -25,5 +24,8 @@ public class Unity_wrap
         Light_wrap.Register();
         Material_wrap.Register();
         UnityEvent_wrap.Register();
+        AsyncOperation_wrap.Register();
+        Scene_wrap.Register();
+        SceneManager_wrap.Register();
     }
 }

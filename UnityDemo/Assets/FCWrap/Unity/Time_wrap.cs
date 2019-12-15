@@ -44,7 +44,7 @@ public class Time_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Time>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 

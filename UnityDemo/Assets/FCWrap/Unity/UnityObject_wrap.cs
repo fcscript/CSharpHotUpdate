@@ -46,7 +46,7 @@ public class UnityObject_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityObject>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -133,7 +133,7 @@ public class UnityObject_wrap
             UnityObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.hideFlags);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -163,7 +163,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             float arg1 = FCLibHelper.fc_get_float(L,1);
             UnityObject.Destroy(arg0,arg1);
         }
@@ -179,7 +179,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject.Destroy(arg0);
         }
         catch(Exception e)
@@ -194,7 +194,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             UnityObject.DestroyImmediate(arg0,arg1);
         }
@@ -210,7 +210,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject.DestroyImmediate(arg0);
         }
         catch(Exception e)
@@ -225,7 +225,7 @@ public class UnityObject_wrap
     {
         try
         {
-            System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
+            System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject[] ret = UnityObject.FindObjectsOfType(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCCustomParam.ReturnArray(ret,ret_ptr);
@@ -242,7 +242,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject.DontDestroyOnLoad(arg0);
         }
         catch(Exception e)
@@ -257,7 +257,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             float arg1 = FCLibHelper.fc_get_float(L,1);
             UnityObject.DestroyObject(arg0,arg1);
         }
@@ -273,7 +273,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject.DestroyObject(arg0);
         }
         catch(Exception e)
@@ -361,7 +361,7 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             Vector3 arg1 = new Vector3();
             FCLibHelper.fc_get_vector3(L,1,ref arg1);
             Quaternion arg2 = new Quaternion();
@@ -369,7 +369,7 @@ public class UnityObject_wrap
             UnityObject ret = UnityObject.Instantiate(arg0,arg1,arg2);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -383,16 +383,16 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             Vector3 arg1 = new Vector3();
             FCLibHelper.fc_get_vector3(L,1,ref arg1);
             Quaternion arg2 = new Quaternion();
             FCLibHelper.fc_get_quaternion(L,2,ref arg2);
-            UnityEngine.Transform arg3 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_intptr(L,3));
+            UnityEngine.Transform arg3 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,3));
             UnityObject ret = UnityObject.Instantiate(arg0,arg1,arg2,arg3);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -406,11 +406,11 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject ret = UnityObject.Instantiate(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -424,12 +424,12 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
-            UnityEngine.Transform arg1 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_intptr(L,1));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
+            UnityEngine.Transform arg1 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,1));
             UnityObject ret = UnityObject.Instantiate(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -443,13 +443,13 @@ public class UnityObject_wrap
     {
         try
         {
-            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_intptr(L,0));
-            UnityEngine.Transform arg1 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_intptr(L,1));
+            UnityObject arg0 = FCGetObj.GetObj<UnityObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
+            UnityEngine.Transform arg1 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,1));
             bool arg2 = FCLibHelper.fc_get_bool(L,2);
             UnityObject ret = UnityObject.Instantiate(arg0,arg1,arg2);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -463,11 +463,11 @@ public class UnityObject_wrap
     {
         try
         {
-            System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_intptr(L,0));
+            System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityObject ret = UnityObject.FindObjectOfType(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {

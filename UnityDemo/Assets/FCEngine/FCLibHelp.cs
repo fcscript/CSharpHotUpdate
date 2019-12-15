@@ -254,8 +254,16 @@ public class FCLibHelper
     public static extern long fc_get_int64(long L, int i);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern ulong fc_get_uint64(long L, int i);
+    // 功能：返回C#平台对象的地址(在Unity的FC引擎中，这个是一个数字, 也就是FCGetObj管理对象的ID）
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_intptr(long L, int i);
+    // 功能：返回宿主平台对象ID（或地址)
+    // 说明：在Unity的FC引擎中，这个是一个数字, 也就是FCGetObj管理对象的ID）
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_wrap_objptr(long L, int i);
+    // 功能：返回脚本对象(C++ void 指针),对应的数据类型是C#中的IntPtr
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_void_ptr(long L, int i);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_string_a(long L, int i, byte[] pOutBuff, int nOutBuffSize);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -333,8 +341,20 @@ public class FCLibHelper
     public static extern void fc_push_int64(long v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_uint64(ulong v);
+    // 功能：将一个C#平台的对象ID压入函数参数栈（函数调用传参)
+    // 说明：这个参数参数在C++平台，可以是对象的地址（转换成64位整数）
+    //       如果在C#平台，可以是自己管理的对象的ID(如Unity工程中FCGetObj管理器的对象ID)
+    // 这个接口有歧义，后面换成fc_push_wrap_objptr
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_intptr(long v);
+    // 功能：将一个跨平台的对象ID(或对象的地址）压入函数参数栈（函数调用传参)
+    // 参数：v - 宿主平台(C#或C++)对象的唯一标识（可以是管理器的对象ID, 或对象的地址）
+    // 说明：Unity C#平台, 对象管理FCGetObj管理的
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_push_wrap_objptr(long v);
+    // 功能：将一个void指针(C#中的IntPtr)参数压入函数参数栈（函数调用传参)
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_push_void_ptr(IntPtr v);
     // 功能：将一个字符串参数压入函数参数栈（函数调用传参)
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_push_string_a(string v);
@@ -436,6 +456,14 @@ public class FCLibHelper
     public static extern long fc_get_return_int64();
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern ulong fc_get_return_uint64();
+    // 功能：返回最后一个fc_call调用的返回值
+    // 返回值：返回C#平台wrap对象ID
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_return_wrap_objptr();
+    // 功能：返回最后一个fc_call调用的返回值
+    // 返回值：返回c#平台的IntPtr(或C++的void *)
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_return_void_ptr();
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_return_string_a(byte[] pOutBuff, int nOutBuffSize);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -453,12 +481,9 @@ public class FCLibHelper
     // 
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_class_value(long ptr, string value_name);
-    //--------------------------------------------------------------------------------------
-    // 以下是对常规变量的设置接口
-    // ptr来源：
-    // (1) fc_intptr  fc_get_param_ptr(fc_intptr L, int i)
-    // (2) fc_intptr  fc_get_class_value(fc_intptr ptr, fc_pcstr value_name);
-    // (3) fc_intptr  fc_get_array_node_temp_ptr(fc_intptr ptr, int nIndex);
+    // 功能：将一个bool值设置给脚本变量
+    // 参数：ptr - 脚本对象地址
+    //       v - 要设置的bool值
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_bool(long ptr, bool v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -483,6 +508,16 @@ public class FCLibHelper
     public static extern void fc_set_value_uint64(long ptr, ulong v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_intptr(long ptr, long v);
+    // 功能：将跨平台的wrap对象(ID或地址)设置给脚本变量
+    // 参数：ptr - 脚本对象地址
+    //       v - wrap对象ID
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_set_value_wrap_objptr(long ptr, long v);
+    // 功能：设置void *指针(IntPtr)设置给脚本变量
+    // 参数：ptr - 脚本对象地址
+    //       v - iNT
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_set_value_void_ptr(long ptr, IntPtr v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_string(long ptr, string v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -543,6 +578,12 @@ public class FCLibHelper
     public static extern ulong fc_get_value_uint64(long ptr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_value_intptr(long ptr);
+    // 功能：从脚本变量中，取出wrap对象的ID或地址
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_value_wrap_objptr(long ptr);
+    // 功能：从脚本对象中，取出void *指针(C# 中的 IntPtr)
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_get_value_void_ptr(long ptr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_get_value_string(long ptr, byte[] pOutBuff, int nOutBuffSize);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -706,4 +747,5 @@ public class FCLibHelper
     public static extern int fc_inport_delegate_get_func_name_len(long pDelegatePtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern int fc_inport_delegate_get_func_name(long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
+
 }

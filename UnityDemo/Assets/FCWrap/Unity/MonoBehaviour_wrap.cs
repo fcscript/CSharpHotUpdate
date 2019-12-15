@@ -21,7 +21,6 @@ public class MonoBehaviour_wrap
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
         FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
         FCLibHelper.fc_register_class_attrib(nClassName,"useGUILayout",get_useGUILayout_wrap,set_useGUILayout_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"runInEditMode",get_runInEditMode_wrap,set_runInEditMode_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"Invoke",Invoke_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"InvokeRepeating",InvokeRepeating_wrap);
         FCLibHelper.fc_register_class_func(nClassName,"CancelInvoke",CancelInvoke_wrap);
@@ -43,7 +42,7 @@ public class MonoBehaviour_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.MonoBehaviour>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -113,39 +112,6 @@ public class MonoBehaviour_wrap
             UnityEngine.MonoBehaviour ret = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
             ret.useGUILayout = arg0;
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int get_runInEditMode_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UnityEngine.MonoBehaviour ret = get_obj(nThisPtr);
-            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_bool(ret_ptr, ret.runInEditMode);
-        }
-        catch(Exception e)
-        {
-            Debug.LogException(e);
-        }
-        return 0;
-    }
-    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int set_runInEditMode_wrap(long L)
-    {
-        try
-        {
-            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
-            UnityEngine.MonoBehaviour ret = get_obj(nThisPtr);
-            bool arg0 = FCLibHelper.fc_get_bool(L,0);
-            ret.runInEditMode = arg0;
         }
         catch(Exception e)
         {
@@ -268,11 +234,11 @@ public class MonoBehaviour_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
-            System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_intptr(L,0));
+            System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -293,7 +259,7 @@ public class MonoBehaviour_wrap
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -313,7 +279,7 @@ public class MonoBehaviour_wrap
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -346,7 +312,7 @@ public class MonoBehaviour_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
-            System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_intptr(L,0));
+            System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_wrap_objptr(L,0));
             obj.StopCoroutine(arg0);
         }
         catch(Exception e)
@@ -363,7 +329,7 @@ public class MonoBehaviour_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
-            UnityEngine.Coroutine arg0 = FCGetObj.GetObj<UnityEngine.Coroutine>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.Coroutine arg0 = FCGetObj.GetObj<UnityEngine.Coroutine>(FCLibHelper.fc_get_wrap_objptr(L,0));
             obj.StopCoroutine(arg0);
         }
         catch(Exception e)

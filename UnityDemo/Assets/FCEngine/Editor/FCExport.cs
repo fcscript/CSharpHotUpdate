@@ -110,7 +110,10 @@ public static class FCExport
         WrapType(pWrap, typeof(UnityEngine.Light));
         WrapType(pWrap, typeof(UnityEngine.Material));
         WrapType(pWrap, typeof(UnityEngine.Events.UnityEvent));
-        
+        WrapType(pWrap, typeof(UnityEngine.AsyncOperation));
+        WrapType(pWrap, typeof(UnityEngine.SceneManagement.Scene));
+        WrapType(pWrap, typeof(UnityEngine.SceneManagement.SceneManager));
+
         pWrap.EndModleWrap();
     }
     static void WrapType(FCClassWrap pWrap, Type nType)

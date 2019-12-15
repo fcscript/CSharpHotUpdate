@@ -54,7 +54,7 @@ public class Light_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Light>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_intptr(ret, nPtr);
+        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
         return 0;
     }
 
@@ -108,7 +108,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.shadows);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -175,7 +175,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.shadowResolution);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -242,7 +242,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.cookie);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -257,7 +257,7 @@ public class Light_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
-            UnityEngine.Texture arg0 = FCGetObj.GetObj<UnityEngine.Texture>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.Texture arg0 = FCGetObj.GetObj<UnityEngine.Texture>(FCLibHelper.fc_get_wrap_objptr(L,0));
             ret.cookie = arg0;
         }
         catch(Exception e)
@@ -276,7 +276,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.renderMode);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -327,7 +327,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.type);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -693,7 +693,7 @@ public class Light_wrap
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret.flare);
-            FCLibHelper.fc_set_value_intptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -708,7 +708,7 @@ public class Light_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
-            UnityEngine.Flare arg0 = FCGetObj.GetObj<UnityEngine.Flare>(FCLibHelper.fc_get_intptr(L,0));
+            UnityEngine.Flare arg0 = FCGetObj.GetObj<UnityEngine.Flare>(FCLibHelper.fc_get_wrap_objptr(L,0));
             ret.flare = arg0;
         }
         catch(Exception e)
@@ -759,7 +759,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
-            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_intptr(L,1));
+            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_wrap_objptr(L,1));
             obj.AddCommandBuffer(arg0,arg1);
         }
         catch(Exception e)
@@ -777,7 +777,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
-            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_intptr(L,1));
+            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_wrap_objptr(L,1));
             UnityEngine.Rendering.ShadowMapPass arg2 = (UnityEngine.Rendering.ShadowMapPass)(FCLibHelper.fc_get_int(L,2));
             obj.AddCommandBuffer(arg0,arg1,arg2);
         }
@@ -796,7 +796,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
-            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_intptr(L,1));
+            UnityEngine.Rendering.CommandBuffer arg1 = FCGetObj.GetObj<UnityEngine.Rendering.CommandBuffer>(FCLibHelper.fc_get_wrap_objptr(L,1));
             obj.RemoveCommandBuffer(arg0,arg1);
         }
         catch(Exception e)

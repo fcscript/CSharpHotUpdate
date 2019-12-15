@@ -410,7 +410,7 @@ public class FCValueType
             return;
         }
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
-        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr({1}, v);\r\n", szLeftEmpty, Ptr);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, v);\r\n", szLeftEmpty, Ptr);
     }
     public static void OutputRefScriptParam(StringBuilder fileData, string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
     {
@@ -445,7 +445,7 @@ public class FCValueType
                 fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, {3});\r\n", szLeftEmpty, szFuncAddr, szOutPtr, szValueName);
             return;
         }
-        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_intptr({1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
     }
 
     public static bool IsBaseType(fc_value_type nValueType)
@@ -529,6 +529,8 @@ public class FCValueType
                 return "IntRect";
             case fc_value_type.fc_value_rect:
                 return "Rect";
+            case fc_value_type.fc_value_int_ptr:
+                return "IntPtr";
             case fc_value_type.fc_value_system_object:
                 return bCSharp ? "System.Object" : "Object";
             case fc_value_type.fc_value_unity_object:
@@ -669,6 +671,8 @@ public class FCValueType
                 return "color";
             case fc_value_type.fc_value_color32:
                 return "color32";
+            case fc_value_type.fc_value_int_ptr:
+                return "IntPtr";
             //case fc_value_type.fc_value_system_object:
             //case fc_value_type.fc_value_object:
             //    return "intptr";
@@ -800,6 +804,10 @@ public class FCValueType
                 return typeof(UnityEngine.Events.UnityAction<Vector2>);
             case fc_value_type.fc_value_vector3:
                 return typeof(UnityEngine.Events.UnityAction<Vector3>);
+            case fc_value_type.fc_value_vector4:
+                return typeof(UnityEngine.Events.UnityAction<Vector4>);
+            case fc_value_type.fc_value_int_ptr:
+                return typeof(UnityEngine.Events.UnityAction<IntPtr>);
             default:
                 break;
         }

@@ -70,6 +70,7 @@
     <Compile Include="inner_class\Unity.cs" />
     <Compile Include="inport\all_default_class.cs" />
     <Compile Include="inport\Animation.cs" />
+    <Compile Include="inport\AsyncOperation.cs" />
     <Compile Include="inport\Behaviour.cs" />
     <Compile Include="inport\Button.cs" />
     <Compile Include="inport\ButtonClickedEvent.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="inport\MeshRenderer.cs" />
     <Compile Include="inport\MonoBehaviour.cs" />
     <Compile Include="inport\Renderer.cs" />
+    <Compile Include="inport\Scene.cs" />
+    <Compile Include="inport\SceneManager.cs" />
     <Compile Include="inport\SkinnedMeshRenderer.cs" />
     <Compile Include="inport\TestD.cs" />
     <Compile Include="inport\TestPart.cs" />
