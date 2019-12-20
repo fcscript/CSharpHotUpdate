@@ -469,8 +469,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(UnityEngine.Input.deviceOrientation);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)UnityEngine.Input.deviceOrientation);
         }
         catch(Exception e)
         {
@@ -485,8 +484,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(UnityEngine.Input.imeCompositionMode);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)UnityEngine.Input.imeCompositionMode);
         }
         catch(Exception e)
         {

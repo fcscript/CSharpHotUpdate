@@ -175,8 +175,7 @@ public class Renderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.shadowCastingMode);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.shadowCastingMode);
         }
         catch(Exception e)
         {
@@ -242,8 +241,7 @@ public class Renderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.motionVectorGenerationMode);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.motionVectorGenerationMode);
         }
         catch(Exception e)
         {
@@ -276,8 +274,7 @@ public class Renderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.lightProbeUsage);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.lightProbeUsage);
         }
         catch(Exception e)
         {
@@ -310,8 +307,7 @@ public class Renderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Renderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.reflectionProbeUsage);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.reflectionProbeUsage);
         }
         catch(Exception e)
         {

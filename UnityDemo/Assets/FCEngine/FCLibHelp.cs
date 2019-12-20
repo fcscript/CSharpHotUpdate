@@ -63,6 +63,15 @@ public class FCLibHelper
     {
         FCLibHelper.fc_set_value_string(ptr, v);
     }
+    public static void fc_get_array_void_ptr(long ptr, IntPtr[] pArray, int nStart, int nCount)
+    {
+        // 这个暂不支持噢
+    }
+    public static void fc_get_void_ptr(long L, int i, ref IntPtr ptr)
+    {
+        long nAddr = fc_get_void_ptr(L, i);
+        ptr = new IntPtr(nAddr);
+    }
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

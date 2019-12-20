@@ -12,6 +12,14 @@ public struct Vector2
     {
         x = _x; y = _y;
     }
+    public static implicit operator Vector2(Vector3 v)
+    {
+        return new Vector2(v.x, v.y);
+    }
+    public static implicit operator Vector2(Vector4 v)
+    {
+        return new Vector2(v.x, v.y);
+    }
     public void Set(float _x, float _y)
     {
         x = _x;  y = _y;
@@ -131,6 +139,14 @@ public struct Vector3
         y = _y;
         z = _z;
     }
+    public static implicit operator Vector3(Vector4 v)
+    {
+        return new Vector3(v.x, v.y, v.z);
+    }
+    public static implicit operator Vector3(Vector2 v)
+    {
+        return new Vector3(v.x, v.y, 0.0f);
+    }
     public void Set(float _x, float _y, float _z)
     {
         x = _x; y = _y; z = _z;
@@ -227,6 +243,11 @@ public struct Vector3
     {
         return v1.IsSimilar(v, 0.00001f);
     }
+    // 功能：求与另一个向量的夹角(弧度)
+    public float GetDotRadian(Vector3 other)
+    {
+        return 0.0f;
+    }
     // 点乘
     public static float Dot(Vector3 v1, Vector3 v2 )
     {
@@ -296,10 +317,10 @@ public struct Vector3
 
 public struct Matrix
 {
-    float _11, _12, _13, _14;
-    float _21, _22, _23, _24;
-    float _31, _32, _33, _34;
-    float _41, _42, _43, _44;
+    public float _11, _12, _13, _14;
+    public float _21, _22, _23, _24;
+    public float _31, _32, _33, _34;
+    public float _41, _42, _43, _44;
 
     //Matrix  &operator = (const Matrix &other);
     //public float[] operator[](int nIndex){return _m[nIndex];}  // C#不支持，算了
@@ -433,12 +454,16 @@ public struct Matrix
     void Transpose()
     {
     }
+    public static Matrix operator * (Matrix mat1, Matrix mat2)
+    {
+        return mat1;
+    }
     //Matrix   &operator += ( const Matrix &mat ); // C#不支持的重载，算了
     //Matrix   &operator -= ( const Matrix &mat ); // C#不支持的重载，算了
     //Matrix   &operator *= ( const Matrix &mat ); // C#不支持的重载，算了
     //Matrix   &operator *= ( float f) // C#不支持的重载，算了
     //Matrix   &operator /= ( float f); // C#不支持的重载，算了
-    public void  Mul( Matrix mat1, Matrix mat2 ) // a = b * c
+    public void Mul(Matrix mat1, Matrix mat2) // a = b * c
     {
         // this = mat1 * mat2; // 暂时不支持*的全局重载，那个效率比较低
     }
@@ -461,6 +486,10 @@ public struct Vector4
     public Vector4(float _x, float _y, float _z, float _w)
     {
         x = _x; y = _y; z = _z; w = _w;
+    }
+    public static implicit operator Vector4(Vector3 v)
+    {
+        return new Vector4(v.x, v.y, v.z, 1.0f);
     }
 
     //Vector4  &operator = (const Vector4 &other);
@@ -522,9 +551,10 @@ public struct Vector4
         v1.w = v.w * fScale;
         return v1;
     }
-    //void operator *=(float fScale)
-    //void operator *= ( const Matrix& mat )  // C#语法不支持噢
-    //void operator += ( const Vector4 &v )
+    public static Vector4 operator *(Vector4 v, Matrix mat)
+    {
+        return v;
+    }
 };
 
 public struct Panel
@@ -559,6 +589,7 @@ public struct Panel
     {
 
     }
+    // 功能：判断指定坐标点是不是在面的前面
     public bool IsFront( Vector3 vPos )
     {
         return false;
@@ -650,13 +681,21 @@ public struct Bounds
 
 public struct Ray
 {
-    public Vector3 org; // 射线的起点
-    public Vector3 dir; // 射线的方向
+    public Vector3 origin;    // 射线的起点
+    public Vector3 direction; // 射线的方向
 
     public Ray(Vector3 _org, Vector3 _dir)
     {
-        org = _org; dir = _dir;
+        origin = _org; direction = _dir;
     }
+    //public Vector3 Org
+    //{
+    //    get { return origin; }
+    //}
+    //public Vector3 Dir
+    //{
+    //    get { return direction; }
+    //}
 
     // 功能：求射线与三角形的交点
     // 参数：vPickPt - 这个是输出参数
@@ -738,6 +777,11 @@ public struct Quaternion
     {
         x = _x; y = _y; z = _z; w = _w;
     }
+    public static implicit operator Quaternion(Matrix mat)
+    {
+        return new Quaternion();
+    }
+
     public void Identity()
     {
     }
@@ -774,6 +818,12 @@ public struct Quaternion
     {
         return new Vector3();
     }
+    
+    // 功能：将四元数转换成距阵
+    public void GetMatrix(ref Matrix mat)
+    {
+    }
+
     public static Vector3 operator *(Quaternion q, Vector3 v)
     {
         return v;

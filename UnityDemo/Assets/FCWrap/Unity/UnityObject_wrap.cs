@@ -132,8 +132,7 @@ public class UnityObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.hideFlags);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.hideFlags);
         }
         catch(Exception e)
         {

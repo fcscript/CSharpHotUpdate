@@ -16,9 +16,9 @@ public class GameObject_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("GameObject");
-        FCLibHelper.fc_register_class_func(nClassName, "GameObject", obj_new3);
+        FCLibHelper.fc_register_class_func(nClassName, "GameObject_StringA_List<Type>", obj_new3);
         FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_func(nClassName, "GameObject", obj_new1);
+        FCLibHelper.fc_register_class_func(nClassName, "GameObject_StringA", obj_new1);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);

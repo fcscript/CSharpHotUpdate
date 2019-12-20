@@ -43,6 +43,7 @@ public class FCClassWrap
 
     Dictionary<string, int> m_CurDontWrapName = new Dictionary<string, int>();
     Dictionary<string, List<Type>> m_CurSupportTemplateFunc = new Dictionary<string, List<Type>>(); // 支持导出的wrap函数
+    Dictionary<uint, string> m_HashKeyToName = new Dictionary<uint, string>(); // hash_key ==> 函数名字
 
     StringBuilder m_szTempBuilder;
 
@@ -246,6 +247,7 @@ public class FCClassWrap
         m_CurSameName.Clear();
         m_CurRefNameSpace.Clear();
         m_CurRefNameSpacesFlags.Clear();
+        m_HashKeyToName.Clear();
 
         PushNameSpace("System");
         PushNameSpace("System.Collections.Generic");
@@ -470,6 +472,8 @@ public class FCClassWrap
         string szCallParam = string.Empty;
         Type nParamType;
         string szLeftName = string.Empty;
+        string szClassWrapName = FCValueType.GetClassName(m_nCurClassType);
+        string szFullFuncName = szClassWrapName;
         for (int i = 0; i<allParams.Length; ++i)
         {
             ParameterInfo param = allParams[i];
@@ -498,6 +502,7 @@ public class FCClassWrap
                 szCallParam += "ref ";
             }
             szCallParam += szLeftName;
+            szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(false);
         }
         fileData.AppendFormat("            {0} obj = new {1}({2});\r\n", m_szCurClassName, m_szCurClassName, szCallParam);
         fileData.AppendFormat("            long nPtr = FCGetObj.PushNewObj<{0}>(obj);\r\n", m_szCurClassName);
@@ -511,14 +516,14 @@ public class FCClassWrap
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
 
-        string szClassWrapName = FCValueType.GetClassName(m_nCurClassType);
+        PushWrapName(szFullFuncName);
 
         WrapFuncDesc func = new WrapFuncDesc();
         func.m_szName = m_szCurClassName;
         func.m_szGetName = func.m_szSetName = string.Format("obj_new{0}", nFuncIndex);
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName, \"{0}\", {1});", szClassWrapName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName, \"{0}\", {1});", szFullFuncName, func.m_szGetName);
         m_CurClassFunc.Insert(0, func);
     }
     void MakeDel()
@@ -1094,6 +1099,8 @@ public class FCClassWrap
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
 
+        PushWrapName(szFullFuncName);
+
         func.m_szContent = fileData.ToString();
         if(nFuncCount > 1)
             func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
@@ -1319,6 +1326,8 @@ public class FCClassWrap
         fileData.AppendLine("    }");
 
         func.m_szContent = fileData.ToString();
+
+        PushWrapName(szFullFuncName);
         if (nFuncCount > 1)
             func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
         else
@@ -1465,6 +1474,8 @@ public class FCClassWrap
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = "AddListener_wrap";
         func.m_bAttrib = false;
+
+        PushWrapName(func.m_szName);
         func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         m_CurClassFunc.Add(func);
     }
@@ -1499,6 +1510,7 @@ public class FCClassWrap
         WrapFuncDesc func = new WrapFuncDesc();
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = "Invoke_wrap";
+        PushWrapName(func.m_szName);
         func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         func.m_bAttrib = false;
         m_CurClassFunc.Add(func);
@@ -1538,8 +1550,31 @@ public class FCClassWrap
         WrapFuncDesc func = new WrapFuncDesc();
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = "RemoveListener_wrap";
+        PushWrapName(func.m_szName);
         func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         func.m_bAttrib = false;
         m_CurClassFunc.Add(func);
+    }
+    string  PushWrapName(string szFuncName)
+    {
+        uint nHashKey = GetFuncHashKey(szFuncName);
+        if(m_HashKeyToName.ContainsKey(nHashKey))
+        {
+            string szOldName = m_HashKeyToName[nHashKey];
+            Debug.LogError("函数HashKey冲突:" + szOldName + " ==> " + szFuncName + ", Key=" + nHashKey.ToString());
+            return szFuncName;
+        }
+        m_HashKeyToName[nHashKey] = szFuncName;
+        return nHashKey.ToString();
+    }
+    static uint  GetFuncHashKey(string szFuncName)
+    {
+        uint nHashKey = 0;
+        for(int i = 0; i<szFuncName.Length; ++i)
+        {
+            uint nChar = (uint)(szFuncName[i]);
+            nHashKey = (nHashKey << 5) + nHashKey + nChar;
+        }
+        return nHashKey;
     }
 }

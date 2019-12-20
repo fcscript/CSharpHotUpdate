@@ -100,6 +100,13 @@ public class FCValueType
     {
         get { return m_bRef; }
     }
+    public bool IsEnum
+    {
+        get
+        {
+            return m_nValueType == fc_value_type.fc_value_enum;
+        }
+    }
     public void SetType(Type nType)
     {
         m_bRef = nType.IsByRef;
@@ -314,6 +321,8 @@ public class FCValueType
         s_BaseTypeFinder[typeof(void)] = fc_value_type.fc_value_void;
         s_BaseTypeFinder[typeof(string)] = fc_value_type.fc_value_string_a;
         s_BaseTypeFinder[typeof(String)] = fc_value_type.fc_value_string_a;
+        s_BaseTypeFinder[typeof(IntPtr)] = fc_value_type.fc_value_int_ptr;
+        s_BaseTypeFinder[typeof(UIntPtr)] = fc_value_type.fc_value_int_ptr;
 
         s_BaseTypeFinder[typeof(Vector2)] = fc_value_type.fc_value_vector2;
         s_BaseTypeFinder[typeof(Vector3)] = fc_value_type.fc_value_vector3;
@@ -409,6 +418,11 @@ public class FCValueType
             fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, {3});\r\n", szLeftEmpty, szFuncAddr, Ptr, szValueName);
             return;
         }
+        if(value.IsEnum)
+        {
+            fileData.AppendFormat("{0}FCLibHelper.fc_set_value_int({1}, (int){2});\r\n", szLeftEmpty, Ptr, szValueName);
+            return;
+        }
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
         fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, v);\r\n", szLeftEmpty, Ptr);
     }
@@ -443,6 +457,11 @@ public class FCValueType
             }
             else
                 fileData.AppendFormat("{0}FCLibHelper.fc_set_value_{1}({2}, {3});\r\n", szLeftEmpty, szFuncAddr, szOutPtr, szValueName);
+            return;
+        }
+        if(value.IsEnum)
+        {
+            fileData.AppendFormat("{0}FCLibHelper.fc_set_value_int({1}, (int){2});\r\n", szLeftEmpty, szOutPtr, szValueName);
             return;
         }
         fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
@@ -672,7 +691,7 @@ public class FCValueType
             case fc_value_type.fc_value_color32:
                 return "color32";
             case fc_value_type.fc_value_int_ptr:
-                return "IntPtr";
+                return "void_ptr";
             //case fc_value_type.fc_value_system_object:
             //case fc_value_type.fc_value_object:
             //    return "intptr";

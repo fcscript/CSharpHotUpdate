@@ -352,8 +352,7 @@ public class Text_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Text ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.alignment);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.alignment);
         }
         catch(Exception e)
         {
@@ -452,8 +451,7 @@ public class Text_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Text ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.horizontalOverflow);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.horizontalOverflow);
         }
         catch(Exception e)
         {
@@ -486,8 +484,7 @@ public class Text_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Text ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.verticalOverflow);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.verticalOverflow);
         }
         catch(Exception e)
         {
@@ -553,8 +550,7 @@ public class Text_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Text ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.fontStyle);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.fontStyle);
         }
         catch(Exception e)
         {

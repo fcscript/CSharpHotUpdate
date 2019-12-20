@@ -11,8 +11,10 @@ using UnityEngine;
 class FCTemplateWrap
 {
     Dictionary<Type, FCValueType> m_GetTypeWrap = new Dictionary<Type, FCValueType>();  // 从脚本中获取参数
-    Dictionary<Type, FCValueType> m_OutTypeWrap = new Dictionary<Type, FCValueType>();  // 向脚本输出参数
-    Dictionary<Type, FCValueType> m_ReturnTypeWrap = new Dictionary<Type, FCValueType>(); // 向脚本输出返回值
+    Dictionary<Type, FCValueType> m_OutTypeWrap = new Dictionary<Type, FCValueType>();  // 向脚本输出参数
+
+    Dictionary<Type, FCValueType> m_ReturnTypeWrap = new Dictionary<Type, FCValueType>(); // 向脚本输出返回值
+
 
     List<string> m_AllRefNameSpace = new List<string>();
     Dictionary<string, int> m_AllRefNameSpaceFlags = new Dictionary<string, int>();
@@ -94,7 +96,8 @@ class FCTemplateWrap
         m_AllRefNameSpace.Add(szNameSpace);
     }
 
-    // 功能：添加要返回值的值
+    // 功能：添加要返回值的值
+
     public FCValueType PushGetTypeWrap(Type nType)
     {
         FCValueType value = null;
@@ -582,10 +585,17 @@ class FCTemplateWrap
             || fc_value_type.fc_value_object == value.m_nValueType
             || fc_value_type.fc_value_unity_object == value.m_nValueType)
         {
-            fileData.AppendLine("                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));");
+            if (value.IsEnum)
+                fileData.AppendLine("                FCLibHelper.fc_set_value_int(pItem, (int)rList[i]);");
+            else
+                fileData.AppendLine("                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));");
             return;
         }
-
+        if (value.IsEnum)
+        {
+            fileData.AppendLine("                FCLibHelper.fc_set_value_int(pItem, (int)rList[i]);");
+            return;
+        }
         string szName = FCValueType.GetFCLibFuncShortName(value.m_nValueType);
         if (string.IsNullOrEmpty(szName))
             return;

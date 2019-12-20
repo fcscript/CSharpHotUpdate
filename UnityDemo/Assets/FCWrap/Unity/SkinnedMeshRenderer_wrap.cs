@@ -123,8 +123,7 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.quality);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.quality);
         }
         catch(Exception e)
         {

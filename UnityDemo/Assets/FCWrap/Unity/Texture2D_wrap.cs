@@ -14,9 +14,9 @@ public class Texture2D_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("Texture2D");
-        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new3);
-        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new2);
-        FCLibHelper.fc_register_class_func(nClassName, "Texture2D", obj_new1);
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D_int_int_TextureFormat_bool_bool", obj_new3);
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D_int_int_TextureFormat_bool", obj_new2);
+        FCLibHelper.fc_register_class_func(nClassName, "Texture2D_int_int", obj_new1);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -189,8 +189,7 @@ public class Texture2D_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Texture2D ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.format);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.format);
         }
         catch(Exception e)
         {
@@ -241,7 +240,8 @@ public class Texture2D_wrap
             UnityEngine.TextureFormat arg2 = (UnityEngine.TextureFormat)(FCLibHelper.fc_get_int(L,2));
             bool arg3 = FCLibHelper.fc_get_bool(L,3);
             bool arg4 = FCLibHelper.fc_get_bool(L,4);
-            System.IntPtr arg5 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_wrap_objptr(L,5));
+            IntPtr arg5 = new IntPtr();
+            FCLibHelper.fc_get_void_ptr(L,5,ref arg5);
             UnityEngine.Texture2D ret = UnityEngine.Texture2D.CreateExternalTexture(arg0,arg1,arg2,arg3,arg4,arg5);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
@@ -261,7 +261,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Texture2D obj = get_obj(nThisPtr);
-            System.IntPtr arg0 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_wrap_objptr(L,0));
+            IntPtr arg0 = new IntPtr();
+            FCLibHelper.fc_get_void_ptr(L,0,ref arg0);
             obj.UpdateExternalTexture(arg0);
         }
         catch(Exception e)
@@ -522,7 +523,8 @@ public class Texture2D_wrap
         {
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Texture2D obj = get_obj(nThisPtr);
-            System.IntPtr arg0 = FCGetObj.GetObj<System.IntPtr>(FCLibHelper.fc_get_wrap_objptr(L,0));
+            IntPtr arg0 = new IntPtr();
+            FCLibHelper.fc_get_void_ptr(L,0,ref arg0);
             int arg1 = FCLibHelper.fc_get_int(L,1);
             obj.LoadRawTextureData(arg0,arg1);
         }

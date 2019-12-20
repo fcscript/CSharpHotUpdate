@@ -14,8 +14,8 @@ public class Material_wrap
     public static void Register()
     {
         int nClassName = FCLibHelper.fc_get_inport_class_id("Material");
-        FCLibHelper.fc_register_class_func(nClassName, "Material", obj_new3);
-        FCLibHelper.fc_register_class_func(nClassName, "Material", obj_new2);
+        FCLibHelper.fc_register_class_func(nClassName, "Material_Material", obj_new3);
+        FCLibHelper.fc_register_class_func(nClassName, "Material_Shader", obj_new2);
         FCLibHelper.fc_register_class_del(nClassName,obj_del);
         FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
         FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
@@ -448,8 +448,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            long v = FCGetObj.PushObj(ret.globalIlluminationFlags);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.globalIlluminationFlags);
         }
         catch(Exception e)
         {

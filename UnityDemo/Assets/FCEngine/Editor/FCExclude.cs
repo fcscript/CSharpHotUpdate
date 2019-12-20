@@ -141,6 +141,14 @@ class FCExclude
             return rList;
         return null;
     }
+    static Dictionary<Type, bool> m_MustExportList;  // 必须导出的对象
+
+    static void  InitMuseExportList()
+    {
+        m_MustExportList = new Dictionary<Type, bool>();
+        m_MustExportList[typeof(UnityEngine.Touch)] = true;
+    }
+
 
     static Dictionary<string, bool> m_excludeList;
 
@@ -177,6 +185,15 @@ class FCExclude
         }
         return false;
     }
+    // 功能：检测是不是导出值类型
+    public static bool IsMustExportStruct(Type t)
+    {
+        if(m_MustExportList == null)
+        {
+            InitMuseExportList();
+        }
+        return m_MustExportList.ContainsKey(t);
+    }
 
     // 功能：得到所有要导出的类
     public static Dictionary<string, List<Type>> GetAllExportType()
@@ -199,9 +216,19 @@ class FCExclude
                 if (t.IsInterface)
                     continue;
                 if (t.IsValueType)
+                {
+                    // 如果是必须要导出的类
+                    if (IsMustExportStruct(t))
+                        PushExportType(allExportType, t);
                     continue;
+                }
                 if (!t.IsClass)
+                {
+                    // 如果是必须要导出的类
+                    if (IsMustExportStruct(t))
+                        PushExportType(allExportType, t);
                     continue;
+                }
                 if (t.IsNested) // 如果是内嵌类
                     continue;
                 if (t.IsDefined(typeof(ObsoleteAttribute), false))
