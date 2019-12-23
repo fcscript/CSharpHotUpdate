@@ -20,3 +20,16 @@ class GoodsCfg
 {
     public GoodsList list = new GoodsList();
 }
+
+class MapNodeData
+{
+    public int Level;
+    public int ResType;
+    public int Type;
+    public int x;
+    public int y;
+}
+class MapData
+{
+    public List<MapNodeData> grids = new List<MapNodeData>();
+}

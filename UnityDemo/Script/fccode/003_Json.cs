@@ -52,3 +52,34 @@ class JsonLoader
         //os.print(szLeft);
     }
 }
+
+[json]
+class MapNodeData
+{
+    // {"l":9,"rt":4,"t":1,"x":300,"y":300}
+    public int Level;
+    public int ResType;
+    public int Type;
+    public int x;
+    public int y;
+}
+[json]
+class MapData
+{
+    public List<MapNodeData> grids;
+}
+[export]
+class JsonLoaderMapData
+{
+    public static void TestLoad(StringA szJson)
+    {
+        MapData data = null;
+        bool bSuc = os.ReadJson(data, szJson);
+        //if(data != null && data.grids != null)
+        //{
+        //    MapNodeData node = data.grids[0];
+        //    os.print("Level:{0},ResType={1},Type:{2},x:{3}, y{4}", node.Level, node.ResType, node.Type, node.x, node.y);
+        //    os.print("size = {0}", data.grids.Length);
+        //}
+    }
+}

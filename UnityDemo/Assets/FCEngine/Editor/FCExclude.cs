@@ -51,6 +51,16 @@ class FCExclude
         "TerrainData", 
         "WaitForSeconds",
         "NativeClassAttribute",
+#if UNITY_ANDROID
+        "iPhoneSettings",
+        "iPhoneUtils",
+#elif UNITY_IPHONE
+        "AndroidInput",
+#else
+        "iPhoneSettings",
+        "iPhoneUtils",
+        "AndroidInput",
+#endif
     };
 
     // 支持的模板函数的接口，需要其他的在这里扩展
@@ -93,12 +103,13 @@ class FCExclude
             rList.Add(szFuncName);
             m_BlackList[nClassType] = rList;
         }
-    }
+    }    
     static void InitBlackList()
     {
         if (m_BlackList != null)
             return;
         PushBlackName(typeof(UnityEngine.Texture2D), "alphaIsTransparency");
+        PushBlackName(typeof(UnityEngine.Texture), "imageContentsHash");
         PushBlackName(typeof(UnityEngine.Animation), "Item");
         PushBlackName(typeof(UnityEngine.Renderer), "allowOcclusionWhenDynamic");
         PushBlackName(typeof(UnityEngine.Input), "IsJoystickPreconfigured");
@@ -128,9 +139,15 @@ class FCExclude
         PushBlackName(typeof(UnityEngine.AudioRenderer), "Render");
         PushBlackName(typeof(UnityEngine.HumanPoseHandler), "GetHumanPose");
         PushBlackName(typeof(UnityEngine.Sprite), "OverridePhysicsShape");
-        PushBlackName(typeof(UnityEngine.UI.GraphicRegistry), "GetGraphicsForCanvas");
+        PushBlackName(typeof(UnityEngine.AudioSettings), "GetSpatializerPluginNames");
+        PushBlackName(typeof(UnityEngine.AudioSettings), "SetSpatializerPluginName");
+        PushBlackName(typeof(UnityEngine.Caching), "SetNoBackupFlag");
+        PushBlackName(typeof(UnityEngine.Caching), "ResetNoBackupFlag");
 
+        PushBlackName(typeof(UnityEngine.UI.GraphicRegistry), "GetGraphicsForCanvas");
         PushBlackName(typeof(UnityEngine.UI.Text), "OnRebuildRequested");
+        PushBlackName(typeof(UnityEngine.UI.Graphic), "OnRebuildRequested");
+        PushBlackName(typeof(UnityEngine.GUIStyleState), "scaledBackgrounds");
     }
 
     public static List<string> GetClassBlackList(Type nClassType)
@@ -141,12 +158,54 @@ class FCExclude
             return rList;
         return null;
     }
+
+    static Dictionary<Type, List<string>> m_PropertySetBlackList;  // set属性的黑名单
+    static void PushPropertySetBlackName(Type nClassType, string szPropertyName)
+    {
+        if (m_PropertySetBlackList == null)
+            m_PropertySetBlackList = new Dictionary<Type, List<string>>();
+
+        List<string> rList = null;
+        if (m_PropertySetBlackList.TryGetValue(nClassType, out rList))
+        {
+            rList.Add(szPropertyName);
+        }
+        else
+        {
+            rList = new List<string>();
+            rList.Add(szPropertyName);
+            m_PropertySetBlackList[nClassType] = rList;
+        }
+    }
+    static void  InitPropertySetBlack()
+    {
+        if (m_PropertySetBlackList != null)
+            return;
+        PushPropertySetBlackName(typeof(UnityEngine.AnimatorControllerParameter), "name");
+    }
+
+    // 功能：是不是禁止某个类的属性set方法
+    public static bool IsDissablePropertySetMethod(Type  nClassType, string szPropertyName)
+    {
+        InitPropertySetBlack();
+        List<string> rList = null;
+        if(m_PropertySetBlackList.TryGetValue(nClassType, out rList))
+        {
+            return rList.Contains(szPropertyName);
+        }
+        return false;
+    }
+
     static Dictionary<Type, bool> m_MustExportList;  // 必须导出的对象
 
     static void  InitMuseExportList()
     {
         m_MustExportList = new Dictionary<Type, bool>();
         m_MustExportList[typeof(UnityEngine.Touch)] = true;
+        m_MustExportList[typeof(UnityEngine.LocationService)] = true;
+        m_MustExportList[typeof(UnityEngine.AccelerationEvent)] = true;
+        m_MustExportList[typeof(UnityEngine.Compass)] = true;
+        m_MustExportList[typeof(UnityEngine.Gyroscope)] = true;
     }
 
 

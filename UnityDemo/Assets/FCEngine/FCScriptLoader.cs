@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 功能：加载脚本
-
+/// 功能：加载脚本
 /// </summary>
 
 public class FCScriptLoader : MonoBehaviour
@@ -23,6 +22,11 @@ public class FCScriptLoader : MonoBehaviour
     protected void Start()
     {
         InitDll();
+    }
+
+    private void OnApplicationQuit()
+    {
+        FCLibHelper.fc_switch_debug(false); // 停止调试吧
     }
 
     public static void InitCall(LPInitCallback pFunc)

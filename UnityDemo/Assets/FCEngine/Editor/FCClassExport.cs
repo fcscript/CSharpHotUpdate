@@ -439,6 +439,11 @@ class FCClassExport
                 bCanWrite = metSet != null;
                 if(metSet != null)
                     bStatic = metSet.IsStatic;
+                if(bCanWrite)
+                {
+                    if (FCExclude.IsDissablePropertySetMethod(m_nClassType, property.Name))
+                        bCanWrite = false;
+                }
             }
         }
         catch (Exception e)
