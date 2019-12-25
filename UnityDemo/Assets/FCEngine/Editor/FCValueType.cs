@@ -579,6 +579,10 @@ public class FCValueType
                 {
                     szCSharpName = szFullName.Substring(nIndex + 1);
                 }
+                else
+                {
+                    szCSharpName = szFullName;
+                }
             }
         }
 
