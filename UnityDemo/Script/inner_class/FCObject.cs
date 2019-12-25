@@ -29,7 +29,7 @@ public struct FCType
     //}
 };
 
-public struct FCObject
+public class FCObject
 {
     public static FCObject Create(FCType nType)  // 通过类型实例化一个对象
     {
@@ -51,20 +51,21 @@ public struct FCObject
     {
         return  "";
     }
-    //public static implicit operator FCObject(System.Object type)
+    //public static implicit operator FCObject(System.Object obj)
     //{
     //    return new FCObject();
     //}
     // 说明：这个在FCScript中，set并不是模板函数，这里只是为了兼容C#语法，所以不要使用<class>(obj)这样的调用
     // 调用时，不要添加<xxx>
-    public void set(System.Object  obj)
+    public void set<_Ty>(_Ty obj)
     {
     }
     // 功能：将FCObject强转成指定的类型
     // 说明：因为C#中不支持(_Ty)的写法，只好提供了一个模板函数, 兼容脚本中(_Ty)的强制转换
-    public _Ty cast<_Ty>()
+    public bool get<_Ty>(out _Ty obj)
     {
-        return default(_Ty);
+        obj = default(_Ty);
+        return true;
     }
 
     public bool IsTypeOf(FCType type)

@@ -791,9 +791,19 @@ public struct Quaternion
     public void SetAxisAngle(Vector3 axis, float angle)
     {
     }
+    // 功能：设置欧拉角
+    // 相当于 ： D3DXQuaternionRotationYawPitchRoll
+    // 参数：Euler.x -- fYaw - Y轴旋转弧度数
+    //       Euler.y -- fPitch - X轴旋转弧度数
+    //       Euler.z -- fRoll - Z轴旋转弧度数
     public void SetEulerAngles(Vector3 Euler)
     {
     }
+    // 功能：设置欧拉角
+    // 相当于 ： D3DXQuaternionRotationYawPitchRoll
+    // 参数：fYaw - Y轴旋转弧度数
+    //       fPitch - X轴旋转弧度数
+    //       fRoll - Z轴旋转弧度数
     public void SetEulerAngles(float fYaw, float fPitch, float fRoll)
     {
     }
