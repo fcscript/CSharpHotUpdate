@@ -608,6 +608,12 @@ public class FCValueType
             bBaseDelegate = true;
             szName = "Func";
         }
+        else if(szName.IndexOf("Comparison`1") != -1)
+        {
+            bBaseDelegate = false;
+            szName = "Comparison";
+        }
+
         if (bBaseDelegate)
         {
             MethodInfo method = nType.GetMethod("Invoke");
@@ -620,14 +626,14 @@ public class FCValueType
                     FCValueType value_param = TransType(allParams[i].ParameterType);
                     if (i > 0)
                         szName += ",";
-                    szName += value_param.GetTypeName(true, true);
+                    szName += value_param.GetTypeName(bCSharp, bFullName);
                 }
                 if(bFuncDelegate)
                 {
                     if(allParams.Length > 0)
                         szName += ",";
                     FCValueType value_param = TransType(method.ReturnType);
-                    szName += value_param.GetTypeName(true, true);
+                    szName += value_param.GetTypeName(bCSharp, bFullName);
                 }
                 szName += ">";
             }

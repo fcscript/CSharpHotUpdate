@@ -722,7 +722,9 @@ class FCClassExport
                 szParamDesc += " arg" + i;
             }
         }
+        FCValueType value_type = FCValueType.TransType(nClassType);
         FCValueType value_ret = FCValueType.TransType(method.ReturnType);
-        fileBuilder.AppendFormat("{0}public delegate {1} {2}({3});\r\n", szLeft, value_ret.GetValueName(false), nClassType.Name, szParamDesc);
+        string szClassName = value_type.GetValueName(false);
+        fileBuilder.AppendFormat("{0}public delegate {1} {2}({3});\r\n", szLeft, value_ret.GetValueName(false), szClassName, szParamDesc);
     }
 }
