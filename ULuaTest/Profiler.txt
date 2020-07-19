@@ -29,6 +29,6 @@ CPU : Huawei Kirin 980
 
            读            写
 json.net   20            9
-FCScript    6             1
+FCScript    6            1
 LitJson    28            9
 

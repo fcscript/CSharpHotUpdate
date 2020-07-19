@@ -40,4 +40,4 @@
 <p>FCSerialize 功能强化，增加读写定长数据的接口，增加PB相关接口</p>
 <p>多变量声明支持, 如 int a, b = 3, c; </p>
 <p>修正switch(exp), exp不支持复杂表达式的问题 </p>
-<p>修正clasa成员map, list的错误初始化导致运行时崩溃的问题 </p>
+<p>修正class成员map, list的错误初始化导致运行时崩溃的问题 </p>
