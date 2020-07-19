@@ -35,3 +35,9 @@
 <p>增加IntPtr支持，将脚本对象数据快速传递到宿主平台，让数据交互飞起</p>
 <p>2019-12-20</p>
 <p>修正脚本若干BUG，修正函数参数错误时编译不报错的BUG，增加Vector2, Vector3, Vector4的隐式转换</p>
+<p>2020-07-19</p>
+<p>增加Protobuf的支持，目前默认是Proto 3.0</p>
+<p>FCSerialize 功能强化，增加读写定长数据的接口，增加PB相关接口</p>
+<p>多变量声明支持, 如 int a, b = 3, c; </p>
+<p>修正switch(exp), exp不支持复杂表达式的问题 </p>
+<p>修正clasa成员map, list的错误初始化导致运行时崩溃的问题 </p>
