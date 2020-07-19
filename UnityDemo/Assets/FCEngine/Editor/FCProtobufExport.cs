@@ -707,15 +707,15 @@ class CPBMessageMng : PBMessage
         int nFileCount = m_MessageFiles.Count;
         int nClassCount = 0;
 
-        // 先导出PBTpye
-        szFileData.Append("enum PB_ZipType\r\n");
-        szFileData.Append("{\r\n");
-        szFileData.Append("    PB_Zip_Varint = 0,\r\n");
-        szFileData.Append("    PB_Zip_Fixed  = 1,\r\n");
-        szFileData.Append("    PB_Zip_ZigZag = 2,\r\n");
-        szFileData.Append("};\r\n");
-        szPathName = szPath + "FCProtobufType.cs";
-        System.IO.File.WriteAllText(szPathName, szFileData.ToString());
+        // 先导出PBTpye, 已经内置了，不需要导出了
+        //szFileData.Append("enum PB_ZipType\r\n");
+        //szFileData.Append("{\r\n");
+        //szFileData.Append("    PB_Zip_Varint = 0,\r\n");
+        //szFileData.Append("    PB_Zip_Fixed  = 1,\r\n");
+        //szFileData.Append("    PB_Zip_ZigZag = 2,\r\n");
+        //szFileData.Append("};\r\n");
+        //szPathName = szPath + "FCProtobufType.cs";
+        //System.IO.File.WriteAllText(szPathName, szFileData.ToString());
 
         for (int i = 0; i < nFileCount; ++i)
         {
