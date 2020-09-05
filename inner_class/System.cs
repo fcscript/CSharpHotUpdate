@@ -105,6 +105,14 @@ class os
     {
         return 0;
     }
+    public static double atan2(double y, double x)
+    {
+        return 0;
+    }
+    public static float atan2f(float y, float x)
+    {
+        return 0;
+    }
     public static double asin(double fValue)
     {
         return 0;
@@ -174,6 +182,22 @@ class os
     {
 
     }
+
+    // 功能：得到对象的数据地址
+    // 说明：如果对象是List，就返回数组的首地址
+    //       如果对象是字符串，就返回字符串的首地址
+    // 使用这个方法，可以将List数组快速与其他平台的接口做数据交互
+    public static IntPtr GetDataPtr<_Ty>(_Ty obj)
+    {
+        return new IntPtr();
+    }
+    // 功能：得到对象自已的地址
+    // 说明：这个接口一般用于调试，没有实际用途
+    //       
+    public static IntPtr GetObjPtr<_Ty>(_Ty obj)
+    {
+        return new IntPtr();
+    }
 };
 
 // 只是为了兼容UnityEngine.Events.UnityAction
@@ -182,7 +206,7 @@ class UnityAction<T>
 };
 
 //自动导出标签 [export]
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct | AttributeTargets.Method)]
 public class exportAttribute : System.Attribute
 {
     // 自动导出标签[export]
@@ -191,11 +215,11 @@ public class exportAttribute : System.Attribute
     }
 }
 
-//自动导出标签 [inline]
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
+//内联标记 [inline]
+[AttributeUsage(AttributeTargets.Method)]
 public class inlineAttribute : System.Attribute
 {
-    // 自动导出标签[export]
+    // 内联标记[inline]
     public inlineAttribute()
     {
     }

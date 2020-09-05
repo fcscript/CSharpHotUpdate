@@ -26,12 +26,18 @@ public class List<_Ty>
         return 0;
     }
     // 功能：指定数组的长度
+    // 说明：首次分配时自动置零
     public void resize(int nSize)
     {
 
     }
     // 功能：预分配
     public void reserve(int nSize)
+    {
+
+    }
+    // 功能：将所有的节点都填充成指定的值
+    public void Fill(_Ty value)
     {
 
     }
