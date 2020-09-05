@@ -43,3 +43,8 @@
 <p>修正class成员map, list的错误初始化导致运行时崩溃的问题 </p>
 <p>2020-09-05</p>
 <p>修正对象赋空指令，空指针访问崩溃的BUG</p>
+<p>2020-09-05</p>
+<p>增加Protobuf的示例</p>
+<p>修正 null == ptr 的编译错误</p>
+<p>修改Protobuf的导出功能，修正一个接口导出的BUG</p>
+<p>修改CSerialize名字为FCScriteze</p>

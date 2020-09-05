@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class CSerialize
+public class FCSerialize
 {
     // 功能：设置读模式, 流的数据由外部指定
     public void ReadMode(List<char> array, int nStart, int nSize)
@@ -14,7 +14,7 @@ class CSerialize
     // 功能：设置读模式, 流的数据由已知的流中获取
     // 参数：nStart - 开始的位置
     //       nSize - 数据流的长度
-    public void ReadMode(CSerialize ar, int nStart, int nSize)
+    public void ReadMode(FCSerialize ar, int nStart, int nSize)
     {
 
     }
@@ -188,7 +188,7 @@ class CSerialize
 };
 
 // 这个类型会在PB导出，也自动导出一下，所以，如果真的有导致，请删除下面的的声明，留下自动导出的
-enum PB_ZipType
+public enum PB_ZipType
 {
     PB_Zip_Varint,    // 变长
     PB_Zip_Fixed,     // 定长

@@ -1,0 +1,39 @@
+
+syntax = "proto3";
+
+//import "google/protobuf/any.proto";
+//import "google/protobuf/struct.proto";
+//import "google/protobuf/timestamp.proto";
+
+//package google.protobuf.testing.oneofs;
+
+message RequestWithSimpleOneof {
+  string value = 1;
+  bytes optional_bytes    = 2;
+  MoreData optional_data    = 3;
+  Data     second_data    = 4;
+  oneof data {
+    string str_data = 5;
+    int32 int_data = 6;
+    Data message_data = 7;
+    MoreData more_data = 8;
+  }
+  oneof thrid_data {
+    string str_data3 = 9;  // 这个不可以与data.str_data重名, id也不可相同
+    int32 int_data3 = 10;
+    Data message_data3 = 11;
+    MoreData more_data3 = 12;
+  }
+}
+
+message Data {
+  int32 data_value = 1;
+}
+
+message MoreData {
+  string str_value = 1;
+}
+
+message Response {
+  string value = 1;
+}

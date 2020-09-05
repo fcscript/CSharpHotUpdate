@@ -204,31 +204,34 @@ public static class FCExport
         pWrap.PushTemplateFuncWrapSupport("GetComponent", aSupportType);
     }
 
-    static void MakeFCProj()
+    static public void InportPathToFCProj(string szInporPath)
     {
         string szRoot = Application.dataPath;
         szRoot = szRoot.Substring(0, szRoot.Length - 6);
-        string szPath = szRoot + "Script/inport/";
-        string [] allPathFileNames = Directory.GetFiles(szPath, "*.cs", SearchOption.AllDirectories);
+        string szPath = szRoot + "Script/" + szInporPath + '/';  // szRoot + "Script/inport/";
+        string[] allPathFileNames = Directory.GetFiles(szPath, "*.cs", SearchOption.AllDirectories);
         string szProjPathName = szRoot + "Script/FCProj.csproj";
         if (!File.Exists(szProjPathName))
             return;
+        string InportKey = string.Format("Include=\"{0}\\", szInporPath);  // Include=\"inport\\
         StreamReader file = new StreamReader(szProjPathName);
         bool bFindInner = false;
         bool bAdd = false;
         StringBuilder fileData = new StringBuilder(1024 * 1024 * 2);
-        while(true)
+        // 写入UTF8的头
+        while (true)
         {
             string szLine = file.ReadLine();
             if (string.IsNullOrEmpty(szLine))
                 break;
-            if(szLine.IndexOf("inner_class\\") != -1)
+            if (szLine.IndexOf("inner_class\\") != -1)
             {
                 bFindInner = true;
                 fileData.AppendLine(szLine);
                 continue;
             }
-            if (szLine.IndexOf("Include=\"inport\\") != -1)
+            //if (szLine.IndexOf("Include=\"inport\\") != -1)
+            if(szLine.IndexOf(InportKey) != -1)
             {
                 continue;
             }
@@ -244,7 +247,8 @@ public static class FCExport
                     if (fileFlags.ContainsKey(szFileName))
                         continue;
                     fileFlags[szFileName] = true;
-                    szInportLine = string.Format("    <Compile Include=\"inport\\{0}\" />", szFileName);
+                    //szInportLine = string.Format("    <Compile Include=\"inport\\{0}\" />", szFileName);
+                    szInportLine = string.Format("    <Compile Include=\"{0}\\{1}\" />", szInporPath, szFileName);
                     fileData.AppendLine(szInportLine);
                 }
             }
@@ -253,6 +257,11 @@ public static class FCExport
         file.Close();
         File.Delete(szProjPathName);
         File.WriteAllText(szProjPathName, fileData.ToString());
+    }
+
+    static public void MakeFCProj()
+    {
+        InportPathToFCProj("inport");
     }
 
     [MenuItem("FCScript/编译脚本 _F7", false, 5)]

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -52,6 +52,7 @@
     <Compile Include="fccode\004_xml.cs" />
     <Compile Include="fccode\005_coroutine.cs" />
     <Compile Include="fccode\008_await.cs" />
+    <Compile Include="fccode\009_protobuf.cs" />
     <Compile Include="fccode\TestUI.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -68,6 +69,7 @@
     <Compile Include="inner_class\StringA.cs" />
     <Compile Include="inner_class\System.cs" />
     <Compile Include="inner_class\Unity.cs" />
+    <Compile Include="Protobuf\oneofs.cs" />
     <Compile Include="inport\all_default_class.cs" />
     <Compile Include="inport\Animation.cs" />
     <Compile Include="inport\AsyncOperation.cs" />

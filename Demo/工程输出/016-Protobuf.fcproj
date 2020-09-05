@@ -1,0 +1,19 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+</IncludePath>
+<IncludeFile>
+    $(curpath)\..\016-Protobuf\009_protobuf.cs
+    $(curpath)\..\016-Protobuf\oneofs.cs
+</IncludeFile>
+<CSharpPath>
+</CSharpPath>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>
+<CopyPathName></CopyPathName>
+<ErrorLogPathName></ErrorLogPathName>
+<ProjCode>0</ProjCode>

@@ -508,7 +508,8 @@ class PBMessage
 			    szOut.AppendFormat("    public {0} mutable_{1}()\r\n", szValueClassName, pItem.m_szName);
 			    szOut.Append(      "    {\r\n");
 			    szOut.AppendFormat("        {0} = {1};\r\n", szOneOfValueName, pItem.m_ID);
-			    szOut.AppendFormat("        {0} = new {1}();\r\n", pItem.m_szName, szValueClassName);
+                szOut.AppendFormat("        if(null == {0})\r\n", pItem.m_szName);
+                szOut.AppendFormat("            {0} = new {1}();\r\n", pItem.m_szName, szValueClassName);
 			    szOut.AppendFormat("        return {0};\r\n", pItem.m_szName);
 			    szOut.Append(      "    }\r\n");
 		    }
@@ -574,7 +575,9 @@ class PBMessage
         szOut.Append("        int nTag = 0;\r\n");
         szOut.Append("        int nFiledIndex = 0;\r\n");
         szOut.Append("        bool bSucRead = false;\r\n");
-        szOut.Append("        while(nTag = ar.ProtobufReadTag())\r\n");
+        //szOut.Append("        while(nTag = ar.ProtobufReadTag())\r\n");
+        szOut.Append("        //while(nTag = ar.ProtobufReadTag()) // C#不支持这样的写法\r\n");
+        szOut.Append("        while((nTag = ar.ProtobufReadTag()) != 0)\r\n");
         szOut.Append("        {\r\n");
         szOut.Append("            nFiledIndex = nTag >> 3;\r\n");
         szOut.Append("            bSucRead = false;\r\n");
@@ -694,6 +697,22 @@ class CPBMessageMng : PBMessage
             ParseFile(szPathName);
         }
     }
+    public static void SaveUTF8File(string szPathName, string szFileData)
+    {
+        if(string.IsNullOrEmpty(szFileData))
+        {
+            System.IO.File.WriteAllText(szPathName, szFileData);
+            return;
+        }
+        byte[] fileData = UTF8Encoding.UTF8.GetBytes(szFileData);
+        int nLength = fileData.Length;
+        byte[] utf8Data = new byte[nLength + 3];
+        Array.Copy(fileData, 0, utf8Data, 3, nLength);
+        utf8Data[0] = 0xef;
+        utf8Data[1] = 0xbb;
+        utf8Data[2] = 0xbf;
+        System.IO.File.WriteAllBytes(szPathName, utf8Data);
+    }
     public void ExportFC(string szPath)
     {
         // 先删除该目录下的文件
@@ -737,7 +756,8 @@ class CPBMessageMng : PBMessage
             szPathName += szFileName;
 
             // 保存
-            System.IO.File.WriteAllText(szPathName, szFileData.ToString());
+            //System.IO.File.WriteAllText(szPathName, szFileData.ToString());
+            SaveUTF8File(szPathName, szFileData.ToString());
         }
     }
     [MenuItem("FCScript/导出Protobuf", false, 5)]
@@ -749,6 +769,8 @@ class CPBMessageMng : PBMessage
         CPBMessageMng pb_mng = new CPBMessageMng();
         pb_mng.ParsePath(szRootPath + "Assets/Protobuf");        
         pb_mng.ExportFC(szRootPath + "Script/Protobuf/");
+
+        FCExport.InportPathToFCProj("Protobuf");
 
         string szExportPath = szRootPath + "Script/Protobuf/";
         szExportPath = szExportPath.Replace('/', '\\');
