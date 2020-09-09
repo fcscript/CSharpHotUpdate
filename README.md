@@ -48,5 +48,5 @@
 <p>修正 null == ptr 的编译错误</p>
 <p>修改Protobuf的导出功能，修正一个接口导出的BUG</p>
 <p>修改CSerialize名字为FCScriteze</p>
-<p>2020-09-05</p>
+<p>2020-09-09</p>
 <p>修正if(exp为常数)时的一个编译错误(笔误)</p>
