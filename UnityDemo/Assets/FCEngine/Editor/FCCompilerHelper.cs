@@ -33,13 +33,13 @@ class FCCompilerHelper
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
     [DllImport(FCCompilerDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print);
+    public static extern bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print, bool bSaveInportXml);
     
     // 功能：停止编译
     [DllImport(FCCompilerDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_stop_compile();
 #else    
-    public static bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print)
+    public static bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print, bool bSaveInportXml)
     {
     // 其他平台暂不支持的噢
     }
@@ -64,13 +64,13 @@ class FCCompilerHelper
         Debug.LogError(szError);
     }
 
-    public static void  CompilerProj(string szProjPathName)
+    public static void  CompilerProj(string szProjPathName, bool bSaveInporXml)
     {
         fc_stop_compile(); // 先总是停止编译先
         ++s_nUserData;
         s_nCompilerErrorCount = 0;
         // 如果这个编译时间长了些的话，可以创建一个线程执行
-        fc_compiler_proj(szProjPathName, s_nUserData, null, null, GetResult, CompilerPrint);
+        fc_compiler_proj(szProjPathName, s_nUserData, null, null, GetResult, CompilerPrint, bSaveInporXml);
     }
     public static void  StopCompiler()
     {

@@ -119,7 +119,7 @@ public static class FCExport
     static void WrapType(FCClassWrap pWrap, Type nType)
     {
         PrepareWrap(pWrap, nType);
-        pWrap.WrapClass(nType);
+        pWrap.WrapClass(nType, true);
     }
 
     static void WrapUIClass(FCClassWrap pWrap)
@@ -270,7 +270,16 @@ public static class FCExport
         string szPath = Application.dataPath;
         szPath = szPath.Substring(0, szPath.Length - 6);
         szPath += "脚本测试工程.fcproj";
-        FCCompilerHelper.CompilerProj(szPath);
+        FCCompilerHelper.CompilerProj(szPath, false);
+    }
+    [MenuItem("FCScript/编译导出引用接口", false, 5)]
+    static void CompilerScriptAndSaveXml()
+    {
+        Debug.Log("特别说明：如果您想要导出精简接口，用于打包前的精简代码，就必须先使用全量导出，再执行这个命令，生成ref_name.xml");
+        string szPath = Application.dataPath;
+        szPath = szPath.Substring(0, szPath.Length - 6);
+        szPath += "脚本测试工程.fcproj";
+        FCCompilerHelper.CompilerProj(szPath, true);
     }
     //[MenuItem("FCScript/测试", false, 5)]
     //static void TestExport()
