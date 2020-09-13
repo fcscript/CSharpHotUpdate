@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <RefClass ClassName="GameObject">
+    <Names>Find</Names>
+    <Names>GetComponent</Names>
+    <Names>AddComponent</Names>
+    <TemplateParams FuncName="GetComponent">
+      <Params>Light</Params>
+      <Params>SkinnedMeshRenderer</Params>
+    </TemplateParams>
+    <TemplateParams FuncName="AddComponent">
+      <Params>SkinnedMeshRenderer</Params>
+    </TemplateParams>
+  </RefClass>
+  <RefClass ClassName="Light">
+    <Names>color</Names>
+  </RefClass>
+  <RefClass ClassName="MeshRenderer">
+  </RefClass>
+  <RefClass ClassName="Component">
+    <Names>GetComponent</Names>
+    <TemplateParams FuncName="GetComponent">
+      <Params>MeshRenderer</Params>
+      <Params>Text</Params>
+      <Params>Button</Params>
+    </TemplateParams>
+  </RefClass>
+  <RefClass ClassName="Renderer">
+    <Names>material</Names>
+    <Names>receiveShadows</Names>
+  </RefClass>
+  <RefClass ClassName="Time">
+    <Names>deltaTime</Names>
+    <Names>time</Names>
+  </RefClass>
+  <RefClass ClassName="Transform">
+    <Names>Rotate</Names>
+    <Names>Find</Names>
+    <Names>position</Names>
+  </RefClass>
+  <RefClass ClassName="Material">
+    <Names>color</Names>
+  </RefClass>
+  <RefClass ClassName="Text">
+    <Names>text</Names>
+  </RefClass>
+  <RefClass ClassName="Button">
+    <Names>onClick</Names>
+  </RefClass>
+  <RefClass ClassName="ButtonClickedEvent">
+  </RefClass>
+  <RefClass ClassName="UnityEvent">
+    <Names>AddListener</Names>
+  </RefClass>
+  <RefClass ClassName="UnityObject">
+    <Names>name</Names>
+  </RefClass>
+  <RefClass ClassName="SkinnedMeshRenderer">
+  </RefClass>
+  <RefClass ClassName="Input">
+    <Names>mousePosition</Names>
+  </RefClass>
+  <RefClass ClassName="UserClass">
+    <Names>TestFunc1</Names>
+  </RefClass>
+</Root>
