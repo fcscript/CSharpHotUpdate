@@ -32,12 +32,20 @@ public class ScriptMono : MonoBehaviour
         if (m_nScriptInsPtr != 0)
         {
             // 假设存在transform变量
-            SetScriptValue("transform", transform);
-
+            SetScriptValue("transform", transform);            
+        }
+        try
+        {
+            OnCreateScript();
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+        if(m_nScriptInsPtr != 0)
+        {
             FCLibHelper.fc_call(m_nScriptInsPtr, "Start");
         }
-
-        OnCreateScript();
     }
     protected virtual void OnCreateScript()
     {
