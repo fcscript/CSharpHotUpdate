@@ -79,6 +79,15 @@ public class ScriptMono : MonoBehaviour
         CreateScript(); // 延迟执行吧
         return m_nScriptInsPtr;
     }
+    // 功能:查找脚本函数是不是存在
+    public bool IsHaveScriptFunc(string szFuncName)
+    {
+        if(m_nScriptInsPtr != 0)
+        {
+            return FCLibHelper.fc_find_class_func(m_nScriptInsPtr, szFuncName);
+        }
+        return false;
+    }
     // 功能：设置脚本中的变量
     public void SetScriptValue(string szName, bool value)
     {

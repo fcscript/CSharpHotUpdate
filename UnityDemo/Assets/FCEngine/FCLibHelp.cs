@@ -490,6 +490,10 @@ public class FCLibHelper
     // 
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_class_value(long ptr, string value_name);
+    //--------------------------------------------------------------------------------------
+    // 功能：查找对象是不是有指定名字的成员函数
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool fc_find_class_func(long ptr, string func_name);
     // 功能：将一个bool值设置给脚本变量
     // 参数：ptr - 脚本对象地址
     //       v - 要设置的bool值
