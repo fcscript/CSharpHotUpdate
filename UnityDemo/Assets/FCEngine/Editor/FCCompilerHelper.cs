@@ -42,6 +42,7 @@ class FCCompilerHelper
     public static bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print, bool bSaveInportXml)
     {
     // 其他平台暂不支持的噢
+       return true;
     }
     public static void fc_stop_compile()
     {
