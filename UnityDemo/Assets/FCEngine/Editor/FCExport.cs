@@ -263,6 +263,37 @@ public static class FCExport
     {
         InportPathToFCProj("inport");
     }
+    [UnityEditor.Callbacks.DidReloadScripts]
+    static void OnUnityCompilerCallback()
+    {
+        Debug.Log("OnUnityCompilerCallback");
+        if (FCLibHelper.fc_is_init())
+        {
+            FCScriptLoader Loader = MonoBehaviour.FindObjectOfType<FCScriptLoader>();
+            if (Loader != null)
+            {
+                Loader.OnAfterScriptCompiler(OnAfterLoadScript);
+            }
+            else
+            {
+                FCLibHelper.fc_set_debug_print_func(FCScriptLoader.print_error);
+                FCLibHelper.fc_set_output_error_func(FCScriptLoader.print_error);
+                all_class_wrap.Register();
+            }
+        }
+    }
+    static void OnAfterLoadScript()
+    {
+        ScriptMono[] Scripts = MonoBehaviour.FindObjectsOfType<ScriptMono>();
+        if (Scripts != null)
+        {
+            for (int i = 0; i < Scripts.Length; ++i)
+            {
+                if (Scripts[i] != null)
+                    Scripts[i].OnAfterScriptCompiler();
+            }
+        }
+    }
 
     [MenuItem("FCScript/编译脚本 _F7", false, 5)]
     static void CompilerScript()

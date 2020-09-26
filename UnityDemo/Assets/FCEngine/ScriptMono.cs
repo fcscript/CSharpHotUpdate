@@ -55,10 +55,18 @@ public class ScriptMono : MonoBehaviour
     {
         if(m_nScriptInsPtr != 0)
         {
-            FCLibHelper.fc_call(m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
-            FCLibHelper.fc_relese_ins(m_nScriptInsPtr); // 释放脚本对象，如果脚本对象有析构函数，就会自动调用析构函数
+            if(FCLibHelper.fc_is_init()) // 如果脚本系统已经释放了，就不能调用脚本的函数了
+            {
+                FCLibHelper.fc_call(m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
+                FCLibHelper.fc_relese_ins(m_nScriptInsPtr); // 释放脚本对象，如果脚本对象有析构函数，就会自动调用析构函数
+            }
             m_nScriptInsPtr = 0;
         }
+    }
+    // 功能：Unity脚本编译后的重新初始化脚本引擎
+    public void OnAfterScriptCompiler()
+    {
+        Start();
     }
     public void OnReloadResource()
     {

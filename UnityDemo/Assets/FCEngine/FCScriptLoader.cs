@@ -27,6 +27,8 @@ public class FCScriptLoader : MonoBehaviour
     private void OnApplicationQuit()
     {
         FCLibHelper.fc_switch_debug(false); // 停止调试吧
+        Debug.Log("OnApplicationQuit");
+        FCDll.ReleaseDll(); // 这里其实需要延迟释放
     }
 
     public static void InitCall(LPInitCallback pFunc)
@@ -52,6 +54,7 @@ public class FCScriptLoader : MonoBehaviour
     {
         if (!FCDll.IsInitDll())
         {
+            m_bLoadScript = false;
             try
             {
                 if(IsRecrodLog())
@@ -79,6 +82,20 @@ public class FCScriptLoader : MonoBehaviour
             }
             if(bLoadByteCode)
                 LoadByteCode(OnLoadScriptCallback);
+        }
+    }
+
+    // 功能：Unity脚本编译后的重新初始化脚本引擎
+    public void OnAfterScriptCompiler(LPInitCallback pFunc)
+    {
+        if(FCLibHelper.fc_is_init())
+        {
+            m_bLoadScript = false;
+            FCLibHelper.fc_set_debug_print_func(print_error);
+            FCLibHelper.fc_set_output_error_func(print_error);
+            FCDll.ReleaseDll();
+            InitDll();
+            InitCall(pFunc);
         }
     }
 

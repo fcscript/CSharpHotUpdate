@@ -42,6 +42,7 @@ public class FCDll
         if(s_pIns != null)
         {
             GameObject.DestroyImmediate(s_pIns.gameObject);
+            s_pIns = null;
         }
     }
 
