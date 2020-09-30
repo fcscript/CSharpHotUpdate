@@ -109,6 +109,10 @@ class TestProfiler: FCScriptLoader
     {
         FCLibHelper.fc_call(0, "Test13");
     }
+    void TestFunc14()
+    {
+        FCLibHelper.fc_call(0, "Test14");
+    }
     void OnGUI()
     {
         int nLeft = 200;
@@ -191,6 +195,11 @@ class TestProfiler: FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test13"))
         {
             TestFunc13();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test14"))
+        {
+            TestFunc14();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;

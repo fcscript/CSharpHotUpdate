@@ -18,6 +18,10 @@ ILRuntime   337     309   2518     117    246    384    397   2830    308  40000
 FCScript   298     298     66     491    2219    60    51     299    261   11682    660
    ULua    620    1609   1312     523    1721   280   318    1630    228    6500   1196
 
+在IPhone11 Max Pro
+          Test0   Test1  Test2   Test3  Test4  Test5  Test6  Test7  Test8  Test9  Test10  Test11  Test12  Test13
+FCScript   58      68     28      80     227    23     25     80      61   1453    78       0       39      560 
+
 Json的读写效率的测试(PC), 300K的文件， 执行100次, 取平均
 CPU : i5-2500 @ 3.30GHz 3.70 GHz
 内存：12G

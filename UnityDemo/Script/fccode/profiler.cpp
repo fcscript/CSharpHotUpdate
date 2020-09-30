@@ -245,28 +245,47 @@ export void  Test13()
     text.push_back("a");
     text.push_back("restaurant");
     text.push_back("near");
-    text.push_back("the");
+    text.push_back("ther");
     text.push_back("lake");
     text.push_back("of");
     text.push_back("ab");
     text.push_back("new");
     text.push_back("era");
 
+	int  nArraySize = text.size();
+
     map<StringA, int>   cnt = new map<StringA, int>();
-    int  nArraySize = text.size();
-    uint  nBeginTime = os.GetTickCount();
+	cnt.Reserve(20);
+	uint  nBegin = System.GetTickCount();
     for(int i = 0; i<1000000; ++i)
     {
         for(int k = 0; k<nArraySize; ++k)
         {
             cnt[text[k]] += 1;
+			//cnt["aa"] = 1;
         }
     }
-    uint  nEndTime = os.GetTickCount();
-    uint  nTime = nEndTime - nBeginTime;
-    print("cost time : {0}", nTime);
-    //for(iterator it = cnt.begin(); it; ++it)
-    //{
-    //    print("{0}:{1}", it.key, it.value);
-    //}	
+	uint nEnd = System.GetTickCount();
+	PrintTime("Test13", nEnd - nBegin);
+}
+
+export void  Test14()
+{
+	List<int>   array = { 1412, 6658, 984, 899, 33, 14, 678, 638, 1101, 3320, 45, 99, 102, 204, 4456, 7668, 5446, 945, 653 };
+
+	int  nArraySize = array.size();
+	print("ArraySize = {0}", nArraySize);
+
+	map<int, int>   cnt = new map<int, int>();
+	cnt.Reserve(20);
+	uint  nBegin = System.GetTickCount();
+	for (int i = 0; i<1000000; ++i)
+	{
+		for (int k = 0; k<nArraySize; ++k)
+		{
+			cnt[array[k]] += 1;
+		}
+	}
+	uint nEnd = System.GetTickCount();
+	PrintTime("Test14", nEnd - nBegin);
 }
