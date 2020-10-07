@@ -2,6 +2,7 @@
 <FileExt>cpp</FileExt>
 <IncludePath>
     $(curpath)\Script\fccode\
+    $(curpath)\Script\Protobuf\
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
