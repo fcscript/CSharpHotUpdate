@@ -231,37 +231,44 @@ export void  Test12()
 
 export void  Test13()
 {
-    List<StringA>   text = new List<StringA>();
-    text.push_back("The");
-    text.push_back("quick");
-    text.push_back("brown");
-    text.push_back("fox");
-    text.push_back("jumped");
-    text.push_back("over");
-    text.push_back("the");
-    text.push_back("lazy");
-    text.push_back("dog");
-    text.push_back("at");
-    text.push_back("a");
-    text.push_back("restaurant");
-    text.push_back("near");
-    text.push_back("ther");
-    text.push_back("lake");
-    text.push_back("of");
-    text.push_back("ab");
-    text.push_back("new");
-    text.push_back("era");
+    List<StringA>   array = new List<StringA>();
+    array.push_back("The");
+    array.push_back("quick");
+    array.push_back("brown");
+    array.push_back("fox");
+    array.push_back("jumped");
+    array.push_back("over");
+    array.push_back("the");
+    array.push_back("lazy");
+    array.push_back("dog");
+    array.push_back("at");
+    array.push_back("a");
+    array.push_back("restaurant");
+    array.push_back("near");
+    array.push_back("ther");
+    array.push_back("lake");
+    array.push_back("of");
+    array.push_back("ab");
+    array.push_back("new");
+    array.push_back("era");
 
-	int  nArraySize = text.size();
 
     map<StringA, int>   cnt = new map<StringA, int>();
 	cnt.Reserve(20);
+
+	int  nArraySize = array.size();
+	for(int k = 0; k<nArraySize; ++k)
+	{
+		cnt[array[k]] = 0;
+	}
+	--nArraySize;
+
 	uint  nBegin = System.GetTickCount();
     for(int i = 0; i<1000000; ++i)
     {
         for(int k = 0; k<nArraySize; ++k)
         {
-            cnt[text[k]] += 1;
+            cnt[array[k]] = cnt[array[k+1]] + 1;
 			//cnt["aa"] = 1;
         }
     }
@@ -273,8 +280,8 @@ export void  Test14()
 {
 	List<int>   array = { 1412, 6658, 984, 899, 33, 14, 678, 638, 1101, 3320, 45, 99, 102, 204, 4456, 7668, 5446, 945, 653 };
 
-	int  nArraySize = array.size();
-	print("ArraySize = {0}", nArraySize);
+	int  nArraySize = array.size() - 1;
+	print("ArraySize = {0}", nArraySize + 1);
 
 	map<int, int>   cnt = new map<int, int>();
 	cnt.Reserve(20);
@@ -283,7 +290,7 @@ export void  Test14()
 	{
 		for (int k = 0; k<nArraySize; ++k)
 		{
-			cnt[array[k]] += 1;
+			cnt[array[k]] = cnt[array[k+1]] + 1;
 		}
 	}
 	uint nEnd = System.GetTickCount();
