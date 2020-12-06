@@ -20,21 +20,33 @@ public class RequestWithSimpleOneof
         THRID_DATA_NOT_SET = 0,
     };
     //-----------------------------
+    [PBAttrib("Value = PB_Zip_Varint, Field = 1, Tag = 10")]
     public StringA  value;// = 1
+    [PBAttrib("Value = PB_Zip_Varint, Field = 2, Tag = 18")]
     public StringA  optional_bytes;// = 2
+    [PBAttrib("Value = PB_Zip_Varint, Field = 3, Tag = 26")]
     public MoreData  optional_data;// = 3
+    [PBAttrib("Value = PB_Zip_Varint, Field = 4, Tag = 34")]
     public Data  second_data;// = 4
     //-----------------------------
     int  _oneof_case_0; // data
+    [PBAttrib("Value = PB_Zip_Varint, Field = 5, Tag = 42, Case = _oneof_case_0")]
     public StringA  str_data;// = 5
+    [PBAttrib("Value = PB_Zip_Varint, Field = 6, Tag = 48, Case = _oneof_case_0")]
     public int  int_data;// = 6
+    [PBAttrib("Value = PB_Zip_Varint, Field = 7, Tag = 58, Case = _oneof_case_0")]
     public Data  message_data;// = 7
+    [PBAttrib("Value = PB_Zip_Varint, Field = 8, Tag = 66, Case = _oneof_case_0")]
     public MoreData  more_data;// = 8
     //-----------------------------
     int  _oneof_case_1; // thrid_data
+    [PBAttrib("Value = PB_Zip_Varint, Field = 9, Tag = 74, Case = _oneof_case_1")]
     public StringA  str_data3;// = 9
+    [PBAttrib("Value = PB_Zip_Varint, Field = 10, Tag = 80, Case = _oneof_case_1")]
     public int  int_data3;// = 10
+    [PBAttrib("Value = PB_Zip_Varint, Field = 11, Tag = 90, Case = _oneof_case_1")]
     public Data  message_data3;// = 11
+    [PBAttrib("Value = PB_Zip_Varint, Field = 12, Tag = 98, Case = _oneof_case_1")]
     public MoreData  more_data3;// = 12
     //-----------------------------
     public void set_str_data(StringA _str_data)
@@ -320,6 +332,7 @@ public class Data
 {
     //-----------------------------
     //-----------------------------
+    [PBAttrib("Value = PB_Zip_Varint, Field = 1, Tag = 8")]
     public int  data_value;// = 1
     [export]
     public void  WriteTo(FCSerialize ar)
@@ -361,6 +374,7 @@ public class MoreData
 {
     //-----------------------------
     //-----------------------------
+    [PBAttrib("Value = PB_Zip_Varint, Field = 1, Tag = 10")]
     public StringA  str_value;// = 1
     [export]
     public void  WriteTo(FCSerialize ar)
@@ -402,6 +416,7 @@ public class Response
 {
     //-----------------------------
     //-----------------------------
+    [PBAttrib("Value = PB_Zip_Varint, Field = 1, Tag = 10")]
     public StringA  value;// = 1
     [export]
     public void  WriteTo(FCSerialize ar)

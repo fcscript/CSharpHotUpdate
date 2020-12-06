@@ -64,7 +64,7 @@ public class FCSerialize
     {
     }
     // 功能：取当前流的指针位置
-    public int Position()
+    public int GetPosition()
     {
         return 0;
     }
@@ -184,6 +184,18 @@ public class FCSerialize
     public void ProtobufWriteMap<_TyKey, _TyValue>(map<_TyKey, _TyValue> sMap, int nFiledIndex, PB_ZipType keyZipType, PB_ZipType valueZipType)
     {
 
+    }
+
+    // 功能：通过反射读取Protobuf脚本对象
+    // 说明：obj - 只能是通过插件导出的带PBAttrib标签的对象
+    public bool ProtobufReadObj(System.Object obj)
+    {
+        return true;
+    }
+    // 功能：通过反射写入Protobuf脚本对象
+    // 说明：obj - 只能是通过插件导出的带PBAttrib标签的对象
+    public void ProtobufWriteObj(System.Object obj)
+    {
     }
 };
 

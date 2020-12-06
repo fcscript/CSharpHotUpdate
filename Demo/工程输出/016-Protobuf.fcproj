@@ -5,6 +5,8 @@
 <IncludeFile>
     $(curpath)\..\016-Protobuf\009_protobuf.cs
     $(curpath)\..\016-Protobuf\oneofs.cs
+    $(curpath)\..\016-Protobuf\person.cs
+    $(curpath)\..\016-Protobuf\test_proto.cpp
 </IncludeFile>
 <CSharpPath>
 </CSharpPath>

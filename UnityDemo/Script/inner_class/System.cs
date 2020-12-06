@@ -235,4 +235,14 @@ public class jsonAttribute : System.Attribute
     }
 }
 
+//Json对象标签 [PBAttrib]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct | AttributeTargets.Field)]
+public class PBAttribAttribute : System.Attribute
+{
+    // Json对象[json]
+    public PBAttribAttribute(string Meta)
+    {
+    }
+}
+
 struct IntPtr { }

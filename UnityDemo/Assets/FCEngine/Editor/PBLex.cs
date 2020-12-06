@@ -16,6 +16,8 @@ enum pb_lex_words_type
     lex_right_bracket, // 右括号   )
     lex_left_brace,    // 左大括号 {
     lex_right_brace,   // 右大括号 }
+    lex_bracket_1,     // [ 中括号
+    lex_bracket_2,     // ] 中括号
     lex_semicolon,     // 分号;
     lex_comma,         // 逗号,
     lex_set,           // =
@@ -27,6 +29,7 @@ enum pb_lex_words_type
     lex_package,       // package
     lex_import,        // import
     lex_service,       // service
+    lex_default,       // default
 
     lex_enum,          // enum
     lex_message,       // message
@@ -804,6 +807,24 @@ class PBLex
                     case '}':
                         {
                             words.push_single_key(pcsIn, pb_lex_words_type.lex_right_brace);
+                        }
+                        break;
+                    case '[':
+                        {
+                            words.push_single_key(pcsIn, pb_lex_words_type.lex_bracket_1);
+                        }
+                        break;
+                    case ']':
+                        {
+                            words.push_single_key(pcsIn, pb_lex_words_type.lex_bracket_2);
+                        }
+                        break;
+                    case 'd': // default
+                        {
+                            if (words.IsCanPushKeyWords(pcsIn, "default"))
+                                words.PushKeyWords(ref pcsIn, pb_lex_words_type.lex_default, 7);
+                            else
+                                words.push_char(pcsIn, pb_lex_words_type.lex_value);
                         }
                         break;
                     case 'i':  // if

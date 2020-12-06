@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -70,6 +70,7 @@
     <Compile Include="inner_class\System.cs" />
     <Compile Include="inner_class\Unity.cs" />
     <Compile Include="Protobuf\oneofs.cs" />
+    <Compile Include="Protobuf\person.cs" />
     <Compile Include="inport\all_default_class.cs" />
     <Compile Include="inport\Animation.cs" />
     <Compile Include="inport\AsyncOperation.cs" />

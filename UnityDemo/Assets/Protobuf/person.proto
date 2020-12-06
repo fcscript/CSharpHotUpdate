@@ -1,0 +1,16 @@
+syntax = "proto3";
+message Phone {
+    string name =1;
+    int64 phonenumber = 2 [default = 1885898888];
+    oneof val {
+        int32 val1 = 3;
+        int32 val2 = 4;
+    }
+    map<string, int32> map_test = 5;
+}
+message Person {
+    string name = 1;
+    int32 age = 2 [default = 1];
+    string address = 3;
+    repeated Phone contacts = 4;
+}

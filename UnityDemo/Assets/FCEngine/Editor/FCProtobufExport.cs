@@ -82,6 +82,7 @@ class PBMessage
         public PBBaseValue m_value;
         public int m_ID;     // ID
         public string m_szName; // 变量名
+        public string m_default; // 默认值
         public PBOneOfDesc m_pOneOfDesc; // 指向OneOf对象
     };
     protected class PBOneOfDesc
@@ -215,34 +216,53 @@ class PBMessage
 		    else
 		    {
 			    // xxx type = xx;
-			    if(i + 5 < aWords.Count && aWords[i + 2].m_type == pb_lex_words_type.lex_set && aWords[i + 4].m_type == pb_lex_words_type.lex_semicolon)
+                // xxx type = xx [default = xx]
+			    if(i + 5 < aWords.Count && aWords[i + 2].m_type == pb_lex_words_type.lex_set)
 			    {
-				    // 是成员定义
-				    pb_lex_words key_words = aWords[i + 0];
-				    pb_lex_words name_words = aWords[i + 1];
-				    pb_lex_words id_words = aWords[i + 3];
-				    nPB_ID = PBLex.GetNumber(id_words);
-                    nFind = FindChild(nPB_ID);
-				    if(nFind != -1)
-				    {
-                        i += 4;
-					    continue;
-				    }
-				    MessageItem Item = new MessageItem();
-                    Item.m_item_type = PBValueType.Value_Base;
-				    Item.m_key.m_type = PBLex.GetPBType(key_words);
-                    Item.m_key.m_szType = key_words.GetString();
-				    Item.m_value = Item.m_key;
-				    Item.m_pOneOfDesc = m_pCurOneOf;
-
-                    Item.m_szName = name_words.GetString();
-                    Item.m_ID = PBLex.GetNumber(id_words);
-                    m_Member.Add(Item);
-				    if(m_pCurOneOf != null)
+                    // 是成员定义
+                    int nSemicolon = PBLex.FindFirstWords(aWords, pb_lex_words_type.lex_none, pb_lex_words_type.lex_semicolon, i, nEnd);
+                    if(nSemicolon != -1)
                     {
-                        m_pCurOneOf.m_Childs.Add(Item);
+                        pb_lex_words key_words = aWords[i + 0];
+                        pb_lex_words name_words = aWords[i + 1];
+                        pb_lex_words id_words = aWords[i + 3];
+                        nPB_ID = PBLex.GetNumber(id_words);
+                        nFind = FindChild(nPB_ID);
+                        if (nFind != -1)
+                        {
+                            i = nSemicolon;
+                            continue;
+                        }
+
+                        MessageItem Item = new MessageItem();
+                        Item.m_item_type = PBValueType.Value_Base;
+                        Item.m_key.m_type = PBLex.GetPBType(key_words);
+                        Item.m_key.m_szType = key_words.GetString();
+                        Item.m_value = Item.m_key;
+                        Item.m_pOneOfDesc = m_pCurOneOf;
+
+                        Item.m_szName = name_words.GetString();
+                        Item.m_ID = PBLex.GetNumber(id_words);
+
+                        // 找默认值 xxx type = xx [default = xx]
+                        if (i + 8 < aWords.Count
+                            && aWords[i + 4].m_type == pb_lex_words_type.lex_bracket_1
+                            && aWords[i + 5].m_type == pb_lex_words_type.lex_default
+                            && aWords[i + 6].m_type == pb_lex_words_type.lex_set
+                            && aWords[i + 8].m_type == pb_lex_words_type.lex_bracket_2
+                            && aWords[i + 7].m_type == pb_lex_words_type.lex_value
+                            )
+                        {
+                            if (Item.m_value.m_type != pb_type.pb_string)
+                                Item.m_default = aWords[i + 7].GetString();
+                        }
+                        m_Member.Add(Item);
+                        if (m_pCurOneOf != null)
+                        {
+                            m_pCurOneOf.m_Childs.Add(Item);
+                        }
+                        i = nSemicolon;
                     }
-                    i += 4;
                 }
 		    }
 	    }
@@ -332,7 +352,7 @@ class PBMessage
     }
     // -------------------------------------------------------------
 
-    public void ExportFCScript(ref StringBuilder szOut, int nSpaceCount)
+    public void ExportFCScript(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc)
     {
         int nParentSpaceCount = nSpaceCount;
         szOut.Append("\r\n");
@@ -340,7 +360,7 @@ class PBMessage
         ExportFC_InnerEnum(ref szOut, nSpaceCount);
 
         // 先将类内的函数，生成到类外吧
-        ExportFC_InnerClass(ref szOut, nSpaceCount);
+        ExportFC_InnerClass(ref szOut, nSpaceCount, bExportReadWriteFunc);
         szOut.Append("\r\n");
 
         // 导出类
@@ -373,7 +393,11 @@ class PBMessage
                 }
             }
             pOneOfPtr = pItem.m_pOneOfDesc;
-            szOut.AppendFormat("    public {0}  {1};// = {2}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_ID);
+            ExportFC_ValueReflexTable(ref szOut, pItem, nSpaceCount);
+            if(string.IsNullOrEmpty(pItem.m_default))
+                szOut.AppendFormat("    public {0}  {1};// = {2}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_ID);
+            else
+                szOut.AppendFormat("    public {0}  {1} = {2};// = {3}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_default, pItem.m_ID);
         }
         if (pOneOfPtr != null)
         {
@@ -387,13 +411,35 @@ class PBMessage
         ExportFC_GetFunc(ref szOut, nSpaceCount);
 
         // 生成写函数
-        ExportFC_WriteFunc(ref szOut, nSpaceCount);
+        if(bExportReadWriteFunc)
+            ExportFC_WriteFunc(ref szOut, nSpaceCount);
 
         // 生成读函数
-        ExportFC_ReadFunc(ref szOut, nSpaceCount);
+        if(bExportReadWriteFunc)
+            ExportFC_ReadFunc(ref szOut, nSpaceCount);
 
         szOut.Append(' ', nParentSpaceCount);
         szOut.Append("};\r\n");
+    }
+
+    // 生成成员变量的反射标签
+    void ExportFC_ValueReflexTable(ref StringBuilder szOut, MessageItem pItem, int nSpaceCount)
+    {
+        // [PBAttrib("Value=PB_Zip_Varint,Field=4, Case=_oneof_case_0, Def=0")]
+        // [PBAttrib("Key=PB_Zip_Varint,Value=PB_Zip_Varint, Field=5")]
+        int nTag = PBLex.PB_MakeTag(pItem.m_ID, pItem.m_key.m_type, pItem.m_item_type);
+        if (pItem.m_pOneOfDesc != null)
+        {
+            szOut.AppendFormat("    [PBAttrib(\"Value = {0}, Field = {1}, Tag = {2}, Case = {3}\")]\r\n", PBLex.GetZipType(pItem.m_key.m_type), pItem.m_ID, nTag, pItem.m_pOneOfDesc.m_szName);
+        }
+        else if(PBValueType.Value_Map == pItem.m_item_type)
+        {
+            szOut.AppendFormat("    [PBAttrib(\"Key = {0}, Value = {1}, Field = {2}, Tag = {3}\")]\r\n", PBLex.GetZipType(pItem.m_key.m_type), PBLex.GetZipType(pItem.m_value.m_type), pItem.m_ID, nTag);
+        }
+        else
+        {
+            szOut.AppendFormat("    [PBAttrib(\"Value = {0}, Field = {1}, Tag = {2}\")]\r\n", PBLex.GetZipType(pItem.m_key.m_type), pItem.m_ID, nTag);
+        }
     }
 
     void ExportFC_InnerEnum(ref StringBuilder szOut, int nSpaceCount)
@@ -430,13 +476,13 @@ class PBMessage
         }
     }
 
-    void ExportFC_InnerClass(ref StringBuilder szOut, int nSpaceCount)
+    void ExportFC_InnerClass(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc)
     {
         int nSize = m_ChildMsgDesc.Count;
         for (int i = 0; i < nSize; ++i)
         {
             PBMessage pChild = m_ChildMsgDesc[i];
-            pChild.ExportFCScript(ref szOut, nSpaceCount);
+            pChild.ExportFCScript(ref szOut, nSpaceCount, bExportReadWriteFunc);
         }
     }
 
@@ -713,7 +759,7 @@ class CPBMessageMng : PBMessage
         utf8Data[2] = 0xbf;
         System.IO.File.WriteAllBytes(szPathName, utf8Data);
     }
-    public void ExportFC(string szPath)
+    public void ExportFC(string szPath, bool bExportReadWriteFunc)
     {
         // 先删除该目录下的文件
         FCClassWrap.DeletePath(szPath);
@@ -748,7 +794,7 @@ class CPBMessageMng : PBMessage
             for (int j = 0; j < nClassCount; ++j)
             {
                 pMsg = pMsgFile.m_Messages[j];
-                pMsg.ExportFCScript(ref szFileData, 0);
+                pMsg.ExportFCScript(ref szFileData, 0, bExportReadWriteFunc);
             }
             szFileName = pMsgFile.m_szFileName;
             szFileName += ".cs";
@@ -760,20 +806,29 @@ class CPBMessageMng : PBMessage
             SaveUTF8File(szPathName, szFileData.ToString());
         }
     }
-    [MenuItem("FCScript/导出Protobuf", false, 5)]
-    static void ExportProtobuf()
+    static void ExprtProtobufToFC(bool bExportReadWriteFunc)
     {
         string szDataPath = Application.dataPath;
         string szRootPath = szDataPath.Substring(0, szDataPath.Length - 6);
 
         CPBMessageMng pb_mng = new CPBMessageMng();
-        pb_mng.ParsePath(szRootPath + "Assets/Protobuf");        
-        pb_mng.ExportFC(szRootPath + "Script/Protobuf/");
+        pb_mng.ParsePath(szRootPath + "Assets/Protobuf");
+        pb_mng.ExportFC(szRootPath + "Script/Protobuf/", bExportReadWriteFunc);
 
         FCExport.InportPathToFCProj("Protobuf");
 
         string szExportPath = szRootPath + "Script/Protobuf/";
         szExportPath = szExportPath.Replace('/', '\\');
         System.Diagnostics.Process.Start("explorer.exe", szExportPath);
+    }
+    [MenuItem("FCScript/导出Protobuf", false, 5)]
+    static void ExportProtobuf()
+    {
+        ExprtProtobufToFC(false);
+    }
+    [MenuItem("FCScript/导出Protobuf(调试)", false, 5)]
+    static void ExportProtobufFull()
+    {
+        ExprtProtobufToFC(true);
     }
 };

@@ -66,4 +66,9 @@ export void main()
     TestProtobuf buf = new TestProtobuf();
     buf.WriteProtobuf();
     buf.ReadProtobuf();
+    
+    os.print("---------------------------------------------------");
+    TestPersonProto  PersonPB = new TestPersonProto();
+    PersonPB.WriteProto();
+    PersonPB.ReadProto();
 }
