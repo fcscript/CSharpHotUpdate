@@ -9,15 +9,32 @@ class TestProtobuf
     Button m_button3;
     int m_nClickCount = 0;
 
+    Button m_button4;
+    Button m_button5;
+
+    Button m_button6;
+    Button m_button7;
+
     StringA m_msgBuffer;
+    TestPersonProto PersonProto;
     public void Start()
     {
         m_text = transform.Find("Text").GetComponent<Text>();
         m_button2 = transform.Find("Button").GetComponent<Button>();
-        m_button2.onClick.AddListener(OnClieckButton);
+        m_button2.onClick.AddListener(OnClickButton);
         m_text.text = "脚本界面初化完成";
         m_button3 = transform.Find("Button3").GetComponent<Button>();
-        m_button3.onClick.AddListener(OnClieckButton3);
+        m_button3.onClick.AddListener(OnClickButton3);
+
+        m_button4 = transform.Find("Button4").GetComponent<Button>();
+        m_button4.onClick.AddListener(OnClickButton4);
+        m_button5 = transform.Find("Button5").GetComponent<Button>();
+        m_button5.onClick.AddListener(OnClickButton5);
+
+        m_button6 = transform.Find("Button6").GetComponent<Button>();
+        m_button6.onClick.AddListener(OnClickButton6);
+        m_button7 = transform.Find("Button7").GetComponent<Button>();
+        m_button7.onClick.AddListener(OnClickButton7);
     }
     void  WriteProtobuf()
     {
@@ -72,16 +89,66 @@ class TestProtobuf
         PrintMsg(msg);
     }
 
-    void OnClieckButton()
+    void OnClickButton()
     {
         ++m_nClickCount;
         WriteProtobuf();
         m_text.text = "Protobuf数据已经写入." + m_nClickCount + ",Time:" + os.time_desc();
     }
-    void OnClieckButton3()
+    void OnClickButton3()
     {
         ReadProtobuf();
         m_text.text = "Protobuf数据已经读取，Time:" + os.time_desc();
+    }
+    void OnClickButton4()
+    {
+        if(PersonProto == null)
+        {
+            PersonProto = new TestPersonProto();
+        }
+        uint  nCostTime = PersonProto.WriteProto();
+        StringA szTips = new StringA();
+        szTips.Format("10W次反射写入，费时:{0}ms", nCostTime);
+        m_text.text = szTips;
+    }
+    void OnClickButton5()
+    {
+        if(PersonProto != null)
+        {
+            uint nCostTime = PersonProto.ReadProto();
+            StringA szTips = new StringA();
+            szTips.Format("10W次反射读取，费时:{0}ms", nCostTime);
+            m_text.text = szTips;
+        }
+        else
+        {
+            m_text.text = "请先执行写入操作, 注意看控制台日志";
+        }
+    }
+    void OnClickButton6()
+    {
+        if (PersonProto == null)
+        {
+            PersonProto = new TestPersonProto();
+        }
+        uint nCostTime = PersonProto.NormalWriteProto();
+        StringA szTips = new StringA();
+        szTips.Format("10W次写入，费时:{0}ms", nCostTime);
+        m_text.text = szTips;
+    }
+    void OnClickButton7()
+    {
+        if (PersonProto != null)
+        {
+            uint nCostTime = PersonProto.NormalReadProto();
+            StringA szTips = new StringA();
+            szTips.Format("10W次读取，费时:{0}ms", nCostTime);
+            m_text.text = szTips;
+        }
+        else
+        {
+            m_text.text = "请先执行写入操作, 注意看控制台日志";
+        }
     }
 };
 
@@ -89,11 +156,14 @@ class TestPersonProto
 {
     List<char> Buffer;
     int BufferLen;
-    public void WriteProto()
-    {
-        Buffer = new List<char>();
-        Buffer.resize(1024);
 
+    Person FillPersonMsg()
+    {
+        if (Buffer == null)
+        {
+            Buffer = new List<char>();
+            Buffer.resize(1024);
+        }
         Person msg = new Person();
         msg.name = "ilse";
         msg.age = 18;
@@ -131,8 +201,30 @@ class TestPersonProto
         Node.map_test["tt1"] = 1001;
         Node.map_test["xxx"] = 1002;
         msg.contacts.push_back(Node);
-        // 
-        int []ma = { 1, 2, 3, 4 };
+
+        return msg;
+    }
+
+    public uint ReadProto()
+    {
+        uint nBeginTime = os.GetTickCount();
+        for (int i = 0; i < 100000; ++i)
+        {
+            Person msg = new Person();
+
+            FCSerialize ar = new FCSerialize();
+            ar.ReadMode(Buffer, 0, BufferLen);
+            //msg.ReadFrom(ar);
+            ar.ProtobufReadObj(msg);
+        }
+        uint nEndTime = os.GetTickCount();
+        os.print("read proto, cost time:{0}ms, BufferLen = {1}", (nEndTime - nBeginTime), BufferLen);
+        return nEndTime - nBeginTime;
+    }
+
+    public uint WriteProto()
+    {
+        Person msg = FillPersonMsg();
         
         int nBufferLen = 0;
         uint nBeginTime = os.GetTickCount();
@@ -147,9 +239,29 @@ class TestPersonProto
         uint nEndTime = os.GetTickCount();
         os.print("write proto, cost time:{0}ms, BufferLen = {1}", (nEndTime - nBeginTime), nBufferLen);
         BufferLen = nBufferLen;
+        return nEndTime - nBeginTime;
     }
 
-    public void  ReadProto()
+    public uint  NormalWriteProto()
+    {
+        Person msg = FillPersonMsg();
+
+        int nBufferLen = 0;
+        uint nBeginTime = os.GetTickCount();
+        for (int i = 0; i < 100000; ++i)
+        {
+            FCSerialize ar = new FCSerialize();
+            ar.WriteMode(Buffer, 0, 1024);
+            msg.WriteTo(ar);
+            nBufferLen = ar.GetPosition();
+        }
+        uint nEndTime = os.GetTickCount();
+        os.print("write proto, cost time:{0}ms, BufferLen = {1}", (nEndTime - nBeginTime), nBufferLen);
+        BufferLen = nBufferLen;
+        return nEndTime - nBeginTime;
+    }
+
+    public uint  NormalReadProto()
     {
         uint nBeginTime = os.GetTickCount();
         for (int i = 0; i < 100000; ++i)
@@ -158,10 +270,10 @@ class TestPersonProto
 
             FCSerialize ar = new FCSerialize();
             ar.ReadMode(Buffer, 0, BufferLen);
-            //msg.ReadFrom(ar);
-            ar.ProtobufReadObj(msg);
+            msg.ReadFrom(ar);
         }
         uint nEndTime = os.GetTickCount();
-        os.print("read proto, cost time:{0}ms, BufferLen = {1}", (nEndTime - nBeginTime), BufferLen);
-    }
+        os.print("normal read proto, cost time:{0}ms, BufferLen = {1}", (nEndTime - nBeginTime), BufferLen);
+        return nEndTime - nBeginTime;
+    }    
 }
