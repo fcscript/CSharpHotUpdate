@@ -19,11 +19,11 @@ class TestAwait
     }
     async void OnClieckButton()
     {
-        ++m_nClickCount;
-        m_text.text = "button is clicked." + m_nClickCount + ",Time:" + os.time_desc();
+        int nObjectIndex = ++m_nClickCount;
+        m_text.text = "button is clicked." + nObjectIndex + ",Time:" + os.time_desc();
         int nRes = await TestD.LoadPrefab("abc.txt");
         m_text.text = "返回值是：" + nRes + ",Time:" + os.time_desc();
-        GameObject obj = await TestD.LoadPrefabObj("test_await" + m_nClickCount);
+        GameObject obj = await TestD.LoadPrefabObj("test_await" + nObjectIndex);
         UnityObject o = (UnityObject)obj;
         m_text.text = "返回 Name:" + obj.name + ", Time:" + os.time_desc();
     }

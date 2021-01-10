@@ -77,6 +77,10 @@ class TestProfiler: FCScriptLoader
     {
         FCLibHelper.fc_call(0, "Test9");
     }
+    void TestFunc91()
+    {
+        FCLibHelper.fc_call(0, "Test91");
+    }
     void TestFunc10()
     {
         GameObject obj = GameObject.Find("Empty");
@@ -200,6 +204,11 @@ class TestProfiler: FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test14"))
         {
             TestFunc14();
+        }
+        nLeft += 160;
+        if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试Test91"))
+        {
+            TestFunc91();
         }
         float fy = 10.0f;
         float fWidth = Screen.width - fy - 10;

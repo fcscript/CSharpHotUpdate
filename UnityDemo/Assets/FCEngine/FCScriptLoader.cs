@@ -70,11 +70,13 @@ public class FCScriptLoader : MonoBehaviour
                 else
                 {
                     FCDll.InitDll();
-                }                
-                
+                }
+
+#if  UNITY_EDITOR
                 // 启动调试器, 启动后，就可以用工具附加调试了，默认端口是2600
                 FCLibHelper.fc_switch_debug(true);
                 // FCLibHelper.fc_start_debug(3000); // 指定3000这个端口并启动调试器
+#endif
             }
             catch (Exception e)
             {

@@ -89,8 +89,9 @@ public class FCLibHelper
     public delegate bool fc_call_back_inport_class_equal(long L, long R);
 #endif
 
-#if !UNITY_EDITOR && UNITY_IPHONE
-        const string FCDLL = "__Internal";
+//#if !UNITY_EDITOR && UNITY_IPHONE
+#if UNITY_IOS
+    const string FCDLL = "__Internal";
 #else
     const string FCDLL = "fclib_dll";
 #endif

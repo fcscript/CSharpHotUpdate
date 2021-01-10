@@ -267,6 +267,7 @@ public static class FCExport
     static void OnUnityCompilerCallback()
     {
         Debug.Log("OnUnityCompilerCallback");
+		#if UNITY_STANDALONE_WIN
         if (FCLibHelper.fc_is_init())
         {
             FCScriptLoader Loader = MonoBehaviour.FindObjectOfType<FCScriptLoader>();
@@ -281,6 +282,7 @@ public static class FCExport
                 all_class_wrap.Register();
             }
         }
+		#endif
     }
     static void OnAfterLoadScript()
     {
@@ -301,6 +303,7 @@ public static class FCExport
         string szPath = Application.dataPath;
         szPath = szPath.Substring(0, szPath.Length - 6);
         szPath += "脚本测试工程.fcproj";
+        Debug.Log(szPath);
         FCCompilerHelper.CompilerProj(szPath, false);
     }
     [MenuItem("FCScript/编译导出引用接口", false, 5)]

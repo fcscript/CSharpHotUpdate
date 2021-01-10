@@ -67,7 +67,7 @@ public class await_script_loader : FCScriptLoader
             ScriptInfo info = AwaitPtr[i];
             if (FCLibHelper.fc_is_valid_await(info.nPtr))
             {
-                if(obj == null)
+                //if(obj == null) 这里不能共用一个Obj，因为脚本中的引用计算一一对应的
                 {
                     obj = new GameObject(szAssetName);  // 自动创建一个对象，算是模拟加载的后对象
                     v = FCGetObj.PushObj(obj);
