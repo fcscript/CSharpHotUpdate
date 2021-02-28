@@ -73,7 +73,7 @@ public class FCLibHelper
         ptr = new IntPtr(nAddr);
     }
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void LPCustomPrintCallback(string pcsInfo);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

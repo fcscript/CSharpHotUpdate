@@ -7,7 +7,7 @@ using System.Reflection;
 
 class FCCompilerHelper
 {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool fc_compiler_isneedstop(Int64 nUserData);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -24,14 +24,14 @@ class FCCompilerHelper
 #endif
 
 
-#if !UNITY_EDITOR && UNITY_IPHONE
-        const string FCCompilerDLL = "__Internal";
-#else
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     const string FCCompilerDLL = "compiler_dll";
+#else
+    const string FCCompilerDLL = "__Internal";
 #endif
 
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
     [DllImport(FCCompilerDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern bool fc_compiler_proj(string szProjPathName, Int64 nUserData, fc_compiler_isneedstop isNeedStop, fc_compiler_progress GetProgtess, fc_compiler_result GetResult, fc_compiler_print Print, bool bSaveInportXml);
     
