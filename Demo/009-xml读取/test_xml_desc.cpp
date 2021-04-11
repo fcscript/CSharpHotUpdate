@@ -24,11 +24,11 @@ class BuffInfo
     [XmlElementAttribute("Country")]
     int   Country;
     [XmlElementAttribute("ARRAY_ID")]
-    list<int>  ARRAY_ID;
+    List<int>  ARRAY_ID;
     [XmlElementAttribute("MAP_ID")]
     map<int, int>  MAP_ID;
     [XmlElementAttribute("EFECT")]
-    list<EffectNode>  EFECT;
+    List<EffectNode>  EFECT;
 };
 
 class EffectNode

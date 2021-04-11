@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>compiler_dll</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.kk.dream.FCCompiler</string>
+	<string>com.kk.dream.compiler-dll</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
