@@ -11,8 +11,10 @@ using UnityEngine;
 class FCTemplateWrap
 {
     Dictionary<Type, FCValueType> m_GetTypeWrap = new Dictionary<Type, FCValueType>();  // 从脚本中获取参数
-    Dictionary<Type, FCValueType> m_OutTypeWrap = new Dictionary<Type, FCValueType>();  // 向脚本输出参数
-    Dictionary<Type, FCValueType> m_ReturnTypeWrap = new Dictionary<Type, FCValueType>(); // 向脚本输出返回值
+    Dictionary<Type, FCValueType> m_OutTypeWrap = new Dictionary<Type, FCValueType>();  // 向脚本输出参数
+
+    Dictionary<Type, FCValueType> m_ReturnTypeWrap = new Dictionary<Type, FCValueType>(); // 向脚本输出返回值
+
 
     List<string> m_AllRefNameSpace = new List<string>();
     Dictionary<string, int> m_AllRefNameSpaceFlags = new Dictionary<string, int>();
@@ -32,6 +34,24 @@ class FCTemplateWrap
     }
     void ExportOutWrap()
     {
+        if(m_OutTypeWrap.Count > 0)
+            MakeGetArrayLengthFunc();
+
+        foreach (FCValueType value in m_OutTypeWrap.Values)
+        {
+            if (value.IsArray)
+            {
+                MakeOutArray(value);
+            }
+            else if (value.IsList)
+            {
+                MakeOutList(value);
+            }
+            else if (value.IsMap)
+            {
+                MakeOutDictionary(value);
+            }
+        }
     }
     public void BeginExport(string szPath)
     {
@@ -94,7 +114,8 @@ class FCTemplateWrap
         m_AllRefNameSpace.Add(szNameSpace);
     }
 
-    // 功能：添加要返回值的值
+    // 功能：添加要返回值的值
+
     public FCValueType PushGetTypeWrap(Type nType)
     {
         FCValueType value = null;
@@ -470,6 +491,27 @@ class FCTemplateWrap
         }
         return bSuc;
     }    
+    void MakeGetArrayLengthFunc()
+    {
+        StringBuilder fileData = m_szTempBuilder;
+        string szFuncDeclare = "    public static int  GetOutArrayLength(long L, int nIndex)";
+        if (TrySetExportFlag(szFuncDeclare))
+            return;
+        fileData.AppendLine(szFuncDeclare);
+        fileData.AppendLine("    {");
+        fileData.AppendLine("        try");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
+        fileData.AppendLine("            int nArraySize = FCLibHelper.fc_get_array_size(ptr);");
+        fileData.AppendLine("            return nArraySize;");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        catch(Exception e)");
+        fileData.AppendLine("        {");
+        fileData.AppendLine("            Debug.LogException(e);");
+        fileData.AppendLine("        }");
+        fileData.AppendLine("        return 0;");
+        fileData.AppendLine("    }");
+    }
     void MakeOutArray(FCValueType value)
     {
         switch(value.m_nValueType)
@@ -503,7 +545,7 @@ class FCTemplateWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
-        fileData.AppendLine("            int nCount = rList != null ? rList.Count : 0;");
+        fileData.AppendLine("            int nCount = rList != null ? rList.Length : 0;");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
         fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
         if (FCValueType.IsRefType(value.m_nValueType))
@@ -533,9 +575,9 @@ class FCTemplateWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
-        fileData.AppendLine("            int nCount = rList != null ? rList.Count : 0;");
+        fileData.AppendLine("            int nCount = rList != null ? rList.Length : 0;");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
-        fileData.AppendFormat("            FCLibHelper.fc_set_array_{0}(ptr, rList, 0, nCount);", FCValueType.GetFCLibFuncShortName(value.m_nValueType));
+        fileData.AppendFormat("            FCLibHelper.fc_set_array_{0}(ptr, rList, 0, nCount);\r\n", FCValueType.GetFCLibFuncShortName(value.m_nValueType));
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
         fileData.AppendLine("        {");

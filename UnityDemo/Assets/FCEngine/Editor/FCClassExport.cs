@@ -483,6 +483,7 @@ class FCClassExport
         m_CurMethods.Clear();
         m_CurValidMethods.Clear();
         string szDeclareName = string.Empty;
+        bool bNeedExport = false;
         foreach (MethodInfo method in allMethods)
         {
             if (!IsNeedExportMember(method.Name))
@@ -491,8 +492,11 @@ class FCClassExport
                 continue;
             if (FCExclude.IsDontExportMethod(method))
                 continue;
+            bNeedExport = true;
             // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
-            szDeclareName = FCValueType.GetMethodDeclare(method);
+            szDeclareName = FCValueType.GetMethodDeclare(method, ref bNeedExport);
+            if (!bNeedExport)
+                continue;
             if (m_CurValidMethods.ContainsKey(szDeclareName))
             {
                 // 必要的话，这里做个替换

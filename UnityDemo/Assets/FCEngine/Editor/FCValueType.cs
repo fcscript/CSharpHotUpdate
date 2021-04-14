@@ -735,11 +735,13 @@ public class FCValueType
         else
             return nType.GetMethods();
     }
-    public static string GetMethodDeclare(MethodInfo method)
+    public static string GetMethodDeclare(MethodInfo method, ref bool bNeedExport)
     {
+        bNeedExport = true;
         string szFullName = method.Name;
         ParameterInfo[] allParams = method.GetParameters();
         string szCallParam = string.Empty;
+        string szParamName = string.Empty;
         if (allParams != null)
         {
             Type nParamType;
@@ -751,7 +753,13 @@ public class FCValueType
                     szCallParam += ',';
                 }
                 FCValueType value = TransType(nParamType);
-                szCallParam += value.GetTypeName(false);
+                szParamName = value.GetTypeName(false);
+                if(szParamName.IndexOf('*') != -1)
+                {
+                    bNeedExport = false;
+                    return string.Empty;
+                }
+                szCallParam += szParamName;
                 szCallParam += " ";
                 szCallParam += allParams[i].Name;
             }

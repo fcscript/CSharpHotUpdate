@@ -319,7 +319,7 @@ public static class FCExport
     //static void TestExport()
     //{
     //    FCClassWrap pWrap = new FCClassWrap();
-    //    pWrap.BeginExport("", true);
+    //    pWrap.BeginExport("", false);
 
     //    WrapUnityClass(pWrap);
     //    WrapUIClass(pWrap);

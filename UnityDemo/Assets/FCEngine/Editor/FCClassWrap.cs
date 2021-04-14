@@ -67,15 +67,38 @@ public class FCClassWrap
     bool  IsNeedExportClass(Type nType)
     {
         if (m_refClassCfg == null)
-            return true;
+        {
+            return IsValidClassName(nType.Name);
+        }
         FCRefClass  pClass = m_refClassCfg.FindClass(nType.Name);
         return pClass != null;
     }
     bool  IsNeedExportMember(string szName)
     {
         if (m_pRefClass == null)
-            return true;
+        {
+            return IsValidClassName(szName);
+        }
         return m_pRefClass.FindMember(szName);
+    }
+
+    static bool  IsValidClassName(string szName)
+    {
+        if (string.IsNullOrEmpty(szName))
+            return false;
+        int nLen = szName.Length;
+        for(int i = 0; i<nLen; ++i)
+        {
+            char ch = szName[i];
+            if (ch >= 'a' && ch <= 'z')
+                continue;
+            if (ch >= 'A' && ch <= 'Z')
+                continue;
+            if (ch == '_')
+                continue;
+            return false;
+        }
+        return true;
     }
 
     // 功能：删除指定目录下的所有文件
@@ -242,6 +265,8 @@ public class FCClassWrap
 
     void  WrapSubClass(StringBuilder fileData, Type nClassType)
     {
+        if (!IsNeedExportClass(nClassType))
+            return;
         string szWrapName = FCValueType.GetClassName(nClassType) + "_wrap";
         m_CurClassFunc.Clear();
         m_CurSameName.Clear();
@@ -293,14 +318,18 @@ public class FCClassWrap
             string szFuncName = string.Empty;
             string szDeclareName = string.Empty;
             int nFuncCount = 0;
+            bool bNeedExport = false;
             foreach (MethodInfo method in allMethods)
             {
                 if (!IsNeedExportMember(method.Name))
                     continue;
                 if (FCExclude.IsDontExportMethod(method))
                     continue;
+                bNeedExport = true;
                 // 去掉参数都一样的，因为FC脚本中 []与List是一个数据类型
-                szDeclareName = FCValueType.GetMethodDeclare(method);
+                szDeclareName = FCValueType.GetMethodDeclare(method, ref bNeedExport);
+                if (!bNeedExport)
+                    continue;
                 if(m_CurValidMethods.ContainsKey(szDeclareName))
                 {
                     // 必要的话，这里做个替换
@@ -1022,15 +1051,31 @@ public class FCClassWrap
             string szSubName = szMethodName.Substring(nStart + 1, nEnd - nStart - 1);
             szFullFuncName = szFullFuncName + '_' + szSubName;
         }
+        bool bParamArray = false;
         for (int i = 0; i<nParamCount; ++i)
         {
+            bParamArray = false;
             int nParamIndex = i + nParamOffset;
             ParameterInfo param = allParams[i];
             nParamType = param.ParameterType;
             szLeftName = string.Format("arg{0}", nParamIndex);
             PushNameSpace(nParamType.Namespace);
             FCValueType param_value = FCTemplateWrap.Instance.PushGetTypeWrap(nParamType);
-            if (param.IsOut)
+
+            if (param.IsOut || nParamType.IsByRef)
+            {
+                FCValueType value = PushOutParamWrap(nParamType);
+                bParamArray = value.IsArray;
+            }
+            if(bParamArray)
+            {
+                string szCSharpName = param_value.GetTypeName(true, true);
+                string szValueTypeName = param_value.GetValueName(true, true);
+                string szArgArrayName = string.Format("{0}_length", szLeftName);
+                fileData.AppendFormat("            int {0} = FCCustomParam.GetOutArrayLength(L,{1});\r\n", szArgArrayName, nParamIndex.ToString());
+                fileData.AppendFormat("            {0} {1} = new {2}[{3}];\r\n", szCSharpName, szLeftName, szValueTypeName, szArgArrayName);
+            }
+            else if (param.IsOut)
             {
                 string szCSharpName = param_value.GetTypeName(true);
                 fileData.AppendFormat("            {0} {1};\r\n", szCSharpName, szLeftName);
@@ -1041,13 +1086,16 @@ public class FCClassWrap
             }
             if (i > 0)
                 szCallParam += ',';
-            if(param.IsOut)
+            if(!bParamArray)
             {
-                szCallParam += "out ";
-            }
-            else if(nParamType.IsByRef)
-            {
-                szCallParam += "ref ";
+                if (param.IsOut)
+                {
+                    szCallParam += "out ";
+                }
+                else if (nParamType.IsByRef)
+                {
+                    szCallParam += "ref ";
+                }
             }
             szCallParam += szLeftName;
             szFullFuncName = szFullFuncName + '_' + param_value.GetTypeName(false);
