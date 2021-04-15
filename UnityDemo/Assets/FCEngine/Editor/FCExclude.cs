@@ -350,6 +350,24 @@ class FCExclude
         }
         return s_InnerType.ContainsKey(nType);
     }
+
+    public static bool IsDontExportProperty(PropertyInfo property)
+    {
+        if(property.Name == "Item")
+        {
+            MethodInfo method = property.GetGetMethod();
+            if(method != null)
+            {
+                ParameterInfo[] allParams = method.GetParameters();  // 函数参数
+                if(allParams != null && allParams.Length > 0)
+                {
+                    return true; // 有参数的，是下标操作符重载
+                }
+            }
+        }
+        return false;
+    }
+
     public static bool IsDontExportMethod(MethodInfo method)
     {
         if (0 != (MethodAttributes.SpecialName & method.Attributes))

@@ -306,6 +306,8 @@ public class FCClassWrap
         {
             foreach(PropertyInfo property in allProperties)
             {
+                if (FCExclude.IsDontExportProperty(property))
+                    continue;
                 if(IsNeedExportMember(property.Name))
                     PushPropertyInfo(property);
             }
@@ -1077,7 +1079,7 @@ public class FCClassWrap
             }
             else if (param.IsOut)
             {
-                string szCSharpName = param_value.GetTypeName(true);
+                string szCSharpName = param_value.GetTypeName(true, true);
                 fileData.AppendFormat("            {0} {1};\r\n", szCSharpName, szLeftName);
             }
             else
