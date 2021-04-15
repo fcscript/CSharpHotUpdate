@@ -119,7 +119,7 @@ public static class FCExport
     static void WrapType(FCClassWrap pWrap, Type nType)
     {
         PrepareWrap(pWrap, nType);
-        pWrap.WrapClass(nType, true);
+        pWrap.WrapClass(nType, false);
     }
 
     static void WrapUIClass(FCClassWrap pWrap)
