@@ -161,6 +161,11 @@ class FCClassExport
             }
             m_szFileBuilder.AppendFormat("using {0};\r\n", szNameSpace);
         }
+        if(m_CurRefNameSpace.Count == 0)
+        {
+            m_szFileBuilder.AppendLine("using System;");
+        }
+
         m_szFileBuilder.AppendLine();
         m_szFileBuilder.Append(m_szTempBuilder.ToString());
 
@@ -172,9 +177,9 @@ class FCClassExport
         ConstructorInfo[] allConInfos = m_nClassType.GetConstructors(); // 得到构造函数信息
         if (allConInfos == null)
             return;
-        string szParentInitCall = GetParentInitCall();
         foreach (ConstructorInfo cons in allConInfos)
         {
+            string szParentInitCall = GetParentInitCall(cons);
             PushConstructor(cons, szParentInitCall);
         }
     }
@@ -240,7 +245,20 @@ class FCClassExport
             m_CurDelegate[nType] = 1;
         }
     }
-    string GetParentInitCall()
+    bool  IsSameParam(ParameterInfo []left, ParameterInfo []right)
+    {
+        if (left.Length != right.Length)
+            return false;
+        for(int i = 0; i>left.Length; ++i)
+        {
+            if(left[i].ParameterType != right[i].ParameterType)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    string GetParentInitCall(ConstructorInfo consCall)
     {
         Type nBaseType = m_nClassType.BaseType;
         if (nBaseType == null)
@@ -248,32 +266,46 @@ class FCClassExport
         ConstructorInfo[] allConInfos = nBaseType.GetConstructors(); // 得到构造函数信息
         if (allConInfos == null)
             return string.Empty;
+
+        ParameterInfo[] InParams = consCall.GetParameters();
+        if (InParams == null || InParams.Length == 0)
+            return string.Empty;
+
         // 先检测构造参数
-        int nMinParamCount = 10000;
-        ConstructorInfo pCon = null;
+        ConstructorInfo pFindCon = null;
         foreach(ConstructorInfo cons in allConInfos)
         {
             ParameterInfo[] allParams = cons.GetParameters();
             int nCurParamCount = allParams != null ? allParams.Length : 0;
-            if(nMinParamCount > nCurParamCount)
+            if(nCurParamCount == 0)
             {
-                nMinParamCount = nCurParamCount;
-                pCon = cons;
+                return string.Empty;
+            }
+            if(nCurParamCount == InParams.Length)
+            {
+                // 比较一个参数
+                if(IsSameParam(InParams, allParams))
+                {
+                    pFindCon = cons;
+                    break;
+                }
             }
         }
-        if (nMinParamCount == 0 || pCon == null)
+        if (pFindCon == null)
+        {
             return string.Empty;
-        ParameterInfo[] Params = pCon.GetParameters();
+        }
+        ParameterInfo[] Params = pFindCon.GetParameters();
         string szParamDesc = string.Empty;
         for(int i = 0; i< Params.Length; ++i)
         {
             if (i > 0)
                 szParamDesc += ',';
             FCValueType value = FCValueType.TransType(Params[i].ParameterType);
-            if (value.m_nValueType == fc_value_type.fc_value_string_a)
-                szParamDesc += "string.Empty";
-            else if(value.m_nValueType == fc_value_type.fc_value_system_object)
+            if(value.IsArray || value.IsList || value.IsMap || value.m_nValueType == fc_value_type.fc_value_system_object)
                 szParamDesc += "null";
+            else if (value.m_nValueType == fc_value_type.fc_value_string_a)
+                szParamDesc += "string.Empty";
             else
                 szParamDesc += string.Format("default({0})", value.GetValueName(false));
         }
@@ -574,6 +606,7 @@ class FCClassExport
         ParameterInfo[] allParams = method.GetParameters();  // 函数参数
         string szCallParam = string.Empty;
         string szBody = string.Empty;
+
         if(allParams != null)
         {
             Type nParamType;

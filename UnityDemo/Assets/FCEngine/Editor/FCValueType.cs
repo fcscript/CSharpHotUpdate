@@ -574,6 +574,8 @@ public class FCValueType
             if(nType.IsNested && nType.IsEnum)
             {
                 string szFullName = nType.FullName;
+                szFullName = szFullName.Replace('+', '.');
+                szFullName = szFullName.Replace("&", "");
                 int nIndex = szFullName.LastIndexOf('.');
                 if(nIndex != -1)
                 {
