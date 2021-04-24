@@ -3,7 +3,9 @@ export void  main()
 {
 	StringA   szWorkPath = GetWorkPath(); // 说明：这个是调用其他平台的接口，需要注册的噢，在调试工具里面已经注册了的， 所以工具中可以直接使用，但其他平台的话，需要用户自己注册
 	print("本地工作目录：{0}", szWorkPath);
-	szWorkPath += "xml_data\\";
+	szWorkPath = GetProjectPath();
+	print("工程目录：{0}", szWorkPath);
+	szWorkPath += "..\xml_data\\";
 	StringA   szXmlPath = szWorkPath + "test_xml.xml";
 
 	print("xml目录：{0}", GetSkillPathName());
@@ -50,7 +52,7 @@ void   PrintSkillXml()
 
 StringA   GetSkillPathName()
 {
-	StringA   szXmlPath = GetWorkPath() + "xml_data\\Skill_SL.xml";
+	StringA   szXmlPath = GetProjectPath() + "../xml_data/Skill_SL.xml";
 	return szXmlPath;
 }
 
