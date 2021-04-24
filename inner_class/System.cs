@@ -198,6 +198,12 @@ class os
     {
         return new IntPtr();
     }
+
+    // 功能：系统广博
+    public static void  Broadcast(StringA szGroupName, params System.Object[] args)
+    {
+
+    }
 };
 
 // 只是为了兼容UnityEngine.Events.UnityAction
@@ -241,6 +247,16 @@ public class PBAttribAttribute : System.Attribute
 {
     // Json对象[json]
     public PBAttribAttribute(string Meta)
+    {
+    }
+}
+
+//广播标记 [Broadcast]
+[AttributeUsage(AttributeTargets.Method)]
+public class BroadcastAttribute : System.Attribute
+{
+    // 内联标记[inline]
+    public BroadcastAttribute()
     {
     }
 }
