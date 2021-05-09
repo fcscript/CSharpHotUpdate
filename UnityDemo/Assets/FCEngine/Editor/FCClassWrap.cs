@@ -94,6 +94,8 @@ public class FCClassWrap
                 continue;
             if (ch >= 'A' && ch <= 'Z')
                 continue;
+            if (ch >= '0' && ch <= '9')
+                continue;
             if (ch == '_')
                 continue;
             return false;
