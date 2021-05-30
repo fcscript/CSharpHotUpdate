@@ -12,36 +12,36 @@ public class SceneManager_wrap
         return FCGetObj.GetObj<UnityEngine.SceneManagement.SceneManager>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("SceneManager");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"sceneCount",get_sceneCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"sceneCountInBuildSettings",get_sceneCountInBuildSettings_wrap,null);
-        FCLibHelper.fc_register_class_func(nClassName,"GetActiveScene",GetActiveScene_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetActiveScene",SetActiveScene_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetSceneByPath",GetSceneByPath_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetSceneByName",GetSceneByName_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetSceneByBuildIndex",GetSceneByBuildIndex_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetSceneAt",GetSceneAt_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadScene_StringA",LoadScene_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadScene_StringA_LoadSceneMode",LoadScene1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadScene_int",LoadScene2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadScene_int_LoadSceneMode",LoadScene3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadSceneAsync_StringA",LoadSceneAsync_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadSceneAsync_StringA_LoadSceneMode",LoadSceneAsync1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadSceneAsync_int",LoadSceneAsync2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LoadSceneAsync_int_LoadSceneMode",LoadSceneAsync3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"CreateScene",CreateScene_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"UnloadSceneAsync_int",UnloadSceneAsync_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"UnloadSceneAsync_StringA",UnloadSceneAsync1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"UnloadSceneAsync_Scene",UnloadSceneAsync2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"MergeScenes",MergeScenes_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"MoveGameObjectToScene",MoveGameObjectToScene_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "SceneManager");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"sceneCount",get_sceneCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"sceneCountInBuildSettings",get_sceneCountInBuildSettings_wrap,null);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetActiveScene",GetActiveScene_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetActiveScene",SetActiveScene_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetSceneByPath",GetSceneByPath_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetSceneByName",GetSceneByName_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetSceneByBuildIndex",GetSceneByBuildIndex_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetSceneAt",GetSceneAt_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadScene_StringA",LoadScene_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadScene_StringA_LoadSceneMode",LoadScene1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadScene_int",LoadScene2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadScene_int_LoadSceneMode",LoadScene3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadSceneAsync_StringA",LoadSceneAsync_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadSceneAsync_StringA_LoadSceneMode",LoadSceneAsync1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadSceneAsync_int",LoadSceneAsync2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LoadSceneAsync_int_LoadSceneMode",LoadSceneAsync3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CreateScene",CreateScene_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"UnloadSceneAsync_int",UnloadSceneAsync_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"UnloadSceneAsync_StringA",UnloadSceneAsync1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"UnloadSceneAsync_Scene",UnloadSceneAsync2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"MergeScenes",MergeScenes_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"MoveGameObjectToScene",MoveGameObjectToScene_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -49,7 +49,8 @@ public class SceneManager_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.SceneManagement.SceneManager>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -68,9 +69,9 @@ public class SceneManager_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.SceneManagement.SceneManager obj = FCGetObj.GetObj<UnityEngine.SceneManagement.SceneManager>(L);
+        UnityEngine.SceneManagement.SceneManager obj = FCGetObj.GetObj<UnityEngine.SceneManagement.SceneManager>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -100,6 +101,7 @@ public class SceneManager_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.SceneManagement.SceneManager.sceneCount);
         }
         catch(Exception e)
@@ -115,6 +117,7 @@ public class SceneManager_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings);
         }
         catch(Exception e)
@@ -129,10 +132,11 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -146,6 +150,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.SceneManagement.Scene arg0 = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(FCLibHelper.fc_get_wrap_objptr(L,0));
             bool ret = UnityEngine.SceneManagement.SceneManager.SetActiveScene(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -163,11 +168,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.GetSceneByPath(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -181,11 +187,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.GetSceneByName(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -199,11 +206,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.GetSceneByBuildIndex(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -217,11 +225,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.GetSceneAt(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -235,6 +244,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.SceneManager.LoadScene(arg0);
         }
@@ -250,6 +260,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.LoadSceneMode arg1 = (UnityEngine.SceneManagement.LoadSceneMode)(FCLibHelper.fc_get_int(L,1));
             UnityEngine.SceneManagement.SceneManager.LoadScene(arg0,arg1);
@@ -266,6 +277,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.SceneManagement.SceneManager.LoadScene(arg0);
         }
@@ -281,6 +293,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.SceneManagement.LoadSceneMode arg1 = (UnityEngine.SceneManagement.LoadSceneMode)(FCLibHelper.fc_get_int(L,1));
             UnityEngine.SceneManagement.SceneManager.LoadScene(arg0,arg1);
@@ -297,11 +310,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -315,12 +329,13 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.LoadSceneMode arg1 = (UnityEngine.SceneManagement.LoadSceneMode)(FCLibHelper.fc_get_int(L,1));
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -334,11 +349,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -352,12 +368,13 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.SceneManagement.LoadSceneMode arg1 = (UnityEngine.SceneManagement.LoadSceneMode)(FCLibHelper.fc_get_int(L,1));
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -371,11 +388,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.SceneManagement.Scene ret = UnityEngine.SceneManagement.SceneManager.CreateScene(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -389,11 +407,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -407,11 +426,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -425,11 +445,12 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.SceneManagement.Scene arg0 = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.AsyncOperation ret = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -443,6 +464,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.SceneManagement.Scene arg0 = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.SceneManagement.Scene arg1 = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(FCLibHelper.fc_get_wrap_objptr(L,1));
             UnityEngine.SceneManagement.SceneManager.MergeScenes(arg0,arg1);
@@ -459,6 +481,7 @@ public class SceneManager_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.GameObject arg0 = FCGetObj.GetObj<UnityEngine.GameObject>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.SceneManagement.Scene arg1 = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(FCLibHelper.fc_get_wrap_objptr(L,1));
             UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(arg0,arg1);

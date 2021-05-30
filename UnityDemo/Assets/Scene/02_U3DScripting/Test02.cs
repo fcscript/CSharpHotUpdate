@@ -13,6 +13,6 @@ public class Test02 : ScriptMono
 	void Update ()
     {
         if(m_nScriptInsPtr != 0)
-            FCLibHelper.fc_call(m_nScriptInsPtr, "Update");
+            FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "Update");
     }
 }

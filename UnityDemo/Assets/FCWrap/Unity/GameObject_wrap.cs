@@ -13,57 +13,57 @@ public class GameObject_wrap
         return FCGetObj.GetObj<UnityEngine.GameObject>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("GameObject");
-        FCLibHelper.fc_register_class_func(nClassName, "GameObject_StringA_List<Type>", obj_new3);
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_func(nClassName, "GameObject_StringA", obj_new1);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"transform",get_transform_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"layer",get_layer_wrap,set_layer_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"activeSelf",get_activeSelf_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"activeInHierarchy",get_activeInHierarchy_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"isStatic",get_isStatic_wrap,set_isStatic_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"tag",get_tag_wrap,set_tag_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"scene",get_scene_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"gameObject",get_gameObject_wrap,null);
-        FCLibHelper.fc_register_class_func(nClassName,"CreatePrimitive",CreatePrimitive_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_Type",GetComponent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_T",GetComponent1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponent_StringA",GetComponent2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentInChildren_Type_bool",GetComponentInChildren_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentInChildren_Type",GetComponentInChildren1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentInParent_Type",GetComponentInParent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponents_Type",GetComponents_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponents_Type_List<Component>",GetComponents1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentsInChildren_Type",GetComponentsInChildren_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentsInChildren_Type_bool",GetComponentsInChildren1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentsInParent_Type",GetComponentsInParent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetComponentsInParent_Type_bool",GetComponentsInParent1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetActive",SetActive_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"CompareTag",CompareTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"FindGameObjectWithTag",FindGameObjectWithTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"FindWithTag",FindWithTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"FindGameObjectsWithTag",FindGameObjectsWithTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessageUpwards_StringA_Object_SendMessageOptions",SendMessageUpwards_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessageUpwards_StringA_Object",SendMessageUpwards1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessageUpwards_StringA",SendMessageUpwards2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessageUpwards_StringA_SendMessageOptions",SendMessageUpwards3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessage_StringA_Object_SendMessageOptions",SendMessage_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessage_StringA_Object",SendMessage1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessage_StringA",SendMessage2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SendMessage_StringA_SendMessageOptions",SendMessage3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA_Object_SendMessageOptions",BroadcastMessage_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA_Object",BroadcastMessage1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA",BroadcastMessage2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"BroadcastMessage_StringA_SendMessageOptions",BroadcastMessage3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"AddComponent_Type",AddComponent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"AddComponent_T",AddComponent1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Find",Find_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "GameObject");
+        FCLibHelper.fc_register_class_func(VM, nClassName, "GameObject_StringA_List<Type>", obj_new3);
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_func(VM, nClassName, "GameObject_StringA", obj_new1);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"transform",get_transform_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"layer",get_layer_wrap,set_layer_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"activeSelf",get_activeSelf_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"activeInHierarchy",get_activeInHierarchy_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"isStatic",get_isStatic_wrap,set_isStatic_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"tag",get_tag_wrap,set_tag_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"scene",get_scene_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"gameObject",get_gameObject_wrap,null);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CreatePrimitive",CreatePrimitive_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponent_Type",GetComponent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponent_T",GetComponent1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponent_StringA",GetComponent2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentInChildren_Type_bool",GetComponentInChildren_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentInChildren_Type",GetComponentInChildren1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentInParent_Type",GetComponentInParent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponents_Type",GetComponents_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponents_Type_List<Component>",GetComponents1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentsInChildren_Type",GetComponentsInChildren_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentsInChildren_Type_bool",GetComponentsInChildren1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentsInParent_Type",GetComponentsInParent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetComponentsInParent_Type_bool",GetComponentsInParent1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetActive",SetActive_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CompareTag",CompareTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"FindGameObjectWithTag",FindGameObjectWithTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"FindWithTag",FindWithTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"FindGameObjectsWithTag",FindGameObjectsWithTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessageUpwards_StringA_Object_SendMessageOptions",SendMessageUpwards_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessageUpwards_StringA_Object",SendMessageUpwards1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessageUpwards_StringA",SendMessageUpwards2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessageUpwards_StringA_SendMessageOptions",SendMessageUpwards3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessage_StringA_Object_SendMessageOptions",SendMessage_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessage_StringA_Object",SendMessage1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessage_StringA",SendMessage2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SendMessage_StringA_SendMessageOptions",SendMessage3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"BroadcastMessage_StringA_Object_SendMessageOptions",BroadcastMessage_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"BroadcastMessage_StringA_Object",BroadcastMessage1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"BroadcastMessage_StringA",BroadcastMessage2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"BroadcastMessage_StringA_SendMessageOptions",BroadcastMessage3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"AddComponent_Type",AddComponent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"AddComponent_T",AddComponent1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Find",Find_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -77,7 +77,8 @@ public class GameObject_wrap
             UnityEngine.GameObject obj = new UnityEngine.GameObject(arg0,arg1);
             long nPtr = FCGetObj.PushNewObj<UnityEngine.GameObject>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         }
         catch(Exception e)
         {
@@ -91,7 +92,8 @@ public class GameObject_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.GameObject>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -104,7 +106,8 @@ public class GameObject_wrap
             UnityEngine.GameObject obj = new UnityEngine.GameObject(arg0);
             long nPtr = FCGetObj.PushNewObj<UnityEngine.GameObject>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         }
         catch(Exception e)
         {
@@ -128,9 +131,9 @@ public class GameObject_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.GameObject obj = FCGetObj.GetObj<UnityEngine.GameObject>(L);
+        UnityEngine.GameObject obj = FCGetObj.GetObj<UnityEngine.GameObject>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -162,8 +165,9 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.transform);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -180,6 +184,7 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.layer);
         }
         catch(Exception e)
@@ -213,6 +218,7 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.activeSelf);
         }
         catch(Exception e)
@@ -230,6 +236,7 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.activeInHierarchy);
         }
         catch(Exception e)
@@ -247,6 +254,7 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isStatic);
         }
         catch(Exception e)
@@ -280,6 +288,7 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, ret.tag);
         }
         catch(Exception e)
@@ -313,8 +322,9 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.scene);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -331,8 +341,9 @@ public class GameObject_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.gameObject);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -346,11 +357,12 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.PrimitiveType arg0 = (UnityEngine.PrimitiveType)(FCLibHelper.fc_get_int(L,0));
             UnityEngine.GameObject ret = UnityEngine.GameObject.CreatePrimitive(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -364,13 +376,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component ret = obj.GetComponent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -384,6 +397,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L, 0);
@@ -502,7 +516,7 @@ public class GameObject_wrap
                 break;
             }
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, nRetPtr);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, nRetPtr);
         }
         catch(Exception e)
         {
@@ -516,13 +530,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.Component ret = obj.GetComponent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -536,6 +551,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -543,7 +559,7 @@ public class GameObject_wrap
             UnityEngine.Component ret = obj.GetComponentInChildren(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -557,13 +573,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component ret = obj.GetComponentInChildren(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -577,13 +594,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component ret = obj.GetComponentInParent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -597,12 +615,13 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component[] ret = obj.GetComponents(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -616,6 +635,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -635,12 +655,13 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component[] ret = obj.GetComponentsInChildren(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -654,13 +675,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             UnityEngine.Component[] ret = obj.GetComponentsInChildren(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -674,12 +696,13 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component[] ret = obj.GetComponentsInParent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -693,13 +716,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             bool arg1 = FCLibHelper.fc_get_bool(L,1);
             UnityEngine.Component[] ret = obj.GetComponentsInParent(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -713,6 +737,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             bool arg0 = FCLibHelper.fc_get_bool(L,0);
@@ -730,6 +755,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -749,11 +775,12 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.GameObject ret = UnityEngine.GameObject.FindGameObjectWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -767,11 +794,12 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.GameObject ret = UnityEngine.GameObject.FindWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -785,10 +813,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.GameObject[] ret = UnityEngine.GameObject.FindGameObjectsWithTag(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -802,10 +831,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             UnityEngine.SendMessageOptions arg2 = (UnityEngine.SendMessageOptions)(FCLibHelper.fc_get_int(L,2));
             obj.SendMessageUpwards(arg0,arg1,arg2);
         }
@@ -821,10 +851,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             obj.SendMessageUpwards(arg0,arg1);
         }
         catch(Exception e)
@@ -839,6 +870,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -856,6 +888,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -874,10 +907,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             UnityEngine.SendMessageOptions arg2 = (UnityEngine.SendMessageOptions)(FCLibHelper.fc_get_int(L,2));
             obj.SendMessage(arg0,arg1,arg2);
         }
@@ -893,10 +927,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             obj.SendMessage(arg0,arg1);
         }
         catch(Exception e)
@@ -911,6 +946,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -928,6 +964,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -946,10 +983,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             UnityEngine.SendMessageOptions arg2 = (UnityEngine.SendMessageOptions)(FCLibHelper.fc_get_int(L,2));
             obj.BroadcastMessage(arg0,arg1,arg2);
         }
@@ -965,10 +1003,11 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             obj.BroadcastMessage(arg0,arg1);
         }
         catch(Exception e)
@@ -983,6 +1022,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1000,6 +1040,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1018,13 +1059,14 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             System.Type arg0 = FCGetObj.GetObj<System.Type>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Component ret = obj.AddComponent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -1038,6 +1080,7 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.GameObject obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L, 0);
@@ -1156,7 +1199,7 @@ public class GameObject_wrap
                 break;
             }
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, nRetPtr);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, nRetPtr);
         }
         catch(Exception e)
         {
@@ -1170,11 +1213,12 @@ public class GameObject_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.GameObject ret = UnityEngine.GameObject.Find(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {

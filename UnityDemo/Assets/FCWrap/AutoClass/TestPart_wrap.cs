@@ -11,15 +11,15 @@ public class TestPart_wrap
         return FCGetObj.GetObj<TestPart>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("TestPart");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_func(nClassName,"SetValue",SetValue_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "TestPart");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetValue",SetValue_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -27,7 +27,8 @@ public class TestPart_wrap
     {
         long nPtr = FCGetObj.NewObj<TestPart>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -46,9 +47,9 @@ public class TestPart_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        TestPart obj = FCGetObj.GetObj<TestPart>(L);
+        TestPart obj = FCGetObj.GetObj<TestPart>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -77,6 +78,7 @@ public class TestPart_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             TestPart obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);

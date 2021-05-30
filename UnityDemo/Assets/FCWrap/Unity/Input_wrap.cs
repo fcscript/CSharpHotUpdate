@@ -11,58 +11,58 @@ public class Input_wrap
         return FCGetObj.GetObj<UnityEngine.Input>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Input");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"compensateSensors",get_compensateSensors_wrap,set_compensateSensors_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"gyro",get_gyro_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mousePosition",get_mousePosition_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mouseScrollDelta",get_mouseScrollDelta_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mousePresent",get_mousePresent_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"simulateMouseWithTouches",get_simulateMouseWithTouches_wrap,set_simulateMouseWithTouches_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"anyKey",get_anyKey_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"anyKeyDown",get_anyKeyDown_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"inputString",get_inputString_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"acceleration",get_acceleration_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"accelerationEvents",get_accelerationEvents_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"accelerationEventCount",get_accelerationEventCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"touches",get_touches_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"touchCount",get_touchCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"touchPressureSupported",get_touchPressureSupported_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"stylusTouchSupported",get_stylusTouchSupported_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"touchSupported",get_touchSupported_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"multiTouchEnabled",get_multiTouchEnabled_wrap,set_multiTouchEnabled_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"location",get_location_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"compass",get_compass_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"deviceOrientation",get_deviceOrientation_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"imeCompositionMode",get_imeCompositionMode_wrap,set_imeCompositionMode_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"compositionString",get_compositionString_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"imeIsSelected",get_imeIsSelected_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"compositionCursorPos",get_compositionCursorPos_wrap,set_compositionCursorPos_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"backButtonLeavesApp",get_backButtonLeavesApp_wrap,set_backButtonLeavesApp_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetAxis",GetAxis_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetAxisRaw",GetAxisRaw_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetButton",GetButton_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetButtonDown",GetButtonDown_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetButtonUp",GetButtonUp_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKey_StringA",GetKey_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKey_KeyCode",GetKey1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKeyDown_StringA",GetKeyDown_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKeyDown_KeyCode",GetKeyDown1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKeyUp_StringA",GetKeyUp_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetKeyUp_KeyCode",GetKeyUp1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetJoystickNames",GetJoystickNames_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMouseButton",GetMouseButton_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMouseButtonDown",GetMouseButtonDown_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMouseButtonUp",GetMouseButtonUp_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"ResetInputAxes",ResetInputAxes_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetAccelerationEvent",GetAccelerationEvent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTouch",GetTouch_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Input");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"compensateSensors",get_compensateSensors_wrap,set_compensateSensors_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"gyro",get_gyro_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mousePosition",get_mousePosition_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mouseScrollDelta",get_mouseScrollDelta_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mousePresent",get_mousePresent_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"simulateMouseWithTouches",get_simulateMouseWithTouches_wrap,set_simulateMouseWithTouches_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"anyKey",get_anyKey_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"anyKeyDown",get_anyKeyDown_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"inputString",get_inputString_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"acceleration",get_acceleration_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"accelerationEvents",get_accelerationEvents_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"accelerationEventCount",get_accelerationEventCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"touches",get_touches_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"touchCount",get_touchCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"touchPressureSupported",get_touchPressureSupported_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"stylusTouchSupported",get_stylusTouchSupported_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"touchSupported",get_touchSupported_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"multiTouchEnabled",get_multiTouchEnabled_wrap,set_multiTouchEnabled_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"location",get_location_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"compass",get_compass_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"deviceOrientation",get_deviceOrientation_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"imeCompositionMode",get_imeCompositionMode_wrap,set_imeCompositionMode_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"compositionString",get_compositionString_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"imeIsSelected",get_imeIsSelected_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"compositionCursorPos",get_compositionCursorPos_wrap,set_compositionCursorPos_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"backButtonLeavesApp",get_backButtonLeavesApp_wrap,set_backButtonLeavesApp_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetAxis",GetAxis_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetAxisRaw",GetAxisRaw_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetButton",GetButton_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetButtonDown",GetButtonDown_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetButtonUp",GetButtonUp_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKey_StringA",GetKey_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKey_KeyCode",GetKey1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKeyDown_StringA",GetKeyDown_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKeyDown_KeyCode",GetKeyDown1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKeyUp_StringA",GetKeyUp_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetKeyUp_KeyCode",GetKeyUp1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetJoystickNames",GetJoystickNames_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMouseButton",GetMouseButton_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMouseButtonDown",GetMouseButtonDown_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMouseButtonUp",GetMouseButtonUp_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"ResetInputAxes",ResetInputAxes_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetAccelerationEvent",GetAccelerationEvent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTouch",GetTouch_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -70,7 +70,8 @@ public class Input_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Input>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -89,9 +90,9 @@ public class Input_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Input obj = FCGetObj.GetObj<UnityEngine.Input>(L);
+        UnityEngine.Input obj = FCGetObj.GetObj<UnityEngine.Input>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -121,6 +122,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.compensateSensors);
         }
         catch(Exception e)
@@ -150,8 +152,9 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(UnityEngine.Input.gyro);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -166,6 +169,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = UnityEngine.Input.mousePosition;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -182,6 +186,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector2 temp_ret = UnityEngine.Input.mouseScrollDelta;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
         }
@@ -198,6 +203,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.mousePresent);
         }
         catch(Exception e)
@@ -213,6 +219,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.simulateMouseWithTouches);
         }
         catch(Exception e)
@@ -242,6 +249,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.anyKey);
         }
         catch(Exception e)
@@ -257,6 +265,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.anyKeyDown);
         }
         catch(Exception e)
@@ -272,6 +281,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, UnityEngine.Input.inputString);
         }
         catch(Exception e)
@@ -287,6 +297,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = UnityEngine.Input.acceleration;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -303,7 +314,8 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(UnityEngine.Input.accelerationEvents,ret_ptr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCCustomParam.ReturnArray(VM, UnityEngine.Input.accelerationEvents,ret_ptr);
         }
         catch(Exception e)
         {
@@ -318,6 +330,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Input.accelerationEventCount);
         }
         catch(Exception e)
@@ -333,7 +346,8 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(UnityEngine.Input.touches,ret_ptr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCCustomParam.ReturnArray(VM, UnityEngine.Input.touches,ret_ptr);
         }
         catch(Exception e)
         {
@@ -348,6 +362,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Input.touchCount);
         }
         catch(Exception e)
@@ -363,6 +378,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.touchPressureSupported);
         }
         catch(Exception e)
@@ -378,6 +394,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.stylusTouchSupported);
         }
         catch(Exception e)
@@ -393,6 +410,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.touchSupported);
         }
         catch(Exception e)
@@ -408,6 +426,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.multiTouchEnabled);
         }
         catch(Exception e)
@@ -437,8 +456,9 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(UnityEngine.Input.location);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -453,8 +473,9 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(UnityEngine.Input.compass);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -469,6 +490,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)UnityEngine.Input.deviceOrientation);
         }
         catch(Exception e)
@@ -484,6 +506,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)UnityEngine.Input.imeCompositionMode);
         }
         catch(Exception e)
@@ -513,6 +536,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, UnityEngine.Input.compositionString);
         }
         catch(Exception e)
@@ -528,6 +552,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.imeIsSelected);
         }
         catch(Exception e)
@@ -543,6 +568,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector2 temp_ret = UnityEngine.Input.compositionCursorPos;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
         }
@@ -574,6 +600,7 @@ public class Input_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Input.backButtonLeavesApp);
         }
         catch(Exception e)
@@ -602,6 +629,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float ret = UnityEngine.Input.GetAxis(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -619,6 +647,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float ret = UnityEngine.Input.GetAxisRaw(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -636,6 +665,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetButton(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -653,6 +683,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetButtonDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -670,6 +701,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetButtonUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -687,6 +719,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetKey(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -704,6 +737,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = UnityEngine.Input.GetKey(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -721,6 +755,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetKeyDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -738,6 +773,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = UnityEngine.Input.GetKeyDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -755,6 +791,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             bool ret = UnityEngine.Input.GetKeyUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -772,6 +809,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.KeyCode arg0 = (UnityEngine.KeyCode)(FCLibHelper.fc_get_int(L,0));
             bool ret = UnityEngine.Input.GetKeyUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -789,9 +827,10 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             string[] ret = UnityEngine.Input.GetJoystickNames();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -805,6 +844,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = UnityEngine.Input.GetMouseButton(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -822,6 +862,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = UnityEngine.Input.GetMouseButtonDown(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -839,6 +880,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             bool ret = UnityEngine.Input.GetMouseButtonUp(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
@@ -856,6 +898,7 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.Input.ResetInputAxes();
         }
         catch(Exception e)
@@ -870,11 +913,12 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.AccelerationEvent ret = UnityEngine.Input.GetAccelerationEvent(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -888,11 +932,12 @@ public class Input_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.Touch ret = UnityEngine.Input.GetTouch(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {

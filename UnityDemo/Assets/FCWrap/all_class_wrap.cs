@@ -6,10 +6,10 @@ using UnityEngine.Rendering;
 
 public class all_class_wrap
 {
-    public static void Register()
+    public static void Register(long VM)
     {
-        Unity_wrap.Register();
-        UnityUI_wrap.Register();
-        AutoClass_wrap.Register();
+        Unity_wrap.Register(VM);
+        UnityUI_wrap.Register(VM);
+        AutoClass_wrap.Register(VM);
     }
 }

@@ -13,16 +13,16 @@ public class Button_wrap
         return FCGetObj.GetObj<UnityEngine.UI.Button>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Button");
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"onClick",get_onClick_wrap,set_onClick_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"OnPointerClick",OnPointerClick_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"OnSubmit",OnSubmit_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Button");
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"onClick",get_onClick_wrap,set_onClick_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"OnPointerClick",OnPointerClick_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"OnSubmit",OnSubmit_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -40,9 +40,9 @@ public class Button_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.UI.Button obj = FCGetObj.GetObj<UnityEngine.UI.Button>(L);
+        UnityEngine.UI.Button obj = FCGetObj.GetObj<UnityEngine.UI.Button>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -74,8 +74,9 @@ public class Button_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.onClick);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -105,6 +106,7 @@ public class Button_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button obj = get_obj(nThisPtr);
             UnityEngine.EventSystems.PointerEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.PointerEventData>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -122,6 +124,7 @@ public class Button_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.UI.Button obj = get_obj(nThisPtr);
             UnityEngine.EventSystems.BaseEventData arg0 = FCGetObj.GetObj<UnityEngine.EventSystems.BaseEventData>(FCLibHelper.fc_get_wrap_objptr(L,0));

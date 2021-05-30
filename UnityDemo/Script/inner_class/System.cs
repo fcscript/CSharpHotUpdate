@@ -204,6 +204,20 @@ class os
     {
 
     }
+    // 功能：获取需要广播的类列表
+    public static void  GetBroadstList(ref List<FCType> ClassList, StringA szFuncName)
+    {
+
+    }
+    // 功能：动态调用任意一个函数
+    // 参数：obj - 类变量指针, 如果为nill表示调用全局函数
+    //       szFuncName - 函数名字(该名字必须使用export关键标记导出的)
+    //       args - 函数参数
+    // System.Call(Obj, funcName, arg0, arg1, ...)
+    public static void  Call<_Ty>(_Ty obj, StringA szFuncName, params System.Object[] args)
+    {
+
+    }
 };
 
 // 只是为了兼容UnityEngine.Events.UnityAction

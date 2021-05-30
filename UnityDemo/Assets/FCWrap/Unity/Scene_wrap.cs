@@ -12,24 +12,24 @@ public class Scene_wrap
         return FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Scene");
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"path",get_path_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"name",get_name_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"isLoaded",get_isLoaded_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"buildIndex",get_buildIndex_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"isDirty",get_isDirty_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"rootCount",get_rootCount_wrap,null);
-        FCLibHelper.fc_register_class_func(nClassName,"IsValid",IsValid_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetRootGameObjects",GetRootGameObjects_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetRootGameObjects_List<GameObject>",GetRootGameObjects1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetHashCode",GetHashCode_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Equals",Equals_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Scene");
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"path",get_path_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"name",get_name_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"isLoaded",get_isLoaded_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"buildIndex",get_buildIndex_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"isDirty",get_isDirty_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"rootCount",get_rootCount_wrap,null);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"IsValid",IsValid_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetRootGameObjects",GetRootGameObjects_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetRootGameObjects_List<GameObject>",GetRootGameObjects1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetHashCode",GetHashCode_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Equals",Equals_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -47,9 +47,9 @@ public class Scene_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.SceneManagement.Scene obj = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(L);
+        UnityEngine.SceneManagement.Scene obj = FCGetObj.GetObj<UnityEngine.SceneManagement.Scene>(nIntPtr);
         return obj.GetHashCode();
     }
 
@@ -69,6 +69,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, ret.path);
         }
         catch(Exception e)
@@ -86,6 +87,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_string_a(ret_ptr, ret.name);
         }
         catch(Exception e)
@@ -103,6 +105,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isLoaded);
         }
         catch(Exception e)
@@ -120,6 +123,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.buildIndex);
         }
         catch(Exception e)
@@ -137,6 +141,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isDirty);
         }
         catch(Exception e)
@@ -154,6 +159,7 @@ public class Scene_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.rootCount);
         }
         catch(Exception e)
@@ -168,6 +174,7 @@ public class Scene_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene obj = get_obj(nThisPtr);
             bool ret = obj.IsValid();
@@ -186,11 +193,12 @@ public class Scene_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene obj = get_obj(nThisPtr);
             UnityEngine.GameObject[] ret = obj.GetRootGameObjects();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -204,6 +212,7 @@ public class Scene_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene obj = get_obj(nThisPtr);
             List<UnityEngine.GameObject> arg0 = null;
@@ -222,6 +231,7 @@ public class Scene_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene obj = get_obj(nThisPtr);
             int ret = obj.GetHashCode();
@@ -240,9 +250,10 @@ public class Scene_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SceneManagement.Scene obj = get_obj(nThisPtr);
-            System.Object arg0 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,0));
+            System.Object arg0 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,0));
             bool ret = obj.Equals(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret);

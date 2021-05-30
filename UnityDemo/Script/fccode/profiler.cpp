@@ -28,10 +28,59 @@ export void  PrintV0()
     print("_V0={0}", _V0);
 }
 
+inline bool MandelbrotCheck(int workX, int workY)
+{
+    return ((workX * workX) + (workY * workY)) < 4.0;
+}
+
+export void TestMandelbrot()
+{
+    float  data = 0;
+    const int    iterations = 4;
+    const int    width = 64;
+    const int    height = 64;
+    uint  nBegin = System.GetTickCount();
+    for(int i =0; i<iterations; ++i)
+    {
+        float  left = -2.1f;
+        float  right = 1.0f;
+        float  top = -1.3f;
+        float  bottom = 1.3f;
+        float  deltaX = (right - left) / width;
+        float  deltaY = (bottom - top) / height;
+        float  coordinateX = left;
+        for(int x = 0; x < width; ++x)
+        {
+            float coordinateY = top;
+            for(int y = 0; y<height; ++y)
+            {
+                float workX = 0;
+                float workY = 0;
+                int counter = 0;
+                while (counter < 255 && UserClass.MandelbrotCheck(workX, workY))
+                {
+                    counter = counter + 1;
+                    float newX = (workX * workX) - (workY * workY) + coordinateX;
+                    workY = 2 * workX * workY + coordinateY;
+                    workX = newX;
+                }
+                data = workX + workY;
+                coordinateY = coordinateY + deltaY;
+				//coordinateY += deltaY;
+            }
+			coordinateX = coordinateX + deltaX;
+			//coordinateX += deltaX;
+        }
+    }
+    uint nEnd = System.GetTickCount();
+	print("data = {0}", data);
+    PrintTime("TestMandelbrot", nEnd - nBegin);
+}
+
 export void Test0(Transform transform)
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         transform.position = transform.position;
     }
@@ -44,7 +93,7 @@ export void  Test1(Transform transform)
     uint  nBegin = System.GetTickCount();
     Vector3 vUp;
     vUp.Set(0, 1, 0);
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         transform.Rotate(vUp, 1);
     }
@@ -60,7 +109,7 @@ export void Test2()
     float x;
     float y;
     float z;
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         f = i;
         v.Set(f, f, f);
@@ -101,6 +150,7 @@ export void Test4(Transform transform)
         SkinnedMeshRenderer c = obj.GetComponent<SkinnedMeshRenderer>();
         c.receiveShadows = false;
         aTemp[i] = obj;
+		//GameObject.Destroy(obj)
     }
     uint nEnd = System.GetTickCount();
     PrintTime("Test4", nEnd - nBegin);
@@ -109,7 +159,7 @@ export void Test4(Transform transform)
 export void Test5()
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         Vector3 v = Input.mousePosition;
     }
@@ -120,7 +170,7 @@ export void Test5()
 export void Test6()
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         Vector3 v;
         v.Set(i, i, i);
@@ -136,7 +186,7 @@ export void Test7()
     Quaternion  qa;
     Quaternion  q1;
     Quaternion  q2;
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
         //q1 = Quaternion.Euler(i, i, i);
         //q2 = Quaternion.Euler(i * 2, i * 2, i * 2);
@@ -154,13 +204,13 @@ export void Test8()
     uint  nBegin = System.GetTickCount();
     int  total = 0;
 	int  i = 0;
-    for(i = 0; i<1000000; ++i)
+    for(i = 0; i<2000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
     }
     uint nEnd = System.GetTickCount();
     //print("end call =================================");
-	//print("total = {0}, i = {1}", total, i);
+	print("total = {0}, i = {1}", total, i);
     PrintTime("Test8", nEnd - nBegin);
 }
 
@@ -173,7 +223,7 @@ export void Test9()
     }
     uint  nBegin = System.GetTickCount();
     int  total = 0;
-    for(int i = 0; i<100000; ++i)
+    for(int i = 0; i<20000; ++i)
     {
         for(int j = 0; j<1024; ++j)
         {
@@ -194,7 +244,7 @@ export void Test91(Transform transform)
     }
     uint  nBegin = System.GetTickCount();
     float  total = 0;
-    for(int i = 0; i<100000; ++i)
+    for(int i = 0; i<20000; ++i)
     {
         for(int j = 0; j<1024; ++j)
         {
@@ -210,12 +260,30 @@ export void Test10(Transform transform)
 {    
     uint  nBegin = System.GetTickCount();
 	
-    for(int i = 0; i<200000; ++i)
+    for(int i = 0; i<2000000; ++i)
     {
-		UserClass.TestFunc1(1, "123", transform.position, transform);
+		UserClass.TestFunc1(1, "123", transform);
     }		
     uint nEnd = System.GetTickCount();
     PrintTime("Test10", nEnd - nBegin);
+}
+
+inline void   AddVector(Vector3 a, Vector3 b)
+{
+    Vector3 v = a + b;
+}
+
+export void  Test11()
+{
+    uint  nBegin = System.GetTickCount();
+    for (int i = 0; i < 1000000; ++i)
+    {
+        Vector3 a = new Vector3(1, 2, 3);
+        Vector3 b = new Vector3(4, 5, 6);
+        AddVector(a, b);
+    }
+    uint nEnd = System.GetTickCount();
+    PrintTime("Test11", nEnd - nBegin);
 }
 
 export void  Test12()

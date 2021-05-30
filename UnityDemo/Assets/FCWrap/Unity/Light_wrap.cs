@@ -12,41 +12,41 @@ public class Light_wrap
         return FCGetObj.GetObj<UnityEngine.Light>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Light");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadows",get_shadows_wrap,set_shadows_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowStrength",get_shadowStrength_wrap,set_shadowStrength_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowResolution",get_shadowResolution_wrap,set_shadowResolution_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"cookieSize",get_cookieSize_wrap,set_cookieSize_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"cookie",get_cookie_wrap,set_cookie_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"renderMode",get_renderMode_wrap,set_renderMode_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"commandBufferCount",get_commandBufferCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"type",get_type_wrap,set_type_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"spotAngle",get_spotAngle_wrap,set_spotAngle_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"color",get_color_wrap,set_color_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"colorTemperature",get_colorTemperature_wrap,set_colorTemperature_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"intensity",get_intensity_wrap,set_intensity_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"bounceIntensity",get_bounceIntensity_wrap,set_bounceIntensity_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowCustomResolution",get_shadowCustomResolution_wrap,set_shadowCustomResolution_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowBias",get_shadowBias_wrap,set_shadowBias_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowNormalBias",get_shadowNormalBias_wrap,set_shadowNormalBias_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shadowNearPlane",get_shadowNearPlane_wrap,set_shadowNearPlane_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"range",get_range_wrap,set_range_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"flare",get_flare_wrap,set_flare_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"cullingMask",get_cullingMask_wrap,set_cullingMask_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"AddCommandBuffer_LightEvent_CommandBuffer",AddCommandBuffer_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"AddCommandBuffer_LightEvent_CommandBuffer_ShadowMapPass",AddCommandBuffer1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"RemoveCommandBuffer",RemoveCommandBuffer_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"RemoveCommandBuffers",RemoveCommandBuffers_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"RemoveAllCommandBuffers",RemoveAllCommandBuffers_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetCommandBuffers",GetCommandBuffers_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetLights",GetLights_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Light");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadows",get_shadows_wrap,set_shadows_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowStrength",get_shadowStrength_wrap,set_shadowStrength_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowResolution",get_shadowResolution_wrap,set_shadowResolution_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"cookieSize",get_cookieSize_wrap,set_cookieSize_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"cookie",get_cookie_wrap,set_cookie_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"renderMode",get_renderMode_wrap,set_renderMode_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"commandBufferCount",get_commandBufferCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"type",get_type_wrap,set_type_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"spotAngle",get_spotAngle_wrap,set_spotAngle_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"color",get_color_wrap,set_color_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"colorTemperature",get_colorTemperature_wrap,set_colorTemperature_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"intensity",get_intensity_wrap,set_intensity_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"bounceIntensity",get_bounceIntensity_wrap,set_bounceIntensity_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowCustomResolution",get_shadowCustomResolution_wrap,set_shadowCustomResolution_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowBias",get_shadowBias_wrap,set_shadowBias_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowNormalBias",get_shadowNormalBias_wrap,set_shadowNormalBias_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shadowNearPlane",get_shadowNearPlane_wrap,set_shadowNearPlane_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"range",get_range_wrap,set_range_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"flare",get_flare_wrap,set_flare_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"cullingMask",get_cullingMask_wrap,set_cullingMask_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"AddCommandBuffer_LightEvent_CommandBuffer",AddCommandBuffer_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"AddCommandBuffer_LightEvent_CommandBuffer_ShadowMapPass",AddCommandBuffer1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"RemoveCommandBuffer",RemoveCommandBuffer_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"RemoveCommandBuffers",RemoveCommandBuffers_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"RemoveAllCommandBuffers",RemoveAllCommandBuffers_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetCommandBuffers",GetCommandBuffers_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetLights",GetLights_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -54,7 +54,8 @@ public class Light_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Light>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -73,9 +74,9 @@ public class Light_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Light obj = FCGetObj.GetObj<UnityEngine.Light>(L);
+        UnityEngine.Light obj = FCGetObj.GetObj<UnityEngine.Light>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -107,6 +108,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.shadows);
         }
         catch(Exception e)
@@ -140,6 +142,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.shadowStrength);
         }
         catch(Exception e)
@@ -173,6 +176,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.shadowResolution);
         }
         catch(Exception e)
@@ -206,6 +210,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.cookieSize);
         }
         catch(Exception e)
@@ -239,8 +244,9 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.cookie);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -273,6 +279,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.renderMode);
         }
         catch(Exception e)
@@ -306,6 +313,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.commandBufferCount);
         }
         catch(Exception e)
@@ -323,6 +331,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.type);
         }
         catch(Exception e)
@@ -356,6 +365,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.spotAngle);
         }
         catch(Exception e)
@@ -389,6 +399,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Color temp_ret = ret.color;
             FCLibHelper.fc_set_value_color(ret_ptr, ref temp_ret);
         }
@@ -424,6 +435,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.colorTemperature);
         }
         catch(Exception e)
@@ -457,6 +469,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.intensity);
         }
         catch(Exception e)
@@ -490,6 +503,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.bounceIntensity);
         }
         catch(Exception e)
@@ -523,6 +537,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.shadowCustomResolution);
         }
         catch(Exception e)
@@ -556,6 +571,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.shadowBias);
         }
         catch(Exception e)
@@ -589,6 +605,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.shadowNormalBias);
         }
         catch(Exception e)
@@ -622,6 +639,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.shadowNearPlane);
         }
         catch(Exception e)
@@ -655,6 +673,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, ret.range);
         }
         catch(Exception e)
@@ -688,8 +707,9 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.flare);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -722,6 +742,7 @@ public class Light_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.cullingMask);
         }
         catch(Exception e)
@@ -752,6 +773,7 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
@@ -770,6 +792,7 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
@@ -789,6 +812,7 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
@@ -807,6 +831,7 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
@@ -824,6 +849,7 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             obj.RemoveAllCommandBuffers();
@@ -840,12 +866,13 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Light obj = get_obj(nThisPtr);
             UnityEngine.Rendering.LightEvent arg0 = (UnityEngine.Rendering.LightEvent)(FCLibHelper.fc_get_int(L,0));
             UnityEngine.Rendering.CommandBuffer[] ret = obj.GetCommandBuffers(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -859,11 +886,12 @@ public class Light_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             UnityEngine.LightType arg0 = (UnityEngine.LightType)(FCLibHelper.fc_get_int(L,0));
             int arg1 = FCLibHelper.fc_get_int(L,1);
             UnityEngine.Light[] ret = UnityEngine.Light.GetLights(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {

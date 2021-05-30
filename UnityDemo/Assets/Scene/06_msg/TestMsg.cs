@@ -81,7 +81,7 @@ public class TestMsg : FCScriptLoader
         CSerialize ar = new CSerialize(SerializeType.write);
         msg.Serialize(ar);
 
-        FCLibHelper.fc_serialize_msg_call(0, "TestSerialize.ReceiveLoginMsg", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
+        FCLibHelper.fc_serialize_msg_call(m_VMPtr, 0, "TestSerialize.ReceiveLoginMsg", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
     }
     void TestFunc1()
     {
@@ -109,7 +109,7 @@ public class TestMsg : FCScriptLoader
         CSerialize ar = new CSerialize(SerializeType.write);
         msg.Serialize(ar);
 
-        FCLibHelper.fc_serialize_msg_call(0, "TestSerialize.ReceiveItemMsg", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
+        FCLibHelper.fc_serialize_msg_call(m_VMPtr, 0, "TestSerialize.ReceiveItemMsg", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
     }
 
     void TestFunc2()
@@ -136,7 +136,7 @@ public class TestMsg : FCScriptLoader
         CSerialize ar = new CSerialize(SerializeType.write);
         msg.Serialize(ar);
 
-        FCLibHelper.fc_serialize_msg_call(0, "TestSerialize.ReceiveItemMsg2", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
+        FCLibHelper.fc_serialize_msg_call(m_VMPtr, 0, "TestSerialize.ReceiveItemMsg2", ar.GetBuffer(), 0, ar.GetBufferSize(), true);
     }
 
     void OnGUI()

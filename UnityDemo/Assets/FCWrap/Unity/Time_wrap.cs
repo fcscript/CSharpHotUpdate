@@ -11,32 +11,32 @@ public class Time_wrap
         return FCGetObj.GetObj<UnityEngine.Time>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Time");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"time",get_time_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"timeSinceLevelLoad",get_timeSinceLevelLoad_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"deltaTime",get_deltaTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"fixedTime",get_fixedTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"unscaledTime",get_unscaledTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"fixedUnscaledTime",get_fixedUnscaledTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"unscaledDeltaTime",get_unscaledDeltaTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"fixedUnscaledDeltaTime",get_fixedUnscaledDeltaTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"fixedDeltaTime",get_fixedDeltaTime_wrap,set_fixedDeltaTime_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"maximumDeltaTime",get_maximumDeltaTime_wrap,set_maximumDeltaTime_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"smoothDeltaTime",get_smoothDeltaTime_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"maximumParticleDeltaTime",get_maximumParticleDeltaTime_wrap,set_maximumParticleDeltaTime_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"timeScale",get_timeScale_wrap,set_timeScale_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"frameCount",get_frameCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"renderedFrameCount",get_renderedFrameCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"realtimeSinceStartup",get_realtimeSinceStartup_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"captureFramerate",get_captureFramerate_wrap,set_captureFramerate_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"inFixedTimeStep",get_inFixedTimeStep_wrap,null);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Time");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"time",get_time_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"timeSinceLevelLoad",get_timeSinceLevelLoad_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"deltaTime",get_deltaTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"fixedTime",get_fixedTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"unscaledTime",get_unscaledTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"fixedUnscaledTime",get_fixedUnscaledTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"unscaledDeltaTime",get_unscaledDeltaTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"fixedUnscaledDeltaTime",get_fixedUnscaledDeltaTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"fixedDeltaTime",get_fixedDeltaTime_wrap,set_fixedDeltaTime_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"maximumDeltaTime",get_maximumDeltaTime_wrap,set_maximumDeltaTime_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"smoothDeltaTime",get_smoothDeltaTime_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"maximumParticleDeltaTime",get_maximumParticleDeltaTime_wrap,set_maximumParticleDeltaTime_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"timeScale",get_timeScale_wrap,set_timeScale_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"frameCount",get_frameCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"renderedFrameCount",get_renderedFrameCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"realtimeSinceStartup",get_realtimeSinceStartup_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"captureFramerate",get_captureFramerate_wrap,set_captureFramerate_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"inFixedTimeStep",get_inFixedTimeStep_wrap,null);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -44,7 +44,8 @@ public class Time_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Time>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -63,9 +64,9 @@ public class Time_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Time obj = FCGetObj.GetObj<UnityEngine.Time>(L);
+        UnityEngine.Time obj = FCGetObj.GetObj<UnityEngine.Time>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -95,6 +96,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.time);
         }
         catch(Exception e)
@@ -110,6 +112,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.timeSinceLevelLoad);
         }
         catch(Exception e)
@@ -125,6 +128,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.deltaTime);
         }
         catch(Exception e)
@@ -140,6 +144,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedTime);
         }
         catch(Exception e)
@@ -155,6 +160,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.unscaledTime);
         }
         catch(Exception e)
@@ -170,6 +176,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedUnscaledTime);
         }
         catch(Exception e)
@@ -185,6 +192,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.unscaledDeltaTime);
         }
         catch(Exception e)
@@ -200,6 +208,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedUnscaledDeltaTime);
         }
         catch(Exception e)
@@ -215,6 +224,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.fixedDeltaTime);
         }
         catch(Exception e)
@@ -244,6 +254,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.maximumDeltaTime);
         }
         catch(Exception e)
@@ -273,6 +284,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.smoothDeltaTime);
         }
         catch(Exception e)
@@ -288,6 +300,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.maximumParticleDeltaTime);
         }
         catch(Exception e)
@@ -317,6 +330,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.timeScale);
         }
         catch(Exception e)
@@ -346,6 +360,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.frameCount);
         }
         catch(Exception e)
@@ -361,6 +376,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.renderedFrameCount);
         }
         catch(Exception e)
@@ -376,6 +392,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_float(ret_ptr, UnityEngine.Time.realtimeSinceStartup);
         }
         catch(Exception e)
@@ -391,6 +408,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, UnityEngine.Time.captureFramerate);
         }
         catch(Exception e)
@@ -420,6 +438,7 @@ public class Time_wrap
         try
         {
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, UnityEngine.Time.inFixedTimeStep);
         }
         catch(Exception e)

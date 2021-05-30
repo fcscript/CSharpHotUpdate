@@ -10,8 +10,8 @@ public class HelloWord : FCScriptLoader
         // 在加载完脚本字码码后，才执行脚本函数吧
         Transform tfChild = transform.Find("Text");
         UnityEngine.UI.Text  text = tfChild.GetComponent<UnityEngine.UI.Text>();
-        FCDll.PushCallParam(text);
+        FCDll.PushCallParam(m_VMPtr, text);
         //FCDll.PushCallObjectParam(text);
-        FCLibHelper.fc_call(0, "HelloWord.SetText");
+        FCLibHelper.fc_call(m_VMPtr, 0, "HelloWord.SetText");
     }    
 }

@@ -12,73 +12,73 @@ public class Transform_wrap
         return FCGetObj.GetObj<UnityEngine.Transform>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Transform");
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"position",get_position_wrap,set_position_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localPosition",get_localPosition_wrap,set_localPosition_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"eulerAngles",get_eulerAngles_wrap,set_eulerAngles_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localEulerAngles",get_localEulerAngles_wrap,set_localEulerAngles_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"right",get_right_wrap,set_right_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"up",get_up_wrap,set_up_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"forward",get_forward_wrap,set_forward_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"rotation",get_rotation_wrap,set_rotation_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localRotation",get_localRotation_wrap,set_localRotation_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localScale",get_localScale_wrap,set_localScale_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"parent",get_parent_wrap,set_parent_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"worldToLocalMatrix",get_worldToLocalMatrix_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localToWorldMatrix",get_localToWorldMatrix_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"root",get_root_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"childCount",get_childCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"lossyScale",get_lossyScale_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"hasChanged",get_hasChanged_wrap,set_hasChanged_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"hierarchyCapacity",get_hierarchyCapacity_wrap,set_hierarchyCapacity_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"hierarchyCount",get_hierarchyCount_wrap,null);
-        FCLibHelper.fc_register_class_func(nClassName,"SetParent_Transform",SetParent_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetParent_Transform_bool",SetParent1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetPositionAndRotation",SetPositionAndRotation_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_Vector3",Translate_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_Vector3_Space",Translate1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_float_float_float",Translate2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_float_float_float_Space",Translate3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_Vector3_Transform",Translate4_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Translate_float_float_float_Transform",Translate5_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_Vector3",Rotate_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_Vector3_Space",Rotate1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_float_float_float",Rotate2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_float_float_float_Space",Rotate3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_Vector3_float",Rotate4_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Rotate_Vector3_float_Space",Rotate5_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"RotateAround",RotateAround_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LookAt_Transform",LookAt_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LookAt_Transform_Vector3",LookAt1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LookAt_Vector3_Vector3",LookAt2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"LookAt_Vector3",LookAt3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformDirection_Vector3",TransformDirection_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformDirection_float_float_float",TransformDirection1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformDirection_Vector3",InverseTransformDirection_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformDirection_float_float_float",InverseTransformDirection1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformVector_Vector3",TransformVector_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformVector_float_float_float",TransformVector1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformVector_Vector3",InverseTransformVector_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformVector_float_float_float",InverseTransformVector1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformPoint_Vector3",TransformPoint_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"TransformPoint_float_float_float",TransformPoint1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformPoint_Vector3",InverseTransformPoint_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InverseTransformPoint_float_float_float",InverseTransformPoint1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"DetachChildren",DetachChildren_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetAsFirstSibling",SetAsFirstSibling_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetAsLastSibling",SetAsLastSibling_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetSiblingIndex",SetSiblingIndex_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetSiblingIndex",GetSiblingIndex_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Find",Find_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"IsChildOf",IsChildOf_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetEnumerator",GetEnumerator_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetChild",GetChild_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Transform");
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"position",get_position_wrap,set_position_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localPosition",get_localPosition_wrap,set_localPosition_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"eulerAngles",get_eulerAngles_wrap,set_eulerAngles_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localEulerAngles",get_localEulerAngles_wrap,set_localEulerAngles_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"right",get_right_wrap,set_right_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"up",get_up_wrap,set_up_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"forward",get_forward_wrap,set_forward_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"rotation",get_rotation_wrap,set_rotation_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localRotation",get_localRotation_wrap,set_localRotation_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localScale",get_localScale_wrap,set_localScale_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"parent",get_parent_wrap,set_parent_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"worldToLocalMatrix",get_worldToLocalMatrix_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localToWorldMatrix",get_localToWorldMatrix_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"root",get_root_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"childCount",get_childCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"lossyScale",get_lossyScale_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"hasChanged",get_hasChanged_wrap,set_hasChanged_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"hierarchyCapacity",get_hierarchyCapacity_wrap,set_hierarchyCapacity_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"hierarchyCount",get_hierarchyCount_wrap,null);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetParent_Transform",SetParent_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetParent_Transform_bool",SetParent1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetPositionAndRotation",SetPositionAndRotation_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_Vector3",Translate_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_Vector3_Space",Translate1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_float_float_float",Translate2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_float_float_float_Space",Translate3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_Vector3_Transform",Translate4_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Translate_float_float_float_Transform",Translate5_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_Vector3",Rotate_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_Vector3_Space",Rotate1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_float_float_float",Rotate2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_float_float_float_Space",Rotate3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_Vector3_float",Rotate4_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Rotate_Vector3_float_Space",Rotate5_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"RotateAround",RotateAround_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LookAt_Transform",LookAt_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LookAt_Transform_Vector3",LookAt1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LookAt_Vector3_Vector3",LookAt2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"LookAt_Vector3",LookAt3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformDirection_Vector3",TransformDirection_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformDirection_float_float_float",TransformDirection1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformDirection_Vector3",InverseTransformDirection_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformDirection_float_float_float",InverseTransformDirection1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformVector_Vector3",TransformVector_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformVector_float_float_float",TransformVector1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformVector_Vector3",InverseTransformVector_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformVector_float_float_float",InverseTransformVector1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformPoint_Vector3",TransformPoint_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"TransformPoint_float_float_float",TransformPoint1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformPoint_Vector3",InverseTransformPoint_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InverseTransformPoint_float_float_float",InverseTransformPoint1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"DetachChildren",DetachChildren_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetAsFirstSibling",SetAsFirstSibling_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetAsLastSibling",SetAsLastSibling_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetSiblingIndex",SetSiblingIndex_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetSiblingIndex",GetSiblingIndex_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Find",Find_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"IsChildOf",IsChildOf_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetEnumerator",GetEnumerator_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetChild",GetChild_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -96,9 +96,9 @@ public class Transform_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Transform obj = FCGetObj.GetObj<UnityEngine.Transform>(L);
+        UnityEngine.Transform obj = FCGetObj.GetObj<UnityEngine.Transform>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -130,6 +130,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.position;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -165,6 +166,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.localPosition;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -200,6 +202,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.eulerAngles;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -235,6 +238,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.localEulerAngles;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -270,6 +274,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.right;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -305,6 +310,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.up;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -340,6 +346,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.forward;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -375,6 +382,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Quaternion temp_ret = ret.rotation;
             FCLibHelper.fc_set_value_quaternion(ret_ptr, ref temp_ret);
         }
@@ -410,6 +418,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Quaternion temp_ret = ret.localRotation;
             FCLibHelper.fc_set_value_quaternion(ret_ptr, ref temp_ret);
         }
@@ -445,6 +454,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.localScale;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -480,8 +490,9 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.parent);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -514,6 +525,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Matrix4x4 temp_ret = ret.worldToLocalMatrix;
             FCLibHelper.fc_set_value_matrix(ret_ptr, ref temp_ret);
         }
@@ -532,6 +544,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Matrix4x4 temp_ret = ret.localToWorldMatrix;
             FCLibHelper.fc_set_value_matrix(ret_ptr, ref temp_ret);
         }
@@ -550,8 +563,9 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.root);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -568,6 +582,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.childCount);
         }
         catch(Exception e)
@@ -585,6 +600,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector3 temp_ret = ret.lossyScale;
             FCLibHelper.fc_set_value_vector3(ret_ptr, ref temp_ret);
         }
@@ -603,6 +619,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.hasChanged);
         }
         catch(Exception e)
@@ -636,6 +653,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.hierarchyCapacity);
         }
         catch(Exception e)
@@ -669,6 +687,7 @@ public class Transform_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.hierarchyCount);
         }
         catch(Exception e)
@@ -683,6 +702,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -700,6 +720,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -718,6 +739,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -738,6 +760,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -756,6 +779,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -775,6 +799,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -794,6 +819,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -814,6 +840,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -833,6 +860,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -853,6 +881,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -871,6 +900,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -890,6 +920,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -909,6 +940,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -929,6 +961,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -948,6 +981,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -968,6 +1002,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -989,6 +1024,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -1006,6 +1042,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -1025,6 +1062,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1045,6 +1083,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1063,6 +1102,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1084,6 +1124,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1106,6 +1147,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1127,6 +1169,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1149,6 +1192,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1170,6 +1214,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1192,6 +1237,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1213,6 +1259,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1235,6 +1282,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1256,6 +1304,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1278,6 +1327,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             Vector3 arg0 = new Vector3();
@@ -1299,6 +1349,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             float arg0 = FCLibHelper.fc_get_float(L,0);
@@ -1321,6 +1372,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             obj.DetachChildren();
@@ -1337,6 +1389,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             obj.SetAsFirstSibling();
@@ -1353,6 +1406,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             obj.SetAsLastSibling();
@@ -1369,6 +1423,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1386,6 +1441,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             int ret = obj.GetSiblingIndex();
@@ -1404,13 +1460,14 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.Transform ret = obj.Find(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -1424,6 +1481,7 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             UnityEngine.Transform arg0 = FCGetObj.GetObj<UnityEngine.Transform>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -1443,12 +1501,13 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             System.Collections.IEnumerator ret = obj.GetEnumerator();
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -1462,13 +1521,14 @@ public class Transform_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Transform obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.Transform ret = obj.GetChild(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {

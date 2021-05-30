@@ -174,11 +174,11 @@ public class FCClassWrap
         fileData.AppendLine("");
         fileData.AppendFormat("public class {0}\r\n", szClassName);
         fileData.AppendLine("{");
-        fileData.AppendLine("    public static void Register()");
+        fileData.AppendLine("    public static void Register(long VM)");
         fileData.AppendLine("    {");
         foreach(string szCurClassName in aWrapNames)
         {
-            fileData.AppendFormat("        {0}.Register();\r\n", szCurClassName);
+            fileData.AppendFormat("        {0}.Register(VM);\r\n", szCurClassName);
         }
         fileData.AppendLine("    }");
         fileData.AppendLine("}");
@@ -454,7 +454,8 @@ public class FCClassWrap
         fileData.AppendLine("    {");
         fileData.AppendFormat("        long nPtr = FCGetObj.NewObj<{0}>();\r\n", m_szCurClassName);
         fileData.AppendLine("        long ret = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);");
+        fileData.AppendLine("        long VM = FCLibHelper.fc_get_vm_ptr(L);");
+        fileData.AppendLine("        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);");
         fileData.AppendLine("        return 0;");
         fileData.AppendLine("    }");
 
@@ -462,7 +463,7 @@ public class FCClassWrap
         func.m_szName = func.m_szGetName = func.m_szSetName = "obj_new";
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = "FCLibHelper.fc_register_class_new(nClassName, obj_new);";
+        func.m_szRegister = "FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);";
         m_CurClassFunc.Insert(0, func);
     }
     void MakeParamNew(ConstructorInfo conInfo, int nFuncIndex)
@@ -540,7 +541,8 @@ public class FCClassWrap
         fileData.AppendFormat("            {0} obj = new {1}({2});\r\n", m_szCurClassName, m_szCurClassName, szCallParam);
         fileData.AppendFormat("            long nPtr = FCGetObj.PushNewObj<{0}>(obj);\r\n", m_szCurClassName);
         fileData.AppendLine("            long ret = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);");        
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
+        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);");        
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
         fileData.AppendLine("        {");
@@ -556,7 +558,7 @@ public class FCClassWrap
         func.m_szGetName = func.m_szSetName = string.Format("obj_new{0}", nFuncIndex);
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName, \"{0}\", {1});", szFullFuncName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName, \"{0}\", {1});", szFullFuncName, func.m_szGetName);
         m_CurClassFunc.Insert(0, func);
     }
     void MakeDel()
@@ -576,7 +578,7 @@ public class FCClassWrap
         func.m_szName = func.m_szGetName = func.m_szSetName = "obj_del";
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = "FCLibHelper.fc_register_class_del(nClassName,obj_del);";
+        func.m_szRegister = "FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);";
         m_CurClassFunc.Insert(0, func);
     }
     void MakeReleaseRef()
@@ -596,7 +598,7 @@ public class FCClassWrap
         func.m_szName = func.m_szGetName = func.m_szSetName = "obj_release";
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = "FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);";
+        func.m_szRegister = "FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);";
         m_CurClassFunc.Insert(0, func);
     }
     void MakeHash()
@@ -607,9 +609,9 @@ public class FCClassWrap
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
         fileData.AppendLine("    [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]");
-        fileData.AppendLine("    public static int  obj_hash(long L)");
+        fileData.AppendLine("    public static int  obj_hash(long nIntPtr)");
         fileData.AppendLine("    {");
-        fileData.AppendFormat("        {0} obj = FCGetObj.GetObj<{0}>(L);\r\n", m_szCurClassName, m_szCurClassName);
+        fileData.AppendFormat("        {0} obj = FCGetObj.GetObj<{0}>(nIntPtr);\r\n", m_szCurClassName, m_szCurClassName);
         if(bStruct)
         {
             fileData.AppendLine("        return obj.GetHashCode();");
@@ -628,7 +630,7 @@ public class FCClassWrap
         func.m_szName = func.m_szGetName = func.m_szSetName = "obj_hash";
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = "FCLibHelper.fc_register_class_hash(nClassName,obj_hash);";
+        func.m_szRegister = "FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);";
         m_CurClassFunc.Insert(0, func);
     }
     void MakeEqual()
@@ -665,16 +667,16 @@ public class FCClassWrap
         func.m_szName = func.m_szGetName = func.m_szSetName = "obj_equal";
         func.m_bAttrib = false;
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = "FCLibHelper.fc_register_class_equal(nClassName,obj_equal);";
+        func.m_szRegister = "FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);";
         m_CurClassFunc.Insert(0, func);
     }
     void MakeInitFunc(string szClassName)
     {
         m_szTempBuilder.Length = 0;
         StringBuilder fileData = m_szTempBuilder;
-        fileData.AppendLine("    public static void Register()");
+        fileData.AppendLine("    public static void Register(long VM)");
         fileData.AppendLine("    {");
-        fileData.AppendFormat("        int nClassName = FCLibHelper.fc_get_inport_class_id(\"{0}\");\r\n", szClassName);
+        fileData.AppendFormat("        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, \"{0}\");\r\n", szClassName);
         foreach (WrapFuncDesc func in m_CurClassFunc)
         {
             if (string.IsNullOrEmpty(func.m_szRegister))
@@ -786,7 +788,7 @@ public class FCClassWrap
             fileData.AppendLine("    }");
         }
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_attrib(nClassName,\"{0}\",{1},{2});", func.m_szName, func.m_szGetName, func.m_szSetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_attrib(VM, nClassName,\"{0}\",{1},{2});", func.m_szName, func.m_szGetName, func.m_szSetName);
         m_CurClassFunc.Add(func);
     }
 
@@ -894,6 +896,7 @@ public class FCClassWrap
                 fileData.AppendFormat("            {0} ret = get_obj(nThisPtr);\r\n", m_szCurClassName);
             }
             fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
+            fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
             FCValueType.PushReturnValue(fileData, "            ", ret_value, "ret_ptr", szLeftName, true);
             fileData.AppendLine("        }");
             fileData.AppendLine("        catch(Exception e)");
@@ -927,7 +930,7 @@ public class FCClassWrap
             fileData.AppendLine("    }");
         }
         func.m_szContent = fileData.ToString();
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_attrib(nClassName,\"{0}\",{1},{2});", func.m_szName, func.m_szGetName, func.m_szSetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_attrib(VM, nClassName,\"{0}\",{1},{2});", func.m_szName, func.m_szGetName, func.m_szSetName);
         m_CurClassFunc.Add(func);
     }
 
@@ -1032,8 +1035,9 @@ public class FCClassWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
 
-        if(!bStatic)
+        if (!bStatic)
         {
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
@@ -1160,9 +1164,9 @@ public class FCClassWrap
 
         func.m_szContent = fileData.ToString();
         if(nFuncCount > 1)
-            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
         else
-            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         m_CurClassFunc.Add(func);        
     }
     // 添加模板函数的导出
@@ -1194,7 +1198,7 @@ public class FCClassWrap
         fileData.AppendLine("                break;");
         fileData.AppendLine("            }");
         fileData.AppendLine("            long ret_ptr = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, nRetPtr);");
+        fileData.AppendLine("            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, nRetPtr);");
     }
 
     // 添加回传的参数的wrap
@@ -1241,7 +1245,7 @@ public class FCClassWrap
             }
             if (value.m_nValueType == fc_value_type.fc_value_system_object)
             {
-                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
+                fileData.AppendFormat("{0}{1}{2} = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr({3},{4}));\r\n", szLeftEmpty, szDefine, szLeftName, Ptr, szIndex);
                 return;
             }
             if(value.m_nValueType == fc_value_type.fc_value_unity_object)
@@ -1322,6 +1326,7 @@ public class FCClassWrap
             fileData.AppendLine("            long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);");
             fileData.AppendFormat("            {0} obj = get_obj(nThisPtr);\r\n", m_szCurClassName);
         }
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            long nPtr = FCLibHelper.fc_await(L);");
         fileData.AppendLine("            long nRetPtr = FCLibHelper.fc_get_return_ptr(L);");
         // 处理函数参数
@@ -1363,16 +1368,16 @@ public class FCClassWrap
         if(nParamCount> 0)
         {
             if(bStatic)
-                fileData.AppendFormat("            {0}_bridge(nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
+                fileData.AppendFormat("            {0}_bridge(VM, nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
             else
-                fileData.AppendFormat("            {0}_bridge(obj, nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
+                fileData.AppendFormat("            {0}_bridge(VM, obj, nPtr, nRetPtr, {1});\r\n", func.m_szName, szCallParam);
         }
         else
         {
             if (bStatic)
-                fileData.AppendFormat("            {0}_bridge(nPtr, nRetPtr);\r\n", func.m_szName);
+                fileData.AppendFormat("            {0}_bridge(VM, nPtr, nRetPtr);\r\n", func.m_szName);
             else
-                fileData.AppendFormat("            {0}_bridge(obj, nPtr, nRetPtr);\r\n", func.m_szName);
+                fileData.AppendFormat("            {0}_bridge(VM, obj, nPtr, nRetPtr);\r\n", func.m_szName);
         }
         fileData.AppendLine("        }");
         fileData.AppendLine("        catch(Exception e)");
@@ -1386,9 +1391,9 @@ public class FCClassWrap
 
         PushWrapName(szFullFuncName);
         if (nFuncCount > 1)
-            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", szFullFuncName, func.m_szGetName);
         else
-            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+            func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         m_CurClassFunc.Add(func);
 
         PushBridgeMethod(method, szCallParam); // 创建桥接函数
@@ -1432,39 +1437,39 @@ public class FCClassWrap
         string szCallName = string.Empty;
         if(bStatic)
         {
-            fileData.AppendFormat("    static async void {0}_bridge(long nPtr, long nRetPtr{1})\r\n", method.Name, szDeclare);
+            fileData.AppendFormat("    static async void {0}_bridge(long VM, long nPtr, long nRetPtr{1})\r\n", method.Name, szDeclare);
             szCallName = m_szCurClassName + "." + method.Name;
         }
         else
         {
-            fileData.AppendFormat("    static async void {0}_bridge({1} obj, long nPtr, long nRetPtr{2})\r\n", method.Name, m_szCurClassName, szDeclare);
+            fileData.AppendFormat("    static async void {0}_bridge(long VM, {1} obj, long nPtr, long nRetPtr{2})\r\n", method.Name, m_szCurClassName, szDeclare);
             szCallName = "obj." + method.Name;
         }
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
-        if(ret_value.m_nTemplateType == fc_value_tempalte_type.template_task)
+        if (ret_value.m_nTemplateType == fc_value_tempalte_type.template_task)
         {
             if(ret_value.m_nValueType != fc_value_type.fc_value_void)
             {
                 fileData.AppendFormat("            {0} nRes = await {1}({2});\r\n", ret_value.GetValueName(true), szCallName, szCallParam);
-                fileData.AppendLine("            if(FCLibHelper.fc_is_valid_await(nPtr))");
+                fileData.AppendLine("            if(FCLibHelper.fc_is_valid_await(VM, nPtr))");
                 fileData.AppendLine("            {");
                 fileData.AppendLine("                // 设置返回值");
                 FCValueType.PushReturnValue(fileData, "                ", ret_value, "nRetPtr", "nRes", false); // 设置返回值
-                fileData.AppendLine("                FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+                fileData.AppendLine("                FCLibHelper.fc_continue(VM, nPtr); // 唤醒脚本");
                 fileData.AppendLine("            }");
             }
             else
             {
                 fileData.AppendFormat("            await {0}({1});\r\n", szCallName, szCallParam);
-                fileData.AppendLine("            FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+                fileData.AppendLine("            FCLibHelper.fc_continue(VM, nPtr); // 唤醒脚本");
             }
         }
         else
         {
             fileData.AppendFormat("            await {0}({1});\r\n", szCallName, szCallParam);
-            fileData.AppendLine("            FCLibHelper.fc_continue(nPtr); // 唤醒脚本");
+            fileData.AppendLine("            FCLibHelper.fc_continue(VM, nPtr); // 唤醒脚本");
         }
 
         fileData.AppendLine("        }");
@@ -1533,7 +1538,7 @@ public class FCClassWrap
         func.m_bAttrib = false;
 
         PushWrapName(func.m_szName);
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         m_CurClassFunc.Add(func);
     }
     void OnInvoke(Type nClassType, Type nParamType)
@@ -1568,7 +1573,7 @@ public class FCClassWrap
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = "Invoke_wrap";
         PushWrapName(func.m_szName);
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         func.m_bAttrib = false;
         m_CurClassFunc.Add(func);
     }
@@ -1608,7 +1613,7 @@ public class FCClassWrap
         func.m_szContent = fileData.ToString();
         func.m_szName = func.m_szGetName = func.m_szSetName = "RemoveListener_wrap";
         PushWrapName(func.m_szName);
-        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
+        func.m_szRegister = string.Format("FCLibHelper.fc_register_class_func(VM, nClassName,\"{0}\",{1});", func.m_szName, func.m_szGetName);
         func.m_bAttrib = false;
         m_CurClassFunc.Add(func);
     }

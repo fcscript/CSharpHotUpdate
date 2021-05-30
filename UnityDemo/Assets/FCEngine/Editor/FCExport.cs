@@ -83,7 +83,7 @@ public static class FCExport
         fileData.AppendLine("");
         fileData.AppendLine("public class all_class_wrap");
         fileData.AppendLine("{");
-        fileData.AppendLine("    public static void Register()");
+        fileData.AppendLine("    public static void Register(long VM)");
         fileData.AppendLine("    {");
         fileData.AppendLine("    }");
         fileData.AppendLine("}");
@@ -318,6 +318,8 @@ public static class FCExport
     //[MenuItem("FCScript/测试", false, 5)]
     //static void TestExport()
     //{
+    //    TestUnsafeStruct();
+
     //    FCClassWrap pWrap = new FCClassWrap();
     //    pWrap.BeginExport("", false);
 
@@ -328,4 +330,27 @@ public static class FCExport
     //    pWrap.EndExport();
     //    MakeFCProj();
     //}
+    static void TestUnsafeStruct()
+    {
+        int nSize = FCValueType.GetStructMemSize(typeof(Vector3));
+        Debug.Log(string.Format("Vector3 mem size = {0}", nSize));
+        nSize = FCValueType.GetStructMemSize(typeof(Vector4));
+        Debug.Log(string.Format("Vector4 mem size = {0}", nSize));
+        nSize = FCValueType.GetStructMemSize(typeof(Matrix4x4));
+        Debug.Log(string.Format("Matrix4x4 mem size = {0}", nSize));
+        Quaternion q1 = new Quaternion();
+        Vector4 v4 = new Vector4();
+        v4.x = 1.1f;
+        v4.y = 2.2f;
+        v4.z = 3.3f;
+        v4.w = 4.4f;
+        //IntPtr ptr1 = System.Runtime.InteropServices.Marshal.GetIUnknownForObject(v4);
+        // 在这里可以将C#的结构体，传给C++        
+        unsafe
+        {
+            FCLibHelper.fc_test_struct(&v4, FCValueType.GetStructMemSize(typeof(Vector4)));
+        }
+        Debug.Log(string.Format("v4: x = {0}, y = {1}, z = {2}, w = {3}", v4.x, v4.y, v4.z, v4.w));
+        //System.Runtime.InteropServices.Marshal.Release(ptr1);
+    }
 }

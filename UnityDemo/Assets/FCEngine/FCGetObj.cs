@@ -95,7 +95,7 @@ public class FCGetObj
         }
         return default(_Ty);
     }
-    public static System.Object  GetSystemObj(long nIntPtr)
+    public static System.Object  GetSystemObj(long VM, long nIntPtr)
     {
         // 先检测这个对象是不是
         FC_TEMPLATE_TYPE nTemplateType = (FC_TEMPLATE_TYPE)FCLibHelper.fc_get_value_template_type(nIntPtr);
@@ -136,9 +136,9 @@ public class FCGetObj
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_UINT64:
                     return FCLibHelper.fc_get_value_uint64(nIntPtr);
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_STRING_A:
-                    return FCLibHelper.fc_get_value_string_a(nIntPtr);  // wrap接口中，其实只用到了这个
+                    return FCLibHelper.fc_get_value_string_a(VM, nIntPtr);  // wrap接口中，其实只用到了这个
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_STRING_W:
-                    return FCLibHelper.fc_get_value_string_a(nIntPtr);
+                    return FCLibHelper.fc_get_value_string_a(VM, nIntPtr);
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_VOID:
                 case FC_VALUE_TYPE.FC_VALUE_TYPE_INT_PTR:
                     return new IntPtr(nIntPtr);

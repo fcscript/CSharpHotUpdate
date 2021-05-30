@@ -12,29 +12,29 @@ public class MonoBehaviour_wrap
         return FCGetObj.GetObj<UnityEngine.MonoBehaviour>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("MonoBehaviour");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"useGUILayout",get_useGUILayout_wrap,set_useGUILayout_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Invoke",Invoke_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"InvokeRepeating",InvokeRepeating_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"CancelInvoke",CancelInvoke_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"CancelInvoke_StringA",CancelInvoke1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"IsInvoking_StringA",IsInvoking_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"IsInvoking",IsInvoking1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StartCoroutine_IEnumerator",StartCoroutine_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StartCoroutine_StringA_Object",StartCoroutine1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StartCoroutine_StringA",StartCoroutine2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StopCoroutine_StringA",StopCoroutine_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StopCoroutine_IEnumerator",StopCoroutine1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StopCoroutine_Coroutine",StopCoroutine2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"StopAllCoroutines",StopAllCoroutines_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"print",print_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "MonoBehaviour");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"useGUILayout",get_useGUILayout_wrap,set_useGUILayout_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Invoke",Invoke_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"InvokeRepeating",InvokeRepeating_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CancelInvoke",CancelInvoke_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CancelInvoke_StringA",CancelInvoke1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"IsInvoking_StringA",IsInvoking_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"IsInvoking",IsInvoking1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StartCoroutine_IEnumerator",StartCoroutine_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StartCoroutine_StringA_Object",StartCoroutine1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StartCoroutine_StringA",StartCoroutine2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StopCoroutine_StringA",StopCoroutine_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StopCoroutine_IEnumerator",StopCoroutine1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StopCoroutine_Coroutine",StopCoroutine2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"StopAllCoroutines",StopAllCoroutines_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"print",print_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -42,7 +42,8 @@ public class MonoBehaviour_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.MonoBehaviour>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -61,9 +62,9 @@ public class MonoBehaviour_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.MonoBehaviour obj = FCGetObj.GetObj<UnityEngine.MonoBehaviour>(L);
+        UnityEngine.MonoBehaviour obj = FCGetObj.GetObj<UnityEngine.MonoBehaviour>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -95,6 +96,7 @@ public class MonoBehaviour_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.useGUILayout);
         }
         catch(Exception e)
@@ -125,6 +127,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -143,6 +146,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -162,6 +166,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             obj.CancelInvoke();
@@ -178,6 +183,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -195,6 +201,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -214,6 +221,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             bool ret = obj.IsInvoking();
@@ -232,13 +240,14 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_wrap_objptr(L,0));
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -252,14 +261,15 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
-            System.Object arg1 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,1));
+            System.Object arg1 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,1));
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0,arg1);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -273,13 +283,14 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.Coroutine ret = obj.StartCoroutine(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -293,6 +304,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -310,6 +322,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             System.Collections.IEnumerator arg0 = FCGetObj.GetObj<System.Collections.IEnumerator>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -327,6 +340,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             UnityEngine.Coroutine arg0 = FCGetObj.GetObj<UnityEngine.Coroutine>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -344,6 +358,7 @@ public class MonoBehaviour_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.MonoBehaviour obj = get_obj(nThisPtr);
             obj.StopAllCoroutines();
@@ -360,7 +375,8 @@ public class MonoBehaviour_wrap
     {
         try
         {
-            System.Object arg0 = FCGetObj.GetSystemObj(FCLibHelper.fc_get_param_ptr(L,0));
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            System.Object arg0 = FCGetObj.GetSystemObj(VM, FCLibHelper.fc_get_param_ptr(L,0));
             UnityEngine.MonoBehaviour.print(arg0);
         }
         catch(Exception e)

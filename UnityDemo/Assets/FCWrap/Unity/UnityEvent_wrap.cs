@@ -12,17 +12,17 @@ public class UnityEvent_wrap
         return FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("UnityEvent");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_func(nClassName,"AddListener",AddListener_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"RemoveListener",RemoveListener_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Invoke",Invoke_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "UnityEvent");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"AddListener",AddListener_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"RemoveListener",RemoveListener_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Invoke",Invoke_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -30,7 +30,8 @@ public class UnityEvent_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Events.UnityEvent>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -49,9 +50,9 @@ public class UnityEvent_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Events.UnityEvent obj = FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(L);
+        UnityEngine.Events.UnityEvent obj = FCGetObj.GetObj<UnityEngine.Events.UnityEvent>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -80,6 +81,7 @@ public class UnityEvent_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
             UnityAction_delegate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_delegate>(L,0);
@@ -102,6 +104,7 @@ public class UnityEvent_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
             UnityAction_delegate func0 = FCDelegateMng.Instance.GetDelegate<UnityAction_delegate>(L,0);
@@ -124,6 +127,7 @@ public class UnityEvent_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Events.UnityEvent obj = get_obj(nThisPtr);
             obj.Invoke();

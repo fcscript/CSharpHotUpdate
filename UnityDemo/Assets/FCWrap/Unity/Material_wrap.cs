@@ -11,99 +11,99 @@ public class Material_wrap
         return FCGetObj.GetObj<UnityEngine.Material>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Material");
-        FCLibHelper.fc_register_class_func(nClassName, "Material_Material", obj_new3);
-        FCLibHelper.fc_register_class_func(nClassName, "Material_Shader", obj_new2);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shader",get_shader_wrap,set_shader_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"color",get_color_wrap,set_color_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mainTexture",get_mainTexture_wrap,set_mainTexture_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mainTextureOffset",get_mainTextureOffset_wrap,set_mainTextureOffset_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"mainTextureScale",get_mainTextureScale_wrap,set_mainTextureScale_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"passCount",get_passCount_wrap,null);
-        FCLibHelper.fc_register_class_attrib(nClassName,"renderQueue",get_renderQueue_wrap,set_renderQueue_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"shaderKeywords",get_shaderKeywords_wrap,set_shaderKeywords_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"globalIlluminationFlags",get_globalIlluminationFlags_wrap,set_globalIlluminationFlags_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"enableInstancing",get_enableInstancing_wrap,set_enableInstancing_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"doubleSidedGI",get_doubleSidedGI_wrap,set_doubleSidedGI_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"HasProperty_StringA",HasProperty_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"HasProperty_int",HasProperty1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTag_StringA_bool_StringA",GetTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTag_StringA_bool",GetTag1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetOverrideTag",SetOverrideTag_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetShaderPassEnabled",SetShaderPassEnabled_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetShaderPassEnabled",GetShaderPassEnabled_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"Lerp",Lerp_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetPass",SetPass_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetPassName",GetPassName_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"FindPass",FindPass_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"CopyPropertiesFromMaterial",CopyPropertiesFromMaterial_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"EnableKeyword",EnableKeyword_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"DisableKeyword",DisableKeyword_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"IsKeywordEnabled",IsKeywordEnabled_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloat_StringA_float",SetFloat_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloat_int_float",SetFloat1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetInt_StringA_int",SetInt_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetInt_int_int",SetInt1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColor_StringA_Color",SetColor_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColor_int_Color",SetColor1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVector_StringA_Vector4",SetVector_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVector_int_Vector4",SetVector1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrix_StringA_Matrix",SetMatrix_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrix_int_Matrix",SetMatrix1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTexture_StringA_Texture",SetTexture_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTexture_int_Texture",SetTexture1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetBuffer_StringA_ComputeBuffer",SetBuffer_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetBuffer_int_ComputeBuffer",SetBuffer1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTextureOffset_StringA_Vector2",SetTextureOffset_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTextureOffset_int_Vector2",SetTextureOffset1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTextureScale_StringA_Vector2",SetTextureScale_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetTextureScale_int_Vector2",SetTextureScale1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_StringA_List<float>",SetFloatArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetFloatArray_int_List<float>",SetFloatArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_StringA_List<Color>",SetColorArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetColorArray_int_List<Color>",SetColorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_StringA_List<Vector4>",SetVectorArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetVectorArray_int_List<Vector4>",SetVectorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_StringA_List<Matrix>",SetMatrixArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetMatrixArray_int_List<Matrix>",SetMatrixArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloat_StringA",GetFloat_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloat_int",GetFloat1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetInt_StringA",GetInt_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetInt_int",GetInt1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColor_StringA",GetColor_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColor_int",GetColor1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVector_StringA",GetVector_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVector_int",GetVector1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrix_StringA",GetMatrix_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrix_int",GetMatrix1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloatArray_StringA_List<float>",GetFloatArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloatArray_int_List<float>",GetFloatArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloatArray_StringA",GetFloatArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetFloatArray_int",GetFloatArray3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVectorArray_StringA_List<Vector4>",GetVectorArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVectorArray_int_List<Vector4>",GetVectorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColorArray_StringA",GetColorArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColorArray_int",GetColorArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColorArray_StringA_List<Color>",GetColorArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetColorArray_int_List<Color>",GetColorArray3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVectorArray_StringA",GetVectorArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetVectorArray_int",GetVectorArray3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrixArray_StringA_List<Matrix>",GetMatrixArray_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrixArray_int_List<Matrix>",GetMatrixArray1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrixArray_StringA",GetMatrixArray2_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetMatrixArray_int",GetMatrixArray3_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTexture_StringA",GetTexture_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTexture_int",GetTexture1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTextureOffset_StringA",GetTextureOffset_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTextureOffset_int",GetTextureOffset1_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTextureScale_StringA",GetTextureScale_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetTextureScale_int",GetTextureScale1_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Material");
+        FCLibHelper.fc_register_class_func(VM, nClassName, "Material_Material", obj_new3);
+        FCLibHelper.fc_register_class_func(VM, nClassName, "Material_Shader", obj_new2);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shader",get_shader_wrap,set_shader_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"color",get_color_wrap,set_color_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mainTexture",get_mainTexture_wrap,set_mainTexture_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mainTextureOffset",get_mainTextureOffset_wrap,set_mainTextureOffset_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"mainTextureScale",get_mainTextureScale_wrap,set_mainTextureScale_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"passCount",get_passCount_wrap,null);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"renderQueue",get_renderQueue_wrap,set_renderQueue_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"shaderKeywords",get_shaderKeywords_wrap,set_shaderKeywords_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"globalIlluminationFlags",get_globalIlluminationFlags_wrap,set_globalIlluminationFlags_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"enableInstancing",get_enableInstancing_wrap,set_enableInstancing_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"doubleSidedGI",get_doubleSidedGI_wrap,set_doubleSidedGI_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"HasProperty_StringA",HasProperty_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"HasProperty_int",HasProperty1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTag_StringA_bool_StringA",GetTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTag_StringA_bool",GetTag1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetOverrideTag",SetOverrideTag_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetShaderPassEnabled",SetShaderPassEnabled_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetShaderPassEnabled",GetShaderPassEnabled_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"Lerp",Lerp_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetPass",SetPass_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetPassName",GetPassName_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"FindPass",FindPass_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"CopyPropertiesFromMaterial",CopyPropertiesFromMaterial_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"EnableKeyword",EnableKeyword_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"DisableKeyword",DisableKeyword_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"IsKeywordEnabled",IsKeywordEnabled_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetFloat_StringA_float",SetFloat_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetFloat_int_float",SetFloat1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetInt_StringA_int",SetInt_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetInt_int_int",SetInt1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetColor_StringA_Color",SetColor_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetColor_int_Color",SetColor1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetVector_StringA_Vector4",SetVector_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetVector_int_Vector4",SetVector1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetMatrix_StringA_Matrix",SetMatrix_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetMatrix_int_Matrix",SetMatrix1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTexture_StringA_Texture",SetTexture_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTexture_int_Texture",SetTexture1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetBuffer_StringA_ComputeBuffer",SetBuffer_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetBuffer_int_ComputeBuffer",SetBuffer1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTextureOffset_StringA_Vector2",SetTextureOffset_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTextureOffset_int_Vector2",SetTextureOffset1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTextureScale_StringA_Vector2",SetTextureScale_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetTextureScale_int_Vector2",SetTextureScale1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetFloatArray_StringA_List<float>",SetFloatArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetFloatArray_int_List<float>",SetFloatArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetColorArray_StringA_List<Color>",SetColorArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetColorArray_int_List<Color>",SetColorArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetVectorArray_StringA_List<Vector4>",SetVectorArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetVectorArray_int_List<Vector4>",SetVectorArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetMatrixArray_StringA_List<Matrix>",SetMatrixArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetMatrixArray_int_List<Matrix>",SetMatrixArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloat_StringA",GetFloat_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloat_int",GetFloat1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetInt_StringA",GetInt_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetInt_int",GetInt1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColor_StringA",GetColor_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColor_int",GetColor1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVector_StringA",GetVector_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVector_int",GetVector1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrix_StringA",GetMatrix_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrix_int",GetMatrix1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloatArray_StringA_List<float>",GetFloatArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloatArray_int_List<float>",GetFloatArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloatArray_StringA",GetFloatArray2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetFloatArray_int",GetFloatArray3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVectorArray_StringA_List<Vector4>",GetVectorArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVectorArray_int_List<Vector4>",GetVectorArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColorArray_StringA",GetColorArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColorArray_int",GetColorArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColorArray_StringA_List<Color>",GetColorArray2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetColorArray_int_List<Color>",GetColorArray3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVectorArray_StringA",GetVectorArray2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetVectorArray_int",GetVectorArray3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrixArray_StringA_List<Matrix>",GetMatrixArray_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrixArray_int_List<Matrix>",GetMatrixArray1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrixArray_StringA",GetMatrixArray2_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetMatrixArray_int",GetMatrixArray3_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTexture_StringA",GetTexture_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTexture_int",GetTexture1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTextureOffset_StringA",GetTextureOffset_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTextureOffset_int",GetTextureOffset1_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTextureScale_StringA",GetTextureScale_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetTextureScale_int",GetTextureScale1_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -115,7 +115,8 @@ public class Material_wrap
             UnityEngine.Material obj = new UnityEngine.Material(arg0);
             long nPtr = FCGetObj.PushNewObj<UnityEngine.Material>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         }
         catch(Exception e)
         {
@@ -133,7 +134,8 @@ public class Material_wrap
             UnityEngine.Material obj = new UnityEngine.Material(arg0);
             long nPtr = FCGetObj.PushNewObj<UnityEngine.Material>(obj);
             long ret = FCLibHelper.fc_get_return_ptr(L);
-            FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         }
         catch(Exception e)
         {
@@ -157,9 +159,9 @@ public class Material_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Material obj = FCGetObj.GetObj<UnityEngine.Material>(L);
+        UnityEngine.Material obj = FCGetObj.GetObj<UnityEngine.Material>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -191,8 +193,9 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.shader);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -225,6 +228,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Color temp_ret = ret.color;
             FCLibHelper.fc_set_value_color(ret_ptr, ref temp_ret);
         }
@@ -260,8 +264,9 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.mainTexture);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -294,6 +299,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector2 temp_ret = ret.mainTextureOffset;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
         }
@@ -329,6 +335,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Vector2 temp_ret = ret.mainTextureScale;
             FCLibHelper.fc_set_value_vector2(ret_ptr, ref temp_ret);
         }
@@ -364,6 +371,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.passCount);
         }
         catch(Exception e)
@@ -381,6 +389,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, ret.renderQueue);
         }
         catch(Exception e)
@@ -414,7 +423,8 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret.shaderKeywords,ret_ptr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCCustomParam.ReturnArray(VM, ret.shaderKeywords,ret_ptr);
         }
         catch(Exception e)
         {
@@ -448,6 +458,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.globalIlluminationFlags);
         }
         catch(Exception e)
@@ -481,6 +492,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.enableInstancing);
         }
         catch(Exception e)
@@ -514,6 +526,7 @@ public class Material_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.doubleSidedGI);
         }
         catch(Exception e)
@@ -544,6 +557,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -563,6 +577,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -582,6 +597,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -603,6 +619,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -623,6 +640,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -641,6 +659,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -659,6 +678,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -678,6 +698,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -697,6 +718,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -716,6 +738,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -735,6 +758,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -754,6 +778,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             UnityEngine.Material arg0 = FCGetObj.GetObj<UnityEngine.Material>(FCLibHelper.fc_get_wrap_objptr(L,0));
@@ -771,6 +796,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -788,6 +814,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -805,6 +832,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -824,6 +852,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -842,6 +871,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -860,6 +890,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -878,6 +909,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -896,6 +928,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -915,6 +948,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -934,6 +968,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -953,6 +988,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -972,6 +1008,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -991,6 +1028,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1010,6 +1048,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1028,6 +1067,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1046,6 +1086,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1064,6 +1105,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1082,6 +1124,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1101,6 +1144,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1120,6 +1164,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1139,6 +1184,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1158,6 +1204,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1177,6 +1224,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1196,6 +1244,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1215,6 +1264,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1234,6 +1284,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1253,6 +1304,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1272,6 +1324,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1291,6 +1344,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1310,6 +1364,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1329,6 +1384,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1348,6 +1404,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1367,6 +1424,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1386,6 +1444,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1406,6 +1465,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1426,6 +1486,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1446,6 +1507,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1466,6 +1528,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1486,6 +1549,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1506,6 +1570,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1525,6 +1590,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1544,12 +1610,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             float[] ret = obj.GetFloatArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1563,12 +1630,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             float[] ret = obj.GetFloatArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1582,6 +1650,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1601,6 +1670,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1620,12 +1690,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Color[] ret = obj.GetColorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1639,12 +1710,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Color[] ret = obj.GetColorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1658,6 +1730,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1677,6 +1750,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1696,12 +1770,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Vector4[] ret = obj.GetVectorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1715,12 +1790,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Vector4[] ret = obj.GetVectorArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1734,6 +1810,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1753,6 +1830,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1772,12 +1850,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             Matrix4x4[] ret = obj.GetMatrixArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1791,12 +1870,13 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             Matrix4x4[] ret = obj.GetMatrixArray(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret,ret_ptr);
+            FCCustomParam.ReturnArray(VM, ret,ret_ptr);
         }
         catch(Exception e)
         {
@@ -1810,13 +1890,14 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
             UnityEngine.Texture ret = obj.GetTexture(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -1830,13 +1911,14 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
             UnityEngine.Texture ret = obj.GetTexture(arg0);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
             long v = FCGetObj.PushObj(ret);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -1850,6 +1932,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1870,6 +1953,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -1890,6 +1974,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             string arg0 = FCLibHelper.fc_get_string_a(L,0);
@@ -1910,6 +1995,7 @@ public class Material_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Material obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);

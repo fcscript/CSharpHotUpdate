@@ -21,8 +21,8 @@ public class TestXml : FCScriptLoader
         long nBeginTime = DateTime.Now.Ticks / 10000;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            FCLibHelper.fc_push_string_a(szFileData);
-            FCLibHelper.fc_call(0, "XmlLoader.TestLoad");
+            FCLibHelper.fc_push_string_a(m_VMPtr, szFileData);
+            FCLibHelper.fc_call(m_VMPtr, 0, "XmlLoader.TestLoad");
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;
@@ -37,8 +37,8 @@ public class TestXml : FCScriptLoader
         long nBeginTime = DateTime.Now.Ticks / 10000;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            FCLibHelper.fc_push_string_a(szFileData);
-            FCLibHelper.fc_call(0, "XmlLoader.TestWrite");
+            FCLibHelper.fc_push_string_a(m_VMPtr, szFileData);
+            FCLibHelper.fc_call(m_VMPtr, 0, "XmlLoader.TestWrite");
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;

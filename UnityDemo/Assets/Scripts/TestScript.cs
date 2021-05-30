@@ -13,9 +13,9 @@ class TestScript : FCScriptLoader
 {
     protected override void OnAfterLoadScriptData()
     {
-        FCLibHelper.fc_register_func("fc2csharp_set_vector3", fc2csharp_set_vector3);
-        FCLibHelper.fc_register_func("fc2csharp_set_vector4", fc2csharp_set_vector4);
-        FCLibHelper.fc_register_func("fc2csharp_set_string", fc2csharp_set_string);
+        FCLibHelper.fc_register_func(m_VMPtr, "fc2csharp_set_vector3", fc2csharp_set_vector3);
+        FCLibHelper.fc_register_func(m_VMPtr, "fc2csharp_set_vector4", fc2csharp_set_vector4);
+        FCLibHelper.fc_register_func(m_VMPtr, "fc2csharp_set_string", fc2csharp_set_string);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back))]
@@ -69,16 +69,16 @@ class TestScript : FCScriptLoader
         try
         {
             Vector3 v = new Vector3(1, 2, 3);
-            FCDll.PushCallParam(ref v);
-            FCLibHelper.fc_call(0, "csharp2fc_set_vector3");
+            FCDll.PushCallParam(m_VMPtr, ref v);
+            FCLibHelper.fc_call(m_VMPtr, 0, "csharp2fc_set_vector3");
 
             Vector4 v2 = new Vector4(22, 33, 44, 55);
-            FCDll.PushCallParam(ref v2);
-            FCLibHelper.fc_call(0, "csharp2fc_set_vector4");
+            FCDll.PushCallParam(m_VMPtr, ref v2);
+            FCLibHelper.fc_call(m_VMPtr, 0, "csharp2fc_set_vector4");
 
             string szTest = "测试字符串传参";
-            FCDll.PushCallParam(szTest);
-            FCLibHelper.fc_call(0, "csharp2fc_set_string");
+            FCDll.PushCallParam(m_VMPtr, szTest);
+            FCLibHelper.fc_call(m_VMPtr, 0, "csharp2fc_set_string");
         }
         catch (Exception e)
         {
@@ -88,17 +88,17 @@ class TestScript : FCScriptLoader
     void LoadScript()
     {
         InitDll();
-        FCLibHelper.fc_call(0, "main");
+        FCLibHelper.fc_call(m_VMPtr, 0, "main");
     }
     long m_nTestPtr;
     void TestObjectScript()
     {
         InitDll();
         if(m_nTestPtr == 0)
-            m_nTestPtr = FCLibHelper.fc_instance("CTestD");
+            m_nTestPtr = FCLibHelper.fc_instance(m_VMPtr, "CTestD");
         string szLog = string.Format("脚本实例IntPtr = {0}", m_nTestPtr);
         print_error(szLog);
-        FCLibHelper.fc_call(m_nTestPtr, "Start");
+        FCLibHelper.fc_call(m_VMPtr, m_nTestPtr, "Start");
     }
     void TestFunc0()
     {
@@ -107,8 +107,8 @@ class TestScript : FCScriptLoader
             obj = new GameObject("Empty");
         //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
         long nPtr = FCGetObj.PushObj(obj.transform);
-        FCLibHelper.fc_push_intptr(nPtr);
-        FCLibHelper.fc_call(0, "Test0");
+        FCLibHelper.fc_push_intptr(m_VMPtr, nPtr);
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test0");
     }
     void TestFunc1()
     {
@@ -117,16 +117,16 @@ class TestScript : FCScriptLoader
             obj = new GameObject("Empty");
         //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
         long nPtr = FCGetObj.PushObj(obj.transform);
-        FCLibHelper.fc_push_intptr(nPtr);
-        FCLibHelper.fc_call(0, "Test1");
+        FCLibHelper.fc_push_intptr(m_VMPtr, nPtr);
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test1");
     }
     void TestFunc2()
     {
-        FCLibHelper.fc_call(0, "Test2");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test2");
     }
     void TestFunc3()
     {
-        FCLibHelper.fc_call(0, "Test3");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test3");
     }
     void TestFunc4()
     {
@@ -135,28 +135,28 @@ class TestScript : FCScriptLoader
             obj = new GameObject("Empty");
         //FCLibHelper.fc_prepare_call(0, "Test0"); // 要传Object参数，需要初始化参数列表
         long nPtr = FCGetObj.PushObj(obj.transform);
-        FCLibHelper.fc_push_intptr(nPtr);
-        FCLibHelper.fc_call(0, "Test4");
+        FCLibHelper.fc_push_intptr(m_VMPtr, nPtr);
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test4");
     }
     void TestFunc5()
     {
-        FCLibHelper.fc_call(0, "Test5");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test5");
     }
     void TestFunc6()
     {
-        FCLibHelper.fc_call(0, "Test6");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test6");
     }
     void TestFunc7()
     {
-        FCLibHelper.fc_call(0, "Test7");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test7");
     }
     void TestFunc8()
     {
-        FCLibHelper.fc_call(0, "Test8");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test8");
     }
     void TestFunc9()
     {
-        FCLibHelper.fc_call(0, "Test9");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test9");
     }
     void TestFunc10()
     {
@@ -164,8 +164,8 @@ class TestScript : FCScriptLoader
         if (obj == null)
             obj = new GameObject("Empty");
         long nPtr = FCGetObj.PushObj(obj.transform);
-        FCLibHelper.fc_push_intptr(nPtr);
-        FCLibHelper.fc_call(0, "Test10");
+        FCLibHelper.fc_push_intptr(m_VMPtr, nPtr);
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test10");
     }
     void TestFunc11()
     {
@@ -173,29 +173,29 @@ class TestScript : FCScriptLoader
         long  nBeginTime = DateTime.Now.Ticks / 10000;
         for (int i = 0; i< 200000; ++i)
         {
-            FCLibHelper.fc_call(0, "EmptyFunc");
+            FCLibHelper.fc_call(m_VMPtr, 0, "EmptyFunc");
         }
         long  nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;
         int nTotalCount = 200000;
         string szTips = string.Format("Test11 花费总时间={0}秒,平均时间={1}毫秒,总调用次数={2}", nCostTime / 1000, nCostTime / nTotalCount, nTotalCount);        
         print_error(szTips);
-        FCLibHelper.fc_call(0, "PrintV0");
+        FCLibHelper.fc_call(m_VMPtr, 0, "PrintV0");
     }
     void TestFunc12()
     {
-        FCLibHelper.fc_call(0, "Test12");
+        FCLibHelper.fc_call(m_VMPtr, 0, "Test12");
     }
     // 功能：测试C#await功能
     void TestAwait()
     {
-        FCLibHelper.fc_call(0, "TestAwait");
+        FCLibHelper.fc_call(m_VMPtr, 0, "TestAwait");
     }
     
     void InvalidObjectScriptCall()
     {
         InitDll();
-        FCLibHelper.fc_call(m_nTestPtr, "Start");
+        FCLibHelper.fc_call(m_VMPtr, m_nTestPtr, "Start");
     }
     void TestGraphicCall()
     {
@@ -244,7 +244,7 @@ class TestScript : FCScriptLoader
     {
         if(m_nTestPtr != 0)
         {
-            FCLibHelper.fc_relese_ins(m_nTestPtr);
+            FCLibHelper.fc_relese_ins(m_VMPtr, m_nTestPtr);
             m_nTestPtr = 0;
         }
     }
@@ -272,12 +272,12 @@ class TestScript : FCScriptLoader
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象不置空"))
         {
-            FCLibHelper.fc_relese_ins(m_nTestPtr);
+            FCLibHelper.fc_relese_ins(m_VMPtr, m_nTestPtr);
         }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "删除对象并置空"))
         {
-            FCLibHelper.fc_relese_ins(m_nTestPtr);
+            FCLibHelper.fc_relese_ins(m_VMPtr, m_nTestPtr);
             m_nTestPtr = 0;
         }
         nLeft += 160;
@@ -300,13 +300,16 @@ class TestScript : FCScriptLoader
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "初始化DLL"))
         {
             if (!FCLibHelper.fc_is_init())
-                FCLibHelper.fc_init();
+                m_VMPtr = FCLibHelper.fc_init(true);
         }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "释放DLL"))
         {
             if (FCLibHelper.fc_is_init())
-                FCLibHelper.fc_release();
+            {
+                FCLibHelper.fc_release(m_VMPtr);
+                m_VMPtr = 0;
+            }
         }
         nLeft += 160;
         if (GUI.Button(new Rect(nLeft, nTop, 120.0f, 30.0f), "测试await"))

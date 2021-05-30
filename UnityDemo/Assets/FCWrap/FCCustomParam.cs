@@ -18,6 +18,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new byte[nArraySize];
@@ -33,6 +34,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new int[nArraySize];
@@ -48,6 +50,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<byte>();
             else
@@ -68,6 +71,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<int>();
             else
@@ -88,6 +92,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Vector2>();
             else
@@ -108,6 +113,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Vector3>();
             else
@@ -128,6 +134,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Vector4>();
             else
@@ -148,6 +155,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<UnityEngine.Component>();
             else
@@ -156,7 +164,7 @@ class FCCustomParam
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Component item = FCGetObj.GetObj<UnityEngine.Component>(item_ptr);
                 rList.Add(item);
             }
@@ -171,6 +179,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new Color[nArraySize];
@@ -186,6 +195,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new Color32[nArraySize];
@@ -201,12 +211,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new UnityEngine.Texture2D[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Texture2D item = FCGetObj.GetObj<UnityEngine.Texture2D>(item_ptr);
                 rList[i] = item;
             }
@@ -221,6 +232,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new Vector2[nArraySize];
@@ -236,6 +248,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Rect>();
             else
@@ -256,12 +269,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new System.Type[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 System.Type item = FCGetObj.GetObj<System.Type>(item_ptr);
                 rList[i] = item;
             }
@@ -276,12 +290,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new UnityEngine.Material[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Material item = FCGetObj.GetObj<UnityEngine.Material>(item_ptr);
                 rList[i] = item;
             }
@@ -296,6 +311,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<UnityEngine.Rendering.ReflectionProbeBlendInfo>();
             else
@@ -304,7 +320,7 @@ class FCCustomParam
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Rendering.ReflectionProbeBlendInfo item = FCGetObj.GetObj<UnityEngine.Rendering.ReflectionProbeBlendInfo>(item_ptr);
                 rList.Add(item);
             }
@@ -319,12 +335,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new UnityEngine.Transform[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Transform item = FCGetObj.GetObj<UnityEngine.Transform>(item_ptr);
                 rList[i] = item;
             }
@@ -339,12 +356,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new UnityEngine.AccelerationEvent[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.AccelerationEvent item = FCGetObj.GetObj<UnityEngine.AccelerationEvent>(item_ptr);
                 rList[i] = item;
             }
@@ -359,12 +377,13 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new UnityEngine.Touch[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.Touch item = FCGetObj.GetObj<UnityEngine.Touch>(item_ptr);
                 rList[i] = item;
             }
@@ -379,13 +398,14 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             rList = new string[nArraySize];
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                string item = FCLibHelper.fc_get_value_string_a(item_ptr);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+                string item = FCLibHelper.fc_get_value_string_a(VM, item_ptr);
                 rList[i] = item;
             }
         }
@@ -399,6 +419,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<float>();
             else
@@ -419,6 +440,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Color>();
             else
@@ -439,6 +461,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<Matrix4x4>();
             else
@@ -447,7 +470,7 @@ class FCCustomParam
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 Matrix4x4 item = new Matrix4x4();
                 FCLibHelper.fc_get_value_matrix(item_ptr, ref item);
                 rList.Add(item);
@@ -463,6 +486,7 @@ class FCCustomParam
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             if (rList == null)
                 rList = new List<UnityEngine.GameObject>();
             else
@@ -471,7 +495,7 @@ class FCCustomParam
             int nArraySize = FCLibHelper.fc_get_array_size(ptr);
             for (int i = 0; i < nArraySize; ++i)
             {
-                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 UnityEngine.GameObject item = FCGetObj.GetObj<UnityEngine.GameObject>(item_ptr);
                 rList.Add(item);
             }
@@ -482,7 +506,7 @@ class FCCustomParam
         }
         return rList;
     }
-    public static void ReturnArray(byte []rList, long ptr)
+    public static void ReturnArray(long VM, byte []rList, long ptr)
     {
         try
         {
@@ -494,15 +518,15 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnList(List<byte> rList, long ptr)
+    public static void ReturnList(long VM, List<byte> rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Count : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 FCLibHelper.fc_set_value_byte(pItem, rList[i]);
             }
         }
@@ -511,16 +535,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityObject []rList, long ptr)
+    public static void ReturnArray(long VM, UnityObject []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -528,16 +553,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Component []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Component []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -545,7 +571,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Color []rList, long ptr)
+    public static void ReturnArray(long VM, Color []rList, long ptr)
     {
         try
         {
@@ -557,7 +583,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Color32 []rList, long ptr)
+    public static void ReturnArray(long VM, Color32 []rList, long ptr)
     {
         try
         {
@@ -569,7 +595,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Rect []rList, long ptr)
+    public static void ReturnArray(long VM, Rect []rList, long ptr)
     {
         try
         {
@@ -581,16 +607,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.GameObject []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.GameObject []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -598,16 +625,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Material []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Material []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -615,16 +643,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Transform []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Transform []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -632,16 +661,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.AccelerationEvent []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.AccelerationEvent []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -649,16 +679,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Touch []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Touch []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -666,15 +697,15 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(string []rList, long ptr)
+    public static void ReturnArray(long VM, string []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 FCLibHelper.fc_set_value_string_a(pItem, rList[i]);
             }
         }
@@ -683,16 +714,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Rendering.CommandBuffer []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Rendering.CommandBuffer []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -700,16 +732,17 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(UnityEngine.Light []rList, long ptr)
+    public static void ReturnArray(long VM, UnityEngine.Light []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
-                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
+        // -------4
+                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));
             }
         }
         catch(Exception e)
@@ -717,7 +750,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(float []rList, long ptr)
+    public static void ReturnArray(long VM, float []rList, long ptr)
     {
         try
         {
@@ -729,7 +762,7 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Vector4 []rList, long ptr)
+    public static void ReturnArray(long VM, Vector4 []rList, long ptr)
     {
         try
         {
@@ -741,16 +774,16 @@ class FCCustomParam
             Debug.LogException(e);
         }
     }
-    public static void ReturnArray(Matrix4x4 []rList, long ptr)
+    public static void ReturnArray(long VM, Matrix4x4 []rList, long ptr)
     {
         try
         {
             int nCount = rList != null ? rList.Length : 0;
-            FCLibHelper.fc_set_array_size(ptr, nCount);
+            FCLibHelper.fc_set_array_size(VM, ptr, nCount);
             Matrix4x4 v;
             for(int i = 0; i<nCount; ++i)
             {
-                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);
+                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);
                 v = rList[i];
                 FCLibHelper.fc_set_value_matrix(pItem, ref v);
             }

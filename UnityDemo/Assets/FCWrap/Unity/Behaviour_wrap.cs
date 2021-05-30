@@ -11,16 +11,16 @@ public class Behaviour_wrap
         return FCGetObj.GetObj<UnityEngine.Behaviour>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("Behaviour");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"enabled",get_enabled_wrap,set_enabled_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"isActiveAndEnabled",get_isActiveAndEnabled_wrap,null);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "Behaviour");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"enabled",get_enabled_wrap,set_enabled_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"isActiveAndEnabled",get_isActiveAndEnabled_wrap,null);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -28,7 +28,8 @@ public class Behaviour_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.Behaviour>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -47,9 +48,9 @@ public class Behaviour_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.Behaviour obj = FCGetObj.GetObj<UnityEngine.Behaviour>(L);
+        UnityEngine.Behaviour obj = FCGetObj.GetObj<UnityEngine.Behaviour>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -81,6 +82,7 @@ public class Behaviour_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Behaviour ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.enabled);
         }
         catch(Exception e)
@@ -114,6 +116,7 @@ public class Behaviour_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.Behaviour ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.isActiveAndEnabled);
         }
         catch(Exception e)

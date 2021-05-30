@@ -6,26 +6,26 @@ using UnityEngine.Rendering;
 
 public class Unity_wrap
 {
-    public static void Register()
+    public static void Register(long VM)
     {
-        Time_wrap.Register();
-        UnityObject_wrap.Register();
-        Component_wrap.Register();
-        Transform_wrap.Register();
-        Texture2D_wrap.Register();
-        GameObject_wrap.Register();
-        Behaviour_wrap.Register();
-        MonoBehaviour_wrap.Register();
-        Animation_wrap.Register();
-        Renderer_wrap.Register();
-        MeshRenderer_wrap.Register();
-        SkinnedMeshRenderer_wrap.Register();
-        Input_wrap.Register();
-        Light_wrap.Register();
-        Material_wrap.Register();
-        UnityEvent_wrap.Register();
-        AsyncOperation_wrap.Register();
-        Scene_wrap.Register();
-        SceneManager_wrap.Register();
+        Time_wrap.Register(VM);
+        UnityObject_wrap.Register(VM);
+        Component_wrap.Register(VM);
+        Transform_wrap.Register(VM);
+        Texture2D_wrap.Register(VM);
+        GameObject_wrap.Register(VM);
+        Behaviour_wrap.Register(VM);
+        MonoBehaviour_wrap.Register(VM);
+        Animation_wrap.Register(VM);
+        Renderer_wrap.Register(VM);
+        MeshRenderer_wrap.Register(VM);
+        SkinnedMeshRenderer_wrap.Register(VM);
+        Input_wrap.Register(VM);
+        Light_wrap.Register(VM);
+        Material_wrap.Register(VM);
+        UnityEvent_wrap.Register(VM);
+        AsyncOperation_wrap.Register(VM);
+        Scene_wrap.Register(VM);
+        SceneManager_wrap.Register(VM);
     }
 }

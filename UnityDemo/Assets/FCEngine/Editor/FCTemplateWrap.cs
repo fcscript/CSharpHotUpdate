@@ -170,6 +170,7 @@ class FCTemplateWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            if (rList == null)");
         fileData.AppendFormat("                rList = new List<{0}>();\r\n", szCharpName);
         fileData.AppendLine("            else");
@@ -223,7 +224,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     if(bList)
                         fileData.AppendLine("                rList.Add(FCLibHelper.fc_get_value_int64(item_ptr));");
                     else
@@ -235,7 +236,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendLine("                Plane item = new Plane();");
                     fileData.AppendLine("                FCLibHelper.fc_get_value_plane(item_ptr, ref item);");
                     if(bList)
@@ -249,7 +250,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendLine("                Bounds item = new Bounds();");
                     fileData.AppendLine("                FCLibHelper.fc_get_value_bounds(item_ptr, ref item);");
                     if (bList)
@@ -263,7 +264,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendLine("                Matrix4x4 item = new Matrix4x4();");
                     fileData.AppendLine("                FCLibHelper.fc_get_value_matrix(item_ptr, ref item);");
                     if (bList)
@@ -277,7 +278,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendLine("                Ray item = new Ray();");
                     fileData.AppendLine("                FCLibHelper.fc_get_value_ray(item_ptr, ref item);");
                     if (bList)
@@ -291,7 +292,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendLine("                long item = FCLibHelper.fc_get_value_uint64(item_ptr);");
                     if (bList)
                         fileData.AppendLine("                rList.Add(item);");
@@ -304,8 +305,8 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
-                    fileData.AppendLine("                string item = FCLibHelper.fc_get_value_string_a(item_ptr);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
+                    fileData.AppendLine("                string item = FCLibHelper.fc_get_value_string_a(VM, item_ptr);");
                     if (bList)
                         fileData.AppendLine("                rList.Add(item);");
                     else
@@ -319,7 +320,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     //if(value.m_value.IsClass)
                         fileData.AppendFormat("                {0} item = FCGetObj.GetObj<{0}>(item_ptr);\r\n", szCharpName, szCharpName);
                     //else
@@ -335,7 +336,7 @@ class FCTemplateWrap
                 {
                     fileData.AppendLine("            for (int i = 0; i < nArraySize; ++i)");
                     fileData.AppendLine("            {");
-                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+                    fileData.AppendLine("                long item_ptr = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
                     fileData.AppendFormat("                {0} item = ({1})FCLibHelper.fc_get_value_int(item_ptr);\r\n", szCharpName, szCharpName);
                     if (bList)
                         fileData.AppendLine("                rList.Add(item);");
@@ -378,6 +379,7 @@ class FCTemplateWrap
         fileData.AppendLine("    {");
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
         fileData.AppendLine("            int nArraySize = FCLibHelper.fc_get_array_size(ptr);");
         fileData.AppendFormat("            rList = new {0}[nArraySize];\r\n", szCharpName);
@@ -410,14 +412,15 @@ class FCTemplateWrap
         fileData.AppendLine("            else");
         fileData.AppendLine("                rList.Clear();");
 
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
-        fileData.AppendLine("            int nCount = FCLibHelper.fc_get_map_size(ptr);");
+        fileData.AppendLine("            int nCount = FCLibHelper.fc_get_map_size(VM, ptr);");
 
         fileData.AppendLine("            for(; nCount > 0; --nCount)");
         fileData.AppendLine("            {");
-        fileData.AppendLine("                FCLibHelper.fc_map_to_next_pair();");
-        fileData.AppendLine("                long key_ptr = FCLibHelper.fc_map_get_cur_key_ptr();");
-        fileData.AppendLine("                long value_ptr = FCLibHelper.fc_map_get_cur_value_ptr();");
+        fileData.AppendLine("                FCLibHelper.fc_map_to_next_pair(VM);");
+        fileData.AppendLine("                long key_ptr = FCLibHelper.fc_map_get_cur_key_ptr(VM);");
+        fileData.AppendLine("                long value_ptr = FCLibHelper.fc_map_get_cur_value_ptr(VM);");
         bool bValidKey = AddKeyValueCall(value.m_nKeyType, "key", "key_ptr", szKeyName);
         bool bValidValue = AddKeyValueCall(value.m_nValueType, "value", "value_ptr", szValeuName);
         if(bValidKey && bValidValue)
@@ -470,7 +473,7 @@ class FCTemplateWrap
                 break;
             case fc_value_type.fc_value_string_a:
                 {
-                    fileData.AppendFormat("                string {0} = FCLibHelper.fc_get_value_string_a({1});\r\n", szLeftName, szPtrName);
+                    fileData.AppendFormat("                string {0} = FCLibHelper.fc_get_value_string_a(VM, {1});\r\n", szLeftName, szPtrName);
                 }
                 break;
             case fc_value_type.fc_value_system_object:
@@ -546,15 +549,16 @@ class FCTemplateWrap
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
         fileData.AppendLine("            int nCount = rList != null ? rList.Length : 0;");
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
-        fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
+        fileData.AppendLine("            FCLibHelper.fc_set_array_size(VM, ptr, nCount);");
         if (FCValueType.IsRefType(value.m_nValueType))
         {
             fileData.AppendFormat("            {0} v;\r\n", value.GetValueName(true));
         }
         fileData.AppendLine("            for(int i = 0; i<nCount; ++i)");
         fileData.AppendLine("            {");
-        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
         MakeOutListElement(value);
         fileData.AppendLine("            }");
         fileData.AppendLine("        }");
@@ -599,15 +603,16 @@ class FCTemplateWrap
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
         fileData.AppendLine("            int nCount = rList != null ? rList.Count : 0;");
+        fileData.AppendLine("            long VM = FCLibHelper.fc_get_vm_ptr(L);");
         fileData.AppendLine("            long ptr = FCLibHelper.fc_get_param_ptr(L, nIndex);");
-        fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
+        fileData.AppendLine("            FCLibHelper.fc_set_array_size(VM, ptr, nCount);");
         if(FCValueType.IsRefType(value.m_nValueType))
         {
             fileData.AppendFormat("            {0} v;\r\n", value.GetValueName(true));
         }
         fileData.AppendLine("            for(int i = 0; i<nCount; ++i)");
         fileData.AppendLine("            {");
-        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
         MakeOutListElement(value);
         fileData.AppendLine("            }");
         fileData.AppendLine("        }");
@@ -624,10 +629,11 @@ class FCTemplateWrap
             || fc_value_type.fc_value_object == value.m_nValueType
             || fc_value_type.fc_value_unity_object == value.m_nValueType)
         {
+            fileData.AppendLine("        // -------4");
             if (value.IsEnum)
                 fileData.AppendLine("                FCLibHelper.fc_set_value_int(pItem, (int)rList[i]);");
             else
-                fileData.AppendLine("                FCLibHelper.fc_set_value_wrap_objptr(pItem, FCGetObj.PushObj(rList[i]));");
+                fileData.AppendLine("                FCLibHelper.fc_set_value_wrap_objptr(VM, pItem, FCGetObj.PushObj(rList[i]));");
             return;
         }
         if (value.IsEnum)
@@ -694,18 +700,18 @@ class FCTemplateWrap
         if(FCValueType.IsRefType(value.m_nKeyType))
         {
             fileData.AppendFormat("                k = v.Key;", szKeyName);
-            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, ref k);", szKeyName);
+            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, ref k);\r\n", szKeyName);
         }
         else
-            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, v.Key);", szKeyName);
+            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, v.Key);\r\n", szKeyName);
         if(FCValueType.IsRefType(value.m_nValueType))
         {
             fileData.AppendFormat("                v = v.Value;", szKeyName);
-            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, ref v);", szKeyName);
+            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pKey, ref v);\r\n", szKeyName);
         }
         else
-            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pValue, v.Value);", szValueName);
-        fileData.AppendLine("                FCLibHelper.fc_map_push_key_value(ptr);");
+            fileData.AppendFormat("                FCLibHelper.fc_set_value_{0}(pValue, v.Value);\r\n", szValueName);
+        fileData.AppendLine("                FCLibHelper.fc_map_push_key_value(VM, ptr);\r\n");
     }
     void ExportReturnWap()
     {
@@ -751,7 +757,7 @@ class FCTemplateWrap
 
         StringBuilder fileData = m_szTempBuilder;
         string szValueName = value.GetValueName(true, true);
-        string szFuncDeclare = string.Format("    public static void ReturnArray({0} []rList, long ptr)", szValueName);
+        string szFuncDeclare = string.Format("    public static void ReturnArray(long VM, {0} []rList, long ptr)", szValueName);
         if (TrySetExportFlag(szFuncDeclare))
             return;
         fileData.AppendLine(szFuncDeclare);
@@ -760,14 +766,14 @@ class FCTemplateWrap
         fileData.AppendLine("        {");
         fileData.AppendLine("            int nCount = rList != null ? rList.Length : 0;");
         //fileData.AppendLine("            long ptr = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
+        fileData.AppendLine("            FCLibHelper.fc_set_array_size(VM, ptr, nCount);");
         if (FCValueType.IsRefType(value.m_nValueType))
         {
             fileData.AppendFormat("            {0} v;\r\n", szValueName);
         }
         fileData.AppendLine("            for(int i = 0; i<nCount; ++i)");
         fileData.AppendLine("            {");
-        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
         MakeOutListElement(value);
         fileData.AppendLine("            }");
         fileData.AppendLine("        }");
@@ -782,7 +788,7 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
         string szTypeName = value.GetValueName(true, true);
-        string szFuncDeclare = string.Format("    public static void ReturnArray({0} []rList, long ptr)", szTypeName);
+        string szFuncDeclare = string.Format("    public static void ReturnArray(long VM, {0} []rList, long ptr)", szTypeName);
         if (TrySetExportFlag(szFuncDeclare))
             return;
         fileData.AppendLine(szFuncDeclare);
@@ -803,7 +809,7 @@ class FCTemplateWrap
     {
         StringBuilder fileData = m_szTempBuilder;
         string szValueName = value.GetValueName(true, true);
-        string szFuncDeclare = string.Format("    public static void ReturnList(List<{0}> rList, long ptr)", szValueName);
+        string szFuncDeclare = string.Format("    public static void ReturnList(long VM, List<{0}> rList, long ptr)", szValueName);
         if (TrySetExportFlag(szFuncDeclare))
             return;
         fileData.AppendLine(szFuncDeclare);
@@ -812,14 +818,14 @@ class FCTemplateWrap
         fileData.AppendLine("        {");
         fileData.AppendLine("            int nCount = rList != null ? rList.Count : 0;");
         //fileData.AppendLine("            long ptr = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_set_array_size(ptr, nCount);");
+        fileData.AppendLine("            FCLibHelper.fc_set_array_size(VM, ptr, nCount);");
         if (FCValueType.IsRefType(value.m_nValueType))
         {
             fileData.AppendFormat("            {0} v;\r\n", szValueName);
         }
         fileData.AppendLine("            for(int i = 0; i<nCount; ++i)");
         fileData.AppendLine("            {");
-        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(ptr, i);");
+        fileData.AppendLine("                long pItem = FCLibHelper.fc_get_array_node_temp_ptr(VM, ptr, i);");
         MakeOutListElement(value);
         fileData.AppendLine("            }");
         fileData.AppendLine("        }");
@@ -835,7 +841,7 @@ class FCTemplateWrap
 
         string szKeyName = value.GetKeyName(true, true);
         string szValeuName = value.GetValueName(true, true);
-        string szFuncDeclare = string.Format("    public static void ReturnDictionary(Dictionary<{0}, {1}> rList, long ptr)", szKeyName, szValeuName);
+        string szFuncDeclare = string.Format("    public static void ReturnDictionary(long VM, Dictionary<{0}, {1}> rList, long ptr)", szKeyName, szValeuName);
         if (TrySetExportFlag(szFuncDeclare))
             return;
         fileData.AppendLine(szFuncDeclare);
@@ -843,10 +849,10 @@ class FCTemplateWrap
         fileData.AppendLine("        try");
         fileData.AppendLine("        {");
         //fileData.AppendLine("            long ptr = FCLibHelper.fc_get_return_ptr(L);");
-        fileData.AppendLine("            FCLibHelper.fc_map_clear(ptr); // 先清空map");
+        fileData.AppendLine("            FCLibHelper.fc_map_clear(VM, ptr); // 先清空map");
         fileData.AppendLine("            if (rList == null) return;");
-        fileData.AppendLine("            long pKey = FCLibHelper.fc_get_map_push_key_ptr(ptr);");
-        fileData.AppendLine("            long pValue = FCLibHelper.fc_get_map_push_value_ptr(ptr);");
+        fileData.AppendLine("            long pKey = FCLibHelper.fc_get_map_push_key_ptr(VM, ptr);");
+        fileData.AppendLine("            long pValue = FCLibHelper.fc_get_map_push_value_ptr(VM, ptr);");
         if (FCValueType.IsRefType(value.m_nKeyType))
         {
             fileData.AppendFormat("            {0} k;\r\n", szKeyName);

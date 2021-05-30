@@ -8,6 +8,7 @@ public class ScriptMono : MonoBehaviour
 {
     public string ScripClassName; // 对应脚本中的类名
     protected long m_nScriptInsPtr; // 脚本对象指针(一个64位整数)
+    protected long m_VMPtr; // 脚本虚拟机指针
 
     void  Start()
     {
@@ -22,11 +23,12 @@ public class ScriptMono : MonoBehaviour
     {
         if (0 != m_nScriptInsPtr)
             return;
+        m_VMPtr = FCDll.GetMainVMPtr();
         // 创建一个脚本
         if (string.IsNullOrEmpty(ScripClassName))
             m_nScriptInsPtr = 0;
         else
-            m_nScriptInsPtr = FCLibHelper.fc_instance(ScripClassName);
+            m_nScriptInsPtr = FCLibHelper.fc_instance(m_VMPtr, ScripClassName);
 
         // 必要的话，调用下脚本中的Start函数
         if (m_nScriptInsPtr != 0)
@@ -44,7 +46,7 @@ public class ScriptMono : MonoBehaviour
         }
         if(m_nScriptInsPtr != 0)
         {
-            FCLibHelper.fc_call(m_nScriptInsPtr, "Start");
+            FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "Start");
         }
     }
     protected virtual void OnCreateScript()
@@ -57,8 +59,8 @@ public class ScriptMono : MonoBehaviour
         {
             if(FCLibHelper.fc_is_init()) // 如果脚本系统已经释放了，就不能调用脚本的函数了
             {
-                FCLibHelper.fc_call(m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
-                FCLibHelper.fc_relese_ins(m_nScriptInsPtr); // 释放脚本对象，如果脚本对象有析构函数，就会自动调用析构函数
+                FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
+                FCLibHelper.fc_relese_ins(m_VMPtr, m_nScriptInsPtr); // 释放脚本对象，如果脚本对象有析构函数，就会自动调用析构函数
             }
             m_nScriptInsPtr = 0;
         }
@@ -78,8 +80,8 @@ public class ScriptMono : MonoBehaviour
 
         if (m_nScriptInsPtr != 0)
         {
-            FCDll.PushCallParam(szName);  // 传点击的按钮的参数
-            FCLibHelper.fc_call(m_nScriptInsPtr, "OnButtonClicked");
+            FCDll.PushCallParam(m_VMPtr, szName);  // 传点击的按钮的参数
+            FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "OnButtonClicked");
         }
     }
     public long GetScriptPtr()
@@ -92,7 +94,7 @@ public class ScriptMono : MonoBehaviour
     {
         if(m_nScriptInsPtr != 0)
         {
-            return FCLibHelper.fc_find_class_func(m_nScriptInsPtr, szFuncName);
+            return FCLibHelper.fc_find_class_func(m_VMPtr, m_nScriptInsPtr, szFuncName);
         }
         return false;
     }
@@ -101,7 +103,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_bool(ptr, value);
         }
     }
@@ -109,7 +111,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_byte(ptr, value);
         }
     }
@@ -117,7 +119,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_short(ptr, value);
         }
     }
@@ -125,7 +127,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_ushort(ptr, value);
         }
     }
@@ -133,7 +135,7 @@ public class ScriptMono : MonoBehaviour
     {
         if(m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_int(ptr, value);
         }
     }
@@ -141,7 +143,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_uint(ptr, value);
         }
     }
@@ -149,7 +151,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_float(ptr, value);
         }
     }
@@ -157,7 +159,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_double(ptr, value);
         }
     }
@@ -165,7 +167,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_string(ptr, value);
         }
     }
@@ -173,25 +175,25 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             long obj_ptr = FCGetObj.PushObj(value);
-            FCLibHelper.fc_set_value_wrap_objptr(ptr, obj_ptr);
+            FCLibHelper.fc_set_value_wrap_objptr(m_VMPtr, ptr, obj_ptr);
         }
     }
     public void SetScriptValue(string szName, UnityEngine.Object value)
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             long obj_ptr = FCGetObj.PushObj(value);
-            FCLibHelper.fc_set_value_wrap_objptr(ptr, obj_ptr);
+            FCLibHelper.fc_set_value_wrap_objptr(m_VMPtr, ptr, obj_ptr);
         }
     }
     public void SetScriptValue(string szName, Vector2 value)
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_vector2(ptr, ref value);
         }
     }
@@ -199,7 +201,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_vector3(ptr, ref value);
         }
     }
@@ -207,7 +209,7 @@ public class ScriptMono : MonoBehaviour
     {
         if (m_nScriptInsPtr != 0)
         {
-            long ptr = FCLibHelper.fc_get_class_value(m_nScriptInsPtr, szName);
+            long ptr = FCLibHelper.fc_get_class_value(m_VMPtr, m_nScriptInsPtr, szName);
             FCLibHelper.fc_set_value_vector4(ptr, ref value);
         }
     }

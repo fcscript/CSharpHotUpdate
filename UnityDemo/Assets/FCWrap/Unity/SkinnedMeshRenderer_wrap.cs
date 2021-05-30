@@ -11,24 +11,24 @@ public class SkinnedMeshRenderer_wrap
         return FCGetObj.GetObj<UnityEngine.SkinnedMeshRenderer>(L);
     }
 
-    public static void Register()
+    public static void Register(long VM)
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("SkinnedMeshRenderer");
-        FCLibHelper.fc_register_class_new(nClassName, obj_new);
-        FCLibHelper.fc_register_class_del(nClassName,obj_del);
-        FCLibHelper.fc_register_class_release_ref(nClassName,obj_release);
-        FCLibHelper.fc_register_class_hash(nClassName,obj_hash);
-        FCLibHelper.fc_register_class_equal(nClassName,obj_equal);
-        FCLibHelper.fc_register_class_attrib(nClassName,"bones",get_bones_wrap,set_bones_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"quality",get_quality_wrap,set_quality_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"updateWhenOffscreen",get_updateWhenOffscreen_wrap,set_updateWhenOffscreen_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"rootBone",get_rootBone_wrap,set_rootBone_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"sharedMesh",get_sharedMesh_wrap,set_sharedMesh_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"skinnedMotionVectors",get_skinnedMotionVectors_wrap,set_skinnedMotionVectors_wrap);
-        FCLibHelper.fc_register_class_attrib(nClassName,"localBounds",get_localBounds_wrap,set_localBounds_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"GetBlendShapeWeight",GetBlendShapeWeight_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"SetBlendShapeWeight",SetBlendShapeWeight_wrap);
-        FCLibHelper.fc_register_class_func(nClassName,"BakeMesh",BakeMesh_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(VM, "SkinnedMeshRenderer");
+        FCLibHelper.fc_register_class_new(VM, nClassName, obj_new);
+        FCLibHelper.fc_register_class_del(VM, nClassName,obj_del);
+        FCLibHelper.fc_register_class_release_ref(VM, nClassName,obj_release);
+        FCLibHelper.fc_register_class_hash(VM, nClassName,obj_hash);
+        FCLibHelper.fc_register_class_equal(VM, nClassName,obj_equal);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"bones",get_bones_wrap,set_bones_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"quality",get_quality_wrap,set_quality_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"updateWhenOffscreen",get_updateWhenOffscreen_wrap,set_updateWhenOffscreen_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"rootBone",get_rootBone_wrap,set_rootBone_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"sharedMesh",get_sharedMesh_wrap,set_sharedMesh_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"skinnedMotionVectors",get_skinnedMotionVectors_wrap,set_skinnedMotionVectors_wrap);
+        FCLibHelper.fc_register_class_attrib(VM, nClassName,"localBounds",get_localBounds_wrap,set_localBounds_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"GetBlendShapeWeight",GetBlendShapeWeight_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"SetBlendShapeWeight",SetBlendShapeWeight_wrap);
+        FCLibHelper.fc_register_class_func(VM, nClassName,"BakeMesh",BakeMesh_wrap);
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
@@ -36,7 +36,8 @@ public class SkinnedMeshRenderer_wrap
     {
         long nPtr = FCGetObj.NewObj<UnityEngine.SkinnedMeshRenderer>();
         long ret = FCLibHelper.fc_get_return_ptr(L);
-        FCLibHelper.fc_set_value_wrap_objptr(ret, nPtr);
+        long VM = FCLibHelper.fc_get_vm_ptr(L);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ret, nPtr);
         return 0;
     }
 
@@ -55,9 +56,9 @@ public class SkinnedMeshRenderer_wrap
     }
 
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]
-    public static int  obj_hash(long L)
+    public static int  obj_hash(long nIntPtr)
     {
-        UnityEngine.SkinnedMeshRenderer obj = FCGetObj.GetObj<UnityEngine.SkinnedMeshRenderer>(L);
+        UnityEngine.SkinnedMeshRenderer obj = FCGetObj.GetObj<UnityEngine.SkinnedMeshRenderer>(nIntPtr);
         if(obj != null)
         {
             return obj.GetHashCode();
@@ -89,7 +90,8 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
-            FCCustomParam.ReturnArray(ret.bones,ret_ptr);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
+            FCCustomParam.ReturnArray(VM, ret.bones,ret_ptr);
         }
         catch(Exception e)
         {
@@ -123,6 +125,7 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_int(ret_ptr, (int)ret.quality);
         }
         catch(Exception e)
@@ -156,6 +159,7 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.updateWhenOffscreen);
         }
         catch(Exception e)
@@ -189,8 +193,9 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.rootBone);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -223,8 +228,9 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long v = FCGetObj.PushObj(ret.sharedMesh);
-            FCLibHelper.fc_set_value_wrap_objptr(ret_ptr, v);
+            FCLibHelper.fc_set_value_wrap_objptr(VM, ret_ptr, v);
         }
         catch(Exception e)
         {
@@ -257,6 +263,7 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             FCLibHelper.fc_set_value_bool(ret_ptr, ret.skinnedMotionVectors);
         }
         catch(Exception e)
@@ -290,6 +297,7 @@ public class SkinnedMeshRenderer_wrap
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer ret = get_obj(nThisPtr);
             long ret_ptr = FCLibHelper.fc_get_return_ptr(L);
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             Bounds temp_ret = ret.localBounds;
             FCLibHelper.fc_set_value_bounds(ret_ptr, ref temp_ret);
         }
@@ -322,6 +330,7 @@ public class SkinnedMeshRenderer_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -341,6 +350,7 @@ public class SkinnedMeshRenderer_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer obj = get_obj(nThisPtr);
             int arg0 = FCLibHelper.fc_get_int(L,0);
@@ -359,6 +369,7 @@ public class SkinnedMeshRenderer_wrap
     {
         try
         {
+            long VM = FCLibHelper.fc_get_vm_ptr(L);
             long nThisPtr = FCLibHelper.fc_get_inport_obj_ptr(L);
             UnityEngine.SkinnedMeshRenderer obj = get_obj(nThisPtr);
             UnityEngine.Mesh arg0 = FCGetObj.GetObj<UnityEngine.Mesh>(FCLibHelper.fc_get_wrap_objptr(L,0));

@@ -18,6 +18,7 @@ public class FCScriptLoader : MonoBehaviour
     protected static int m_nAddLogCount = 0;
     protected static bool m_bLoadScript = false;
     protected static LPInitCallback m_InitCallback = null;
+    protected long m_VMPtr = 0;
 
     protected void Start()
     {
@@ -29,6 +30,12 @@ public class FCScriptLoader : MonoBehaviour
         FCLibHelper.fc_switch_debug(false); // 停止调试吧
         Debug.Log("OnApplicationQuit");
         FCDll.ReleaseDll(); // 这里其实需要延迟释放
+        m_VMPtr = 0;
+    }
+
+    public long  GetVMPtr()
+    {
+        return m_VMPtr;
     }
 
     public static void InitCall(LPInitCallback pFunc)
@@ -62,14 +69,14 @@ public class FCScriptLoader : MonoBehaviour
                     FCLibHelper.fc_set_debug_print_func(print_error);
                     FCLibHelper.fc_set_output_error_func(print_error);
 
-                    FCDll.InitDll();
+                    m_VMPtr = FCDll.InitDll();
 
                     FCLibHelper.fc_set_debug_print_func(print_error);
                     FCLibHelper.fc_set_output_error_func(print_error);
                 }
                 else
                 {
-                    FCDll.InitDll();
+                    m_VMPtr = FCDll.InitDll();
                 }
 
 #if  UNITY_EDITOR
@@ -181,9 +188,10 @@ public class FCScriptLoader : MonoBehaviour
         if (fileData != null && fileData.Length > 0)
         {
             m_bLoadScript = true;
-            FCLibHelper.fc_set_code_data(fileData, fileData.Length, GetProjCode());
+            long VM = m_VMPtr;
+            FCLibHelper.fc_set_code_data(VM, fileData, fileData.Length, GetProjCode());
 
-            all_class_wrap.Register(); // 动态wrap
+            all_class_wrap.Register(VM); // 动态wrap
             OnAfterLoadScriptData();
             if (m_InitCallback != null)
             {

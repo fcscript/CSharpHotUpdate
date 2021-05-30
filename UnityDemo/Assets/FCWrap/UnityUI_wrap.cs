@@ -6,10 +6,10 @@ using UnityEngine.Rendering;
 
 public class UnityUI_wrap
 {
-    public static void Register()
+    public static void Register(long VM)
     {
-        ButtonClickedEvent_wrap.Register();
-        Button_wrap.Register();
-        Text_wrap.Register();
+        ButtonClickedEvent_wrap.Register(VM);
+        Button_wrap.Register(VM);
+        Text_wrap.Register(VM);
     }
 }

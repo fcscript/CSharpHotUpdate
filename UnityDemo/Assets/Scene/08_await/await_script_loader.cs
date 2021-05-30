@@ -65,7 +65,7 @@ public class await_script_loader : FCScriptLoader
         for (int i = 0; i< AwaitPtr.Count; ++i )
         {
             ScriptInfo info = AwaitPtr[i];
-            if (FCLibHelper.fc_is_valid_await(info.nPtr))
+            if (FCLibHelper.fc_is_valid_await(m_VMPtr, info.nPtr))
             {
                 //if(obj == null) 这里不能共用一个Obj，因为脚本中的引用计算一一对应的
                 {
@@ -73,9 +73,9 @@ public class await_script_loader : FCScriptLoader
                     v = FCGetObj.PushObj(obj);
                 }
                 // 必要的话，在这里设置返回值
-                FCLibHelper.fc_set_value_wrap_objptr(info.nReturnPtr, v);
+                FCLibHelper.fc_set_value_wrap_objptr(m_VMPtr, info.nReturnPtr, v);
 
-                FCLibHelper.fc_continue(info.nPtr); // 唤醒脚本
+                FCLibHelper.fc_continue(m_VMPtr, info.nPtr); // 唤醒脚本
             }
         }
     }
@@ -106,8 +106,8 @@ public class await_script_loader : FCScriptLoader
     }
     void OwnRegister()
     {
-        int nClassName = FCLibHelper.fc_get_inport_class_id("TestD");
-        FCLibHelper.fc_register_class_func(nClassName, "WaitLoadPrefab", WaitLoadPrefab_wrap);
+        int nClassName = FCLibHelper.fc_get_inport_class_id(m_VMPtr, "TestD");
+        FCLibHelper.fc_register_class_func(m_VMPtr, nClassName, "WaitLoadPrefab", WaitLoadPrefab_wrap);
     }
     
     [MonoPInvokeCallbackAttribute(typeof(FCLibHelper.fc_call_back_inport_class_func))]

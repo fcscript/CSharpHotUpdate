@@ -190,6 +190,7 @@ class FCDelegateWrap
 
         m_szTempBuilder.AppendLine("        try");
         m_szTempBuilder.AppendLine("        {");
+        m_szTempBuilder.AppendLine("            long  VM = m_VMPtr;");
         string szArg = string.Empty;
         for(int i = 0; i<nParamCount; ++i)
         {
@@ -201,7 +202,7 @@ class FCDelegateWrap
                 {
                     if(value_param.m_nValueType == fc_value_type.fc_value_byte)
                     {
-                        m_szTempBuilder.AppendFormat("            FCDll.PushCallParam({0});\r\n", szArg);
+                        m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, {0});\r\n", szArg);
                         continue;
                     }
                 }
@@ -209,11 +210,11 @@ class FCDelegateWrap
                 continue;
             }
             if(FCValueType.IsRefType(value_param.m_nValueType))
-                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(ref {0});\r\n", szArg);
+                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, ref {0});\r\n", szArg);
             else
-                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam({0});\r\n", szArg);
+                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, {0});\r\n", szArg);
         }
-        m_szTempBuilder.AppendLine("            FCLibHelper.fc_call(m_nThisPtr, m_szFuncName);");
+        m_szTempBuilder.AppendLine("            FCLibHelper.fc_call(VM, m_nThisPtr, m_szFuncName);");
 
         // 如果委托是有返回值的，添加返回值
         if(ret_value.m_nValueType != fc_value_type.fc_value_void)
@@ -236,67 +237,67 @@ class FCDelegateWrap
         switch (ret_value.m_nValueType)
         {
             case fc_value_type.fc_value_bool:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_bool();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_bool(VM);");
                 break;
             case fc_value_type.fc_value_char:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_char();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_char(VM);");
                 break;
             case fc_value_type.fc_value_byte:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_byte();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_byte(VM);");
                 break;
             case fc_value_type.fc_value_short:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_short();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_short(VM);");
                 break;
             case fc_value_type.fc_value_ushort:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_ushort();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_ushort(VM);");
                 break;
             case fc_value_type.fc_value_int:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int(VM);");
                 break;
             case fc_value_type.fc_value_uint:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint(VM);");
                 break;
             case fc_value_type.fc_value_float:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_float();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_float(VM);");
                 break;
             case fc_value_type.fc_value_double:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_double();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_double(VM);");
                 break;
             case fc_value_type.fc_value_int64:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int64();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int64(VM);");
                 break;
             case fc_value_type.fc_value_uint64:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint64();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint64(VM);");
                 break;
             case fc_value_type.fc_value_string_a:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_string_a();");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_string_a(VM);");
                 break;
             case fc_value_type.fc_value_vector2:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector2(ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector2(VM, ref ret);");
                 break;
             case fc_value_type.fc_value_vector3:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector3(ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector3(VM, ref ret);");
                 break;
             case fc_value_type.fc_value_vector4:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector4(ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector4(VM, ref ret);");
                 break;
             case fc_value_type.fc_value_system_object:
                 {
                     string szName = ret_value.GetTypeName(true, true);
-                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr();");
-                    m_szTempBuilder.AppendFormat("            ret = FCGetObj.GetSystemObj<{0}>(nWrapObj);", szName);
+                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr(VM);");
+                    m_szTempBuilder.AppendFormat("            ret = FCGetObj.GetSystemObj<{0}>(VM, nWrapObj);", szName);
                 }
                 break;
             case fc_value_type.fc_value_unity_object:
             case fc_value_type.fc_value_object:
                 {
                     string szName = ret_value.GetTypeName(true, true);
-                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr();");
+                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr(VM);");
                     m_szTempBuilder.AppendFormat("            ret = FCGetObj.GetObj<{0}>(nWrapObj);", szName);
                 }
                 break;
             case fc_value_type.fc_value_int_ptr:
-                m_szTempBuilder.AppendLine("            ret = new IntPtr(FCLibHelper.fc_get_return_void_ptr());");
+                m_szTempBuilder.AppendLine("            ret = new IntPtr(FCLibHelper.fc_get_return_void_ptr(VM));");
                 break;
         }
         m_szTempBuilder.AppendLine("            return ret;");

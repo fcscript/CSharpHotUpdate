@@ -7,11 +7,12 @@ using UnityEngine;
 public class FCDll
 {
     static FCDll_coroutine_udpate s_pIns = null;
+    static long s_VMPtr = 0;
     class FCDll_coroutine_udpate : MonoBehaviour
     {
         void Update()
         {
-            FCLibHelper.fc_coroutine_udpate();// 执行协程逻辑
+            FCLibHelper.fc_coroutine_udpate(s_VMPtr);// 执行协程逻辑
         }
     }
 
@@ -36,35 +37,47 @@ public class FCDll
         Debug.Log(pcsInfo);
     }
 
+    public static long  GetMainVMPtr()
+    {
+        return s_VMPtr;
+    }
+
     public static void  ReleaseDll()
     {
-        FCLibHelper.fc_release();
-        if(s_pIns != null)
+        FCLibHelper.fc_release(s_VMPtr);
+        s_VMPtr = 0;
+        if (s_pIns != null)
         {
             GameObject.DestroyImmediate(s_pIns.gameObject);
             s_pIns = null;
         }
     }
 
-    public static void  InitDll()
+    public static long  InitDll(bool bMainThread = true)
     {
+        long VMPtr = 0;
         try
         {
             FCLibHelper.fc_set_output_error_func(fc_print_error_call_back);
             FCLibHelper.fc_set_debug_print_func(fc_print_debug_call_back);
 
-            ReleaseDll();
+            if(bMainThread)
+                ReleaseDll();
             CreateInstance();
-            FCLibHelper.fc_init();  // 创建脚本全局单例
+            if(bMainThread)
+                VMPtr = s_VMPtr = FCLibHelper.fc_init(true);  // 创建脚本全局单例
+            else
+                VMPtr = FCLibHelper.fc_init(false);  // 创建脚本全局单例
 
             // 注册两个读写文件的wrap接口
-            FCLibHelper.fc_register_func("ReadFile", csharp_readfile);
-            FCLibHelper.fc_register_func("WriteFile", csharp_writefile);
+            FCLibHelper.fc_register_func(VMPtr, "ReadFile", csharp_readfile);
+            FCLibHelper.fc_register_func(VMPtr, "WriteFile", csharp_writefile);
         }
         catch(Exception e)
         {
             Debug.LogException(e);
         }
+        return VMPtr;
     }
     public static bool  IsInitDll()
     {
@@ -72,138 +85,138 @@ public class FCDll
     }
 
     // 功能：调用FC脚本时，传递C#参数给脚本函数
-    public static void PushCallParam(bool v)
+    public static void PushCallParam(long VM, bool v)
     {
-        FCLibHelper.fc_push_bool(v);
+        FCLibHelper.fc_push_bool(VM, v);
     }
-    public static void PushCallParam(byte v)
+    public static void PushCallParam(long VM, byte v)
     {
-        FCLibHelper.fc_push_byte(v);
+        FCLibHelper.fc_push_byte(VM, v);
     }
-    public static void PushCallParam(char v)
+    public static void PushCallParam(long VM, char v)
     {
-        FCLibHelper.fc_push_char(v);
+        FCLibHelper.fc_push_char(VM, v);
     }
-    public static void PushCallParam(short v)
+    public static void PushCallParam(long VM, short v)
     {
-        FCLibHelper.fc_push_short(v);
+        FCLibHelper.fc_push_short(VM, v);
     }
-    public static void PushCallParam(ushort v)
+    public static void PushCallParam(long VM, ushort v)
     {
-        FCLibHelper.fc_push_ushort(v);
+        FCLibHelper.fc_push_ushort(VM, v);
     }
-    public static void PushCallParam(int v)
+    public static void PushCallParam(long VM, int v)
     {
-        FCLibHelper.fc_push_int(v);
+        FCLibHelper.fc_push_int(VM, v);
     }
-    public static void PushCallParam(uint v)
+    public static void PushCallParam(long VM, uint v)
     {
-        FCLibHelper.fc_push_uint(v);
+        FCLibHelper.fc_push_uint(VM, v);
     }
-    public static void PushCallParam(float v)
+    public static void PushCallParam(long VM, float v)
     {
-        FCLibHelper.fc_push_float(v);
+        FCLibHelper.fc_push_float(VM, v);
     }
-    public static void PushCallParam(double v)
+    public static void PushCallParam(long VM, double v)
     {
-        FCLibHelper.fc_push_double(v);
+        FCLibHelper.fc_push_double(VM, v);
     }
-    public static void PushCallParam(long v)
+    public static void PushCallParam(long VM, long v)
     {
-        FCLibHelper.fc_push_int64(v);
+        FCLibHelper.fc_push_int64(VM, v);
     }
-    public static void PushCallParam(ulong v)
+    public static void PushCallParam(long VM, ulong v)
     {
-        FCLibHelper.fc_push_uint64(v);
+        FCLibHelper.fc_push_uint64(VM, v);
     }
-    public static void PushCallParam(IntPtr v)
+    public static void PushCallParam(long VM, IntPtr v)
     {
-        FCLibHelper.fc_push_void_ptr(v);
+        FCLibHelper.fc_push_void_ptr(VM, v);
     }
-    public static void PushCallParam(string v)
+    public static void PushCallParam(long VM, string v)
     {
-        FCLibHelper.fc_push_string_a(v);
+        FCLibHelper.fc_push_string_a(VM, v);
     }
-    public static void PushCallParam(byte []v)
+    public static void PushCallParam(long VM, byte []v)
     {
         if (v != null)
-            FCLibHelper.fc_push_byte_array(v, 0, v.Length);
+            FCLibHelper.fc_push_byte_array(VM, v, 0, v.Length);
         else
-            FCLibHelper.fc_push_byte_array(v, 0, 0);
+            FCLibHelper.fc_push_byte_array(VM, v, 0, 0);
     }
-    public static void PushCallParam(byte[] v, int nStart, int nLen)
+    public static void PushCallParam(long VM, byte[] v, int nStart, int nLen)
     {
         if (v != null && nStart > 0 && nStart + nLen < v.Length)
-            FCLibHelper.fc_push_byte_array(v, nStart, nLen);
+            FCLibHelper.fc_push_byte_array(VM, v, nStart, nLen);
         else
-            FCLibHelper.fc_push_byte_array(v, 0, 0);
+            FCLibHelper.fc_push_byte_array(VM, v, 0, 0);
     }
-    public static void PushCallParam(ref Vector2 v)
+    public static void PushCallParam(long VM, ref Vector2 v)
     {
-        FCLibHelper.fc_push_vector2(ref v);
+        FCLibHelper.fc_push_vector2(VM, ref v);
     }
-    public static void PushCallParam(ref Vector3 v)
+    public static void PushCallParam(long VM, ref Vector3 v)
     {
-        FCLibHelper.fc_push_vector3(ref v);
+        FCLibHelper.fc_push_vector3(VM, ref v);
     }
-    public static void PushCallParam(ref Vector4 v)
+    public static void PushCallParam(long VM, ref Vector4 v)
     {
-        FCLibHelper.fc_push_vector4(ref v);
+        FCLibHelper.fc_push_vector4(VM, ref v);
     }
-    public static void PushCallParam(ref Plane v)
+    public static void PushCallParam(long VM, ref Plane v)
     {
-        FCLibHelper.fc_push_plane(ref v);
+        FCLibHelper.fc_push_plane(VM, ref v);
     }
-    public static void PushCallParam(ref Matrix4x4 v)
+    public static void PushCallParam(long VM, ref Matrix4x4 v)
     {
-        FCLibHelper.fc_push_matrix(ref v);
+        FCLibHelper.fc_push_matrix(VM, ref v);
     }
-    public static void PushCallParam(ref Bounds v)
+    public static void PushCallParam(long VM, ref Bounds v)
     {
-        FCLibHelper.fc_push_bounds(ref v);
+        FCLibHelper.fc_push_bounds(VM, ref v);
     }
-    public static void PushCallParam(ref Ray v)
+    public static void PushCallParam(long VM, ref Ray v)
     {
-        FCLibHelper.fc_push_ray(ref v);
+        FCLibHelper.fc_push_ray(VM, ref v);
     }
-    public static void PushCallParam(ref Quaternion v)
+    public static void PushCallParam(long VM, ref Quaternion v)
     {
-        FCLibHelper.fc_push_quaternion(ref v);
+        FCLibHelper.fc_push_quaternion(VM, ref v);
     }
-    public static void PushCallParam(Color32 v)
+    public static void PushCallParam(long VM, Color32 v)
     {
-        FCLibHelper.fc_push_color32(ref v);
+        FCLibHelper.fc_push_color32(VM, ref v);
     }
-    public static void PushCallParam(ref Color v)
+    public static void PushCallParam(long VM, ref Color v)
     {
-        FCLibHelper.fc_push_color(ref v);
+        FCLibHelper.fc_push_color(VM, ref v);
     }
-    public static void PushCallParam(ref IntRect v)
+    public static void PushCallParam(long VM, ref IntRect v)
     {
-        FCLibHelper.fc_push_intrect(ref v);
+        FCLibHelper.fc_push_intrect(VM, ref v);
     }
-    public static void PushCallParam(ref Rect v)
+    public static void PushCallParam(long VM, ref Rect v)
     {
-        FCLibHelper.fc_push_rect(ref v);
+        FCLibHelper.fc_push_rect(VM, ref v);
     }
-    public static void PushCallParam(Sphere v)
+    public static void PushCallParam(long VM, Sphere v)
     {
-        FCLibHelper.fc_push_sphere(ref v);
+        FCLibHelper.fc_push_sphere(VM, ref v);
     }
-    public static void PushCallParam(UnityEngine.Object obj)
-    {
-        long nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(nPtr);
-    }
-    public static void PushCallParam(System.Object obj)
+    public static void PushCallParam(long VM, UnityEngine.Object obj)
     {
         long nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_push_intptr(VM, nPtr);
     }
-    public static void PushCallObjectParam<_Ty>(_Ty obj)
+    public static void PushCallParam(long VM, System.Object obj)
+    {
+        long nPtr = FCGetObj.PushObj(obj);
+        FCLibHelper.fc_push_intptr(VM, nPtr);
+    }
+    public static void PushCallObjectParam<_Ty>(long VM, _Ty obj)
     {
         long  nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(nPtr);
+        FCLibHelper.fc_push_intptr(VM, nPtr);
     }
     //------------------------------------------------------------------------
 

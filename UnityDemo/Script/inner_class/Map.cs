@@ -12,7 +12,7 @@ public class iterator<_TyKey, _TyValue>
         // 自增
         return o;
     }
-                               // 功能：测试迭代器是不是有效
+    // 功能：测试迭代器是不是有效
     public bool IsValid()
     {
         return true;

@@ -391,17 +391,17 @@ public class FCValueType
         // fc_push_return_intptr(L, pPtr.nPtr);
         if(value.IsArray)
         {
-            fileData.AppendFormat("{0}FCCustomParam.ReturnArray({1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
+            fileData.AppendFormat("{0}FCCustomParam.ReturnArray(VM, {1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
             return;
         }
         else if(value.IsList)
         {
-            fileData.AppendFormat("{0}FCCustomParam.ReturnList({1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
+            fileData.AppendFormat("{0}FCCustomParam.ReturnList(VM, {1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
             return;
         }
         else if(value.IsMap)
         {
-            fileData.AppendFormat("{0}FCCustomParam.ReturnDictionary({1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
+            fileData.AppendFormat("{0}FCCustomParam.ReturnDictionary(VM, {1},{2});\r\n", szLeftEmpty, szValueName, Ptr);
             return;
         }        
         string szType = value.GetTypeName(true, true);
@@ -424,7 +424,7 @@ public class FCValueType
             return;
         }
         fileData.AppendFormat("{0}long v = FCGetObj.PushObj({1});\r\n", szLeftEmpty, szValueName);
-        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, v);\r\n", szLeftEmpty, Ptr);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr(VM, {1}, v);\r\n", szLeftEmpty, Ptr);
     }
     public static void OutputRefScriptParam(StringBuilder fileData, string szLeftEmpty, FCValueType value, string szLeftName, string Ptr, string szIndex, bool bTempValue)
     {
@@ -464,7 +464,7 @@ public class FCValueType
             fileData.AppendFormat("{0}FCLibHelper.fc_set_value_int({1}, (int){2});\r\n", szLeftEmpty, szOutPtr, szValueName);
             return;
         }
-        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr({1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
+        fileData.AppendFormat("{0}FCLibHelper.fc_set_value_wrap_objptr(VM, {1}, FCGetObj.PushObj({2}));\r\n", szLeftEmpty, szOutPtr, szValueName);
     }
 
     public static bool IsBaseType(fc_value_type nValueType)
@@ -851,5 +851,10 @@ public class FCValueType
                 break;
         }
         return nClassType;
+    }
+    // 功能：得到结构体的大小(内存字节数)
+    public static int GetStructMemSize(Type nClassType)
+    {
+        return System.Runtime.InteropServices.Marshal.SizeOf(nClassType);
     }
 }
