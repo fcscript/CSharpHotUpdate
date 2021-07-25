@@ -103,3 +103,5 @@
 <p>修正for循环条件中多if指令的BUG</p>
 <p>增强Broadcast广播功能，增加获取广播类的功能</p>
 <p>增加动态调用函数功能System.Call</p>
+<p>2021-07-25</p>
+<p>优化并增强String::Format，String::AppendFormat接口，支持格式化参数</p>
