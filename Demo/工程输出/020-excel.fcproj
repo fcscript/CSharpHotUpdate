@@ -1,0 +1,18 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+    $(curpath)\..\020-excel\
+</IncludePath>
+<IncludeFile>
+</IncludeFile>
+<CSharpPath>
+</CSharpPath>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>
+<CopyPathName></CopyPathName>
+<ErrorLogPathName></ErrorLogPathName>
+<ProjCode>0</ProjCode>

@@ -1,0 +1,10 @@
+﻿
+// 注意，枚举文件需要使用UTF8编码，如果有中文的话
+
+enum ObjType
+{
+	未知 = 0,
+    道具 = GObjType.Item,
+    怪物 = GObjType.Monster,
+    玩家 = GObjType.Player,	
+};

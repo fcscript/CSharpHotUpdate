@@ -105,3 +105,5 @@
 <p>增加动态调用函数功能System.Call</p>
 <p>2021-07-25</p>
 <p>优化并增强String::Format，String::AppendFormat接口，支持格式化参数</p>
+<p>2021-08-15</p>
+<p>增加Excel表的支持，添加转表工具, libfclib_dll.so增加了16k</p>
