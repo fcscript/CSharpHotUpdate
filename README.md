@@ -107,3 +107,6 @@
 <p>优化并增强String::Format，String::AppendFormat接口，支持格式化参数</p>
 <p>2021-08-15</p>
 <p>增加Excel表的支持，添加转表工具, libfclib_dll.so增加了16k</p>
+<p>2021-08-18</p>
+<p>修正Broadcast广播参数类型不一致时，没有自动转换的BUG</p>
+<p>修正Format无符号整数会转成有符号数的BUG</p>

@@ -27,15 +27,14 @@ class UIPanelManger
 	{
 		print("优先级：10，   UIPanelManger::OnLeaveGame()");
 	}
-};
 
-UIPanelManger  ui_Mng;
-[Broadcast("OnEnterGame", 1001)]
-void  OnGlbEnterGame(int UserID, StringA UserName)
-{
-	print("优先级：1001， OnGlbEnterGame(UserID = {0}, UserName = {1})", UserID, UserName);
-	ui_Mng = new UIPanelManger();
-}
+	static UIPanelManger  s_pIns = new UIPanelManger();
+	[Broadcast("OnEnterGame", 1001)]
+	static void  OnGlbEnterGame(int UserID, StringA UserName)
+	{
+		print("优先级：1001， OnGlbEnterGame(UserID = {0}, UserName = {1})", UserID, UserName);
+	}
+};
 
 [Broadcast("OnLeaveGame", 1)]
 void OnGlbLeaveGame()
