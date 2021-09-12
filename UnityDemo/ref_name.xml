@@ -55,12 +55,18 @@
   <RefClass ClassName="UnityObject">
     <Names>name</Names>
   </RefClass>
+  <RefClass ClassName="UserClass">
+    <Names>S2C_Test2</Names>
+    <Names>S2C_Test3</Names>
+    <Names>S2C_Test4</Names>
+    <Names>S2C_Test5</Names>
+    <Names>S2C_Test1</Names>
+    <Names>MandelbrotCheck</Names>
+    <Names>TestFunc1</Names>
+  </RefClass>
   <RefClass ClassName="SkinnedMeshRenderer">
   </RefClass>
   <RefClass ClassName="Input">
     <Names>mousePosition</Names>
-  </RefClass>
-  <RefClass ClassName="UserClass">
-    <Names>TestFunc1</Names>
   </RefClass>
 </Root>

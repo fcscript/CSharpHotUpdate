@@ -44,6 +44,19 @@ public class FCRefClassCfg
         xs.Serialize(stream, cfg);
         stream.Close();
     }
+    public void PrepareUnityName()
+    {
+        RefUnityObject(typeof(UnityEngine.Object), "UnityObject");
+        RefUnityObject(typeof(System.Object), "Object");
+    }
+    void  RefUnityObject(Type t, string szClassName)
+    {
+        FCRefClass ref_class = FindClass(szClassName);
+        if(ref_class != null)
+        {
+            m_Finder[t.Name] = ref_class;
+        }
+    }
     void  MakerFinder(List<FCRefClass>  rList)
     {
         if (rList == null)

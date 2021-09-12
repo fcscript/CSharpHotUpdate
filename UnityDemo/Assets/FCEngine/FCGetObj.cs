@@ -28,6 +28,7 @@ public class FCGetObj
         FC_VALUE_TYPE_FCTYPE,          // type类型, FCType type = typeof(xxxx);
         FC_VALUE_TYPE_FCOBJECT,        // 
         FC_VALUE_TYPE_INPORT_CLASS,    // 外部导入的class
+        FC_VALUE_TYPE_EXCEL,           // 数据表对象
         FC_VALUE_TYPE_SERIALIZE,       // CSerialize
         FC_VALUE_TYPE_MAP_ITERATOR,    // 迭代器iterator
         FC_VALUE_TYPE_FUNC_PTR,        // 函数指针

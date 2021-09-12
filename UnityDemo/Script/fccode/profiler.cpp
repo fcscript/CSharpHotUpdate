@@ -80,7 +80,7 @@ export void TestMandelbrot()
 export void Test0(Transform transform)
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         transform.position = transform.position;
     }
@@ -93,7 +93,7 @@ export void  Test1(Transform transform)
     uint  nBegin = System.GetTickCount();
     Vector3 vUp;
     vUp.Set(0, 1, 0);
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         transform.Rotate(vUp, 1);
     }
@@ -109,7 +109,7 @@ export void Test2()
     float x;
     float y;
     float z;
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         f = i;
         v.Set(f, f, f);
@@ -159,7 +159,7 @@ export void Test4(Transform transform)
 export void Test5()
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         Vector3 v = Input.mousePosition;
     }
@@ -170,7 +170,7 @@ export void Test5()
 export void Test6()
 {
     uint  nBegin = System.GetTickCount();
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         Vector3 v;
         v.Set(i, i, i);
@@ -186,7 +186,7 @@ export void Test7()
     Quaternion  qa;
     Quaternion  q1;
     Quaternion  q2;
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
         //q1 = Quaternion.Euler(i, i, i);
         //q2 = Quaternion.Euler(i * 2, i * 2, i * 2);
@@ -204,7 +204,7 @@ export void Test8()
     uint  nBegin = System.GetTickCount();
     int  total = 0;
 	int  i = 0;
-    for(i = 0; i<2000000; ++i)
+    for(i = 0; i<1000000; ++i)
     {
         total = total + i - (i/2) * (i + 3) / (i + 5);
     }
@@ -223,7 +223,7 @@ export void Test9()
     }
     uint  nBegin = System.GetTickCount();
     int  total = 0;
-    for(int i = 0; i<20000; ++i)
+    for(int i = 0; i<100000; ++i)
     {
         for(int j = 0; j<1024; ++j)
         {
@@ -244,7 +244,7 @@ export void Test91(Transform transform)
     }
     uint  nBegin = System.GetTickCount();
     float  total = 0;
-    for(int i = 0; i<20000; ++i)
+    for(int i = 0; i<100000; ++i)
     {
         for(int j = 0; j<1024; ++j)
         {
@@ -260,7 +260,7 @@ export void Test10(Transform transform)
 {    
     uint  nBegin = System.GetTickCount();
 	
-    for(int i = 0; i<2000000; ++i)
+    for(int i = 0; i<200000; ++i)
     {
 		UserClass.TestFunc1(1, "123", transform);
     }		

@@ -48,6 +48,7 @@ public static class FCExport
         FCRefClassCfg custom = FCRefClassCfg.LoadCfg(szPath + "custom_name.xml");
         if (used_cfg != null)
             used_cfg.MergeFinder(custom);
+        used_cfg.PrepareUnityName();
 
         FCClassWrap pWrap = new FCClassWrap();
         pWrap.BeginExport("");
@@ -279,7 +280,7 @@ public static class FCExport
             {
                 FCLibHelper.fc_set_debug_print_func(FCScriptLoader.print_error);
                 FCLibHelper.fc_set_output_error_func(FCScriptLoader.print_error);
-                all_class_wrap.Register();
+                all_class_wrap.Register(FCLibHelper.fc_get_main_vm());
             }
         }
 		#endif
