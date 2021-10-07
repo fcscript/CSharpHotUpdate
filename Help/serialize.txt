@@ -2,6 +2,8 @@
    {
        // 功能：设置读模式, 流的数据由外部指定
        public void ReadMode(list<char> array, int nStart, int nSize);
+       // 功能：设置读模式, 流的数据由已知的流中获取
+       public void ReadMode(FCSerialize ar, int nStart, int nSize);
        // 功能：设置读模式, 流的数据由外部指定
        public void ReadMode(StringA szData);
        // 功能：设置写模式, 流的内存外部指定
@@ -18,7 +20,9 @@
        public void CopyTo(list<char> aOut);
        public void CopyTo(StringA out szOut);
        // 功能：取当前流的指针位置
-       public int  Position();
+       public int GetPosition();
+       // 功能：返回当前流的缓冲区的最大长度
+       public int GetBufferSize();
        // 功能：测试当前流是不是读模式
        public bool IsReadMode();
        // 功能：测试是不是可以读取指定字节大小的数据
@@ -26,8 +30,57 @@
        public bool IsCanRead(int nReadSize);
        // 功能：将当前指针跳到流数据末尾
        public void SkipToEnd();
+       // 功能：预分配写入缓冲区的长度
+       public bool Reserve(int nSize);
+       --------------------------------------------------------------------------------------
        // 功能：读或写一个变量
        // 参数：value - 任意数据类型（基本数据类型 + 自定义的class)
        // 说明：value默认是引用传递的，如果class，读模式下如果为NULL，就会自动创建一个       
        public void ReadWrite(_Ty value);
+       // 功能：从字符串的指定位置，读取一个定长的字符串，并写入到value中
+       // 参数：value - 输入并输出的数组变量
+       //       nStart - 从value的指定写入位置
+       //       nSize - 读取写入的长度
+       // 说明：仅支持基本的数据类型（如boo, char, byte, short, ushort, int, uint, long, float, double, StringA)
+       //       不支持对象数组
+       public bool ReadFixed(StringA value, int nStart, int nSize);
+       // 功能：从字符串的指定位置，读取一个定长的字符串，并写入到数据流
+       public bool WriteFixed(StringA value, int nStart, int nSize);
+       // 功能：从数组指定位置，读取一个定长的数组，并写入到数据流
+       // 参数：value - 数组变量
+       //       nStart - 从value的指定写入位置
+       //       nSize - 读取写入的长度
+       // 说明：仅支持基本的数据类型（如boo, char, byte, short, ushort, int, uint, long, float, double, StringA)
+       //       不支持对象数组
+       public bool WriteFixed(List<_Ty> value, int nStart, int nSize);
+       --------------------------------------------------------------------------------------
+       // 以下是关于Protobuf相关的接口
+       // 功能：读取一个PB的TAG头
+       public int ProtobufReadTag();
+       // 功能：按Tag的头，跳过流的读取
+       public void ProtobufSkipField(int nTag);
+       // 功能：读取一个整型变量
+       public bool ProtobufReadVarint(_Ty value);
+       // 功能：读取一个PB对象
+       public bool ProtobufRead(_Ty value, int nFiledIndex, PB_ZipType keyZipType);
+       // 功能：写入一个PB对象
+       public void ProtobufWrite(_Ty value, int nFieldIndex, PB_ZipType nType);
+       // 功能：读取map对象
+       // 说明：这里sMap参数是引用传递，如果你想加上ref, 就得修改导出的代码，因为代码的代码目前没有加 ref
+       public bool ProtobufReadMap(map<_TyKey, _TyValue> sMap, int nFiledIndex, PB_ZipType keyZipType, PB_ZipType valueZipType);
+       // 功能：写入map对象
+       public void ProtobufWriteMap<_TyKey, _TyValue>(map<_TyKey, _TyValue> sMap, int nFiledIndex, PB_ZipType keyZipType, PB_ZipType valueZipType);
+       // 功能：通过反射读取Protobuf脚本对象
+       // 说明：obj - 只能是通过插件导出的带PBAttrib标签的对象
+       public bool ProtobufReadObj(System.Object obj);
+       // 功能：通过反射写入Protobuf脚本对象
+       // 说明：obj - 只能是通过插件导出的带PBAttrib标签的对象
+       public void ProtobufWriteObj(System.Object obj);
+       --------------------------------------------------------------------------------------
+   };
+   public enum PB_ZipType
+   {
+       PB_Zip_Varint,    // 变长
+       PB_Zip_Fixed,     // 定长
+       PB_Zip_ZigZag,    // ZigZag压缩
    };
