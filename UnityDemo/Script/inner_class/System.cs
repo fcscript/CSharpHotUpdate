@@ -130,7 +130,7 @@ class os
         return 0.0f;
     }
 
-    // 功能：读取一个XML
+    // 功能：读取一个文本格式的XML到脚本对象
     // 参数：pXmlRoot - 这个必须是class, 并在成员变量声明中添加[XmlElementAttribute]字段
     //       szRootName - XML表根节点的名字
     //       szFileData - XML文件数据
@@ -138,7 +138,7 @@ class os
     {
         return true;
     }
-    // 功能：将XML写入到内存
+    // 功能：将脚本对象转换成文本格式的XML
     // 参数：pXmlRoot - 这个必须是class, 并在成员变量声明中添加[XmlElementAttribute]字段
     //       szRootName - XML表根节点的名字
     //       szFileData - XML输出数据
@@ -146,13 +146,13 @@ class os
     {
         return true;
     }
-    // 功能：从一个二进制流中读取XML配置
+    // 功能：从一个二进制流中读取XML脚本对象
     // 说明：这个目前写的是测试指令，测试发现这个速度比ReadXml要慢，而且文件还比XML要大，所以这个二进制流的接口是没有意义的，请不要使用
     public static bool ReadBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
     {
         return true;
     }
-    // 功能：将XML配置按二进制流的格式写入到文件
+    // 功能：将XML脚本对象写入到二进制流
     // 说明：这个目前写的是测试指令，测试发现这个速度比ReadXml要慢，而且文件还比XML要大，所以这个二进制流的接口是没有意义的，请不要使用
     public static bool XmlToBin<_Ty>(_Ty pXmlRoot, StringA szFileData)
     {
@@ -199,7 +199,7 @@ class os
         return new IntPtr();
     }
 
-    // 功能：系统广博
+    // 功能：系统广播调用
     public static void  Broadcast(StringA szGroupName, params System.Object[] args)
     {
 

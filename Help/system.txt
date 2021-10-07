@@ -25,16 +25,44 @@
        // 功能：返回class实例ins的弱引用计数,调试用的接口
        pulbic static int  GetWeakRef(ins);
        // 功能：开方
-       pulbic static float sqrt(float fValue);
-       pulbic static float sin(float fValue);
-       pulbic static float cos(float fValue);
-       pulbic static float tan(float fValue);
-       pulbic static float atan(float fValue);
-       pulbic static float asin(float fValue);
-       pulbic static float acos(float fValue);
-       
-       public bool ReadXml(_Ty pXmlRoot, const StringA &szRootName, const StringA &szFileData);
-       pulbic bool WriteXml(_Ty pXmlRoot,const StringA &szRootName, StringA &szFileData);
-       public bool ReadBin( _Ty pXmlRoot, const StringA &szFileData);
-       public bool XmlToBin(_Ty pXmlRoot, StringA &szFileData);
+       public static double sqrt(double fValue);
+       public static float sqrtf(float fValue);
+       public static double sin(double fValue);
+       public static float sinf(float fValue);
+       public static double cos(double fValue)
+       public static float cosf(float fValue);
+       public static double tan(double fValue);
+       public static float tanf(float fValue);
+       public static double atan(double fValue);
+       public static float atanf(float fValue);
+       public static double atan2(double y, double x);
+       public static float atan2f(float y, float x);
+       public static double asin(double fValue);
+       public static float asinf(float fValue);
+       public static double acos(double fValue);
+       public static float acosf(float fValue);
+          
+       // 功能：读取一个文本格式的XML到脚本对象
+       public static bool ReadXml(_Ty pXmlRoot, const StringA &szRootName, const StringA &szFileData);
+       // 功能：将脚本对象转换成文本格式的XML
+       pulbic static bool WriteXml(_Ty pXmlRoot,const StringA &szRootName, StringA &szFileData);
+       // 功能：从一个二进制流中读取XML脚本对象
+       public static bool ReadBin( _Ty pXmlRoot, const StringA &szFileData);
+       // 功能：将XML脚本对象写入到二进制流
+       public static bool XmlToBin(_Ty pXmlRoot, StringA &szFileData);
+         
+       // 功能：读取一个Json配置
+       public static bool ReadJson(_Ty pJsonRoot, StringA szJson);
+       // 功能：将Json对象转换成Json字符串
+       public static StringA  WriteJson(_Ty pJsonRoot);
+         
+       // 功能：打印到命令行
+       public static void print(StringA szFormat, params System.Object[] args);
+         
+       // 功能：系统广播调用
+       public static void  Broadcast(StringA szGroupName, params System.Object[] args);        
+       // 功能：获取需要广播的类列表
+       public static void  GetBroadstList(ref List<FCType> ClassList, StringA szFuncName);
+       // 功能：动态调用任意一个函数(Invoke)
+       public static void  Call(_Ty obj, StringA szFuncName, params System.Object[] args);
    };
