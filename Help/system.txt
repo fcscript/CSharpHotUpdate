@@ -24,6 +24,7 @@
        pulbic static int  GetRef(ins);
        // 功能：返回class实例ins的弱引用计数,调试用的接口
        pulbic static int  GetWeakRef(ins);
+       ---------------------------------------------------------------
        // 功能：开方
        public static double sqrt(double fValue);
        public static float sqrtf(float fValue);
@@ -41,7 +42,7 @@
        public static float asinf(float fValue);
        public static double acos(double fValue);
        public static float acosf(float fValue);
-          
+       ---------------------------------------------------------------
        // 功能：读取一个文本格式的XML到脚本对象
        public static bool ReadXml(_Ty pXmlRoot, const StringA &szRootName, const StringA &szFileData);
        // 功能：将脚本对象转换成文本格式的XML
@@ -50,15 +51,15 @@
        public static bool ReadBin( _Ty pXmlRoot, const StringA &szFileData);
        // 功能：将XML脚本对象写入到二进制流
        public static bool XmlToBin(_Ty pXmlRoot, StringA &szFileData);
-         
+       ---------------------------------------------------------------
        // 功能：读取一个Json配置
        public static bool ReadJson(_Ty pJsonRoot, StringA szJson);
        // 功能：将Json对象转换成Json字符串
        public static StringA  WriteJson(_Ty pJsonRoot);
-         
+       ---------------------------------------------------------------
        // 功能：打印到命令行
        public static void print(StringA szFormat, params System.Object[] args);
-         
+       ---------------------------------------------------------------
        // 功能：系统广播调用
        public static void  Broadcast(StringA szGroupName, params System.Object[] args);        
        // 功能：获取需要广播的类列表
