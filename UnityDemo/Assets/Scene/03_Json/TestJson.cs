@@ -69,8 +69,7 @@ public class TestJson : FCScriptLoader
         long nBeginTime = DateTime.Now.Ticks / 10000;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            FCLibHelper.fc_push_string_a(m_VMPtr, szJson);
-            FCLibHelper.fc_call(m_VMPtr, 0, "JsonLoader.TestLoad");
+            FCCallHelper.fc_param_call(m_VMPtr, 0, "JsonLoader.TestLoad", szJson);
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;
@@ -82,8 +81,7 @@ public class TestJson : FCScriptLoader
         string szJson = m_ItemCfg.text;
         long nBeginTime = DateTime.Now.Ticks / 10000;
         int nTotalCount = 100;
-        FCLibHelper.fc_push_string_a(m_VMPtr, szJson);
-        FCLibHelper.fc_call(m_VMPtr, 0, "JsonLoader.TestWrite");
+        FCCallHelper.fc_param_call(m_VMPtr, 0, "JsonLoader.TestWrite", szJson);
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;
         string szTips = string.Format("FC Save Json 花费总时间={0}毫秒,平均时间={1}毫秒,总调用次数={2}", nCostTime, nCostTime / nTotalCount, nTotalCount);
@@ -164,8 +162,7 @@ public class TestJson : FCScriptLoader
         long nBeginTime = DateTime.Now.Ticks / 10000;
         for (int i = 0; i < nTotalCount; ++i)
         {
-            FCLibHelper.fc_push_string_a(m_VMPtr, szJson);
-            FCLibHelper.fc_call(m_VMPtr, 0, "JsonLoaderMapData.TestLoad");
+            FCCallHelper.fc_param_call(m_VMPtr, 0, "JsonLoaderMapData.TestLoad", szJson);
         }
         long nEndTime = DateTime.Now.Ticks / 10000;
         long nCostTime = nEndTime - nBeginTime;

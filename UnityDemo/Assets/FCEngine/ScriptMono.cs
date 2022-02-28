@@ -46,7 +46,7 @@ public class ScriptMono : MonoBehaviour
         }
         if(m_nScriptInsPtr != 0)
         {
-            FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "Start");
+            FCCallHelper.fc_void_call(m_VMPtr, m_nScriptInsPtr, "Start");
         }
     }
     protected virtual void OnCreateScript()
@@ -59,7 +59,7 @@ public class ScriptMono : MonoBehaviour
         {
             if(FCLibHelper.fc_is_init()) // 如果脚本系统已经释放了，就不能调用脚本的函数了
             {
-                FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
+                FCCallHelper.fc_void_call(m_VMPtr, m_nScriptInsPtr, "OnDestroy"); // 实际上，脚本一般是不需要OnDestroy事件的，只需要释放脚本就可以了
                 FCLibHelper.fc_relese_ins(m_VMPtr, m_nScriptInsPtr); // 释放脚本对象，如果脚本对象有析构函数，就会自动调用析构函数
             }
             m_nScriptInsPtr = 0;
@@ -80,8 +80,8 @@ public class ScriptMono : MonoBehaviour
 
         if (m_nScriptInsPtr != 0)
         {
-            FCDll.PushCallParam(m_VMPtr, szName);  // 传点击的按钮的参数
-            FCLibHelper.fc_call(m_VMPtr, m_nScriptInsPtr, "OnButtonClicked");
+            // 传点击的按钮的参数
+            FCCallHelper.fc_param_call(m_VMPtr, m_nScriptInsPtr, "OnButtonClicked", szName);
         }
     }
     public long GetScriptPtr()

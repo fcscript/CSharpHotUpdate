@@ -84,139 +84,215 @@ public class FCDll
         return s_pIns != null;
     }
 
-    // 功能：调用FC脚本时，传递C#参数给脚本函数
-    public static void PushCallParam(long VM, bool v)
+    //------------------------------------------------------------------------
+    //public static void WriteValueToScript(long VM, long ScriptValuePtr, System.Object obj)
+    //{
+    //    long nPtr = FCGetObj.PushObj(obj);
+    //    FCLibHelper.fc_set_value_wrap_objptr(VM, ScriptValuePtr, nPtr);
+    //}
+	public static void WriteValueToScript(long VM, long ScriptValuePtr, System.Object obj)
+	{
+		long nPtr = FCGetObj.PushObj(obj);
+		FCLibHelper.fc_set_value_wrap_objptr(VM, ScriptValuePtr, nPtr);
+	}
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, UnityEngine.Object obj)
     {
-        FCLibHelper.fc_push_bool(VM, v);
+        long nPtr = FCGetObj.PushObj(obj);
+        FCLibHelper.fc_set_value_wrap_objptr(VM, ScriptValuePtr, nPtr);
     }
-    public static void PushCallParam(long VM, byte v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, bool v)
     {
-        FCLibHelper.fc_push_byte(VM, v);
+        FCLibHelper.fc_set_value_bool(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, char v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, byte v)
     {
-        FCLibHelper.fc_push_char(VM, v);
+        FCLibHelper.fc_set_value_byte(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, short v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, char v)
     {
-        FCLibHelper.fc_push_short(VM, v);
+        FCLibHelper.fc_set_value_char(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, ushort v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, short v)
     {
-        FCLibHelper.fc_push_ushort(VM, v);
+        FCLibHelper.fc_set_value_short(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, int v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, ushort v)
     {
-        FCLibHelper.fc_push_int(VM, v);
+        FCLibHelper.fc_set_value_ushort(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, uint v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, int v)
     {
-        FCLibHelper.fc_push_uint(VM, v);
+        FCLibHelper.fc_set_value_int(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, float v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, uint v)
     {
-        FCLibHelper.fc_push_float(VM, v);
+        FCLibHelper.fc_set_value_uint(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, double v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, float v)
     {
-        FCLibHelper.fc_push_double(VM, v);
+        FCLibHelper.fc_set_value_float(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, long v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, double v)
     {
-        FCLibHelper.fc_push_int64(VM, v);
+        FCLibHelper.fc_set_value_double(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, ulong v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, long v)
     {
-        FCLibHelper.fc_push_uint64(VM, v);
+        FCLibHelper.fc_set_value_int64(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, IntPtr v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, ulong v)
     {
-        FCLibHelper.fc_push_void_ptr(VM, v);
+        FCLibHelper.fc_set_value_uint64(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, string v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, IntPtr v)
     {
-        FCLibHelper.fc_push_string_a(VM, v);
+        FCLibHelper.fc_set_value_void_ptr(ScriptValuePtr, v);
     }
-    public static void PushCallParam(long VM, byte []v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, string v)
+    {
+        FCLibHelper.fc_set_value_string_a(ScriptValuePtr, v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector2 v)
+    {
+        FCLibHelper.fc_set_value_vector2(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector3 v)
+    {
+        FCLibHelper.fc_set_value_vector3(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector4 v)
+    {
+        FCLibHelper.fc_set_value_vector4(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Plane v)
+    {
+        FCLibHelper.fc_set_value_plane(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Bounds v)
+    {
+        FCLibHelper.fc_set_value_bounds(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Quaternion v)
+    {
+        FCLibHelper.fc_set_value_quaternion(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Color32 v)
+    {
+        FCLibHelper.fc_set_value_color32(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Color v)
+    {
+        FCLibHelper.fc_set_value_color(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, IntRect v)
+    {
+        FCLibHelper.fc_set_value_intrect(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Rect v)
+    {
+        FCLibHelper.fc_set_value_rect(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Sphere v)
+    {
+        FCLibHelper.fc_set_value_sphere(ScriptValuePtr, ref v);
+    }
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, byte []v)
     {
         if (v != null)
-            FCLibHelper.fc_push_byte_array(VM, v, 0, v.Length);
-        else
-            FCLibHelper.fc_push_byte_array(VM, v, 0, 0);
+        {
+            FCLibHelper.fc_set_array_byte(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, byte[] v, int nStart, int nLen)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, bool[] v)
     {
-        if (v != null && nStart > 0 && nStart + nLen < v.Length)
-            FCLibHelper.fc_push_byte_array(VM, v, nStart, nLen);
-        else
-            FCLibHelper.fc_push_byte_array(VM, v, 0, 0);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_bool(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Vector2 v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, short[] v)
     {
-        FCLibHelper.fc_push_vector2(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_short(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Vector3 v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, ushort[] v)
     {
-        FCLibHelper.fc_push_vector3(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_ushort(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Vector4 v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, int[] v)
     {
-        FCLibHelper.fc_push_vector4(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_int(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Plane v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, uint[] v)
     {
-        FCLibHelper.fc_push_plane(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_uint(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Matrix4x4 v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, float[] v)
     {
-        FCLibHelper.fc_push_matrix(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_float(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Bounds v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, double[] v)
     {
-        FCLibHelper.fc_push_bounds(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_set_array_double(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Ray v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Color32[] v)
     {
-        FCLibHelper.fc_push_ray(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_color32(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Quaternion v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Color[] v)
     {
-        FCLibHelper.fc_push_quaternion(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_color(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, Color32 v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector2[] v)
     {
-        FCLibHelper.fc_push_color32(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_vector2(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Color v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector3[] v)
     {
-        FCLibHelper.fc_push_color(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_vector3(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref IntRect v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Vector4[] v)
     {
-        FCLibHelper.fc_push_intrect(VM, ref v);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_vector4(ScriptValuePtr, v, 0, v.Length);
+        }
     }
-    public static void PushCallParam(long VM, ref Rect v)
+    public static void WriteValueToScript(long VM, long ScriptValuePtr, Rect[] v)
     {
-        FCLibHelper.fc_push_rect(VM, ref v);
-    }
-    public static void PushCallParam(long VM, Sphere v)
-    {
-        FCLibHelper.fc_push_sphere(VM, ref v);
-    }
-    public static void PushCallParam(long VM, UnityEngine.Object obj)
-    {
-        long nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(VM, nPtr);
-    }
-    public static void PushCallParam(long VM, System.Object obj)
-    {
-        long nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(VM, nPtr);
-    }
-    public static void PushCallObjectParam<_Ty>(long VM, _Ty obj)
-    {
-        long  nPtr = FCGetObj.PushObj(obj);
-        FCLibHelper.fc_push_intptr(VM, nPtr);
+        if (v != null)
+        {
+            FCLibHelper.fc_get_array_rect(ScriptValuePtr, v, 0, v.Length);
+        }
     }
     //------------------------------------------------------------------------
 

@@ -26,6 +26,12 @@ public struct Sphere
 
 public class FCLibHelper
 {
+    static long m_CallKey = 0;
+
+    public static long QueryCallKey()
+    {
+        return ++m_CallKey;
+    }
     // 扩展方法
     public static string fc_get_string_a(long L, int i)
     {
@@ -43,14 +49,6 @@ public class FCLibHelper
         return buff;
     }
     // 扩展方法
-    public static string fc_get_return_string_a(long VM)
-    {
-        int nLen = FCLibHelper.fc_get_return_string_len(VM);
-        byte[] buff = new byte[nLen];
-        FCLibHelper.fc_get_return_string_a(VM, buff, nLen);
-        string szParam = System.Text.Encoding.UTF8.GetString(buff, 0, nLen);
-        return szParam;
-    }
     public static string fc_get_value_string_a(long VM, long ptr)
     {
         int nLen = FCLibHelper.fc_get_value_string_len(VM, ptr);
@@ -82,14 +80,20 @@ public class FCLibHelper
     public delegate int fc_call_back_inport_class_func(long L);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool fc_call_back_inport_class_equal(long L, long R);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void fc_call_back_override(long L, int nClassName, string pcsFuncName, long UserData1, long UserData2);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void fc_input_outer_callback(long L, long UserData);
 #else
     public delegate void LPCustomPrintCallback(string pcsInfo);
     public delegate int fc_call_back(long L);
     public delegate int fc_call_back_inport_class_func(long L);
     public delegate bool fc_call_back_inport_class_equal(long L, long R);
+    public delegate void fc_call_back_override(long L, int nClassName, string pcsFuncName, long UserData1, long UserData2);
+    public delegate void fc_input_outer_callback(long L, long UserData);
 #endif
 
-//#if !UNITY_EDITOR && UNITY_IPHONE
+    //#if !UNITY_EDITOR && UNITY_IPHONE
 #if UNITY_IOS
     const string FCDLL = "__Internal";
 #else
@@ -222,6 +226,34 @@ public class FCLibHelper
     // 功能：注册C#导入类的Equal函数
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_register_class_equal(long VM, int nClassNameID, fc_call_back_inport_class_equal func);
+    // 反射类接口--------begin
+    // 功能：注册C#反射类的回调函数
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_func(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的属性get/set方法
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_attrib(long VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet);
+    // 功能：注册C#反射类的属性get/set方法, += , -=
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_attrib_ex(long VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet, fc_call_back_inport_class_func pAddSet, fc_call_back_inport_class_func pSubSet);
+    // 功能：注册C#反射类的cast强制转换接口
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_cast(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的new
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_new(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的delete
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_del(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的释放引用接口
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_release_ref(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的hash函数
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_hash(long VM, fc_call_back_inport_class_func func);
+    // 功能：注册C#反射类的Equal函数
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_register_reflex_class_equal(long VM, fc_call_back_inport_class_equal func);
     // 功能：平台注册的回调函数，取脚本所传的函数参数
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern int fc_get_param_count(long L);
@@ -334,107 +366,72 @@ public class FCLibHelper
     // 功能：根据当前调参数取虚拟机的地址
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern long fc_get_vm_ptr(long L);
-    // 功能：清除当前脚本函数临时传递的参数
-    // 说明：这个函数并不需要上层调用，每次通过fc_call调用函数脚本后，会自动清除当前栈上的临时参数
+    // 功能：得到当前调用wrap调用(脚本调用宿主语言)的类的名字ID
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_clear_param(long VM);
-    //--------------------------------------------------------------------------------------
-    // 以下是调用脚本函数前的，传给脚本函数的参数的接口
-    // 
-    // 功能：将一个字符参数压入函数参数栈（函数调用传参）
+    public static extern int fc_get_current_call_class_name_id(long L);
+    // 功能：得到当前调用wrap调用(脚本调用宿主语言)的类的函数的名字ID
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_char(long VM, char v);
-    // 功能：将一个bool变量压入函数参数栈（函数调用传参）
+    public static extern int fc_get_current_call_class_function_name_id(long L);
+    // 功能：通过类名获取类的名字(id转字符串)
+    // 参数：L - 当前调用的上下文参数
+    //       pOutBuff - 输出的字符串地址
+    //       nOutBuffSize - 缓冲区的最大容量
+    // 返回值：总是返回类名的长度(不管有没有拷贝成功）
+    // 说明：这个是给C#使用的接口
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_bool(long VM, bool v);
-    // 功能：将一个byte变量压入函数参数栈（函数调用传参）
+    public static extern int fc_csharp_get_current_call_class_name(long L, byte[] pOutBuff, int nOutBuffSize);
+    // 功能：通过类ID+函数ID获取函数的名字(id转字符串)
+    // 参数：L - 当前调用的上下文参数
+    //       pOutBuff - 输出的字符串地址
+    //       nOutBuffSize - 缓冲区的最大容量
+    // 返回值：总是返回函数名的长度(不管有没有拷贝成功）
+    // 说明：这个是给C#使用的接口
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_byte(long VM, byte v);
-    // 功能：将一个short变量压入函数参数栈（函数调用传参）
+    public static extern int fc_csharp_get_current_call_class_function_name(long L, byte[] pOutBuff, int nOutBuffSize);
+    // 功能：判断变量地址是不是wrap的模板实例
+    // 参数：ptr - 变量的地址
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_short(long VM, short v);
-    // 功能：将一个ushort变量压入函数参数栈（函数调用传参）
+    public static extern bool fc_is_wrap_template(long VM, long ptr);
+    // 功能：得到模板参数ID
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_ushort(long VM, ushort v);
-    // 功能：将一个utf16的宽字符压入函数参数栈（函数调用传参）
+    public static extern int fc_get_wrap_template_param_id(long VM, long ptr);
+    // 功能：得到指定变量的模板参数数量
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_wchar(long VM, ushort v);
-    // 功能：将一个int参数压入函数参数栈（函数调用传参）
+    public static extern int fc_get_wrap_template_param_count(long VM, long ptr);
+    // 功能：得到指定模板实例的第N个参数的类型
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_int(long VM, int v);
-    // 功能：将一个uint参数压入函数参数栈（函数调用传参)
+    public static extern int fc_get_wrap_template_param_type(long VM, long ptr, int nIndex);
+    // 功能：得到指定模板实例的第N个参数的类的ID
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_uint(long VM, uint v);
-    // 功能：将一个float参数压入函数参数栈（函数调用传参)
+    public static extern int fc_get_wrap_template_param_class_name_id(long VM, long ptr, int nIndex);
+    // 功能：得到指定模板实例的第N个参数的类名(C#使用)
+    // 返回值：返回名字的真实长度
+    // 说明：如果pOutBuff为NULL 或 nOutBuffSize <= 0, 就直接返回字符串的长度;
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_float(long VM, float v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_double(long VM, double v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_int64(long VM, long v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_uint64(long VM, ulong v);
-    // 功能：将一个C#平台的对象ID压入函数参数栈（函数调用传参)
-    // 说明：这个参数参数在C++平台，可以是对象的地址（转换成64位整数）
-    //       如果在C#平台，可以是自己管理的对象的ID(如Unity工程中FCGetObj管理器的对象ID)
-    // 这个接口有歧义，后面换成fc_push_wrap_objptr
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_intptr(long VM, long v);
-    // 功能：将一个跨平台的对象ID(或对象的地址）压入函数参数栈（函数调用传参)
-    // 参数：v - 宿主平台(C#或C++)对象的唯一标识（可以是管理器的对象ID, 或对象的地址）
-    // 说明：Unity C#平台, 对象管理FCGetObj管理的
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_wrap_objptr(long VM, long v);
-    // 功能：将一个void指针(C#中的IntPtr)参数压入函数参数栈（函数调用传参)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_void_ptr(long VM, IntPtr v);
-    // 功能：将一个字符串参数压入函数参数栈（函数调用传参)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_string_a(long VM, string v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_string_w(long VM, ushort[] v, int nLen);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_byte_array(long VM, byte[] v, int nStart, int nLen);
-    // 功能：将一个Vector2参数压入函数参数栈（函数调用传参)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_vector2(long VM, ref Vector2 v);
-    // 功能：将一个Vector3参数压入函数参数栈（函数调用传参)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_vector3(long VM, ref Vector3 v);
-    // 功能：将一个Vector4参数压入函数参数栈（函数调用传参)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_vector4(long VM, ref Vector4 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_plane(long VM, ref Plane v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_matrix(long VM, ref Matrix4x4 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_bounds(long VM, ref Bounds v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_quaternion(long VM, ref Quaternion v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_ray(long VM, ref Ray v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_color32(long VM, ref Color32 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_color(long VM, ref Color v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_intrect(long VM, ref IntRect v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_rect(long VM, ref Rect v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_push_sphere(long VM, ref Sphere v);
-    // 功能：预备调用脚本函数
+    public static extern int fc_csharp_get_wrap_template_param_class_name(long VM, long ptr, int nIndex, byte[] pOutBuff, int nOutBuffSize);
+    // 功能：装备调用UE或C#反射函数调用脚本函数
     // 参数：pIns - 脚本对象指针
     //       pcsFuncName - 函数名
-    // 说明：这个接口做预备工作，主要是为了传参数的的需要，需要初始化参数列表, 如果是没有参数，或不需要传对象的参数，就不需要调用这个
+    //       CallKey - 标记当前调用的一关键KEY(由用户上层产生, 最近1000内不相同就可以了)
+    // 返回值：返回L参数, 如果失败就返回NULL
+    // 说明：CallKey - 是用户管理的唯一值，可以是一个自增的ID, 只需要最近N次调用不相同就可以, 这个N的大小，取决于函数最大递归栈的数量
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_prepare_call(long VM, long pInsPtr, string pcsFuncName);
-    // 功能：调用脚本函数
-    // 参数：pIns - 脚本对象指针
-    //       pcsFuncName - 函数名
+    public static extern long fc_prepare_ue_call(long VM, long pInsPtr, string pcsFuncName, long CallKey);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_call(long VM, long pInsPtr, string pcsFuncName);
+    public static extern long fc_prepare_ue_fast_call(long VM, long pInsPtr, int nClassNameID, int nFuncNameID, long CallKey);
+    // 功能：UE或C#反射函数调用脚本函数
+    // 参数：VM - 脚本设备上下文
+    //       CallKey - 标记当前调用的一关键KEY
+    // 返回值：返回L参数, 如果失败就返回NULL
+    // 说明：调用这个函数前，必须先调用fc_prepare_ue_call, 然后由上层自己Push函数参数, 最后调用fc_end_ue_call结束函数的调用
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern long fc_ue_call(long VM, long CallKey);
+    // 功能：结束UE或C#反射函数调用脚本函数
+    // 参数：VM - 脚本设备上下文
+    //       CallKey - 标记当前调用的一关键KEY
+    // 说明：调用这个函数前，必须先调用fc_prepare_ue_call ==> fc_ue_call
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_end_ue_call(long VM, long CallKey);
     // 功能：睡眠当前运行中的函数(虚拟器)
     // 返回值：返回当前虚拟器的指针
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -457,56 +454,6 @@ public class FCLibHelper
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_serialize_msg_call(long VM, long pInsPtr, string pcsFuncName, byte[] msgPtr, int nStart, int nLen, bool bReadMode);
     //--------------------------------------------------------------------------------------
-    // 以下函数(fc_get_return_xxxx)是在调用脚本函数，反函数的返回值，目前只支持少量的数据类型
-    // 
-    // 功能：返回最后一个fc_call调用的返回值
-    // 说明：返回值的类型是bool
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern bool fc_get_return_bool(long VM);
-    // 功能：返回最后一个fc_call调用的返回值
-    // 说明：返回值的类型是char
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern char fc_get_return_char(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern byte fc_get_return_byte(long VM);
-    // 功能：返回最后一个fc_call调用的返回值
-    // 说明：返回值的类型是short
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern short fc_get_return_short(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ushort fc_get_return_ushort(long VM);
-    // 功能：返回最后一个fc_call调用的返回值
-    // 说明：返回值的类型是int
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int fc_get_return_int(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint fc_get_return_uint(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float fc_get_return_float(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double fc_get_return_double(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern long fc_get_return_int64(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern ulong fc_get_return_uint64(long VM);
-    // 功能：返回最后一个fc_call调用的返回值
-    // 返回值：返回C#平台wrap对象ID
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern long fc_get_return_wrap_objptr(long VM);
-    // 功能：返回最后一个fc_call调用的返回值
-    // 返回值：返回c#平台的IntPtr(或C++的void *)
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern long fc_get_return_void_ptr(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_get_return_string_a(long VM, byte[] pOutBuff, int nOutBuffSize);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int fc_get_return_string_len(long VM);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_get_return_vector2(long VM, ref Vector2 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_get_return_vector3(long VM, ref Vector3 v);
-    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void fc_get_return_vector4(long VM, ref Vector4 v);
     //--------------------------------------------------------------------------------------
     // 以下是对一些常规变量的设置
     // 
@@ -550,6 +497,15 @@ public class FCLibHelper
     //       v - wrap对象ID
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_wrap_objptr(long VM, long ptr, long v);
+    // 功能：将外部创建的脚本对象设置给脚本变量
+    // 参数：ptr - 脚本对象地址
+    //       v - 脚本对象ID(由fc_instance接口创建的)
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_set_value_script_instance(long L, long ptr, long v);
+    // 功能：得到wrap变量的类名
+    // 参数：ptr - 脚本变量地址
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int fc_get_wrap_class_name_id(long ptr);
     // 功能：设置void *指针(IntPtr)设置给脚本变量
     // 参数：ptr - 脚本对象地址
     //       v - iNT
@@ -557,6 +513,8 @@ public class FCLibHelper
     public static extern void fc_set_value_void_ptr(long ptr, IntPtr v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_string(long ptr, string v);
+    [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void fc_set_value_string_w(long ptr, ushort[] v, int nLen);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void fc_set_value_vector2(long ptr, ref Vector2 v);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
@@ -804,5 +762,6 @@ public class FCLibHelper
     public static extern int fc_inport_delegate_get_func_name_len(long VM, long pDelegatePtr);
     [DllImport(FCDLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern int fc_inport_delegate_get_func_name(long VM, long pDelegatePtr, byte[] pOutBuff, int nOutBuffSize);
+
 
 }

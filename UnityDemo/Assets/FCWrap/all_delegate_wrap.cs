@@ -8,14 +8,17 @@ class UnityAction_delegate : FCDelegateBase
 {
     public void  CallFunc()
     {
+        long CallKey = FCLibHelper.QueryCallKey();
+        long VM = m_VMPtr;
         try
         {
-            long  VM = m_VMPtr;
-            FCLibHelper.fc_call(VM, m_nThisPtr, m_szFuncName);
+            long L_Param = FCLibHelper.fc_prepare_ue_fast_call(VM, m_nThisPtr, m_nClassName, m_nFuncName, CallKey);
+            long L_Ret = FCLibHelper.fc_ue_call(VM, CallKey);
         }
         catch(Exception e)
         {
             Debug.LogException(e);
         }
+        FCLibHelper.fc_end_ue_call(VM, CallKey);
     }
 }

@@ -188,33 +188,35 @@ class FCDelegateWrap
                 m_szTempBuilder.AppendFormat("        {0} ret = default({1});\r\n", szName, szName);
         }
 
+        m_szTempBuilder.AppendLine("        long CallKey = FCLibHelper.QueryCallKey();");
+        m_szTempBuilder.AppendLine("        long VM = m_VMPtr;");
         m_szTempBuilder.AppendLine("        try");
         m_szTempBuilder.AppendLine("        {");
-        m_szTempBuilder.AppendLine("            long  VM = m_VMPtr;");
+        m_szTempBuilder.AppendLine("            long L_Param = FCLibHelper.fc_prepare_ue_fast_call(VM, m_nThisPtr, m_nClassName, m_nFuncName, CallKey);");
         string szArg = string.Empty;
+        string szPtr = string.Empty;
         for(int i = 0; i<nParamCount; ++i)
         {
             szArg = string.Format("arg{0}", i);
+            szPtr = string.Format("Ptr{0}", i);
+            m_szTempBuilder.AppendFormat("            long {0} = FCLibHelper.fc_get_param_ptr(L_Param, {1});\r\n", szPtr, i);
             FCValueType value_param = FCValueType.TransType(allParams[i].ParameterType);
             if(value_param.m_nTemplateType != fc_value_tempalte_type.template_none)
             {
                 if(value_param.m_nTemplateType == fc_value_tempalte_type.template_array)
                 {
-                    if(value_param.m_nValueType == fc_value_type.fc_value_byte)
+                    if(FCValueType.IsBaseType(value_param.m_nValueType))
                     {
-                        m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, {0});\r\n", szArg);
+                        m_szTempBuilder.AppendFormat("            FCDll.WriteValueToScript(VM, {0}, {1});\r\n", szPtr, szArg);
                         continue;
                     }
                 }
                 Debug.LogError(nClassType.FullName + "参数不支持模板");
                 continue;
             }
-            if(FCValueType.IsRefType(value_param.m_nValueType))
-                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, ref {0});\r\n", szArg);
-            else
-                m_szTempBuilder.AppendFormat("            FCDll.PushCallParam(VM, {0});\r\n", szArg);
+            m_szTempBuilder.AppendFormat("            FCDll.WriteValueToScript(VM, {0}, {1});\r\n", szPtr, szArg);
         }
-        m_szTempBuilder.AppendLine("            FCLibHelper.fc_call(VM, m_nThisPtr, m_szFuncName);");
+        m_szTempBuilder.AppendLine("            long L_Ret = FCLibHelper.fc_ue_call(VM, CallKey);");
 
         // 如果委托是有返回值的，添加返回值
         if(ret_value.m_nValueType != fc_value_type.fc_value_void)
@@ -226,6 +228,8 @@ class FCDelegateWrap
         m_szTempBuilder.AppendLine("        {");
         m_szTempBuilder.AppendLine("            Debug.LogException(e);");
         m_szTempBuilder.AppendLine("        }");
+
+        m_szTempBuilder.AppendLine("        FCLibHelper.fc_end_ue_call(VM, CallKey);");
         if (ret_value.m_nValueType != fc_value_type.fc_value_void)
             m_szTempBuilder.AppendLine("        return ret;");
         m_szTempBuilder.AppendLine("    }");
@@ -234,57 +238,86 @@ class FCDelegateWrap
     void  AddReturnCmd(FCValueType ret_value)
     {
         // 目前不是所有的类型都支持返回
+        m_szTempBuilder.AppendLine("            long RetPtr = FCLibHelper.fc_get_return_ptr(L_Ret);");
+        // 如果是数组
+        if (ret_value.m_nTemplateType != fc_value_tempalte_type.template_none)
+        {
+            if (fc_value_tempalte_type.template_array == ret_value.m_nTemplateType)
+            {
+                m_szTempBuilder.AppendLine("            int nSize = FCLibHelper.fc_get_array_size(RetPtr);");
+                switch (ret_value.m_nValueType)
+                {
+                    case fc_value_type.fc_value_byte:
+                        m_szTempBuilder.AppendLine("            byte[] pArray = new byte[nSize];");
+                        m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_array_byte(RetPtr, pArray, 0, nSize);");
+                        m_szTempBuilder.AppendLine("            ret = pArray;");
+                        break;
+                    case fc_value_type.fc_value_short:
+                        m_szTempBuilder.AppendLine("            short[] pArray = new short[nSize];");
+                        m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_array_short(RetPtr, pArray, 0, nSize);");
+                        m_szTempBuilder.AppendLine("            ret = pArray;");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            m_szTempBuilder.AppendLine("            return ret;");
+            return;
+        }
         switch (ret_value.m_nValueType)
         {
             case fc_value_type.fc_value_bool:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_bool(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_bool(RetPtr);");
                 break;
             case fc_value_type.fc_value_char:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_char(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_char(RetPtr);");
                 break;
             case fc_value_type.fc_value_byte:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_byte(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_byte(RetPtr);");
                 break;
             case fc_value_type.fc_value_short:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_short(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_short(RetPtr);");
                 break;
             case fc_value_type.fc_value_ushort:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_ushort(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_ushort(RetPtr);");
                 break;
             case fc_value_type.fc_value_int:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_int(RetPtr);");
                 break;
             case fc_value_type.fc_value_uint:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_uint(RetPtr);");
                 break;
             case fc_value_type.fc_value_float:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_float(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_float(RetPtr);");
                 break;
             case fc_value_type.fc_value_double:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_double(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_double(RetPtr);");
                 break;
             case fc_value_type.fc_value_int64:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_int64(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_int64(RetPtr);");
                 break;
             case fc_value_type.fc_value_uint64:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_uint64(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_uint64(RetPtr);");
                 break;
             case fc_value_type.fc_value_string_a:
-                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_return_string_a(VM);");
+                m_szTempBuilder.AppendLine("            ret = FCLibHelper.fc_get_value_string_a(VM, RetPtr);");
                 break;
             case fc_value_type.fc_value_vector2:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector2(VM, ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_value_vector2(RetPtr, ref ret);");
                 break;
             case fc_value_type.fc_value_vector3:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector3(VM, ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_value_vector3(RetPtr, ref ret);");
                 break;
             case fc_value_type.fc_value_vector4:
-                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_return_vector4(VM, ref ret);");
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_value_vector4(RetPtr, ref ret);");
+                break;
+            case fc_value_type.fc_value_plane:
+                m_szTempBuilder.AppendLine("            FCLibHelper.fc_get_value_plane(RetPtr, ref ret);");
                 break;
             case fc_value_type.fc_value_system_object:
                 {
                     string szName = ret_value.GetTypeName(true, true);
-                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr(VM);");
+                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_value_wrap_objptr(RetPtr);");
                     m_szTempBuilder.AppendFormat("            ret = FCGetObj.GetSystemObj<{0}>(VM, nWrapObj);", szName);
                 }
                 break;
@@ -292,12 +325,14 @@ class FCDelegateWrap
             case fc_value_type.fc_value_object:
                 {
                     string szName = ret_value.GetTypeName(true, true);
-                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_return_wrap_objptr(VM);");
+                    m_szTempBuilder.AppendLine("            long  nWrapObj = FCLibHelper.fc_get_value_wrap_objptr(RetPtr);");
                     m_szTempBuilder.AppendFormat("            ret = FCGetObj.GetObj<{0}>(nWrapObj);", szName);
                 }
                 break;
             case fc_value_type.fc_value_int_ptr:
-                m_szTempBuilder.AppendLine("            ret = new IntPtr(FCLibHelper.fc_get_return_void_ptr(VM));");
+                m_szTempBuilder.AppendLine("            ret = new IntPtr(FCLibHelper.fc_get_value_intptr(RetPtr));");
+                break;
+            default:
                 break;
         }
         m_szTempBuilder.AppendLine("            return ret;");
