@@ -1,0 +1,26 @@
+{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.0",
+    "FriendlyName": "FCScript",
+    "Description": "FCScript plugin",
+    "Category": "Scripting",
+    "CreatedBy": "DreamRoom",
+    "CreatedByURL": "https://www.DreamRoom.com/",
+    "DocsURL": "",
+    "MarketplaceURL": "",
+    "SupportURL": "",
+    "EnabledByDefault" : true,
+    "CanContainContent": true,
+    "IsBetaVersion": false,
+    "Installed": false,
+    "CanBeUsedWithUnrealHeaderTool": true,
+    "Modules":
+    [
+        {
+            "Name" : "FCScript",
+            "Type" : "Runtime",
+            "LoadingPhase" : "PostConfigInit"
+        }
+    ]
+}

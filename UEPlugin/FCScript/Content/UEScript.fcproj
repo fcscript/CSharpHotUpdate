@@ -1,0 +1,20 @@
+﻿<ProjName></ProjName>
+<FileExt>cpp</FileExt>
+<IncludePath>
+    $(curpath)\Script\
+</IncludePath>
+<IncludeFile>
+</IncludeFile>
+<CSharpPath>
+    $(curpath)\Wrap\
+    $(curpath)\inner_wrap\
+</CSharpPath>
+<ExcutePath>
+</ExcutePath>
+<ExcuteFile>
+</ExcuteFile>
+<Breakpoint>
+</Breakpoint>
+<CopyPathName></CopyPathName>
+<ErrorLogPathName></ErrorLogPathName>
+<ProjCode>0</ProjCode>
