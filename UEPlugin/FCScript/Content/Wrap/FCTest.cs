@@ -7,6 +7,25 @@ using System.Threading.Tasks;
 //typdef DelegateEvent  FOnButtonClickedEvent
 //typdef MulticastDelegate  FOnHttpResponseMessage
 
+
+public class FTestBoneAdjustItemInfo
+{
+	public StringW   SlotName;
+	public int       ItemId;
+	public StringW   BoneName;
+	public FVector   Scale;
+	public FVector   Offset;
+};
+
+public class FTestAvatarSystemInitParams
+{
+	public TArray<StringW> HideBoneWhiteList;
+	public StringA MaleFaceConfigPath;
+	public TArray<FTestBoneAdjustItemInfo>  BoneAdjustItemsTable;	
+	public FTestBoneAdjustItemInfo   BoneAdjustItem;
+	public FVector   Offset;
+};
+
 public class UFCTest : UObject
 {
 	public float GetHP(){return 0;}
@@ -19,7 +38,10 @@ public class UFCTest : UObject
 	public void CallClicked(){}
 
     public TArray<int> IDList { get; set; }
-    public TArray<StringA> NameList { get; set; }
+    public TArray<StringW> NameList { get; set; }
+
+	public TWeakObjectPtr<UFCTest>  WeakPtr { get; set; }
+	public TLazyObjectPtr<UFCTest>  LazyPtr { get; set; }
 
     public UFCTest NextPtr { get;  set; }
 	public int ID { get;  set; }

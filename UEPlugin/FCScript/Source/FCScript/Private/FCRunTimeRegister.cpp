@@ -92,12 +92,12 @@ int WrapUClassGetAttrib(fc_intptr L)
 			const char *AttribName = fc_cpp_get_current_call_class_function_name(L);
 			DynamicProperty = ClassDesc->RegisterProperty(AttribName, nFuncName);
 		}
-		if(DynamicProperty && ObjRef->ValuePtr)
+		if(DynamicProperty && ObjRef->IsValid())
 		{	
-			uint8 *ObjAddr = (uint8 *)(ObjRef->ValuePtr);
+			uint8 *ObjAddr = (uint8 *)(ObjRef->GetPropertyAddr());
 			uint8 *ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
 			UObject *ThisObj = ObjRef->GetUObject();
-			DynamicProperty->m_WriteScriptFunc(VM, ret_ptr, DynamicProperty, ValueAddr, ThisObj);
+			DynamicProperty->m_WriteScriptFunc(VM, ret_ptr, DynamicProperty, ValueAddr, ThisObj, ObjRef);
 		}
 	}
 	return 0;
@@ -123,12 +123,12 @@ int WrapUClassSetAttrib(fc_intptr L)
 			const char *AttribName = fc_cpp_get_current_call_class_function_name(L);
 			DynamicProperty = ClassDesc->RegisterProperty(AttribName, nFuncName);
 		}
-		if(DynamicProperty && ObjRef->ValuePtr)
+		if(DynamicProperty && ObjRef->IsValid())
 		{	
-			uint8 *ObjAddr = (uint8 *)(ObjRef->ValuePtr);
+			uint8 *ObjAddr = (uint8 *)(ObjRef->GetPropertyAddr());
 			uint8* ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
 			UObject* ThisObj = ObjRef->GetUObject();
-			DynamicProperty->m_ReadScriptFunc(VM, value_ptr, DynamicProperty, ValueAddr, ThisObj);
+			DynamicProperty->m_ReadScriptFunc(VM, value_ptr, DynamicProperty, ValueAddr, ThisObj, ObjRef);
 		}
 	}
 	return 0;
@@ -216,7 +216,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         ValuePtr = fc_get_param_ptr(L, Index);
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
         DynamicProperty->Property->InitializeValue(ValueAddr);
-        DynamicProperty->m_ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr);
+        DynamicProperty->m_ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
     }
 
     if (DynamicFunc->ReturnPropertyIndex >= 0)
@@ -252,7 +252,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
             {
                 ValuePtr = fc_get_param_ptr(L, Index);
                 ValueAddr = Locals + DynamicProperty->Offset_Internal;
-                DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr);
+                DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
             }
         }
     }
@@ -271,7 +271,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         DynamicProperty = BeginProperty + DynamicFunc->ReturnPropertyIndex;
         ValuePtr = fc_get_return_ptr(L);
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
-        DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr);
+        DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
         DynamicProperty->Property->DestroyValue(ValueAddr);
     }
 

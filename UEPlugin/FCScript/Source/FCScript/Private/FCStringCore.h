@@ -36,6 +36,34 @@ template<> struct stdext::hash_compare<const char *>
     }
 };
 
+struct ObjRefKey
+{
+	unsigned char* ParentAddr;    // 
+	int    Offset;
+	ObjRefKey() :ParentAddr(nullptr), Offset(0) {}
+	ObjRefKey(unsigned char* InParentAddr, int InOffset) : ParentAddr(InParentAddr), Offset(InOffset) {}
+};
+
+template<> struct stdext::hash_compare<ObjRefKey>
+{
+	enum
+	{	// parameters for hash table
+		bucket_size = 1		// 0 < bucket_size
+	};
+	size_t operator()(const ObjRefKey& Key) const
+	{	// hash _Keyval to size_t value by pseudorandomizing transform
+        return (size_t)(Key.ParentAddr + Key.Offset);
+	}
+
+	bool operator()(const ObjRefKey& key1, const ObjRefKey& key2) const
+	{	// test if _Keyval1 ordered before _Keyval2
+        if(key1.Offset == key2.Offset)
+            return key1.ParentAddr < key2.ParentAddr;
+        else
+            return key1.Offset < key2.Offset;
+	}
+};
+
 
 template <class _TyPtrMap>
 void  ReleasePtrMap(_TyPtrMap &PtrMap)

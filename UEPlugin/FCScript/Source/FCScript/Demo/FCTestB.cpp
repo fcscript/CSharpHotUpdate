@@ -53,7 +53,7 @@ uint8* GetObjAttribAddr(int64 ObjID, const char* AttribName)
 	FCDynamicProperty* DynamicProperty = GetObjAttrib(ObjRef, ObjID, AttribName);
 	if (DynamicProperty)
 	{
-		uint8* ObjAddr = (uint8*)(ObjRef->ValuePtr);
+		uint8* ObjAddr = (uint8*)(ObjRef->GetPropertyAddr());
 		uint8* ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
 		return ValueAddr;
 	}
@@ -81,7 +81,7 @@ void   WriteUObject(int64 ObjID, const char* AttribName, UObject* v)
 	FCDynamicProperty* DynamicProperty = GetObjAttrib(ObjRef, ObjID, AttribName);
 	if (DynamicProperty)
 	{
-		uint8* ObjAddr = (uint8*)(ObjRef->ValuePtr);
+		uint8* ObjAddr = (uint8*)(ObjRef->GetPropertyAddr());
 		if (!ObjAddr)
 		{
 			return;
@@ -129,7 +129,7 @@ void   ReadUObject(int64 ObjID, const char* AttribName, UObject*& v)
 	FCDynamicProperty* DynamicProperty = GetObjAttrib(ObjRef, ObjID, AttribName);
 	if (DynamicProperty)
 	{
-		uint8* ObjAddr = (uint8*)(ObjRef->ValuePtr);
+		uint8* ObjAddr = (uint8*)(ObjRef->GetPropertyAddr());
 		if (!ObjAddr)
 		{
 			v = nullptr;
@@ -174,7 +174,7 @@ void  PushStringToArray(int64 ObjID, const char* AttribName, const char* InStr)
 	{
 		//FArrayProperty  *ArrayProperty = 
 		int ElementSize = sizeof(FString);
-		FScriptArray* ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+		FScriptArray* ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 		int Index = ScriptArray->Num();
 		ScriptArray->Add(1, ElementSize);
 		uint8* ObjAddr = (uint8*)ScriptArray->GetData();

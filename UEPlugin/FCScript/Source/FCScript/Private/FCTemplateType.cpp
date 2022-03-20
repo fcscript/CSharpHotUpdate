@@ -28,6 +28,17 @@ FProperty  *NewUEBoolProperty(UScriptStruct* ScriptStruct)
 	return Property;
 }
 
+FProperty* NewUEStructProperty(UScriptStruct* Struct, UScriptStruct* ScriptStruct)
+{
+#if ENGINE_MINOR_VERSION < 25
+	// see overloaded operator new that defined in DECLARE_CLASS(...)
+	FStructProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Struct);
+#else
+	FStructProperty* Property = new FStructProperty(ScriptStruct, NAME_None, RF_Transient, 0, CPF_HasGetValueTypeHash, Struct);
+#endif
+	return Property;
+}
+
 FProperty  *NewUEClassProperty(UClass *Class, UScriptStruct* ScriptStruct)
 {
 #if ENGINE_MINOR_VERSION < 25
@@ -99,6 +110,7 @@ FProperty  *CreateBaseProperty(FCInnerBaseType InBaseType)
 		case FC_VALUE_TYPE_UINT64:
 			return NewUEProperty<FUInt64Property>(ScriptStruct);
 		case FC_VALUE_TYPE_STRING_A:
+			return NewUEProperty<FNameProperty>(ScriptStruct);
 		case FC_VALUE_TYPE_STRING_W:
 			return NewUEProperty<FStrProperty>(ScriptStruct);
 		case FC_VALUE_TYPE_VECTOR2:
@@ -119,8 +131,14 @@ FProperty  *CreateBaseProperty(FCInnerBaseType InBaseType)
 
 typedef stdext::hash_map<int, FProperty*> CTemplatePropertyIDMap;
 typedef stdext::hash_map<const char *, FProperty*> CTemplatePropertyNameMap;
+typedef stdext::hash_map<UStruct*, FCDynamicProperty*> CStructDynamicPropertyMap;
+typedef stdext::hash_map<FProperty*, FCDynamicProperty*> CPropertyDynamicPropertyMap;
+typedef stdext::hash_map<const char*, FCDynamicProperty*> CCppDynamicPropertyMap;
 CTemplatePropertyIDMap   GBasePropertyIDMap;
 CTemplatePropertyNameMap GClassPropertyNameMap;
+CStructDynamicPropertyMap GStructDynamicPropertyMap;
+CPropertyDynamicPropertyMap GPropertyDynamicPropertyMap;
+CCppDynamicPropertyMap      GCppDynamicPropertyMap;
 
 FProperty  *CreateClassProperty(const char *InClassName)
 {
@@ -132,17 +150,91 @@ FProperty  *CreateClassProperty(const char *InClassName)
 	const FCDynamicClassDesc *DynamicClass = GetScriptContext()->RegisterUClass(InClassName);
 	if(!DynamicClass)
 	{
-		return nullptr;
+		FProperty* Property = nullptr;
+		if(strcmp(InClassName, "FString") == 0)
+		{
+			Property = NewUEProperty<FStrProperty>(GetGlbScriptStruct());
+			GClassPropertyNameMap["FString"] = Property;
+		}
+		else if (strcmp(InClassName, "FName") == 0)
+		{
+			Property = NewUEProperty<FNameProperty>(GetGlbScriptStruct());
+			GClassPropertyNameMap["FName"] = Property;
+		}
+		return Property;
 	}
 	if(!DynamicClass->m_Class)
 	{
+		if (DynamicClass->m_Struct)
+		{
+			// 注明一下，这里的Struct一定是UScriptStruct
+			FProperty* Property = NewUEStructProperty((UScriptStruct *)DynamicClass->m_Struct, GetGlbScriptStruct());
+			InClassName = DynamicClass->m_UEClassName.c_str();
+			GClassPropertyNameMap[InClassName] = Property;
+			return Property;
+		}
 		return nullptr;
 	}
 	FProperty *Property = NewUEClassProperty(DynamicClass->m_Class, GetGlbScriptStruct());
 	InClassName = DynamicClass->m_UEClassName.c_str();
 	GClassPropertyNameMap[InClassName] = Property;
 	return Property;
+}
 
+FCDynamicProperty* GetCppDynamicProperty(const char* InClassName)
+{
+	CCppDynamicPropertyMap::iterator itProperty = GCppDynamicPropertyMap.find(InClassName);
+	if(itProperty != GCppDynamicPropertyMap.end())
+	{
+		return itProperty->second;
+    }
+	FProperty* Property = CreateClassProperty(InClassName);
+	if(Property)
+    {
+        FCDynamicProperty* DynamicPropery = new FCDynamicProperty();
+		DynamicPropery->InitProperty(Property);
+		GCppDynamicPropertyMap[InClassName] = DynamicPropery;
+		return DynamicPropery;
+	}
+	else
+	{
+		GCppDynamicPropertyMap[InClassName] = nullptr;
+		return nullptr;
+	}
+}
+
+FCDynamicProperty* GetStructDynamicProperty(UStruct* Struct)
+{
+	CStructDynamicPropertyMap::iterator itProperty = GStructDynamicPropertyMap.find(Struct);
+	if (itProperty != GStructDynamicPropertyMap.end())
+	{
+		return itProperty->second;
+	}
+	FCDynamicProperty* DynamicPropery = new FCDynamicProperty();
+	FProperty* Property = NewUEStructProperty((UScriptStruct*)Struct, GetGlbScriptStruct());
+	DynamicPropery->InitProperty(Property);
+	DynamicPropery->Name = TCHAR_TO_UTF8(*(Struct->GetName()));
+	GStructDynamicPropertyMap[Struct] = DynamicPropery;
+	return DynamicPropery;
+}
+
+FCDynamicProperty* GetDynamicPropertyByUEProperty(FProperty* InProperty)
+{
+	CPropertyDynamicPropertyMap::iterator itProperty = GPropertyDynamicPropertyMap.find(InProperty);
+	if (itProperty != GPropertyDynamicPropertyMap.end())
+	{
+		return itProperty->second;
+	}
+	FCDynamicProperty* DynamicPropery = new FCDynamicProperty();
+	DynamicPropery->InitProperty(InProperty);
+	if(FCPropertyType::FCPROPERTY_StructProperty == DynamicPropery->Type)
+	{
+		FStructProperty* StructProperty = (FStructProperty*)InProperty;
+		UStruct* Struct = StructProperty->Struct;
+		DynamicPropery->Name = TCHAR_TO_UTF8(*(Struct->GetName()));
+	}
+	GPropertyDynamicPropertyMap[InProperty] = DynamicPropery;
+	return DynamicPropery;
 }
 
 FProperty  *GetBaseProperty(FCInnerBaseType InBaseType)
@@ -286,9 +378,15 @@ FCDynamicProperty *GetTMapDynamicProperty(fc_intptr VM, fc_intptr Ptr)
 
 void ReleaseTempalteProperty()
 {
+	// 说明：UProperty对象不能释放，这个只能是全局管理的，由UE释放
+	//ReleasePtrMap(GBasePropertyIDMap);
+	//ReleasePtrMap(GClassPropertyNameMap);
+
 	ReleasePtrMap(GTempalteDynamicPropertyMap);
-	ReleasePtrMap(GBasePropertyIDMap);
-	ReleasePtrMap(GClassPropertyNameMap);
+	ReleasePtrMap(GStructDynamicPropertyMap);
+	ReleasePtrMap(GPropertyDynamicPropertyMap);
+	ReleasePtrMap(GCppDynamicPropertyMap);
+
 	GScriptStruct = nullptr;
 }
 

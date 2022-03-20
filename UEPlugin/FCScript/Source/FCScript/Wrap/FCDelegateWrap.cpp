@@ -40,7 +40,7 @@ int FCDelegateWrap::AddListener_wrap(fc_intptr L)
         int nClassNameID = fc_inport_delegate_get_class_name_id(VM, pDelegatePtr);  // 类名
         int nFuncNameID = fc_inport_delegate_get_func_name_id(VM, pDelegatePtr); // 函数名
 
-		UObject  *Object = ObjRef->Parent;
+		UObject  *Object = ObjRef->GetParentObject();
 		FFCObjectdManager::GetSingleIns()->RegisterScriptDelegate(Object, ObjRef->DynamicProperty, nObjPtr, nClassNameID, nFuncNameID);
 	}
 	return 0;
@@ -58,7 +58,7 @@ int FCDelegateWrap::RemoveListener_wrap(fc_intptr L)
         int nClassNameID = fc_inport_delegate_get_class_name_id(VM, pDelegatePtr);  // 类名
         int nFuncNameID = fc_inport_delegate_get_func_name_id(VM, pDelegatePtr); // 函数名
 
-		UObject  *Object = ObjRef->Parent;
+		UObject  *Object = ObjRef->GetParentObject();
 		FFCObjectdManager::GetSingleIns()->RemoveScriptDelegate(Object, ObjRef->DynamicProperty, nObjPtr, nClassNameID, nFuncNameID);
 	}
 	return 0;
@@ -75,8 +75,8 @@ int FCDelegateWrap::ClearLinstener_wrap(fc_intptr L)
         fc_intptr nObjPtr = fc_inport_delegate_get_obj_ptr(VM, pDelegatePtr); // 得到脚本对象地址
         int nClassNameID = fc_inport_delegate_get_class_name_id(VM, pDelegatePtr);  // 类名
         int nFuncNameID = fc_inport_delegate_get_func_name_id(VM, pDelegatePtr); // 函数名
-
-		UObject  *Object = ObjRef->Parent;
+        UObject* Object = ObjRef->GetParentObject();
+        FFCObjectdManager::GetSingleIns()->ClearScriptDelegate(Object, ObjRef->DynamicProperty);
 	}
 	return 0;
 }
@@ -92,8 +92,6 @@ int FCDelegateWrap::Invoke_wrap(fc_intptr L)
         fc_intptr nObjPtr = fc_inport_delegate_get_obj_ptr(VM, pDelegatePtr); // 得到脚本对象地址
         int nClassNameID = fc_inport_delegate_get_class_name_id(VM, pDelegatePtr);  // 类名
         int nFuncNameID = fc_inport_delegate_get_func_name_id(VM, pDelegatePtr); // 函数名
-
-		UObject  *Object = ObjRef->Parent;
 	}
 	return 0;
 }

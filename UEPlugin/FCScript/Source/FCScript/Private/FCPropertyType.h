@@ -33,6 +33,9 @@ enum FCPropertyType
 	FCPROPERTY_StrProperty,     // FString
 	FCPROPERTY_Property,        // 
 	FCPROPERTY_ObjectProperty,  // UObject*  // CPT_ObjectReference // CPT_WeakObjectReference // CPT_LazyObjectReference
+	FCPROPERTY_WeakObjectPtr,   // FWeakObjectProperty, TWeakObjectPtr<_Ty>, FWeakObjectPtr
+	FCPROPERTY_LazyObjectPtr,   // FLazyObjectProperty, TLazyObjectPtr<_Ty>, FLazyObjectPtr
+	FCPROPERTY_Interface,       // FInterfaceProperty
 	FCPROPERTY_SoftObjectReference, // CPT_SoftObjectReference
 	FCPROPERTY_Function,        // Fucntion
 	FCPROPERTY_StructProperty,  // Struct, FVector 也是这个类型噢

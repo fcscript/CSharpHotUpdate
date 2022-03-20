@@ -72,6 +72,7 @@ public:
     void  CallBindScript(UObject *InObject, const char *ScriptClassName);
 	void  DynamicBind(const class UObjectBaseUtility *Object, UClass *Class);
 
+	// 功能：对象释放事件
 	void  NotifyDeleteUObject(const class UObjectBase *Object, int32 Index);
 
 	void  PushDynamicBindClass(UClass *Class, const char *ScriptClassName);
@@ -105,10 +106,11 @@ public:
 	FCDynamicDelegateList  *FindDelegateFunction(UObject *InObject);
 	void  RegisterScriptDelegate(UObject *InObject, const FCDynamicProperty* InDynamicProperty, fc_intptr InScriptThisPtr, int InClassNameID, int InFuncNameID);
 	void  RemoveScriptDelegate(UObject *InObject, const FCDynamicProperty* InDynamicProperty, fc_intptr InScriptThisPtr, int InClassNameID, int InFuncNameID);
+	void  ClearScriptDelegate(UObject* InObject, const FCDynamicProperty* InDynamicProperty);
 
 	void  CheckGC();
 protected:
-	void  ClearDynamicFunction(const class UObjectBase *Object, int32 Index);
+	void  ClearObjectDelegate(const class UObjectBase *Object);
 	void  ClearAllDynamicFunction();
 	void  AddDelegateToClass(FCDynamicFunction *InDynamicFunc, UClass *InClass);
 	void  RemoveDelegateFromClass(FCDynamicFunction *InDynamicFunc, UClass *InClass);

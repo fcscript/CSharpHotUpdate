@@ -72,6 +72,19 @@ public:
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "CallClicked"))
 	void CallClicked();
+	
+	
+	//UPROPERTY()
+	//TSharedPtr<UFCTest> SharedPtr;  // 这个是不支持的
+
+	UPROPERTY()
+	TWeakObjectPtr<UFCTest>   WeakPtr;
+
+	UPROPERTY()
+	TLazyObjectPtr<UFCTest>  LazyPtr;
+	
+	UPROPERTY()
+	TSoftObjectPtr<UObject>  ResPtr;
 
 	UPROPERTY()
 	class UFCTest* NextPtr;

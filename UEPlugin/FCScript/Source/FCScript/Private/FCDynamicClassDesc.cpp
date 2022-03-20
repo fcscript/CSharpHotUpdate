@@ -305,7 +305,14 @@ FCDynamicFunction*  FCDynamicClassDesc::RegisterFunc(const char *pcsFuncName, in
 		return itFunc->second;
 	}
 	FCDynamicFunction *DynamicFunction = RegisterUEFunc(pcsFuncName);
-	DynamicFunction->FuncID = nFuncID;
+	if (DynamicFunction)
+	{
+		DynamicFunction->FuncID = nFuncID;
+	}
+	else
+	{
+		UE_LOG(LogFCScript, Warning, TEXT("failed register function: %s, class name: %s"), UTF8_TO_TCHAR(pcsFuncName), UTF8_TO_TCHAR(m_UEClassName.c_str()));
+	}
 	m_ID2Function[nFuncID] = DynamicFunction;
 	return DynamicFunction;
 }
@@ -320,9 +327,22 @@ FCDynamicClassDesc* FCScriptContext::RegisterWrapClass(const char *UEClassName, 
 		return itIDClass->second;
 	}	
 	FCDynamicClassDesc  *DynamicClass = RegisterUClass(UEClassName);
-	DynamicClass->m_nClassNameID = nClassID;
+	if (DynamicClass)
+	{
+		DynamicClass->m_nClassNameID = nClassID;
+	}
+	else
+	{
+		UE_LOG(LogFCScript, Warning, TEXT("failed register UE class, class name: %s"), UTF8_TO_TCHAR(UEClassName));
+	}
 	m_ClassIDMap[nClassID] = DynamicClass;
 	return DynamicClass;
+}
+
+const char* GetUEClassName(const char* InName)
+{
+	const char* Name = (InName[0] == 'U' || InName[0] == 'A' || InName[0] == 'F' || InName[0] == 'E') ? InName + 1 : InName;
+	return Name;
 }
 
 FCDynamicClassDesc*  FCScriptContext::RegisterUClass(const char *UEClassName)

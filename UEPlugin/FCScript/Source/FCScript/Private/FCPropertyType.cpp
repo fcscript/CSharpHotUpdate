@@ -26,13 +26,14 @@ void  InitPropertyTable()
 
 	gPropertyTypeMap[FProperty::StaticClass()]       = FCPROPERTY_FILED;
 	gPropertyTypeMap[FEnumProperty::StaticClass()]   = FCPROPERTY_Enum;
-	gPropertyTypeMap[UScriptStruct::StaticClass()]   = FCPROPERTY_ScriptStruct;
+	gPropertyTypeMap[FStructProperty::StaticClass()] = FCPROPERTY_ScriptStruct;
 	gPropertyTypeMap[UClass::StaticClass()]          = FCPROPERTY_Class;
 	gPropertyTypeMap[FClassProperty::StaticClass()]  = FCPROPERTY_ClassProperty;
 
 	gPropertyTypeMap[FObjectProperty::StaticClass()] = FCPROPERTY_ObjectProperty;
-	gPropertyTypeMap[FWeakObjectProperty::StaticClass()] = FCPROPERTY_ObjectProperty;
-	gPropertyTypeMap[FLazyObjectProperty::StaticClass()] = FCPROPERTY_ObjectProperty;
+	gPropertyTypeMap[FWeakObjectProperty::StaticClass()] = FCPROPERTY_WeakObjectPtr;
+	gPropertyTypeMap[FLazyObjectProperty::StaticClass()] = FCPROPERTY_LazyObjectPtr;
+	gPropertyTypeMap[FInterfaceProperty::StaticClass()] = FCPROPERTY_Interface;
 
 	gPropertyTypeMap[FSoftObjectProperty::StaticClass()]  = FCPROPERTY_SoftObjectReference;
 
@@ -50,10 +51,10 @@ void  InitPropertyTable()
 	gPropertyTypeMap[FMulticastSparseDelegateProperty::StaticClass()] = FCPROPERTY_MulticastDelegateProperty;
 	#endif
 
-	gGraphyTypeMap["Vector2"] = FCPROPERTY_Vector2;
-	gGraphyTypeMap["Vector3"] = FCPROPERTY_Vector3;
-	gGraphyTypeMap["Vector4"] = FCPROPERTY_Vector4;
-    gGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
+	//gGraphyTypeMap["Vector2"] = FCPROPERTY_Vector2;
+	//gGraphyTypeMap["Vector3"] = FCPROPERTY_Vector3;
+	//gGraphyTypeMap["Vector4"] = FCPROPERTY_Vector4;
+ //   gGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
 }
 
 void  ReleasePropertyTable()

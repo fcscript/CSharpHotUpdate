@@ -51,6 +51,9 @@ enum FCInnerBaseType
 };
 
 FProperty  *CreateClassProperty(const char *InClassName);
+FCDynamicProperty *GetCppDynamicProperty(const char *InClassName);
+FCDynamicProperty* GetStructDynamicProperty(UStruct* Struct);
+FCDynamicProperty* GetDynamicPropertyByUEProperty(FProperty* InProperty);
 
 FArrayProperty* CreateTArrayProperty(fc_intptr VM, fc_intptr Ptr);
 

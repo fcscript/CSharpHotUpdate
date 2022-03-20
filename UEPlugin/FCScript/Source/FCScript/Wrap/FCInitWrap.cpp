@@ -4,6 +4,10 @@
 #include "FCMulticastDelegateWrap.h"
 #include "FCTArrayWrap.h"
 #include "FCTMapWrap.h"
+#include "TWeakObjectPtrWrap.h"
+#include "TLazyObjectPtrWrap.h"
+#include "TSoftObjectPtrWrap.h"
+#include "FCTMapIteratorWrap.h"
 
 
 void FCInitWrap::Register(fc_intptr VM)
@@ -13,5 +17,9 @@ void FCInitWrap::Register(fc_intptr VM)
 	FCMulticastDelegateWrap::Register(VM);
 	FCTArrayWrap::Register(VM);
 	FCTMapWrap::Register(VM);
+	TWeakObjectPtrWrap::Register(VM);
+	TLazyObjectPtrWrap::Register(VM);
+	TSoftObjectPtrWrap::Register(VM);
+	FCTMapIteratorWrap::Register(VM);
 }
 

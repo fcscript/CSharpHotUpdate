@@ -90,7 +90,7 @@ void  FFCObjectdManager::NotifyDeleteUObject(const class UObjectBase* Object, in
         // 释放
         RemoveOverrideRefByObject(Object);
 	}
-	ClearDynamicFunction(Object, Index);
+	ClearObjectDelegate(Object);
 }
 
 void  FFCObjectdManager::PushDynamicBindClass(UClass* Class, const char *ScriptClassName)
@@ -311,7 +311,7 @@ void  FFCObjectdManager::RemoveScriptDelegate(UObject *InObject, const FCDynamic
 	m_DelegateRefMap[Func] = Ref - 1;
 	if(0 == Ref)
 	{
-		// 添加引用吧
+		// 释放引用吧
 		RemoveDelegateFromClass(DynamicFunc, InObject->GetClass());
 	}
 
@@ -331,7 +331,49 @@ void  FFCObjectdManager::RemoveScriptDelegate(UObject *InObject, const FCDynamic
 	}
 }
 
-void  FFCObjectdManager::ClearDynamicFunction(const class UObjectBase *Object, int32 Index)
+void  FFCObjectdManager::ClearScriptDelegate(UObject* InObject, const FCDynamicProperty* InDynamicProperty)
+{
+	if (!InObject || !InDynamicProperty)
+	{
+		return;
+	}
+	CObjectDelegateMap::iterator itDelegateList = m_ObjectDelegateMap.find(InObject);
+	if (itDelegateList == m_ObjectDelegateMap.end())
+	{
+		return;
+	}
+	UFunction* Func = InDynamicProperty->GetSignatureFunction();
+	if (!Func)
+	{
+		return;
+	}
+	FCDynamicFunction* DynamicFunc = this->FindOverrideFunction(InObject, Func);
+	if (!DynamicFunc)
+	{
+		return;
+	}
+	FCDynamicDelegateList& DelegateList = itDelegateList->second;
+	for (int i = DelegateList.Delegates.size() - 1; i >= 0; --i)
+	{
+		const FCDelegateInfo& DelegateInfo = DelegateList.Delegates[i];
+		if (DelegateInfo.DynamicFunc == DynamicFunc)
+		{
+			Func = DelegateInfo.DynamicFunc->Function;
+			int Ref = m_DelegateRefMap[Func];
+			m_DelegateRefMap[Func] = Ref - 1;
+			if (0 == Ref)
+			{
+				// 释放引用吧
+				RemoveDelegateFromClass(DynamicFunc, InObject->GetClass());
+			}
+			DelegateList.Delegates.erase(DelegateList.Delegates.begin() + i);
+		}
+	}
+	RemoveDelegateFromClass(DynamicFunc, InObject->GetClass());
+	RemoveObjectDelegate(InObject, InDynamicProperty);
+}
+
+void  FFCObjectdManager::ClearObjectDelegate(const class UObjectBase *Object)
 {
 	CObjectDelegateMap::iterator itDelegateList = m_ObjectDelegateMap.find((UObject*)Object);
 	if(itDelegateList != m_ObjectDelegateMap.end())

@@ -63,8 +63,8 @@ struct FCDynamicPropertyBase
 	}
 };
 
-typedef  void(*LPPushScriptValueFunc)(int64  VM, int64 ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj);
-typedef  void(*LPOuterScriptValueFunc)(int64  L, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj);
+typedef  void(*LPPushScriptValueFunc)(int64  VM, int64 ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void *ObjRefPtr);
+typedef  void(*LPOuterScriptValueFunc)(int64  L, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr);
 
 // 动态属性(反射)
 struct FCDynamicProperty : public FCDynamicPropertyBase
@@ -148,6 +148,8 @@ typedef  std::vector<FCDynamicProperty*>   CDynamicPropertyPtrArray;
 
 typedef  stdext::hash_map<int, FCDynamicFunction*>   CDynamicFunctionIDMap; // id == > function
 typedef  stdext::hash_map<const char*, FCDynamicFunction*>   CDynamicFunctionNameMap;  // name ==> function
+
+const char* GetUEClassName(const char* InName);
 
 // 一个动态类的数据结构
 struct FCDynamicClassDesc

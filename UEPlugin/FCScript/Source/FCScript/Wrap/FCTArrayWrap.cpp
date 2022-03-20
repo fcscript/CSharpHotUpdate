@@ -78,7 +78,7 @@ int FCTArrayWrap::GetNumb_wrap(fc_intptr L)
 	FCObjRef *ObjRef = FCGetObj::GetIns()->FindValue(nThisPtr);
 	if(ObjRef)
 	{
-		FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+		FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 		int Num = ScriptArray->Num();
 		fc_intptr RetPtr = fc_get_return_ptr(L);
 		fc_set_value_uint(RetPtr, Num);
@@ -128,7 +128,7 @@ int FCTArrayWrap::SetNumb_wrap(fc_intptr L)
 	{
 		if(ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_Array)
 		{
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			fc_intptr ArgPtr0 = fc_get_param_ptr(L, 0);
@@ -148,7 +148,7 @@ void FCTArrayWrap_GetAt_Wrap(fc_intptr L, fc_intptr KeyPtr, fc_intptr ValuePtr)
 		{
 			int Index = fc_get_value_int(KeyPtr);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			int32 Num = ScriptArray->Num();
 			if(Index >= 0 && Index < Num)
@@ -158,12 +158,10 @@ void FCTArrayWrap_GetAt_Wrap(fc_intptr L, fc_intptr KeyPtr, fc_intptr ValuePtr)
 				uint8 *ObjAddr = (uint8 *)ScriptArray->GetData();
 				uint8 *ValueAddr = ObjAddr + Index * ElementSize;
 
-				// 需要的话，这里可以优化一下
-				FCDynamicProperty  ElementProperty;
-				ElementProperty.InitProperty(Inner);
+				FCDynamicProperty * ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 
 				fc_intptr VM = fc_get_vm_ptr(L);
-				ElementProperty.m_WriteScriptFunc(VM, ValuePtr, &ElementProperty, ValueAddr, NULL);
+				ElementProperty->m_WriteScriptFunc(VM, ValuePtr, ElementProperty, ValueAddr, NULL, ObjRef);
 			}
 		}
 	}
@@ -187,7 +185,7 @@ void FCTArrayWrap_SetAt_warp(fc_intptr L, fc_intptr KeyPtr, fc_intptr ValuePtr)
 		{
 			int Index = fc_get_value_int(KeyPtr);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			int32 Num = ScriptArray->Num();
 			if (Index >= 0 && Index < Num)
@@ -198,12 +196,10 @@ void FCTArrayWrap_SetAt_warp(fc_intptr L, fc_intptr KeyPtr, fc_intptr ValuePtr)
 				uint8 *ValueAddr = ObjAddr + Index * ElementSize;
 				Inner->InitializeValue(ValueAddr);
 
-				// 需要的话，这里可以优化一下
-				FCDynamicProperty  ElementProperty;
-				ElementProperty.InitProperty(Inner);
+				FCDynamicProperty* ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 
 				fc_intptr VM = fc_get_vm_ptr(L);
-				ElementProperty.m_ReadScriptFunc(VM, ValuePtr, &ElementProperty, ValueAddr, NULL);
+				ElementProperty->m_ReadScriptFunc(VM, ValuePtr, ElementProperty, ValueAddr, NULL, ObjRef);
 			}
 		}
 	}
@@ -245,7 +241,7 @@ int FCTArrayWrap::Add_wrap(fc_intptr L)
 		{
 			fc_intptr ArgPtr0 = fc_get_param_ptr(L, 0);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			int ElementSize = Inner->GetSize();
@@ -254,12 +250,10 @@ int FCTArrayWrap::Add_wrap(fc_intptr L)
 			uint8 *ValueAddr = ObjAddr + Index * ElementSize;
 			Inner->InitializeValue(ValueAddr);
 
-			// 需要的话，这里可以优化一下
-			FCDynamicProperty  ElementProperty;
-			ElementProperty.InitProperty(Inner);
+			FCDynamicProperty* ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 
 			fc_intptr VM = fc_get_vm_ptr(L);
-			ElementProperty.m_ReadScriptFunc(VM, ArgPtr0, &ElementProperty, ValueAddr, NULL);
+			ElementProperty->m_ReadScriptFunc(VM, ArgPtr0, ElementProperty, ValueAddr, NULL, ObjRef);
 		}
 	}
 	return 0;
@@ -275,7 +269,7 @@ int FCTArrayWrap::Remove_wrap(fc_intptr L)
 			fc_intptr ArgPtr0 = fc_get_param_ptr(L, 0);
 			int Index = fc_get_value_int(ArgPtr0);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			int ElementSize = Inner->GetSize();
@@ -299,7 +293,7 @@ int FCTArrayWrap::Clear_wrap(fc_intptr L)
 	{
 		if (ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_Array)
 		{
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			TArray_Clear(ScriptArray, Inner);
@@ -318,15 +312,13 @@ int FCTArrayWrap::ToList_wrap(fc_intptr L)
 		{
 			fc_intptr RetPtr = fc_get_return_ptr(L);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			int ElementSize = Inner->GetSize();
 			int Numb = ScriptArray->Num();
 
-			// 需要的话，这里可以优化一下
-			FCDynamicProperty  ElementProperty;
-			ElementProperty.InitProperty(Inner);
+			FCDynamicProperty* ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 			fc_intptr VM = fc_get_vm_ptr(L);
 			fc_set_array_size(VM, RetPtr, Numb);
 
@@ -336,7 +328,7 @@ int FCTArrayWrap::ToList_wrap(fc_intptr L)
 			{
 				fc_intptr ItemPtr = fc_get_array_node_temp_ptr(VM, RetPtr, Index);
 				ValueAddr = ObjAddr + Index * ElementSize;
-				ElementProperty.m_WriteScriptFunc(VM, ItemPtr, &ElementProperty, ValueAddr, NULL);
+				ElementProperty->m_WriteScriptFunc(VM, ItemPtr, ElementProperty, ValueAddr, NULL, NULL);
 			}
 		}
 	}
@@ -353,14 +345,13 @@ int FCTArrayWrap::SetList_wrap(fc_intptr L)
 		{
 			fc_intptr ArgPtr0 = fc_get_param_ptr(L, 0);
 
-			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->ValuePtr;
+			FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 			FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
 			FProperty *Inner = ArrayProperty->Inner;
 			int ElementSize = Inner->GetSize();
 
 			// 需要的话，这里可以优化一下
-			FCDynamicProperty  ElementProperty;
-			ElementProperty.InitProperty(Inner);
+			FCDynamicProperty* ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 			fc_intptr VM = fc_get_vm_ptr(L);
 			int ScriptListNumb = fc_get_array_size(ArgPtr0);
 
@@ -372,7 +363,7 @@ int FCTArrayWrap::SetList_wrap(fc_intptr L)
 			{
 				fc_intptr ItemPtr = fc_get_array_node_temp_ptr(VM, ArgPtr0, Index);
 				ValueAddr = ObjAddr + Index * ElementSize;
-				ElementProperty.m_ReadScriptFunc(VM, ItemPtr, &ElementProperty, ValueAddr, NULL);
+				ElementProperty->m_ReadScriptFunc(VM, ItemPtr, ElementProperty, ValueAddr, NULL, ObjRef);
 			}
 		}
 	}
