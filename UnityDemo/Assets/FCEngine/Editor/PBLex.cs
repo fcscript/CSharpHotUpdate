@@ -423,6 +423,10 @@ class PBLex
                 if (IsWords(words.m_pcsIn, "bytes"))
                     return pb_type.pb_string;
                 break;
+            case 'd':
+                if (IsWords(words.m_pcsIn, "double"))
+                    return pb_type.pb_double;
+                break;
             case 'e':
                 if (IsWords(words.m_pcsIn, "enum"))
                     return pb_type.pb_enum;

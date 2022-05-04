@@ -90,7 +90,7 @@ export void  main()
 	szWorkPath += "../xml_data/";
 	StringA   szXmlPath = szWorkPath + "Goodslist.txt";
 
-	print("xml目录：{0}", GetSkillPathName());
+	print("xml目录：{0}", szXmlPath);
 
 	StringA  szFileData;
     ReadFile(szXmlPath, szFileData);  // 这个也是跨平台注册的回调接口

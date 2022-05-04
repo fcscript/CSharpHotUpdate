@@ -4,54 +4,90 @@ using System.Text;
 using UnityEngine;
 using UnityEditor;
 
+class FBExportSetting
+{
+    public bool m_bExportReadWriteFunc = false;
+    public bool m_bExportEnumHelp = false;
+};
+
 class PBEnumDesc
 {
     public struct EnumValue
     {
         public string Name;
         public int ID;
+        public string m_szHelp; // 注释
     };
 
     public string m_szType; // 类型
     public List<EnumValue> m_Values = new List<EnumValue>();
 
-    public void Parse(List<pb_lex_words> aWords, int nStart, int nEnd)
+    public void Parse(List<pb_lex_words> aWords, int nStart, int nEnd, FBExportSetting Setting)
     {
         int nID = 0;
         EnumValue value = new EnumValue();
         value.Name = string.Empty;
         value.ID = 0;
+        // SUCCESS = 0                             [(err_msg) = "Success", (err_msg_zh) = "desc tips"];
+        bool bValidKey = false;
+        bool bValidValue = false;
+        int nRef = 0;
         for (int i = nStart; i < nEnd; ++i)
         {
             pb_lex_words words = aWords[i];
+
+            if (words.m_type == pb_lex_words_type.lex_bracket_1)
+            {
+                ++nRef;
+            }
+            else if (words.m_type == pb_lex_words_type.lex_bracket_2)
+            {
+                --nRef;
+            }
+            if (nRef > 0)
+            {
+                if (Setting.m_bExportEnumHelp)
+                    value.m_szHelp += words.GetString();
+                continue;
+            }
+
             if (words.m_type == pb_lex_words_type.lex_value)
             {
-                value.Name = words.GetString();
+                if(string.IsNullOrEmpty(value.Name))
+                {
+                    bValidKey = true;
+                    value.Name = words.GetString();
+                }
             }
             else if (words.m_type == pb_lex_words_type.lex_set)
             {
                 // name = id,
-                pb_lex_words word_id = aWords[i + 1];
-                value.ID = PBLex.GetNumber(word_id);
-                m_Values.Add(value);
-                value.Name = string.Empty;
-                nID = value.ID;
-                i += 1;
+                if (!bValidValue && bValidKey)
+                {
+                    bValidValue = true;
+                    pb_lex_words word_id = aWords[i + 1];
+                    value.ID = PBLex.GetNumber(word_id);
+                    nID = value.ID;
+                    i += 1;
+                }
             }
-            else if (words.m_type == pb_lex_words_type.lex_comma)
+            else if (words.m_type == pb_lex_words_type.lex_semicolon || words.m_type == pb_lex_words_type.lex_comma)
             {
                 // name,
-                if (!string.IsNullOrEmpty(value.Name))
+                if (bValidKey && bValidValue)
                 {
-                    value.ID = ++nID;
+                    value.ID = nID++;
                     m_Values.Add(value);
                     value.Name = string.Empty;
+                    value.m_szHelp = string.Empty;
+                    bValidKey = false;
+                    bValidValue = false;
                 }
             }
         }
         if (!string.IsNullOrEmpty(value.Name))
         {
-            value.ID = ++nID;
+            value.ID = nID++;
             m_Values.Add(value);
             value.Name = string.Empty;
         }
@@ -66,7 +102,12 @@ class PBEnumDesc
 	    for(int i = 0; i<nEnumCount; ++i)
 	    {
 		    szOut.Append(' ', nSpaceCount + 4);
-		    szOut.AppendFormat("{0} = {1},\r\n", m_Values[i].Name, m_Values[i].ID);
+
+            EnumValue Value = m_Values[i];
+            if (string.IsNullOrEmpty(Value.m_szHelp))
+                szOut.AppendFormat("{0} = {1},\r\n", Value.Name, Value.ID);
+            else
+                szOut.AppendFormat("{0} = {1}, // {2} \r\n", Value.Name, Value.ID, Value.m_szHelp);
 	    }
         szOut.Append(' ', nSpaceCount);
         szOut.Append("};\r\n");
@@ -84,6 +125,7 @@ class PBMessage
         public string m_szName; // 变量名
         public string m_default; // 默认值
         public PBOneOfDesc m_pOneOfDesc; // 指向OneOf对象
+        public bool m_bValidType = true;
     };
     protected class PBOneOfDesc
     {
@@ -96,7 +138,7 @@ class PBMessage
     protected List<MessageItem> m_Member = new List<MessageItem>();       // 成员
     protected List<PBEnumDesc>  m_Enums = new List<PBEnumDesc>();        // 枚举
     protected List<PBOneOfDesc> m_OneOf = new List<PBOneOfDesc>();        // 单个对象的
-    protected string      m_szClassName;  // 类名
+    public string      m_szClassName;  // 类名
     protected string m_szCurFileName;
     protected PBOneOfDesc m_pCurOneOf;
 
@@ -110,7 +152,7 @@ class PBMessage
         return -1;
     }
 
-    protected void Parse(List<pb_lex_words> aWords, int nStart, int nEnd)
+    protected void Parse(List<pb_lex_words> aWords, int nStart, int nEnd, FBExportSetting Setting, CPBMessageMng pPBMessageMng)
     {        
         int nPB_ID = 0;
         int nFind = -1;
@@ -119,19 +161,19 @@ class PBMessage
 		    pb_lex_words words = aWords[i];
 		    if(words.m_type == pb_lex_words_type.lex_enum)
 		    {
-                PBEnumDesc pEnum = ParseEnum(aWords, ref i, nEnd);
+                PBEnumDesc pEnum = ParseEnum(aWords, ref i, nEnd, Setting, pPBMessageMng);
                 if (pEnum != null)
                     m_Enums.Add(pEnum);
             }
 		    else if(words.m_type == pb_lex_words_type.lex_message)
 		    {
-			    PBMessage pChild = ParseMessage(aWords, ref i, nEnd);
+			    PBMessage pChild = ParseMessage(aWords, ref i, nEnd, Setting, pPBMessageMng);
 			    if(pChild != null)
 				    m_ChildMsgDesc.Add(pChild);
 		    }
 		    else if(words.m_type == pb_lex_words_type.lex_oneof)
 		    {
-                ParseOneOf(aWords, ref i, nEnd);
+                ParseOneOf(aWords, ref i, nEnd, Setting, pPBMessageMng);
 		    }
 		    else if(words.m_type == pb_lex_words_type.lex_repeated)
 		    {
@@ -268,8 +310,9 @@ class PBMessage
 	    }
     }
 
-    protected PBEnumDesc ParseEnum(List<pb_lex_words> aWords, ref int nStart, int nEnd)
+    protected PBEnumDesc ParseEnum(List<pb_lex_words> aWords, ref int nStart, int nEnd, FBExportSetting Setting, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pMng = pPBMessageMng;
         int nLeft = PBLex.FindFirstWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_left_brace, nStart, nEnd);
         int nRight = PBLex.FindNextWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_right_brace, nStart, nEnd);
         PBEnumDesc pEnum = null;
@@ -282,15 +325,18 @@ class PBMessage
 			    pb_lex_words name_enum = aWords[nStart + 1];
 			    pEnum = new PBEnumDesc();
                 pEnum.m_szType = name_enum.GetString();
-			    pEnum.Parse(aWords, nLeft + 1, nRight + 1);
+                pMng.m_AllEnumNames.PushKey(pEnum.m_szType);
+                pEnum.Parse(aWords, nLeft + 1, nRight + 1, Setting);
 		    }
             nStart = nRight;
 	    }
         return pEnum;
     }
 
-    protected void ParseOneOf(List<pb_lex_words> aWords, ref int nStart, int nEnd)
+    protected void ParseOneOf(List<pb_lex_words> aWords, ref int nStart, int nEnd, FBExportSetting Setting, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pMng = pPBMessageMng;
+
         PBOneOfDesc pChild = null;
         int nLeft = PBLex.FindFirstWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_left_brace, nStart, nEnd);
         int nRight = PBLex.FindNextWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_right_brace, nStart, nEnd);
@@ -305,18 +351,22 @@ class PBMessage
                 pChild.m_szClassName = name_class.GetString();
                 pChild.m_szName = MakeOneOfValueName(pChild.m_nIndex);
 
+                pMng.m_AllMessageNames.PushKey(pChild.m_szClassName);
+
                 PBOneOfDesc pOldOneOf = m_pCurOneOf;
                 m_pCurOneOf = pChild;
                 m_OneOf.Add(pChild);
-                Parse(aWords, nLeft + 1, nRight);
+                Parse(aWords, nLeft + 1, nRight, Setting, pPBMessageMng);
                 m_pCurOneOf = pOldOneOf;
             }
             nStart = nRight;
         }
     }
 
-    protected PBMessage ParseMessage(List<pb_lex_words> aWords, ref int nStart, int nEnd)
+    protected PBMessage ParseMessage(List<pb_lex_words> aWords, ref int nStart, int nEnd, FBExportSetting Setting, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pMng = pPBMessageMng;
+
         PBMessage pChild = null;
         int nLeft = PBLex.FindFirstWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_left_brace, nStart, nEnd);
         int nRight = PBLex.FindNextWords(aWords, pb_lex_words_type.lex_left_brace, pb_lex_words_type.lex_right_brace, nStart, nEnd);
@@ -328,7 +378,8 @@ class PBMessage
                 pb_lex_words name_class = aWords[nStart + 1];
                 pChild = new PBMessage();
                 pChild.m_szClassName = name_class.GetString();
-                pChild.Parse(aWords, nLeft + 1, nRight);
+                pMng.m_AllMessageNames.PushKey(pChild.m_szClassName);
+                pChild.Parse(aWords, nLeft + 1, nRight, Setting, pPBMessageMng);
             }
             nStart = nRight;
         }
@@ -352,16 +403,45 @@ class PBMessage
     }
     // -------------------------------------------------------------
 
-    public void ExportFCScript(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc)
+    string GetValidMessageType( CPBStringMap AllMessageNames, string szType)
     {
+	    int nPos = 0;
+        string szRealType = szType;
+	    while(nPos<szType.Length)
+	    {
+            int nNext = szType.IndexOf('.', nPos);
+		    if(nNext != -1)
+		    {
+			    szRealType = szType.Substring(nNext+1);
+			    nPos = nNext + 1;
+		    }
+		    else
+		    {
+			    break;
+		    }
+	    }
+	    return szRealType;
+    }
+
+    public void ExportFCScript(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc, CPBMessageMng pPBMessageMng)
+    {
+        CPBMessageMng pMng = pPBMessageMng;
+
         int nParentSpaceCount = nSpaceCount;
         szOut.Append("\r\n");
         // 先生成枚举
-        ExportFC_InnerEnum(ref szOut, nSpaceCount);
+        ExportFC_InnerEnum(ref szOut, nSpaceCount, pPBMessageMng);
 
         // 先将类内的函数，生成到类外吧
-        ExportFC_InnerClass(ref szOut, nSpaceCount, bExportReadWriteFunc);
+        ExportFC_InnerClass(ref szOut, nSpaceCount, bExportReadWriteFunc, pPBMessageMng);
         szOut.Append("\r\n");
+
+        string szRealClassName = m_szClassName;
+        if (pMng.m_ReplaceTypeMap.GetValue(m_szClassName, out szRealClassName))
+        {
+            pMng.m_AllMessageNames.PushKey(szRealClassName);
+            m_szClassName = szRealClassName;
+        }
 
         // 导出类
         szOut.Append(' ', nParentSpaceCount);
@@ -373,16 +453,44 @@ class PBMessage
         // 生成内部的枚举
         szOut.Append(' ', nSpaceCount);
         szOut.Append("//-----------------------------\r\n");
-        ExportFC_OneofEnum(ref szOut, nSpaceCount);
+        ExportFC_OneofEnum(ref szOut, nSpaceCount, pPBMessageMng);
         szOut.Append(' ', nSpaceCount);
         szOut.Append("//-----------------------------\r\n");
 
         // 生成变量
         int nSize = m_Member.Count;
         PBOneOfDesc pOneOfPtr = null;
+        bool bValidType = true;
         for (int i = 0; i < nSize; ++i)
         {
             MessageItem pItem = m_Member[i];
+            string szKeyType = pItem.m_key.m_szType;
+
+            bValidType = true;
+            pItem.m_bValidType = true;
+            if (PBValueType.Value_Base == pItem.m_item_type || PBValueType.Value_Array == pItem.m_item_type)
+            {
+                if (pMng.m_ReplaceTypeMap.GetValue(pItem.m_key.m_szType, out szRealClassName))
+                {
+                    pMng.m_AllMessageNames.PushKey(szRealClassName);
+                    pItem.m_key.m_szType = szRealClassName;
+                }
+                else if (szKeyType.IndexOf('.') != -1)
+                {
+                    pItem.m_key.m_szType = GetValidMessageType(pMng.m_AllMessageNames, szKeyType);
+                }
+                if (pMng.m_ReplaceNameMap.GetValue(pItem.m_szName, out szRealClassName))
+                {
+                    pItem.m_szName = szRealClassName;
+                }
+
+                if (pb_type.pb_object == pItem.m_key.m_type || pb_type.pb_none == pItem.m_key.m_type)
+                {
+                    szKeyType = pItem.m_key.m_szType;
+                    bValidType = pMng.m_AllMessageNames.IsValid(szKeyType) || pMng.m_AllEnumNames.IsValid(szKeyType);
+                }
+                pItem.m_bValidType = bValidType;
+            }
             if (pOneOfPtr != pItem.m_pOneOfDesc)
             {
                 szOut.Append("    //-----------------------------\r\n");
@@ -394,21 +502,41 @@ class PBMessage
             }
             pOneOfPtr = pItem.m_pOneOfDesc;
             ExportFC_ValueReflexTable(ref szOut, pItem, nSpaceCount);
-            if(string.IsNullOrEmpty(pItem.m_default))
-                szOut.AppendFormat("    public {0}  {1};// = {2}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_ID);
+            if(bValidType)
+            {
+                if (string.IsNullOrEmpty(pItem.m_default))
+                    szOut.AppendFormat("    public {0}  {1};// = {2}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_ID);
+                else
+                    szOut.AppendFormat("    public {0}  {1} = {2};// = {3}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_default, pItem.m_ID);
+            }
             else
-                szOut.AppendFormat("    public {0}  {1} = {2};// = {3}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_default, pItem.m_ID);
+            {
+                if (string.IsNullOrEmpty(pItem.m_default))
+                    szOut.AppendFormat("    // public {0}  {1};// = {2}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_ID);
+                else
+                    szOut.AppendFormat("    // public {0}  {1} = {2};// = {3}\r\n", GetValueTypeName(pItem), pItem.m_szName, pItem.m_default, pItem.m_ID);
+            }
         }
         if (pOneOfPtr != null)
         {
             szOut.Append("    //-----------------------------\r\n");
         }
 
+        // 删除无效的节点
+        for (int i = m_Member.Count - 1; i >= 0; --i)
+        {
+            MessageItem pItem = m_Member[i];
+            if (!pItem.m_bValidType)
+            {
+                m_Member.RemoveAt(i);
+            }
+        }
+
         // 生成Set函数
-        ExportFC_SetFunc(ref szOut, nSpaceCount);
+        ExportFC_SetFunc(ref szOut, nSpaceCount, pPBMessageMng);
 
         // 生成Get函数
-        ExportFC_GetFunc(ref szOut, nSpaceCount);
+        ExportFC_GetFunc(ref szOut, nSpaceCount, pPBMessageMng);
 
         // 生成写函数
         if(bExportReadWriteFunc)
@@ -442,22 +570,33 @@ class PBMessage
         }
     }
 
-    void ExportFC_InnerEnum(ref StringBuilder szOut, int nSpaceCount)
+    void ExportFC_InnerEnum(ref StringBuilder szOut, int nSpaceCount, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pMng = pPBMessageMng;
+        CPBStringMap EnumMap = pMng.m_EnumMap;
         int nSize = m_Enums.Count;
         for (int i = 0; i < nSize; ++i)
         {
             PBEnumDesc pEnum = m_Enums[i];
-            pEnum.ExportFC(ref szOut, nSpaceCount);
+            if (EnumMap.PushKey(pEnum.m_szType))
+            {
+                pEnum.ExportFC(ref szOut, nSpaceCount);
+            }
         }
     }
 
-    void ExportFC_OneofEnum(ref StringBuilder szOut, int nSpaceCount)
+    void ExportFC_OneofEnum(ref StringBuilder szOut, int nSpaceCount, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pMng = pPBMessageMng;
+        CPBStringMap EnumMap = pMng.m_EnumMap;
         int nSize = m_OneOf.Count;
         for (int i = 0; i < nSize; ++i)
         {
             PBOneOfDesc pOneOf = m_OneOf[i];
+            if (!EnumMap.PushKey(pOneOf.m_szClassName))
+            {
+                continue;
+            }
             int nEnumCount = pOneOf.m_Childs.Count;
             szOut.Append(' ', nSpaceCount);
             szOut.AppendFormat("public enum {0}Case\r\n", pOneOf.m_szClassName);
@@ -476,13 +615,18 @@ class PBMessage
         }
     }
 
-    void ExportFC_InnerClass(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc)
+    void ExportFC_InnerClass(ref StringBuilder szOut, int nSpaceCount, bool bExportReadWriteFunc, CPBMessageMng pPBMessageMng)
     {
+        CPBMessageMng pPBMng = pPBMessageMng;
+        CPBStringMap NameMap = pPBMng.m_NameMap;
         int nSize = m_ChildMsgDesc.Count;
         for (int i = 0; i < nSize; ++i)
         {
             PBMessage pChild = m_ChildMsgDesc[i];
-            pChild.ExportFCScript(ref szOut, nSpaceCount, bExportReadWriteFunc);
+            if (NameMap.PushKey(pChild.m_szClassName))
+            {
+                pChild.ExportFCScript(ref szOut, nSpaceCount, bExportReadWriteFunc, pPBMessageMng);
+            }
         }
     }
 
@@ -508,7 +652,7 @@ class PBMessage
         szOut.Append("    }\r\n");
     }
 
-    void ExportFC_SetFunc(ref StringBuilder szOut, int nSpaceCount)
+    void ExportFC_SetFunc(ref StringBuilder szOut, int nSpaceCount, CPBMessageMng pPBMessageMng)
     {
         // 只需要生成OneOf的
         for (int i = 0; i < m_Member.Count; ++i)
@@ -516,12 +660,12 @@ class PBMessage
             MessageItem pItem = m_Member[i];
             if (pItem.m_pOneOfDesc != null)
             {
-                ExportFC_OneOfFunc(ref szOut, pItem, true, nSpaceCount);
+                ExportFC_OneOfFunc(ref szOut, pItem, true, nSpaceCount, pPBMessageMng);
             }
         }
     }
 
-    void ExportFC_GetFunc(ref StringBuilder szOut, int nSpaceCount)
+    void ExportFC_GetFunc(ref StringBuilder szOut, int nSpaceCount, CPBMessageMng pPBMessageMng)
     {
         // has_xxxx()
         for (int i = 0; i < m_Member.Count; ++i)
@@ -529,17 +673,20 @@ class PBMessage
             MessageItem pItem = m_Member[i];
             if (pItem.m_pOneOfDesc != null)
             {
-                ExportFC_OneOfFunc(ref szOut, pItem, false, nSpaceCount);
+                ExportFC_OneOfFunc(ref szOut, pItem, false, nSpaceCount, pPBMessageMng);
             }
         }
     }
 
-    void ExportFC_OneOfFunc(ref StringBuilder szOut, MessageItem pItem, bool bSetFunc, int nSpaceCount)
+    void ExportFC_OneOfFunc(ref StringBuilder szOut, MessageItem pItem, bool bSetFunc, int nSpaceCount, CPBMessageMng pPBMessageMng)
     {
         PBOneOfDesc pOneOf = pItem.m_pOneOfDesc;
 	    string szOneOfValueName = pOneOf.m_szName;
         string szValueClassName = GetValueTypeName(pItem);
-	    if(bSetFunc)
+
+        CPBMessageMng pMng = pPBMessageMng;
+
+        if (bSetFunc)
 	    {
 		    // set_xxxx(_Ty value)
 		    // _Ty mutable_xxxx();
@@ -554,8 +701,11 @@ class PBMessage
 			    szOut.AppendFormat("    public {0} mutable_{1}()\r\n", szValueClassName, pItem.m_szName);
 			    szOut.Append(      "    {\r\n");
 			    szOut.AppendFormat("        {0} = {1};\r\n", szOneOfValueName, pItem.m_ID);
-                szOut.AppendFormat("        if(null == {0})\r\n", pItem.m_szName);
-                szOut.AppendFormat("            {0} = new {1}();\r\n", pItem.m_szName, szValueClassName);
+                if (!pMng.m_AllEnumNames.IsValid(szValueClassName))
+                {
+                    szOut.AppendFormat("        if(null == {0})\r\n", pItem.m_szName);
+                    szOut.AppendFormat("            {0} = new {1}();\r\n", pItem.m_szName, szValueClassName);
+                }
 			    szOut.AppendFormat("        return {0};\r\n", pItem.m_szName);
 			    szOut.Append(      "    }\r\n");
 		    }
@@ -666,6 +816,47 @@ class PBMessage
     // -------------------------------------------------------------
 };
 
+class CPBStringMap
+{
+    Dictionary<string, int> m_Names = new Dictionary<string, int>();
+
+    public bool IsValid(string szKey)
+    {
+        return m_Names.ContainsKey(szKey);
+    }
+    public bool PushKey(string szKey)
+    {
+        if (!m_Names.ContainsKey(szKey))
+        {
+            m_Names[szKey] = 1;
+            return true;
+        }
+        return false;
+    }
+};
+
+class CPBReplaceNameMap
+{
+    Dictionary<string, string> m_Names = new Dictionary<string, string>();
+
+    public bool IsValid(string szKey)
+	{
+        return m_Names.ContainsKey(szKey);
+    }
+    public bool PushKeyValue(string szKey, string szValue)
+    {
+        if(!m_Names.ContainsKey(szKey))
+        {
+            m_Names[szKey] = szValue;
+            return true;
+        }
+        return false;
+    }
+    public bool GetValue(string szKey, out string value)
+	{
+        return m_Names.TryGetValue(szKey, out value);
+	}
+};
 
 class CPBMessageMng : PBMessage
 {
@@ -677,6 +868,21 @@ class CPBMessageMng : PBMessage
     };
     List<PBMessageFile> m_MessageFiles = new List<PBMessageFile>();  // 所有的文件
 
+    public CPBStringMap m_AllEnumNames = new CPBStringMap();
+    public CPBStringMap m_AllMessageNames = new CPBStringMap();
+    public CPBStringMap m_EnumMap = new CPBStringMap();
+    public CPBStringMap m_NameMap = new CPBStringMap();
+    public CPBReplaceNameMap m_ReplaceTypeMap = new CPBReplaceNameMap();
+    public CPBReplaceNameMap m_ReplaceNameMap = new CPBReplaceNameMap();
+
+    public CPBMessageMng()
+    {
+        m_ReplaceTypeMap.PushKeyValue("Vector4", "PB_Vector4");
+        m_ReplaceTypeMap.PushKeyValue("Vector3", "PB_Vector3");
+        m_ReplaceTypeMap.PushKeyValue("Vector2", "PB_Vector2");
+        m_ReplaceNameMap.PushKeyValue("delete", "pb_delete");
+    }
+
     string DistillFileName(string szPathName)
     {
         szPathName = szPathName.Replace('\\', '/');
@@ -684,7 +890,7 @@ class CPBMessageMng : PBMessage
         szFileName = szFileName.Replace(".proto", "");
         return szFileName;
     }
-    public void ParseFile(string szPathName)
+    public void ParseFile(string szPathName, FBExportSetting Setting)
     {
         if (!System.IO.File.Exists(szPathName))
             return;
@@ -708,7 +914,7 @@ class CPBMessageMng : PBMessage
             {
                 case pb_lex_words_type.lex_enum:
                     {
-                        PBEnumDesc pEnum = ParseEnum(contain.m_Words, ref i, nSize);
+                        PBEnumDesc pEnum = ParseEnum(contain.m_Words, ref i, nSize, Setting, this);
                         if(pEnum != null)
                         {
                             pMessageFile.m_Enums.Add(pEnum);
@@ -717,7 +923,7 @@ class CPBMessageMng : PBMessage
                     break;
                 case pb_lex_words_type.lex_message:
                     {
-                        PBMessage pMessage = ParseMessage(contain.m_Words, ref i, nSize);
+                        PBMessage pMessage = ParseMessage(contain.m_Words, ref i, nSize, Setting, this);
                         if (pMessage != null)
                             pMessageFile.m_Messages.Add(pMessage);
                     }
@@ -727,20 +933,20 @@ class CPBMessageMng : PBMessage
             }
         }
 
-        if (pMessageFile.m_Messages.Count == 0)
+        if (pMessageFile.m_Messages.Count == 0 && pMessageFile.m_Enums.Count == 0)
         {
             return;
         }
         m_MessageFiles.Add(pMessageFile);
     }
-    public void ParsePath(string szPath)
+    public void ParsePath(string szPath, FBExportSetting Setting)
     {
         string []all_files = System.IO.Directory.GetFiles(szPath, "*.proto", System.IO.SearchOption.AllDirectories);
         if (all_files == null)
             return;
         foreach(string szPathName in all_files)
         {
-            ParseFile(szPathName);
+            ParseFile(szPathName, Setting);
         }
     }
     public static void SaveUTF8File(string szPathName, string szFileData)
@@ -788,13 +994,21 @@ class CPBMessageMng : PBMessage
             szFileData.Clear();
             for (int j = 0; j < pMsgFile.m_Enums.Count; ++j)
             {
-                pMsgFile.m_Enums[j].ExportFC(ref szFileData, 0);
+                PBEnumDesc pEnum = pMsgFile.m_Enums[j];
+                string szType = pEnum.m_szType;
+                if (m_EnumMap.PushKey(szType))
+                {
+                    pEnum.ExportFC(ref szFileData, 0);
+                }
             }
             nClassCount = pMsgFile.m_Messages.Count;
             for (int j = 0; j < nClassCount; ++j)
             {
                 pMsg = pMsgFile.m_Messages[j];
-                pMsg.ExportFCScript(ref szFileData, 0, bExportReadWriteFunc);
+                if (m_NameMap.PushKey(pMsg.m_szClassName))
+                {
+                    pMsg.ExportFCScript(ref szFileData, 0, bExportReadWriteFunc, this);
+                }
             }
             szFileName = pMsgFile.m_szFileName;
             szFileName += ".cs";
@@ -806,13 +1020,17 @@ class CPBMessageMng : PBMessage
             SaveUTF8File(szPathName, szFileData.ToString());
         }
     }
-    static void ExprtProtobufToFC(bool bExportReadWriteFunc)
+    static void ExprtProtobufToFC(bool bExportReadWriteFunc, bool bExportEnumHelp)
     {
         string szDataPath = Application.dataPath;
         string szRootPath = szDataPath.Substring(0, szDataPath.Length - 6);
 
+        FBExportSetting Setting = new FBExportSetting();
+        Setting.m_bExportReadWriteFunc = bExportReadWriteFunc;
+        Setting.m_bExportEnumHelp = bExportEnumHelp;
+
         CPBMessageMng pb_mng = new CPBMessageMng();
-        pb_mng.ParsePath(szRootPath + "Assets/Protobuf");
+        pb_mng.ParsePath(szRootPath + "Assets/Protobuf", Setting);
         pb_mng.ExportFC(szRootPath + "Script/Protobuf/", bExportReadWriteFunc);
 
         FCExport.InportPathToFCProj("Protobuf");
@@ -824,11 +1042,11 @@ class CPBMessageMng : PBMessage
     [MenuItem("FCScript/导出Protobuf", false, 5)]
     static void ExportProtobuf()
     {
-        ExprtProtobufToFC(false);
+        ExprtProtobufToFC(false, false);
     }
     [MenuItem("FCScript/导出Protobuf(调试)", false, 5)]
     static void ExportProtobufFull()
     {
-        ExprtProtobufToFC(true);
+        ExprtProtobufToFC(true, false);
     }
 };
