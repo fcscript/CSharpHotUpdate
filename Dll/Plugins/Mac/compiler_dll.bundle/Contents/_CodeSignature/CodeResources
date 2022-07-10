@@ -3,9 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>files</key>
-	<dict/>
+	<dict>
+		<key>Resources/ReadMe.txt</key>
+		<data>
+		r7mKI5JmlLYOc+Rn7oX23vNjiSQ=
+		</data>
+	</dict>
 	<key>files2</key>
-	<dict/>
+	<dict>
+		<key>Resources/ReadMe.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			M9SE4AI/Z0SF05EQ2JtBcJPOk/ja0PEHx6LrIzpuznI=
+			</data>
+		</dict>
+	</dict>
 	<key>rules</key>
 	<dict>
 		<key>^Resources/</key>
