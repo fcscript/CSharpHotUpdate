@@ -1,0 +1,26 @@
+
+-- 全局函数 ----
+
+bool ReadFile( StringA szFullFileName, out StringA & szFileData );
+bool WriteFile(StringA szFullFileName, StringA szFileData );
+
+StringA GetWorkPath();
+void CallProcess(StringA szExePathName, StringA szParam);
+void SystemCall(StringA szExePathName, StringA szParam);
+void System(StringA szCmd);
+
+void EnumPath(List<StringA> &aOutPath, List<StringA> &aOutFiles, StringA szPath, StringA szExtType, bool bReadAll);
+void ReadAllFile(List<StringA> &aOutPath, List<StringA> &aOutFiles, StringA szPath, StringA szExtType, bool bReadAll);
+void ReadAllPath(List<StringA> &aOutPath, List<StringA> &aOutFiles, StringA szPath, StringA szExtType, bool bReadAll);
+
+bool DeletePath(StringA szPath);
+bool DeleteFile(StringA szPathName);
+void AutoCreateDir(StringA szPath);
+bool CopyFile(StringA szExistingFileName, StringA szNewFileName, bool bFailedExit);
+
+bool GetFileTimeInfo(StringA szPathName, StringA &szCreateTime, StringA &szModifyTime); 
+bool GetFileUTCTime(StringA szPathName, int64 &tCreateTime, int64 &tModifyTime);
+StringA UTCTimeToString(int64 tTime);
+int64 StringToUTCTime(StringA szTime);
+int64 GetFileSize(StringA szTime);
+bool ZipCompress(StringA szSrcPath, StringA szZipPathName);
