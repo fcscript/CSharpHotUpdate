@@ -121,4 +121,10 @@ public class List<_Ty>
             m_pData[nIndex] = value;
         }
     }
+	
+	// 功能：串连两个数组
+	public void operator += (List<_Ty> other){}
+	
+	// 功能：克隆一个新的数组 
+	public List<_Ty> Clone(){return null;}
 };

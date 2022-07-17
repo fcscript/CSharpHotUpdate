@@ -118,4 +118,10 @@ public class map<_TyKey, _TyValue>
     {
 
     }
+	
+	// 功能：串连两个map
+	public void operator += (map<_TyKey, _TyValue> other){}
+	
+	// 功能：克隆一个新的map 
+	public map<_TyKey, _TyValue> Clone(){return null;}
 };
