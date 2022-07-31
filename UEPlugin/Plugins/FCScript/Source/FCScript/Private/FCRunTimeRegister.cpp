@@ -174,7 +174,7 @@ FCDynamicFunction  *GetCallClassFunc(fc_intptr L, UObject *&ThisObject )
         if (!ClassDesc)
         {
             const char* ClassName = fc_cpp_get_current_call_class_name(L);  // 这个只是单纯的UEClass，不是脚本的，这里创建的也是UE对象
-            ClassDesc = GetScriptContext()->RegisterUClass(ClassName);
+            ClassDesc = GetScriptContext()->RegisterWrapClass(ClassName, nClassName);
         }
         if (ClassDesc)
         {
@@ -184,6 +184,10 @@ FCDynamicFunction  *GetCallClassFunc(fc_intptr L, UObject *&ThisObject )
                 const char* FuncName = fc_cpp_get_current_call_class_function_name(L);
                 DynamicFunc = ClassDesc->RegisterFunc(FuncName, nFuncName);
             }
+            if (ClassDesc->m_Class)
+            {
+                ThisObject = ClassDesc->m_Class->GetDefaultObject();                // get CDO for static function
+            }
         }
     }
     return DynamicFunc;
@@ -191,6 +195,11 @@ FCDynamicFunction  *GetCallClassFunc(fc_intptr L, UObject *&ThisObject )
 
 void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, FCDynamicFunction  *DynamicFunc, uint8 *Buffer, int BufferSize, FNativeFuncPtr NativeFuncPtr)
 {
+    if (!ThisObject)
+    {
+        return;
+    }
+
     fc_intptr VM = fc_get_vm_ptr(L);
     int  StackSize = DynamicFunc->ParmsSize;
     UFunction* Function = DynamicFunc->Function;
@@ -270,7 +279,8 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     {
         DynamicProperty = BeginProperty + DynamicFunc->ReturnPropertyIndex;
         ValuePtr = fc_get_return_ptr(L);
-        ValueAddr = Locals + DynamicProperty->Offset_Internal;
+        //ValueAddr = Locals + DynamicProperty->Offset_Internal;
+        ValueAddr = ReturnValueAddress;
         DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
         DynamicProperty->Property->DestroyValue(ValueAddr);
     }
@@ -291,10 +301,11 @@ int WrapUClassFunction(fc_intptr L)
 	{
         if(!ThisObject)
         {
-            if(FUNC_Static != (FUNC_Static & DynamicFunc->Function->FunctionFlags))
-            {
-                return 0;
-            }
+            //if(FUNC_Static != (FUNC_Static & DynamicFunc->Function->FunctionFlags))
+            //{
+            //    return 0;
+            //}
+            return 0;
         }
 		uint8   Buffer[256];
         WrapNativeCallFunction(L, 0, ThisObject, DynamicFunc, Buffer, sizeof(Buffer), nullptr);

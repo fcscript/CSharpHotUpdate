@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 class FCMainPanel
 {	
 	UUserWidget  Self;
+	IEnumerator   m_coruntine;
     //	
     // 摘要:
     //     ///
@@ -49,5 +50,35 @@ class FCMainPanel
 		{
 			os.print("[FCTestScript]failed load umg:{0}", ClassName);
 		}
+	}
+	public override FEventReply OnMouseButtonDown(FGeometry MyGeometry, FPointerEvent MouseEvent)
+	{
+		os.print("OnMouseButtonDown");
+		UWorld world = UEUtil.GetWorld(Self);
+		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
+		if(localPlayerControler != null)
+		{
+			localPlayerControler.bShowMouseCursor = 1;
+		}
+
+		os.print("world = {0}, localPlayerControler={1}, bShowMouseCursor={2}", world, localPlayerControler, localPlayerControler.bShowMouseCursor);
+		
+        //m_coruntine = new IEnumerator(this, DelaySetMouseCursor());
+        //StartCoroutine(m_coruntine);
+		return UWidgetBlueprintLibrary.Handled();
+	}
+	public override FEventReply OnMouseButtonUp(FGeometry MyGeometry, FPointerEvent MouseEvent)
+	{
+		os.print("OnMouseButtonUp");
+		return UWidgetBlueprintLibrary.Handled();
+	}
+
+	IEnumerator  DelaySetMouseCursor()
+	{
+		UWorld world = UEUtil.GetWorld(Self);
+		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
+		localPlayerControler.bShowMouseCursor = 1;
+		os.print("DelaySetMouseCursor, world={0}, bShowMouseCursor={1}", world, localPlayerControler.bShowMouseCursor);
+        yield return 0;
 	}
 }

@@ -151,8 +151,25 @@ void  PushScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *D
 void  PushScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {	
 	UObject *value = *((UObject **)ValueAddr);
-	// 做类型检查
-	if(IsCanCastToScript(VM, ValuePtr, DynamicProperty))
+
+	FObjectProperty* ObjectProperty = (FObjectProperty*)DynamicProperty->Property;
+	UClass* InClass = value ? value->GetClass() : UObject::StaticClass();
+	UClass* Class = ObjectProperty->PropertyClass;
+	//if (ObjectProperty->PropertyClass->IsChildOf(UClass::StaticClass()))
+	//{
+	//	FClassProperty* ClassProperty = (FClassProperty*)ObjectProperty;
+	//	UClass* tempClass = Cast<UClass>(ObjectProperty->GetPropertyValue(ValueAddr));
+	//	UClass* MetaClass = tempClass ? tempClass : ClassProperty->MetaClass;
+	//	int iii = 0;
+	//}
+	//else
+	//{
+	//	UObject* Object = ObjectProperty->GetPropertyValue(ValueAddr);
+	//	UClass* tempClass = Object ? Object->GetClass() : ObjectProperty->PropertyClass;
+	//	int iii = 0;
+	//}
+
+	if (Class == InClass || Class->IsChildOf(InClass))
 	{
 		fc_intptr PtrID = FCGetObj::GetIns()->PushUObject(value);
 		fc_set_value_wrap_objptr(VM, ValuePtr, PtrID);
@@ -161,6 +178,17 @@ void  PushScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 	{
 		fc_set_value_wrap_objptr(VM, ValuePtr, 0);
 	}
+
+	// 做类型检查
+	//if(IsCanCastToScript(VM, ValuePtr, DynamicProperty))
+	//{
+	//	fc_intptr PtrID = FCGetObj::GetIns()->PushUObject(value);
+	//	fc_set_value_wrap_objptr(VM, ValuePtr, PtrID);
+	//}
+	//else
+	//{
+	//	fc_set_value_wrap_objptr(VM, ValuePtr, 0);
+	//}
 }
 
 void  PushScriptCppPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
@@ -402,10 +430,12 @@ void  ReadScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *D
 }
 void  ReadScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	UObject *SrcObj = FCGetObj::GetIns()->GetUObject(ValuePtr);
-	UClass *InClass = UObject::StaticClass();
-	UStruct *Struct = DynamicProperty->Property->GetOwnerStruct();
-	if(Struct == InClass || Struct->IsChildOf(InClass))
+	FObjectProperty* ObjectProperty = (FObjectProperty*)DynamicProperty->Property;
+	fc_intptr PtrID = fc_get_value_wrap_objptr(ValuePtr);
+	UObject *SrcObj = FCGetObj::GetIns()->GetUObject(PtrID);
+	UClass *InClass = SrcObj ? SrcObj->GetClass() : UObject::StaticClass();
+	UClass *Class = ObjectProperty->PropertyClass;
+	if(Class == InClass || InClass->IsChildOf(Class))
 	{
 		*((UObject**)ValueAddr) = SrcObj;
 	}

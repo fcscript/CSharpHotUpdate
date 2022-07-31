@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class APlayerController : public UObject
+public class APlayerController : public UObject
 {
-    
+    public bool bShowMouseCursor;
 };
