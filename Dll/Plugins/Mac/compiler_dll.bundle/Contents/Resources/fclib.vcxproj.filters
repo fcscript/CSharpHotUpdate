@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{7097b2fe-3bb4-4dc1-af7e-87bd568445ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{80874d73-03ff-4a90-9f81-52504fac8bd4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C_API.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="class_base.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ExcelTable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_any_hash_map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_api.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_binary.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_broadcast_mng.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_class_ins.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_code_mng.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_coroutine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_coroutine_mng.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_debug_interface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_delay_check.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_delegate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_excel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_hash_map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_init_value.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_json.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_malloc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_print.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_ref_object.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_stack_buffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_stack_buffer_excute.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_stack_buffer_excute_call.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_stack_buffer_excute_debug.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_array.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_array.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_color.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_coroutine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_graphic.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_inport_class.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_string_a.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_string_w.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_static_buffer_system.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_string.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_xml.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="net\fc_tcp_server.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="class_base.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ExcelStruct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ExcelTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_any_hash_map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_any_stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_binary.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_broadcast_mng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_c_value.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_class_hash_func.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_class_ins.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_clock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_cmd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_cmd_op.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_cmd_sub.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_code_mng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_compile_hash_map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_coroutine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_coroutine_mng.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_debug_interface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_delay_check.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_delegate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_excel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_hash_map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_hash_map_func.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_init_value.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_json.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_malloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_mem_malloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_place_new.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_plat_time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_print.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_ref_object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_runtime_api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_runtime_register.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_stack_buffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_static_array.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_string.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_switch_hash_map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_value.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_xml.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="C_API.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="FastSort.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_fast_list.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_fast_malloc.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_stack_alloc.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GL2DMath.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLBezier.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLD3DMath.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="GLQuaternion.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="MArray.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="MTime.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="SortFunc.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="window_value_type.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="net\fc_debug_msg.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\fc_tcp_server.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\LinuxThread.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\PlatIPV6.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\PlatThread.h">
+      <Filter>net</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

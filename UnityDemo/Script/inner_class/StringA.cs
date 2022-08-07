@@ -253,6 +253,19 @@ public struct StringA
     {
         return 0;
     }
+    // 读取行
+    bool ReadLine(ref fc_string szLine, ref int nStart)
+    {
+        return false;
+    }
+    bool Match(fc_string szWildcard, int nStart)
+    {
+        return false;
+    }
+    public bool MatchNext(StringA szWildcard, ref int nStart, ref int nEnd) // 匹配下一个通配字符串
+    {
+        return false;
+    }
     public bool CompareWithWildcard(StringA szWildcard, bool bNoCase) // 使用通配符判断两个字符串是不是相似, bNoCase : true忽略大小写; false比较大小写
     {
         return false;

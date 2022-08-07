@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{4ddbb45b-26d0-4b9a-96c2-39b80a2c18f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dllexport">
+      <UniqueIdentifier>{2acdffa5-32b9-4207-95a8-6b4c6bf54a26}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fc_compile_api.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_const_anylse.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_debug_data.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_debug_manager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_graphic_match.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_Lex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_compile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_complex_cmd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_enum_set.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_func_compile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_func_declare.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_func_desc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_inport_class.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_inport_record.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_template.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_template_typedef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_lex_typedef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lex_name_space.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fc_task_mng.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdProjSetting.cpp">
+      <Filter>dllexport</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler_dll.cpp">
+      <Filter>dllexport</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fc_compile_api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_compile_hash_map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_const_anylse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_const_op.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_debug_data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_debug_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_graphic_match.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_Lex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_compile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_complex_cmd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_enum_set.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_func.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_func_declare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_func_desc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_func_input_param.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_inport_class.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_inport_record.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_template.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_template_typedef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_lex_typedef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_switch_hash_map_edit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lex_name_space.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FastAlloc.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="FastList.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="FastLZW.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_c_file.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_plat_file.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_share_ptr.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_string_buffer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="fc_task_mng.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="WFile.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdProjSetting.h">
+      <Filter>dllexport</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler_dll.h">
+      <Filter>dllexport</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

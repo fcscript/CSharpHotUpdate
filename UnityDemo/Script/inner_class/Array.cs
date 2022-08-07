@@ -32,7 +32,7 @@ public class List<_Ty>
 
     }
     // 功能：预分配
-    public void reserve(int nSize)
+    public void Reserve(int nSize)
     {
 
     }
