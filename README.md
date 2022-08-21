@@ -142,3 +142,8 @@
 <p>增加字符串三个接口Match, MatchNext, ReadLine</p>
 <p>优化字符串Append,缓存不足时改成倍增内存分配，解决巨量字符串连接的性能问题</p>
 <p>增加C API桥接函数的导入声明的解析</p>
+<p>2022-08-21</p>
+<p>修正case非连值时, default分支跳转错误的BUG</p>
+<p>修正for循环控制变量如果是函数引用参数时，没有输出引用的BUG</p>
+<p>修正String的Match,MatchNext的BUG</p>
+<p>修正单个字符常量与单个字符串常量相同时，编译函数匹配错误的BUG</p>

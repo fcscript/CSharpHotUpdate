@@ -51,6 +51,9 @@
         public void MakeLower(); // 转换成小写
         public int  Compare( StringT other );  // 比较字符串, 返回-1是小于，0是相等，1是大于
         public int  CompareNoCase( StringT other ); // 比较字符串，忽略大小写
+        public bool ReadLine(ref fc_string szLine, ref int nStart); // 从指定位置读取到行尾的内容
+        public bool Match(fc_string szWildcard, int nStart);// 从指定位置匹配一个通配字符串
+        public bool MatchNext(StringA szWildcard, ref int nStart, ref int nEnd); // 匹配下一个通配字符串
         public bool  CompareWithWildcard( StringT szWildcard, bool bNoCase ); // 使用通配符判断两个字符串是不是相似, bNoCase : true忽略大小写; false比较大小写
         public int   Find( _Ty ch, int iStart );  // 从前向后查找指定的字符
         public int   Find( StringT substr, int iStart);

@@ -5,9 +5,13 @@ bool ReadFile( StringA szFullFileName, out StringA & szFileData );
 bool WriteFile(StringA szFullFileName, StringA szFileData );
 
 StringA GetWorkPath();
-void CallProcess(StringA szExePathName, StringA szParam);
-void SystemCall(StringA szExePathName, StringA szParam);
+void CallProcess(StringA szExePathName, StringA szParam, bool bWaitProcess, StringA &szOutRead, StringA &szOutErr);
+void SystemCall(StringA szExePathName, StringA szParam, bool bWaitProcess, StringA &szOutRead, StringA &szOutErr);
 void System(StringA szCmd);
+void Sleep(uint nTick);
+
+StringA UTF8ToAnsi(StringA szIn);
+StringA AnsiToUTF8(StringA szIn);
 
 void EnumPath(List<StringA> &aOutPath, List<StringA> &aOutFiles, StringA szPath, StringA szExtType, bool bReadAll);
 void ReadAllFile(List<StringA> &aOutPath, List<StringA> &aOutFiles, StringA szPath, StringA szExtType, bool bReadAll);
@@ -22,5 +26,6 @@ bool GetFileTimeInfo(StringA szPathName, StringA &szCreateTime, StringA &szModif
 bool GetFileUTCTime(StringA szPathName, int64 &tCreateTime, int64 &tModifyTime);
 StringA UTCTimeToString(int64 tTime);
 int64 StringToUTCTime(StringA szTime);
-int64 GetFileSize(StringA szTime);
+int64 GetFileSize(StringA szPathName);
+bool IsFileExit(StringA szPathName);
 bool ZipCompress(StringA szSrcPath, StringA szZipPathName);
