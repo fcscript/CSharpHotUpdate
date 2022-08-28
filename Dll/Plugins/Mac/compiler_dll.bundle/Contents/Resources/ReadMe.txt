@@ -1,2 +1,0 @@
-如果这个默认是编译动态库，
-如果想编译成静态库，只需要将Android.mk中的BUILD_SHARED_LIBRARY替换成BUILD_STATIC_LIBRARY

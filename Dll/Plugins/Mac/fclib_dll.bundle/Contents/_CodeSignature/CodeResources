@@ -3,9 +3,55 @@
 <plist version="1.0">
 <dict>
 	<key>files</key>
-	<dict/>
+	<dict>
+		<key>Resources/Android.mk</key>
+		<data>
+		hwZnaR730cGnnFPurGHV7BhLUEU=
+		</data>
+		<key>Resources/Application.mk</key>
+		<data>
+		a2iaNH7n+H4z2r7lp2kJXtPx5tc=
+		</data>
+		<key>Resources/ReadMe.txt</key>
+		<data>
+		Z6ITwOQvwTp5s2tnL5laqOAOo0M=
+		</data>
+		<key>Resources/compiler.bat</key>
+		<data>
+		YAMUZnqCNLywwn7csCoBFXUPsXk=
+		</data>
+	</dict>
 	<key>files2</key>
-	<dict/>
+	<dict>
+		<key>Resources/Android.mk</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1l0V92gubnWx4+yWhw1W4wyjTJDL9VOjEiy4HBix/Qs=
+			</data>
+		</dict>
+		<key>Resources/Application.mk</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GRdjcEYKSIYLh0m2umoW/AvChyuszcNRpojp6QF3ze8=
+			</data>
+		</dict>
+		<key>Resources/ReadMe.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			IRx2uvlm2pMfPCy1fCZkgPrdFIr7Ajri9hXEfRYtTOA=
+			</data>
+		</dict>
+		<key>Resources/compiler.bat</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			83whGfGK0QiOm/1LZtU2IhG8QIE6kuZBlN7hsRAjLc8=
+			</data>
+		</dict>
+	</dict>
 	<key>rules</key>
 	<dict>
 		<key>^Resources/</key>

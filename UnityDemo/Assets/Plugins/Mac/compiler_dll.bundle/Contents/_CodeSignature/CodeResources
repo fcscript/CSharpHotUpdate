@@ -20,26 +20,6 @@
 		<data>
 		YAMUZnqCNLywwn7csCoBFXUPsXk=
 		</data>
-		<key>Resources/compiler.vcxproj</key>
-		<data>
-		ouCbs6gT13DdBxytOR9OhNDDTp8=
-		</data>
-		<key>Resources/compiler.vcxproj.filters</key>
-		<data>
-		ZZwRRYSL4Sit9HLbDfYIUchC10E=
-		</data>
-		<key>Resources/fclib.vcproj</key>
-		<data>
-		J707Wsb1axn5lzCWgEhdEv9Y/2o=
-		</data>
-		<key>Resources/fclib.vcxproj.filters</key>
-		<data>
-		C/a4ZOXIoI4MbEKzU5jS6Y3zgwI=
-		</data>
-		<key>Resources/fclib.vcxproj.user</key>
-		<data>
-		O6ODhTgEhdn/JesULsoKAdjOL6s=
-		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -69,41 +49,6 @@
 			<key>hash2</key>
 			<data>
 			83whGfGK0QiOm/1LZtU2IhG8QIE6kuZBlN7hsRAjLc8=
-			</data>
-		</dict>
-		<key>Resources/compiler.vcxproj</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			h4TQpJq/r4Otd1bOO3YpsOg12SV708FpQo8Ud2+LXb8=
-			</data>
-		</dict>
-		<key>Resources/compiler.vcxproj.filters</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			BE2g1KELuXykEIxIupezvUEHDMuWzWdFnQKZZIrAG5Y=
-			</data>
-		</dict>
-		<key>Resources/fclib.vcproj</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			DDDbUAXZ4dzbk5mdpLRViWIFgYycFqVkIThwDKnCmm0=
-			</data>
-		</dict>
-		<key>Resources/fclib.vcxproj.filters</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			9L8L8hYKRfi8YnU/dFmIPnOG2iCy9LuMfIZyfZpaacY=
-			</data>
-		</dict>
-		<key>Resources/fclib.vcxproj.user</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			wGp1sT+FWpTUZhZ5bgJMUrSZ+Pks8AzLVx3bxv9XRnY=
 			</data>
 		</dict>
 	</dict>

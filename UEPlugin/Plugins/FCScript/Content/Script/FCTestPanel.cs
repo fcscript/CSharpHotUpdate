@@ -68,6 +68,17 @@ class FCTestPanel
 		UEUtil.CallFunction(Self, "CallBlueprintFunc2");
 		bLockCall = false;
 	}
+	public override FEventReply OnMouseButtonDown(FGeometry MyGeometry, FPointerEvent MouseEvent)
+	{
+		os.print("[FCTestScript]FCTestPanel:OnMouseButtonDown");
+		UWorld world = UEUtil.GetWorld(Self);
+		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
+		if(localPlayerControler != null)
+		{
+			localPlayerControler.bShowMouseCursor = 1;
+		}		
+		return UWidgetBlueprintLibrary.Handled();
+	}
 	// 需要重载的接口
 	public override void OnButtonEvent1(StringA Name)
 	{

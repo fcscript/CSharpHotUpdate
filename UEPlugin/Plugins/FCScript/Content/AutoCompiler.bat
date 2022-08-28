@@ -9,7 +9,8 @@ set RootPath=%cd%
 :: --proto_path=
 :: --script_path
 
-call ScriptEditor.exe --fcproj=$(curpath)UEScript.fcproj
+::call ScriptEditor.exe --fcproj=$(curpath)UEScript.fcproj
+call fc_cmd.exe --fcproj=$(curpath)UEScript.fcproj
 
 pause
 

@@ -11,7 +11,8 @@ class FCDemoSample
 		os.print("[FCTestScript]OnGameStartup:Start");
 		//TestStruct2();
 		//TestTMap_int_int();
-		TestTSet_string();
+		//TestTSet_string();
+		TestOther();
 		os.print("[FCTestScript]OnGameStartup:End");		
 	}
 	public static void  TestOther()

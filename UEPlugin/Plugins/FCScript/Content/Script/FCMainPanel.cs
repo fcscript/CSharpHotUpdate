@@ -28,6 +28,13 @@ class FCMainPanel
 		{
 			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, button is invalid");
 		}
+		
+		UWorld world = UEUtil.GetWorld(Self);
+		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
+		if(localPlayerControler != null)
+		{
+			localPlayerControler.bShowMouseCursor = 1;
+		}
 	}
     public void ReceiveBeginDestroy()
 	{

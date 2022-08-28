@@ -94,7 +94,7 @@ struct FCObjRef
 		if(Parent)
 		{
 			uint8*ParentPropertyAddr = Parent->ThisObjAddr;
-			if(FCPROPERTY_Array == Parent->DynamicProperty->Type)
+			if(FCPROPERTY_Array == this->DynamicProperty->Type)
 			{
 				FScriptArray* ScriptArray = (FScriptArray*)ThisObjAddr;
 				ParentPropertyAddr = (uint8*)ScriptArray->GetData();
