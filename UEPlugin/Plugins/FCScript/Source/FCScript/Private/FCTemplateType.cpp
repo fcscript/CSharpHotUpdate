@@ -298,7 +298,7 @@ struct FCTArrayDynamicProperty : public FCDynamicProperty
 	{
 		if(ArrayProperty)
 		{
-			delete ArrayProperty;
+			//delete ArrayProperty;  // UE会有GC，不要删除吧
 		}
 	}
 };
@@ -359,7 +359,7 @@ struct FCTMapDynamicProperty : public FCDynamicProperty
 	{
 		if(MapProperty)
 		{
-			delete MapProperty;
+			// delete MapProperty; // UE会有GC，不要删除吧
 		}
 	}
 };
@@ -396,7 +396,7 @@ struct FCTSetDynamicProperty : public FCDynamicProperty
     {
         if (SetProperty)
         {
-            delete SetProperty;
+            //delete SetProperty; // UE会有GC，不要删除吧
         }
     }
 };
@@ -447,6 +447,9 @@ void ReleaseTempalteProperty()
 	// 说明：UProperty对象不能释放，这个只能是全局管理的，由UE释放
 	//ReleasePtrMap(GBasePropertyIDMap);
 	//ReleasePtrMap(GClassPropertyNameMap);
+
+    GBasePropertyIDMap.clear(); // UE会自动释放，所以不能留
+    GClassPropertyNameMap.clear(); // UE会自动释放，所以不能留
 
 	ReleasePtrMap(GTempalteDynamicPropertyMap);
 	ReleasePtrMap(GStructDynamicPropertyMap);

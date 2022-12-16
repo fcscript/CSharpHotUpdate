@@ -1,0 +1,15 @@
+# 忽略指定文件夹
+.vs
+Intermediate
+Saved
+DerivedDataCache
+Binaries
+Config
+
+# 忽略指定类型
+*.sln
+*.obj
+*.exe
+*.log
+*.lua
+*.json

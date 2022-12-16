@@ -16,7 +16,7 @@ class FCMainPanel
     public void ReceiveBeginPlay()
 	{
 		//Self.Button_0.OnClicked.AddListener(OnButtonClicked);		
-		os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay");
+		os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, 1111111");
 		UObject obj = UEUtil.GetChild(Self, "Button_0");
 		UButton button = (UButton)obj;
 		if(button != null)
@@ -28,25 +28,45 @@ class FCMainPanel
 		{
 			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, button is invalid");
 		}
+		os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, 222222");
+		obj = UEUtil.GetChild(Self, "ButtonProfile");
+		button = (UButton)obj;
 		
-		UWorld world = UEUtil.GetWorld(Self);
-		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
-		if(localPlayerControler != null)
+		if(button != null)
 		{
-			localPlayerControler.bShowMouseCursor = 1;
+			button.OnClicked.AddListener(OnButtonProfile);		
+			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, ButtonProfile is valid, bind click function");
 		}
+		else
+		{
+			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, ButtonProfile is invalid");
+		}
+
+		//UButton ButtonProfile = GetButton("ButtonProfile");
+		//ButtonProfile.OnClicked.AddListener(OnButtonProfile);
 	}
     public void ReceiveBeginDestroy()
 	{
 		int nRef = os.GetRef(this);
 		os.print("[FCTestScript]FCMainPanel:ReceiveBeginDestroy, Ref={0}", nRef);
 	}
-	public void OnButtonClicked()
+    public UButton GetButton(StringA Name)
+    {
+		UObject obj = UEUtil.GetChild(Self, Name);
+		UButton button = (UButton)obj;
+		if(button == null)
+		{
+			os.print("[FCTestScript]FCMainPanel:GetButton, Errro, button is invalid({0})", Name);
+		}
+		else
+		{
+			os.print("[FCTestScript]FCMainPanel:GetButton, button is invalid, {0}", Name);
+		}
+        return button;
+    }
+	void OpenPanel(StringA ClassName)
 	{
-		os.print("[FCTestScript]FCMainPanel:OnButtonClicked");
-		// WidgetBlueprint'/Game/UMG/UMG_TestPanel.UMG_TestPanel'
 		UWorld world = UEUtil.GetWorld(Self);
-		StringA  ClassName = "/Game/UMG/UMG_TestPanel.UMG_TestPanel_C";
 		UUserWidget panel = UEUtil.LoadUserWidget(world, ClassName, null);
 		panel.AddToViewport(5001);
 		if(panel != null)
@@ -57,6 +77,18 @@ class FCMainPanel
 		{
 			os.print("[FCTestScript]failed load umg:{0}", ClassName);
 		}
+	}
+	public void OnButtonClicked()
+	{
+		os.print("[FCTestScript]FCMainPanel:OnButtonClicked");
+		StringA  ClassName = "/Game/UMG/UMG_TestPanel.UMG_TestPanel_C";
+		OpenPanel(ClassName);
+	}
+	public void OnButtonProfile()
+	{
+		os.print("[FCTestScript]FCMainPanel:OnButtonProfile");
+		StringA  ClassName = "/Game/UMG/UMG_Profile.UMG_Profile_C";
+		OpenPanel(ClassName);
 	}
 	public override FEventReply OnMouseButtonDown(FGeometry MyGeometry, FPointerEvent MouseEvent)
 	{

@@ -109,6 +109,7 @@ void FCDynamicOverrideBeginBeginPlay(UObject* Context, FFrame& TheStack, RESULT_
 			if(ScriptIns)
 			{
 				CallAnyScriptFunc(ScriptContext, BindInfo->m_ScriptIns, DynamicFunction->Name.c_str());
+                return ;
 			}
 		}
     }

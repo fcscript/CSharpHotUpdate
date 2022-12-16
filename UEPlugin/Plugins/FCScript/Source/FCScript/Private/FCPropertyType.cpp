@@ -39,6 +39,7 @@ void  InitPropertyTable()
 
 	gPropertyTypeMap[FNameProperty::StaticClass()]   = FCPROPERTY_NameProperty;
 	gPropertyTypeMap[FStrProperty::StaticClass()]    = FCPROPERTY_StrProperty;
+    gPropertyTypeMap[FTextProperty::StaticClass()] = FCPROPERTY_TextProperty;
 
 	gPropertyTypeMap[FStructProperty::StaticClass()] = FCPROPERTY_StructProperty;
 	gPropertyTypeMap[FArrayProperty::StaticClass()]  = FCPROPERTY_Array;
