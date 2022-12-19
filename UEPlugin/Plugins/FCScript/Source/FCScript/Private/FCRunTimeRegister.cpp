@@ -204,9 +204,9 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     int  StackSize = DynamicFunc->ParmsSize;
     UFunction* Function = DynamicFunc->Function;
     int nParamCount = DynamicFunc->ParamCount;
-    const FCDynamicProperty* BeginProperty = DynamicFunc->m_Property.data();
-    const FCDynamicProperty* EndProperty = BeginProperty + nParamCount;
-    const FCDynamicProperty* DynamicProperty = BeginProperty;
+    FCDynamicProperty* BeginProperty = DynamicFunc->m_Property.data();
+    FCDynamicProperty* EndProperty = BeginProperty + nParamCount;
+    FCDynamicProperty* DynamicProperty = BeginProperty;
     uint8* Frame = Buffer;
     int nAllBuffSize = Function->PropertiesSize + Function->ParmsSize;
     if (nAllBuffSize > BufferSize)
@@ -225,7 +225,10 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         ValuePtr = fc_get_param_ptr(L, Index);
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
         DynamicProperty->Property->InitializeValue(ValueAddr);
+        DynamicProperty->bTempNeedRef = true;
+        DynamicProperty->bTempRealRef = false;
         DynamicProperty->m_ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
+        DynamicProperty->bTempNeedRef = false;
     }
 
     if (DynamicFunc->ReturnPropertyIndex >= 0)
@@ -257,7 +260,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         Index = 0;
         for (; DynamicProperty < EndProperty; ++DynamicProperty, ++Index)
         {
-            if (DynamicProperty->bOuter)
+            if (DynamicProperty->bOuter && !DynamicProperty->Property->HasAnyPropertyFlags(CPF_ConstParm))
             {
                 ValuePtr = fc_get_param_ptr(L, Index);
                 ValueAddr = Locals + DynamicProperty->Offset_Internal;
@@ -271,7 +274,8 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     for (; DynamicProperty < EndProperty; ++DynamicProperty, ++Index)
     {
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
-        DynamicProperty->Property->DestroyValue(ValueAddr);
+        if (!DynamicProperty->bTempRealRef)
+            DynamicProperty->Property->DestroyValue(ValueAddr);
     }
 
     // 将返回值传给脚本

@@ -2,36 +2,57 @@
 
 float UFCTest::GetHP() const
 {
-	return HP;
+    return HP;
 }
 
-void UFCTest::SetIDList(const TArray<int32> &IDs)
+void UFCTest::SetIDList(const TArray<int32>& IDs)
 {
-	IDList = IDs;
+    IDList = IDs;
 }
 
-bool UFCTest::GetIDList(TArray<int32> &IDs)
+bool UFCTest::GetIDList(TArray<int32>& IDs)
 {
-	IDs = IDList;
-	return true;
+    IDs = IDList;
+    return true;
 }
 
-void UFCTest::SetNameList(const TArray<FString> &Names)
+void UFCTest::SetIDMap(const TMap<int32, int32>& IDs)
 {
-	NameList = Names;
+    IDMap = IDs;
 }
 
-int UFCTest::NotifyAll(int nType, const FVector &Pos)
+void UFCTest::GetIDS(TArray<int32>& OutIDS, TMap<int32, int32>& OutMap)
 {
-	return 100 + nType;
+    OutIDS = IDList;
+    OutMap = IDMap;
 }
 
-void UFCTest::HttpNotify(const FString &MessageContent, bool bWasSuccessful)
+void UFCTest::SetIDSet(const TSet<int32>& InIDSet)
 {
-	OnResponseMessage.ExecuteIfBound(MessageContent, bWasSuccessful);
+    IDSet = InIDSet;
+}
+
+void UFCTest::GetIDSet(TSet<int32>& OutIDSet)
+{
+    OutIDSet = IDSet;
+}
+
+void UFCTest::SetNameList(const TArray<FString>& Names)
+{
+    NameList = Names;
+}
+
+int UFCTest::NotifyAll(int nType, const FVector& Pos)
+{
+    return 100 + nType;
+}
+
+void UFCTest::HttpNotify(const FString& MessageContent, bool bWasSuccessful)
+{
+    OnResponseMessage.ExecuteIfBound(MessageContent, bWasSuccessful);
 }
 
 void UFCTest::CallClicked()
 {
-	OnClicked.Broadcast();
+    OnClicked.Broadcast();
 }

@@ -34,8 +34,10 @@ struct FCDynamicPropertyBase
 	const FProperty  *Property;
 	bool              bRef;       // 是不是引用类型
 	bool              bOuter;     // 是不是输出类型
+    bool              bTempNeedRef;  // 临时的上下拷贝参数标记
+    bool              bTempRealRef;  // 
 	
-	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Type(FCPropertyType::FCPROPERTY_Unkonw), Flags(CPF_None), Property(nullptr), bRef(false), bOuter(false)
+	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Type(FCPropertyType::FCPROPERTY_Unkonw), Flags(CPF_None), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
 	{
 	}
 	bool  IsRef() const
@@ -265,6 +267,7 @@ struct FCDynamicClassDesc
 typedef stdext::hash_map<std::string, FCDynamicClassDesc*>   CDynamicClassNameMap;
 typedef stdext::hash_map<int, FCDynamicClassDesc*>   CDynamicClassIDMap;
 typedef stdext::hash_map<UStruct*, FCDynamicClassDesc*>   CDynamicUStructMap;
+typedef stdext::hash_map<FProperty*, FCDynamicClassDesc*>   CDynamicPropertyMap;
 
 struct FCScriptContext
 {
@@ -277,6 +280,7 @@ struct FCScriptContext
 	CDynamicClassNameMap  m_ClassNameMap;   // name == > class ptr
 	CDynamicUStructMap    m_StructMap;      // UStruct* ==> class ptr
 	CDynamicClassIDMap    m_ClassIDMap;     // wrap class id ==> class ptr
+    CDynamicPropertyMap   m_PropeytyMap;    // FPropery ==> class ptr
 
 	FCScriptContext():m_bInit(false), m_ScriptVM(0), m_TempParamPtr(0), m_TempValuePtr(0), m_TempParamIndex(0)
 	{
@@ -285,6 +289,7 @@ struct FCScriptContext
 	FCDynamicClassDesc*  RegisterWrapClass(const char *UEClassName, int nClassID);
 	FCDynamicClassDesc*  RegisterUClass(const char *UEClassName);
 	FCDynamicClassDesc*  RegisterUStruct(UStruct *Struct);
+    FCDynamicClassDesc*  RegisterByProperty(FProperty* Property);
 	void Clear();
 
 	FCDynamicClassDesc  *FindClassByName(const char *ScriptClassName)

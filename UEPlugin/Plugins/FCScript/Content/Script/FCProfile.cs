@@ -29,7 +29,19 @@ class FCProfile
 		button.OnClicked.AddListener(OnClickArrayByte);
         button = GetButton("ArrayStr");
 		button.OnClicked.AddListener(OnClickArrayStr);    
+        button = GetButton("Other");
+		button.OnClicked.AddListener(OnClickOther);    
 	}
+    MulticastDelegateEvent GetButtonDelegate(StringA ButtonName)
+    {
+		UObject obj = UEUtil.GetChild(Self, ButtonName);
+		UButton button = (UButton)obj;
+        if(button == null)
+        {
+		os.print("[FCTestScript]FCProfile:GetButton, failed get button({0})", ButtonName);
+        }
+        return button.OnClicked;
+    }
     UButton GetButton(StringA Name)
     {
 		UObject obj = UEUtil.GetChild(Self, Name);
@@ -121,5 +133,18 @@ class FCProfile
     void OnClickArrayStr()
     {
 
+    }
+    void OnClickOther()
+    {        
+        UFCTest obj = UEUtil.NewObject(null, "UFCTest", "", "");
+        FTestAvatarSystemInitParams objAvatar = obj.AvatarParams;
+
+        ProfileFrame.DoStruct(objAvatar);
+        ProfileFrame.DoStructOne(objAvatar);
+
+        obj.HP = 101;
+        ProfileFrame.GetHP(obj);
+        ProfileFrame.NotifyAll(obj);
+        ProfileFrame.SetIDList(obj);
     }
 };

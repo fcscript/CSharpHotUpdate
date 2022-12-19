@@ -415,6 +415,22 @@ FCDynamicClassDesc*  FCScriptContext::RegisterUStruct(UStruct *Struct)
 	return ScriptClassDesc;
 }
 
+FCDynamicClassDesc* FCScriptContext::RegisterByProperty(FProperty* Property)
+{
+    CDynamicPropertyMap::iterator itClass = m_PropeytyMap.find(Property);
+    if (itClass != m_PropeytyMap.end())
+    {
+        return itClass->second;
+    }
+    FFieldClass* FieldClass = Property->GetClass();
+    FString  Name = FieldClass->GetName();
+
+    FCDynamicClassDesc* ClassDesc = RegisterUClass(TCHAR_TO_UTF8(*Name));
+    m_PropeytyMap[Property] = ClassDesc;
+
+    return ClassDesc;
+}
+
 void FCScriptContext::Clear()
 {
 	m_bInit = false;
@@ -425,6 +441,7 @@ void FCScriptContext::Clear()
 	}
 	ReleasePtrMap(m_ClassNameMap);
 	m_StructMap.clear();
+    m_PropeytyMap.clear();
 	m_ClassIDMap.clear();
 	m_TempParamPtr = 0;
 	m_TempValuePtr = 0;

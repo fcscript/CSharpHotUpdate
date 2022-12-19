@@ -38,10 +38,10 @@ template<> struct stdext::hash_compare<const char *>
 
 struct ObjRefKey
 {
-	unsigned char* ParentAddr;    // 
-	int    Offset;
-	ObjRefKey() :ParentAddr(nullptr), Offset(0) {}
-	ObjRefKey(unsigned char* InParentAddr, int InOffset) : ParentAddr(InParentAddr), Offset(InOffset) {}
+    const unsigned char* ParentAddr;    // 
+    const unsigned char* OffsetPtr;    // 对象自己的地址
+    ObjRefKey() :ParentAddr(nullptr), OffsetPtr(nullptr) {}
+    ObjRefKey(const void* InParentAddr, const void* InOffsetPtr) : ParentAddr((const unsigned char*)InParentAddr), OffsetPtr((const unsigned char*)InOffsetPtr) {}
 };
 
 template<> struct stdext::hash_compare<ObjRefKey>
@@ -52,15 +52,15 @@ template<> struct stdext::hash_compare<ObjRefKey>
 	};
 	size_t operator()(const ObjRefKey& Key) const
 	{	// hash _Keyval to size_t value by pseudorandomizing transform
-        return (size_t)(Key.ParentAddr + Key.Offset);
+        return (size_t)Key.ParentAddr + (size_t)Key.OffsetPtr;
 	}
 
 	bool operator()(const ObjRefKey& key1, const ObjRefKey& key2) const
 	{	// test if _Keyval1 ordered before _Keyval2
-        if(key1.Offset == key2.Offset)
+        if (key1.OffsetPtr == key2.OffsetPtr)
             return key1.ParentAddr < key2.ParentAddr;
         else
-            return key1.Offset < key2.Offset;
+            return key1.OffsetPtr < key2.OffsetPtr;
 	}
 };
 

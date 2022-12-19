@@ -161,7 +161,8 @@ void FCTArrayWrap_GetAt_Wrap(fc_intptr L, fc_intptr KeyPtr, fc_intptr ValuePtr)
 				FCDynamicProperty * ElementProperty = GetDynamicPropertyByUEProperty(Inner);
 
 				fc_intptr VM = fc_get_vm_ptr(L);
-				ElementProperty->m_WriteScriptFunc(VM, ValuePtr, ElementProperty, ValueAddr, NULL, ObjRef);
+				//ElementProperty->m_WriteScriptFunc(VM, ValuePtr, ElementProperty, ValueAddr, NULL, ObjRef);
+                ElementProperty->m_WriteScriptFunc(VM, ValuePtr, ElementProperty, ValueAddr, NULL, NULL);  // 不可以引用，拷贝吧, 因为容器易变，对象地址会变, 合法性会变
 			}
 		}
 	}

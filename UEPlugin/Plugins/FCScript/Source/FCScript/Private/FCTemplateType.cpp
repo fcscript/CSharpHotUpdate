@@ -341,8 +341,8 @@ FMapProperty* CreateTMapProperty(fc_intptr VM, fc_intptr Ptr)
 	MapProperty->ValueProp = ValueProperty;
 
 	int ValueSize = ValueProperty->ElementSize * ValueProperty->ArrayDim;
-	int AlignKeySize = (KeyProperty->ElementSize + 7)/8*8;
-	int AlignValueSize = (ValueSize + 7)/8*8;
+    int AlignKeySize = KeyProperty->GetMinAlignment();
+    int AlignValueSize = ValueProperty->GetMinAlignment();
 
 	MapProperty->MapLayout = FScriptMap::GetScriptLayout(KeyProperty->ElementSize, AlignKeySize, ValueSize, AlignValueSize);
 
@@ -413,7 +413,7 @@ FSetProperty* CreateTSetProperty(fc_intptr VM, fc_intptr Ptr)
 	SetProperty->ElementProp = ElementProp;
 
     int ValueSize = ElementProp->ElementSize * ElementProp->ArrayDim;
-    int AlignValueSize = (ValueSize + 7) / 8 * 8;
+    int AlignValueSize = ElementProp->GetMinAlignment();
 
 	SetProperty->SetLayout = FScriptSet::GetScriptLayout(ValueSize, AlignValueSize);
 

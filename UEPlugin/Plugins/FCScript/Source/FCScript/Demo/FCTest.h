@@ -57,7 +57,19 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	bool GetIDList(TArray<int32> &IDs);
-	
+
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    void SetIDMap(const TMap<int32, int32> &IDs);
+
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    void GetIDS(TArray<int32>& OutIDS, TMap<int32, int32> &OutMap);
+
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    void SetIDSet(const TSet<int32> &InIDSet);
+
+    UFUNCTION(BlueprintCallable, Category = "Attributes")
+    void GetIDSet(TSet<int32>& OutIDSet);
+
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	void SetNameList(const TArray<FString> &Names);
 
@@ -103,9 +115,18 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TArray<int32> IDList;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TMap<int32, int32> IDMap;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSet<int32> IDSet;
+
 	UPROPERTY(BlueprintAssignable, Category = "Button|Event")
 	FOnButtonClickedEvent OnClicked;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FOnHttpResponseMessage OnResponseMessage;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    FTestAvatarSystemInitParams   AvatarParams;
 };

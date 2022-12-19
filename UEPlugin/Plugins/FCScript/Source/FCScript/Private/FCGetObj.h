@@ -3,20 +3,21 @@
 
 enum EFCObjRefType
 {
-	RefNone,        // 未知
-	RefObject,      // UObject对象引用
-	NewUObject,     // new UObject对象
-	NewUStruct,     // new UStrucct对象
-	NewProperty,    // new Property对象
-	RefProperty,    // UObject的属性引用
-	RefStructValue, // 普通的Struct变量引用
-	NewTArray,      // new TArray
-	NewTMap,        // new TMap
-	NewTSet,        // new TSet
-	NewTLazyPtr,    // 
-	NewTWeakPtr,    // 
-	CppPtr,         // 全局的Cpp对象指针
-	MapIterator,    // map_iterator
+    RefNone,        // 未知
+    RefObject,      // UObject对象引用
+    NewUObject,     // new UObject对象
+    NewUStruct,     // new UStrucct对象
+    NewProperty,    // new Property对象
+    RefProperty,    // UObject的属性引用
+    RefFunction,    // 引用Function
+    RefStructValue, // 普通的Struct变量引用
+    NewTArray,      // new TArray
+    NewTMap,        // new TMap
+    NewTSet,        // new TSet
+    NewTLazyPtr,    // 
+    NewTWeakPtr,    // 
+    CppPtr,         // 全局的Cpp对象指针
+    MapIterator,    // map_iterator
 };
 
 struct TMapIterator
@@ -34,15 +35,9 @@ struct FCObjRef
 	FCDynamicClassDesc* ClassDesc;
 	FCDynamicProperty *DynamicProperty;  // 属性描述
 
-	int64     PtrIndex;         // Wrap对象ID
-
-	//void     *ValuePtr;
-	union
-	{
-		uint8     *ThisObjAddr;    // 对象自己的地址
-		int        PropertyOffset;  // 属性位移
-	};
-	int        Ref;             // 引用计数
+	int64      PtrIndex;         // Wrap对象ID    
+    uint8     *ThisObjAddr;      // 对象自己的地址
+	int        Ref;              // 引用计数
 	EFCObjRefType  RefType;
 	CFastList<FCObjRef>  Childs;
 	FCObjRef():m_pLast(NULL), m_pNext(NULL), Parent(NULL), ClassDesc(NULL), DynamicProperty(NULL), PtrIndex(0), ThisObjAddr(NULL), Ref(0), RefType(RefNone)
@@ -50,14 +45,7 @@ struct FCObjRef
 	}
 	ObjRefKey GetRefKey() const
 	{
-		if(Parent)
-		{
-			return ObjRefKey(Parent->ThisObjAddr, PropertyOffset);
-		}
-		else
-		{
-			return ObjRefKey(ThisObjAddr, 0);
-		}
+        return ObjRefKey(Parent ? Parent->ThisObjAddr : nullptr, ThisObjAddr);
 	}
 	UObject* GetParentObject() const
 	{
@@ -75,15 +63,7 @@ struct FCObjRef
 	}
 	uint8*GetThisAddr()
 	{
-		if (Parent)
-		{
-			uint8* ParentPropertyAddr = Parent->ThisObjAddr;  // 不要递归
-			return ParentPropertyAddr ? (ParentPropertyAddr + PropertyOffset) : nullptr;
-		}
-		else
-		{
-			return (uint8*)ThisObjAddr;
-		}		
+        return ThisObjAddr;
 	}
 	bool IsValid() const
 	{
@@ -91,21 +71,15 @@ struct FCObjRef
 	}
 	uint8*GetPropertyAddr()
 	{
-		if(Parent)
-		{
-			uint8*ParentPropertyAddr = Parent->ThisObjAddr;
-			if(FCPROPERTY_Array == this->DynamicProperty->Type)
-			{
-				FScriptArray* ScriptArray = (FScriptArray*)ThisObjAddr;
-				ParentPropertyAddr = (uint8*)ScriptArray->GetData();
-			}
-			return ParentPropertyAddr ? (ParentPropertyAddr + PropertyOffset) : nullptr;
-		}
-		else
-		{
-			return ThisObjAddr;
-		}
+        return ThisObjAddr;
 	}
+    FCPropertyType GetPropertyType() const
+    {
+        if (RefType != RefFunction)
+            return DynamicProperty->Type;
+        else
+            return FCPROPERTY_Function;
+    }
 	FStructProperty *GetStructProperty() const
 	{
 		if(EFCObjRefType::RefProperty == RefType || EFCObjRefType::RefStructValue == RefType)
@@ -147,6 +121,9 @@ public:
 	int64  PushNewStruct(FCDynamicClassDesc* ClassDesc);
 	// 功能：压入一个UObject的属性(生成周期随父对象)的引用
 	int64  PushProperty(UObject *Parent, const FCDynamicProperty *DynamicProperty, void *pValueAddr);
+    int64  PushNewTArray(const FCDynamicProperty* DynamicProperty, void* pValueAddr);
+    int64  PushNewTMap(const FCDynamicProperty* DynamicProperty, void* pValueAddr);
+    int64  PushNewTSet(const FCDynamicProperty* DynamicProperty, void* pValueAddr);
 	// 功能：压入一个子属性(UObject或UStruct的成员变量)的引用
 	int64  PushChildProperty(FCObjRef *Parent, const FCDynamicProperty* DynamicProperty, void* pValueAddr);
 	// 功能：压入一个纯Struct对象(没有父对象，一般是临时的)

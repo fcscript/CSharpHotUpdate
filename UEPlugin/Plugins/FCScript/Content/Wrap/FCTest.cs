@@ -33,7 +33,7 @@ public class UFCTest : UObject
 	public bool GetIDList(out TArray<int> IDs){}
 	public void SetNameList(TArray<StringA> Names){}
 	public void NotifyObject(int nType, float x, float y, float z){}
-	public static int NotifyAll(int nType, Vector3 Pos){}
+	public static int NotifyAll(int nType, Vector3 Pos){return 0;}
 	public void HttpNotify(StringA MessageContent, bool bWasSuccessful){}
 	public void CallClicked(){}
 
@@ -49,7 +49,8 @@ public class UFCTest : UObject
 	public List<int> aID { get;  set; }
 	public Vector3 Pos { get;  set; }
 	public MulticastDelegateEvent OnClicked { get;  set; }
-	public DelegateEvent OnResponseMessage { get;  set; }
+	public DelegateEvent OnResponseMessage { get;  set; }	
+	public FTestAvatarSystemInitParams   AvatarParams{ get; set; }
 };
 
 pulbic class FFCTestInterface
