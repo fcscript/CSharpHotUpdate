@@ -14,41 +14,31 @@ class FCTestPanel
     //     ///
     //     ///
     public void ReceiveBeginPlay()
-	{
-		//Self.Button_0.OnClicked.AddListener(OnButtonClicked);		
+	{		
 		os.print("[FCTestScript]FCTestPanel:ReceiveBeginPlay");
-		UButton button = GetButton("ButtonClose");
-		if(button != null)
-		{
-			os.print("[FCTestScript]FCTestPanel:ReceiveBeginPlay, ButtonClose is valid");
-		}
-		else
-		{
-			os.print("[FCTestScript]FCTestPanel:ReceiveBeginPlay, ButtonClose is null");
-		}
-		button = GetButton("ButtonClose");
-		button.OnClicked.AddListener(OnButtonCloseClicked);
-		
-		button = GetButton("Button_0");
-		button.OnClicked.AddListener(OnButton1Clicked);
-		
-		button = GetButton("Button_1");
-		button.OnClicked.AddListener(OnButton2Clicked);
-		
-		button = GetButton("Button_2");
-		button.OnClicked.AddListener(OnButton1Clicked);
+		AddButtonCallback("ButtonClose", OnButtonCloseClicked);
+		AddButtonCallback("Button_0", OnButton1Clicked);
+		AddButtonCallback("Button_1", OnButton2Clicked);
+		AddButtonCallback("Button_2", OnButton1Clicked);		
 	}
     public void ReceiveBeginDestroy()
 	{
 		int nRef = os.GetRef(this);
 		os.print("[FCTestScript]FCTestPanel:ReceiveBeginDestroy, Ref={0}", nRef);
 	}
-	UButton  GetButton(StringA ChildName)
-	{
-		UObject obj = UEUtil.GetChild(Self, ChildName);
+    void  AddButtonCallback(StringA  ButtonName, delegate cb)
+    {
+		UObject obj = UEUtil.GetChild(Self, ButtonName);
 		UButton button = (UButton)obj;
-		return button;
-	}
+        if(button == null)
+        {
+		    os.print("[FCTestScript]FCTestPanel:AddButtonCallback, failed get button({0})", ButtonName);
+        }
+        else
+        {
+		    button.OnClicked.AddListener(cb);
+        }
+    }
 	public void OnButtonCloseClicked()
 	{
 		os.print("[FCTestScript]FCTestPanel:OnButtonCloseClicked");

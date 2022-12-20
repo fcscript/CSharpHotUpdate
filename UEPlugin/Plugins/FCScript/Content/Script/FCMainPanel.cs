@@ -17,52 +17,30 @@ class FCMainPanel
 	{
 		//Self.Button_0.OnClicked.AddListener(OnButtonClicked);		
 		os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, 1111111");
-		UObject obj = UEUtil.GetChild(Self, "Button_0");
-		UButton button = (UButton)obj;
-		if(button != null)
-		{
-			button.OnClicked.AddListener(OnButtonClicked);		
-			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, button is valid, bind click function");
-		}
-		else
-		{
-			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, button is invalid");
-		}
+        AddButtonCallback("Button_0", OnButtonClicked);
 		os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, 222222");
-		obj = UEUtil.GetChild(Self, "ButtonProfile");
-		button = (UButton)obj;
-		
-		if(button != null)
-		{
-			button.OnClicked.AddListener(OnButtonProfile);		
-			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, ButtonProfile is valid, bind click function");
-		}
-		else
-		{
-			os.print("[FCTestScript]FCMainPanel:ReceiveBeginPlay, ButtonProfile is invalid");
-		}
-
-		//UButton ButtonProfile = GetButton("ButtonProfile");
-		//ButtonProfile.OnClicked.AddListener(OnButtonProfile);
+		AddButtonCallback("ButtonProfile", OnButtonProfile);		
+		UWorld world = UEUtil.GetWorld(Self);
+		APlayerController localPlayerControler = UGameplayStatics.GetPlayerController(world, 0);
+		localPlayerControler.bShowMouseCursor = 1;
 	}
     public void ReceiveBeginDestroy()
 	{
 		int nRef = os.GetRef(this);
 		os.print("[FCTestScript]FCMainPanel:ReceiveBeginDestroy, Ref={0}", nRef);
 	}
-    public UButton GetButton(StringA Name)
+    void  AddButtonCallback(StringA  ButtonName, delegate cb)
     {
-		UObject obj = UEUtil.GetChild(Self, Name);
+		UObject obj = UEUtil.GetChild(Self, ButtonName);
 		UButton button = (UButton)obj;
-		if(button == null)
-		{
-			os.print("[FCTestScript]FCMainPanel:GetButton, Errro, button is invalid({0})", Name);
-		}
-		else
-		{
-			os.print("[FCTestScript]FCMainPanel:GetButton, button is invalid, {0}", Name);
-		}
-        return button;
+        if(button == null)
+        {
+		    os.print("[FCTestScript]FCMainPanel:AddButtonCallback, failed get button({0})", ButtonName);
+        }
+        else
+        {
+		    button.OnClicked.AddListener(cb);
+        }
     }
 	void OpenPanel(StringA ClassName)
 	{
