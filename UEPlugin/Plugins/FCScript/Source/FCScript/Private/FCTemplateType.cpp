@@ -1,7 +1,7 @@
 #include "FCTemplateType.h"
 
 
-#if ENGINE_MINOR_VERSION < 25 
+#if OLD_UE_ENGINE
 template<class _Ty>
 _Ty * NewUEProperty(UScriptStruct* ScriptStruct)
 {
@@ -19,7 +19,7 @@ _Ty* NewUEProperty(UScriptStruct* ScriptStruct)
 
 FProperty  *NewUEBoolProperty(UScriptStruct* ScriptStruct)
 {
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
 	UBoolProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UBoolProperty(FObjectInitializer(), EC_CppProperty, 0, (EPropertyFlags)0, 0xFF, 1, true);
 #else
@@ -30,7 +30,7 @@ FProperty  *NewUEBoolProperty(UScriptStruct* ScriptStruct)
 
 FProperty* NewUEStructProperty(UScriptStruct* Struct, UScriptStruct* ScriptStruct)
 {
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
 	FStructProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Struct);
 #else
@@ -41,7 +41,7 @@ FProperty* NewUEStructProperty(UScriptStruct* Struct, UScriptStruct* ScriptStruc
 
 FProperty  *NewUEClassProperty(UClass *Class, UScriptStruct* ScriptStruct)
 {
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
 	UObjectProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Class);
 #else
@@ -52,7 +52,7 @@ FProperty  *NewUEClassProperty(UClass *Class, UScriptStruct* ScriptStruct)
 
 FArrayProperty  *NewUEArrayProperty(UScriptStruct* ScriptStruct)
 {
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	FArrayProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) FArrayProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_None);
 #else
 	FArrayProperty* Property = new FArrayProperty(ScriptStruct, NAME_None, RF_Transient);
@@ -62,7 +62,7 @@ FArrayProperty  *NewUEArrayProperty(UScriptStruct* ScriptStruct)
 
 FMapProperty  *NewUEMapProperty(UScriptStruct* ScriptStruct)
 {	
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	FMapProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) FMapProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_None);
 #else
 	FMapProperty* Property = new FMapProperty(ScriptStruct, NAME_None, RF_Transient);
@@ -72,7 +72,7 @@ FMapProperty  *NewUEMapProperty(UScriptStruct* ScriptStruct)
 
 FSetProperty* NewUESetProperty(UScriptStruct* ScriptStruct)
 {
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 	FSetProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) FMapProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_None);
 #else
 	FSetProperty* Property = new FSetProperty(ScriptStruct, NAME_None, RF_Transient);
@@ -144,30 +144,11 @@ typedef std::unordered_map<const char *, FProperty*, FCStringHash, FCStringEqual
 typedef std::unordered_map<UStruct*, FCDynamicProperty*> CStructDynamicPropertyMap;
 typedef std::unordered_map<FProperty*, FCDynamicProperty*> CPropertyDynamicPropertyMap;
 typedef std::unordered_map<const char*, FCDynamicProperty*, FCStringHash, FCStringEqual> CCppDynamicPropertyMap;
-typedef std::unordered_map<const char*, char*, FCStringHash, FCStringEqual> CCppName2NameMap;
 CTemplatePropertyIDMap   GBasePropertyIDMap;
 CTemplatePropertyNameMap GClassPropertyNameMap;
 CStructDynamicPropertyMap GStructDynamicPropertyMap;
 CPropertyDynamicPropertyMap GPropertyDynamicPropertyMap;
 CCppDynamicPropertyMap      GCppDynamicPropertyMap;
-CCppName2NameMap            GCppName2NameMap;
-
-const char* GetConstName(const char* InName)
-{
-    if (!InName)
-        return "";
-    CCppName2NameMap::iterator itName = GCppName2NameMap.find(InName);
-    if (itName != GCppName2NameMap.end())
-    {
-        return itName->second;
-    }
-    int  Len = strlen(InName);
-    char* buffer = new char[Len + 1];
-    memcpy(buffer, InName, Len);
-    buffer[Len] = 0;
-    GCppName2NameMap[buffer] = buffer;
-    return buffer;
-}
 
 FProperty  *CreateClassProperty(const char *InClassName)
 {
@@ -243,6 +224,7 @@ FCDynamicProperty* GetStructDynamicProperty(UStruct* Struct)
 	FProperty* Property = NewUEStructProperty((UScriptStruct*)Struct, GetGlbScriptStruct());
 	DynamicPropery->InitProperty(Property);
 	DynamicPropery->Name = TCHAR_TO_UTF8(*(Struct->GetName()));
+    DynamicPropery->Name = GetConstName(DynamicPropery->Name);
 	GStructDynamicPropertyMap[Struct] = DynamicPropery;
 	return DynamicPropery;
 }
@@ -261,6 +243,7 @@ FCDynamicProperty* GetDynamicPropertyByUEProperty(FProperty* InProperty)
 		FStructProperty* StructProperty = (FStructProperty*)InProperty;
 		UStruct* Struct = StructProperty->Struct;
 		DynamicPropery->Name = TCHAR_TO_UTF8(*(Struct->GetName()));
+        DynamicPropery->Name = GetConstName(DynamicPropery->Name);
 	}
 	GPropertyDynamicPropertyMap[InProperty] = DynamicPropery;
 	return DynamicPropery;
@@ -474,7 +457,6 @@ void ReleaseTempalteProperty()
 	ReleasePtrMap(GStructDynamicPropertyMap);
 	ReleasePtrMap(GPropertyDynamicPropertyMap);
 	ReleasePtrMap(GCppDynamicPropertyMap);
-    ReleasePtrMap(GCppName2NameMap);
 
 	GScriptStruct = nullptr;
 }

@@ -311,7 +311,7 @@ void  FFCDelegateModule::TryBindScript(const class UObjectBaseUtility *Object)
 	}
 }
 
-#if ENGINE_MINOR_VERSION > 23
+#if OLD_UE_ENGINE == 0
 void FFCDelegateModule::OnWorldTickStart(UWorld *World, ELevelTick TickType, float DeltaTime)
 #else
 void FFCDelegateModule::OnWorldTickStart(ELevelTick TickType, float DeltaTime)

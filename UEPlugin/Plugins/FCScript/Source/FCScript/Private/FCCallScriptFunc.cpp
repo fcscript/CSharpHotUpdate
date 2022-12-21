@@ -539,13 +539,13 @@ void  ReadScriptFText(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dy
 {
     *((FText*)ValueAddr) = FText::FromString(fc_cpp_get_value_string_w(VM, ValuePtr));
 }
-void  ReadScriptFVector(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
-{
-	fc_get_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
-}
 void  ReadScriptFVector2D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
 	fc_get_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+}
+void  ReadScriptFVector(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    fc_get_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
 }
 void  ReadScriptFVector4D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {

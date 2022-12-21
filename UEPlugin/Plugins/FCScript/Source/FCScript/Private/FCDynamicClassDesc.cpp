@@ -3,7 +3,6 @@
 #include "UObject/Class.h"
 #include "FCCallScriptFunc.h"
 #include "FCDynamicOverrideFunc.h"
-#include "FCTemplateType.h"
 
 void  FCDynamicProperty::InitProperty(const FProperty *InProperty)
 {
@@ -67,7 +66,7 @@ void  FCDynamicFunction::InitParam(UFunction *InFunction)
 }
 
 
-#if ENGINE_MINOR_VERSION < 25
+#if OLD_UE_ENGINE
 struct FFakeProperty : public UField
 #else
 struct FFakeProperty : public FField

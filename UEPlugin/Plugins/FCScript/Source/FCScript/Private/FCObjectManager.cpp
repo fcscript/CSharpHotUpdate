@@ -2,7 +2,6 @@
 #include "FCDynamicOverrideFunc.h"
 #include "FCCallScriptFunc.h"
 #include "FCRunTimeRegister.h"
-#include "FCTemplateType.h"
 #include "../../FCLib/include/fc_api.h"
 
 extern uint8 GRegisterNative(int32 NativeBytecodeIndex, const FNativeFuncPtr& Func);

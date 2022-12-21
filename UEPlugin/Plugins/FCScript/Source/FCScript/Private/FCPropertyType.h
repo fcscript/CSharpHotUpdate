@@ -48,8 +48,14 @@ enum FCPropertyType
 	FCPROPERTY_ObjectPropertyBase, // 
 };
 
+#if (ENGINE_MAJOR_VERSION < 5) && (ENGINE_MINOR_VERSION < 25)
+#define OLD_UE_ENGINE 1
+#else
+#define OLD_UE_ENGINE 0
+#endif
 
-#if ENGINE_MINOR_VERSION < 25
+
+#if OLD_UE_ENGINE
 #define CastField Cast
 #define GetPropertyOuter(Property) (Property)->GetOuter()
 #define GetChildProperties(Function) (Function)->Children
@@ -97,6 +103,8 @@ typedef UMulticastSparseDelegateProperty FMulticastSparseDelegateProperty;
 void  InitPropertyTable();
 
 void  ReleasePropertyTable();
+
+const char* GetConstName(const char* InName);
 
 // 功能：得到反射属性的类型（脚本所支持的）
 FCPropertyType  GetScriptPropertyType(const FProperty *Property);
