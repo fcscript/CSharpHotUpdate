@@ -57,7 +57,7 @@ void FCDynamicOverrideNative(UObject* Context, FFrame& TheStack, RESULT_DECL)
             int64 ScriptIns = FFCObjectdManager::GetSingleIns()->FindOverrideScriptIns(Object, Func);
 			if (ScriptIns)
 			{
-				if(FCCallScriptFunc(ScriptContext, Object, ScriptIns, DynamicFunction->Name.c_str(), DynamicFunction, TheStack))
+				if(FCCallScriptFunc(ScriptContext, Object, ScriptIns, DynamicFunction->Name, DynamicFunction, TheStack))
                 {
                     return ;
                 }
@@ -65,7 +65,7 @@ void FCDynamicOverrideNative(UObject* Context, FFrame& TheStack, RESULT_DECL)
 		}
 		else
 		{
-			if(FCCallScriptFunc(ScriptContext, Object, 0, DynamicFunction->Name.c_str(), DynamicFunction, TheStack))
+			if(FCCallScriptFunc(ScriptContext, Object, 0, DynamicFunction->Name, DynamicFunction, TheStack))
             {
                 return ;
             }
@@ -108,7 +108,7 @@ void FCDynamicOverrideBeginBeginPlay(UObject* Context, FFrame& TheStack, RESULT_
             int64 ScriptIns = FCDynamicBindScript(Object);
 			if(ScriptIns)
 			{
-				CallAnyScriptFunc(ScriptContext, BindInfo->m_ScriptIns, DynamicFunction->Name.c_str());
+				CallAnyScriptFunc(ScriptContext, BindInfo->m_ScriptIns, DynamicFunction->Name);
                 return ;
 			}
 		}

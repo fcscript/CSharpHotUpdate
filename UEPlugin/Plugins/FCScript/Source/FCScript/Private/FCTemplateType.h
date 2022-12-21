@@ -50,6 +50,7 @@ enum FCInnerBaseType
     FC_VALUE_TYPE_BEZIER3D,        // Bezier3D
 };
 
+const char* GetConstName(const char* InName);
 FProperty  *CreateClassProperty(const char *InClassName);
 FCDynamicProperty *GetCppDynamicProperty(const char *InClassName);
 FCDynamicProperty* GetStructDynamicProperty(UStruct* Struct);

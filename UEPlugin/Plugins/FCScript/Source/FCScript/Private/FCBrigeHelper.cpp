@@ -1,7 +1,7 @@
 #include "FCBrigeHelper.h"
 #include "FCGetObj.h"
 
-typedef stdext::hash_map<int, FCExportedClass*>   CExportClassIDMap;
+typedef std::unordered_map<int, FCExportedClass*>   CExportClassIDMap;
 FCExportedClass* FCExportedClass::s_pExportedIns = nullptr;
 CExportClassIDMap  sExportClassMap;
 

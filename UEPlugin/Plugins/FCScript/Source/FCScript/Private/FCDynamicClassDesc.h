@@ -27,7 +27,7 @@ struct FCDynamicPropertyBase
 	int		Offset_Internal;  // 相对偏移
 	int     PropertyIndex;    // 参数或属性索引(序号)
 	int     ScriptParamIndex; // 脚本参数索引号
-	std::string Name;        // 调试时用的(常引用)
+    const char *Name;        // 调试时用的(常引用)
 	
 	FCPropertyType    Type;       // 类型
 	EPropertyFlags    Flags;      // 属性类型（用于强制转换的检测)
@@ -37,7 +37,7 @@ struct FCDynamicPropertyBase
     bool              bTempNeedRef;  // 临时的上下拷贝参数标记
     bool              bTempRealRef;  // 
 	
-	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Type(FCPropertyType::FCPROPERTY_Unkonw), Flags(CPF_None), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
+	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Name(nullptr), Type(FCPropertyType::FCPROPERTY_Unkonw), Flags(CPF_None), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
 	{
 	}
 	bool  IsRef() const
@@ -95,9 +95,9 @@ struct  FCDynamicFunction
 	bool    bOuter;
 	bool    bRegister;        // 是不是在类中注册了
 	bool    bDelegate;
-	std::string Name;        // 函数名
+    const char *Name;        // 函数名
 	std::vector<FCDynamicProperty>   m_Property;
-	FCDynamicFunction():Function(nullptr), FuncID(0), ReturnPropertyIndex(-1), ParmsSize(0), ParamCount(0), bOverride(false), bOuter(false), bRegister(false), bDelegate(false)
+	FCDynamicFunction():Function(nullptr), FuncID(0), ReturnPropertyIndex(-1), ParmsSize(0), ParamCount(0), bOverride(false), bOuter(false), bRegister(false), bDelegate(false), Name(nullptr)
 	{
 	}
 	void  InitParam(UFunction *InFunction);
@@ -155,12 +155,12 @@ struct FCDynamicDelegateList
 	bool  DelScriptDelegate(const FCDelegateInfo &Info);
 };
 
-typedef  stdext::hash_map<const char*, FCDynamicProperty*>   CDynamicName2Property;
-typedef  stdext::hash_map<int, FCDynamicProperty*>   CDynamicID2Property;
+typedef  std::unordered_map<const char*, FCDynamicProperty*, FCStringHash, FCStringEqual>   CDynamicName2Property;
+typedef  std::unordered_map<int, FCDynamicProperty*>   CDynamicID2Property;
 typedef  std::vector<FCDynamicProperty*>   CDynamicPropertyPtrArray;
 
-typedef  stdext::hash_map<int, FCDynamicFunction*>   CDynamicFunctionIDMap; // id == > function
-typedef  stdext::hash_map<const char*, FCDynamicFunction*>   CDynamicFunctionNameMap;  // name ==> function
+typedef  std::unordered_map<int, FCDynamicFunction*>   CDynamicFunctionIDMap; // id == > function
+typedef  std::unordered_map<const char*, FCDynamicFunction*, FCStringHash, FCStringEqual>   CDynamicFunctionNameMap;  // name ==> function
 
 const char* GetUEClassName(const char* InName);
 
@@ -172,9 +172,8 @@ struct FCDynamicClassDesc
 	FCDynamicClassDesc          *m_Super;
 	int                          m_nClassNameID; // 在脚本中的Wrap class ID, 唯一的
 	EClassCastFlags              m_ClassFlags;  // 用于强制转换的检测
-	std::string                  m_SuperName;
-	std::string                  m_UEClassName; // 类名，wrap的类名
-	FName                        m_ClassName;
+	const char*                  m_SuperName;
+	const char*                  m_UEClassName; // 类名，wrap的类名
 	CDynamicPropertyPtrArray     m_Property;  // 属性
 	CDynamicName2Property        m_Name2Property;  // 所有的属性
 
@@ -185,7 +184,7 @@ struct FCDynamicClassDesc
 	CDynamicID2Property          m_ID2Property;    // id ==> Property
 	// ------- 脚本中的的属性ID或函数ID
 
-	FCDynamicClassDesc():m_Struct(nullptr), m_Class(nullptr), m_Super(nullptr), m_nClassNameID(0), m_ClassFlags(CASTCLASS_None)
+	FCDynamicClassDesc():m_Struct(nullptr), m_Class(nullptr), m_Super(nullptr), m_nClassNameID(0), m_ClassFlags(CASTCLASS_None), m_SuperName(nullptr), m_UEClassName(nullptr)
 	{
 	}
 	~FCDynamicClassDesc();
@@ -264,10 +263,10 @@ struct FCDynamicClassDesc
 	}
 };
 
-typedef stdext::hash_map<std::string, FCDynamicClassDesc*>   CDynamicClassNameMap;
-typedef stdext::hash_map<int, FCDynamicClassDesc*>   CDynamicClassIDMap;
-typedef stdext::hash_map<UStruct*, FCDynamicClassDesc*>   CDynamicUStructMap;
-typedef stdext::hash_map<FProperty*, FCDynamicClassDesc*>   CDynamicPropertyMap;
+typedef std::unordered_map<const char*, FCDynamicClassDesc*, FCStringHash, FCStringEqual>   CDynamicClassNameMap;
+typedef std::unordered_map<int, FCDynamicClassDesc*>   CDynamicClassIDMap;
+typedef std::unordered_map<UStruct*, FCDynamicClassDesc*>   CDynamicUStructMap;
+typedef std::unordered_map<FProperty*, FCDynamicClassDesc*>   CDynamicPropertyMap;
 
 struct FCScriptContext
 {

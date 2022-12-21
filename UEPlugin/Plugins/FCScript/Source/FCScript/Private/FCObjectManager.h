@@ -31,29 +31,20 @@ struct FScriptOverrideKey
     FScriptOverrideKey(const UObjectBase *InObject, UFunction *InFunction):Object(InObject), Function(InFunction){}
 };
 
-template<> struct stdext::hash_compare<FScriptOverrideKey>
+template<> struct std::hash<FScriptOverrideKey>
 {
-    enum
-    {	// parameters for hash table
-        bucket_size = 1		// 0 < bucket_size
-    };
     size_t operator()(const FScriptOverrideKey& Key) const
-    {	// hash _Keyval to size_t value by pseudorandomizing transform
-        FCUnitPtr Ptr1;
-        Ptr1.Ptr = Key.Object;
-        FCUnitPtr Ptr2;
-        Ptr2.Ptr = Key.Function;
-        size_t HashValue = (size_t)(Ptr1.nPtr + Ptr2.nPtr);
-        return HashValue;
+    {
+        return size_t(Key.Object) + size_t(Key.Function);
     }
+};
 
+template<> struct std::equal_to<FScriptOverrideKey>
+{
     bool operator()(const FScriptOverrideKey& key1, const FScriptOverrideKey& key2) const
-    {	// test if _Keyval1 ordered before _Keyval2
-        if(key1.Object != key2.Object)
-        {
-            return key1.Object < key2.Object;
-        }
-        return key1.Function < key2.Function;
+    {
+        return key1.Object == key2.Object
+            && key1.Function == key2.Function;
     }
 };
 
@@ -120,18 +111,6 @@ protected:
 	void  RemoveObjectDelegate(UObject *InObject, const FCDynamicProperty* InDynamicProperty);
     void  RemoveOverrideRefByObject(const class UObjectBase *Object);
 protected:
-	const char *NameToName(const char *InName)
-	{
-		CScriptNamePtrMap::iterator itName = m_NamePtrMap.find(InName);
-		if(itName != m_NamePtrMap.end())
-		{
-			return itName->first.c_str();
-		}
-        m_NamePtrMap[InName] = true;
-		itName = m_NamePtrMap.find(InName);
-		return itName->first.c_str();
-	}
-protected:
 	struct FDynmicBindClassInfo
 	{
 		UClass  *Class;
@@ -143,21 +122,19 @@ protected:
 		FNativeFuncPtr  NativeFuncPtr;
 		FBindReceiveBeginPlayInfo():Ref(0), NativeFuncPtr(nullptr){}
 	};
-	typedef  stdext::hash_map<const UObjectBase*, FBindObjectInfo>   CBindObjectInfoMap;
-	typedef  stdext::hash_map<const UClass*, FBindReceiveBeginPlayInfo>   CBindReceiveBeginPlayRefMap;
-	typedef  stdext::hash_map<std::string, bool>   CScriptNamePtrMap;
+	typedef  std::unordered_map<const UObjectBase*, FBindObjectInfo>   CBindObjectInfoMap;
+	typedef  std::unordered_map<const UClass*, FBindReceiveBeginPlayInfo>   CBindReceiveBeginPlayRefMap;
 
 	std::vector<FDynmicBindClassInfo>   m_DynamicBindClassInfo;
 	UClass*             m_pCurrentBindClass;
 	const char *        m_ScriptsClassName;
  
 	CBindObjectInfoMap  m_BindObjects;
-	CScriptNamePtrMap   m_NamePtrMap;
 
 	// ------------------------------	
-	typedef stdext::hash_map<UFunction*, FCDynamicOverrideFunction*> COverrideFunctionMap;
-	typedef stdext::hash_map<UObject *, FCDynamicDelegateList>   CObjectDelegateMap;
-	typedef stdext::hash_map<UFunction*, int>                    CFunctionRefMap;
+	typedef std::unordered_map<UFunction*, FCDynamicOverrideFunction*> COverrideFunctionMap;
+	typedef std::unordered_map<UObject *, FCDynamicDelegateList>   CObjectDelegateMap;
+	typedef std::unordered_map<UFunction*, int>                    CFunctionRefMap;
 
 	COverrideFunctionMap         m_OverrideFunctionMap;  // OverrideFunction
 	CObjectDelegateMap           m_ObjectDelegateMap;    // 对象委托列表	
@@ -166,8 +143,8 @@ protected:
 
     // ------------------------------	函数重载记录 -------------------------
     typedef std::vector<UFunction*>  CScriptFunctionList;
-    typedef stdext::hash_map<FScriptOverrideKey, int64> COverrideFunction2ScriptInsMap;
-    typedef stdext::hash_map<UObjectBase*, CScriptFunctionList> COverrideObjectFunctionMap;
+    typedef std::unordered_map<FScriptOverrideKey, int64> COverrideFunction2ScriptInsMap;
+    typedef std::unordered_map<UObjectBase*, CScriptFunctionList> COverrideObjectFunctionMap;
     COverrideFunction2ScriptInsMap   m_OverrideFunctionScriptInsMap;  // 重载的脚本实例
     COverrideObjectFunctionMap       m_OverrideObjectFunctionMap;    //  
     CFunctionRefMap                  m_OverrideRefMap;

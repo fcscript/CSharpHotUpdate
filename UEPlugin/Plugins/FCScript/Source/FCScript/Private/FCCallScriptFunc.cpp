@@ -105,8 +105,8 @@ bool  IsCanCastToScript(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 			return true;
 		}
 
-		const char* Name = GetUEClassName(ClassDesc->m_UEClassName.c_str());
-		if (DynamicProperty->Name == Name)
+		const char* Name = GetUEClassName(ClassDesc->m_UEClassName);
+        if(DynamicProperty->Name == Name || strcmp(DynamicProperty->Name, Name) == 0)
 		{
 			return true;
 		}

@@ -98,8 +98,8 @@ struct FCObjRef
 	}
 };
 
-typedef  stdext::hash_map<ObjRefKey, FCObjRef*>   CScriptRefObjMap;  // ptr ==> FCObjRef
-typedef  stdext::hash_map<int64, FCObjRef*>   CIntPtr2RefObjMap; // IntPtr ==> FCObjRef
+typedef  std::unordered_map<ObjRefKey, FCObjRef*>   CScriptRefObjMap;  // ptr ==> FCObjRef
+typedef  std::unordered_map<int64, FCObjRef*>   CIntPtr2RefObjMap; // IntPtr ==> FCObjRef
 
 class FCGetObj
 {	
