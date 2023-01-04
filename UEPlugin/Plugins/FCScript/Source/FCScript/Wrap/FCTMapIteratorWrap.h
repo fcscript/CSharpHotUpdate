@@ -21,7 +21,7 @@ public:
 	static int ToNext_wrap(fc_intptr L);
 	static int Reset_wrap(fc_intptr L);
 
-	static FScriptMap *GetScriptMap(fc_intptr nIntPtr);
+	static FScriptMap *GetScriptMap(int64 nIntPtr);
 
 	static int32 ToNextValidIterator(FScriptMap* ScriptMap, int32 NextIndex);
 };

@@ -10,11 +10,11 @@ void  FCDynamicProperty::InitProperty(const FProperty *InProperty)
     Name = GetConstName(Name);
 	ElementSize = InProperty->ElementSize;
 	Offset_Internal = InProperty->GetOffset_ForInternal();
-	Flags = InProperty->GetPropertyFlags();
 	Property = InProperty;
 	bOuter = InProperty->HasAnyPropertyFlags(CPF_OutParm);
 
 	Type = GetScriptPropertyType(Property);
+    ClassName = GetScriptPropertyClassName(Type, InProperty);
 
 	InitDynamicPropertyWriteFunc(this, Type);
 	InitDynamicPropertyReadFunc(this, Type);
@@ -63,64 +63,6 @@ void  FCDynamicFunction::InitParam(UFunction *InFunction)
 			ReturnPropertyIndex = RealReturnIndex;
 		}
 	}
-}
-
-
-#if OLD_UE_ENGINE
-struct FFakeProperty : public UField
-#else
-struct FFakeProperty : public FField
-#endif
-{
-    int32       ArrayDim;
-    int32       ElementSize;
-    uint64      PropertyFlags;
-    uint16      RepIndex;
-    TEnumAsByte<ELifetimeCondition> BlueprintReplicationCondition;
-    int32       Offset_Internal;
-};
-
-#define fc_offsetof(s,m) ((int32)((size_t)&(((s*)0)->m)))
-
-UFunction* DuplicateUFunction(UFunction *TemplateFunction, UClass *OuterClass, const FName &NewFuncName)
-{
-    int32 Offset = fc_offsetof(FFakeProperty, Offset_Internal);
-    FArchive Ar;         // dummy archive used for FProperty::Link()
-
-#if CLEAR_INTERNAL_NATIVE_FLAG_DURING_DUPLICATION
-    FObjectDuplicationParameters DuplicationParams(TemplateFunction, OuterClass);
-    DuplicationParams.DestName = NewFuncName;
-    DuplicationParams.InternalFlagMask &= ~EInternalObjectFlags::Native;
-    UFunction *NewFunc = Cast<UFunction>(StaticDuplicateObjectEx(DuplicationParams));
-#else
-    UFunction *NewFunc = DuplicateObject(TemplateFunction, OuterClass, NewFuncName);
-#endif
-
-    NewFunc->PropertiesSize = TemplateFunction->PropertiesSize;
-    NewFunc->MinAlignment = TemplateFunction->MinAlignment;
-    int32 NumParams = NewFunc->NumParms;
-    if (NumParams > 0)
-    {
-        NewFunc->PropertyLink = CastField<FProperty>(GetChildProperties(NewFunc));
-        FProperty *SrcProperty = CastField<FProperty>(GetChildProperties(TemplateFunction));
-        FProperty *DestProperty = NewFunc->PropertyLink;
-        while (true)
-        {
-            DestProperty->Link(Ar);
-            DestProperty->RepIndex = SrcProperty->RepIndex;
-            *((int32*)((uint8*)DestProperty + Offset)) = *((int32*)((uint8*)SrcProperty + Offset)); // set Offset_Internal (Offset_Internal set by DestProperty->Link(Ar) is incorrect because of incorrect Outer class)
-            if (--NumParams < 1)
-            {
-                break;
-            }
-            DestProperty->PropertyLinkNext = CastField<FProperty>(DestProperty->Next);
-            DestProperty = DestProperty->PropertyLinkNext;
-            SrcProperty = SrcProperty->PropertyLinkNext;
-        }
-    }
-    NewFunc->ClearInternalFlags(EInternalObjectFlags::Native);
-	NewFunc->Script.Empty();
-    return NewFunc;
 }
 
 int FCDynamicDelegateList::FindDelegate(const FCDelegateInfo &Info) const
@@ -190,6 +132,7 @@ FCDynamicClassDesc &FCDynamicClassDesc::CopyDesc(const FCDynamicClassDesc &other
 	Clear();
 	m_Struct = other.m_Struct;
 	m_Class = other.m_Class;
+    m_ScriptStruct = other.m_ScriptStruct;
 	m_Super = other.m_Super;
 	m_nClassNameID = other.m_nClassNameID;
 	m_ClassFlags = other.m_ClassFlags;
@@ -224,11 +167,9 @@ void  FCDynamicClassDesc::OnRegisterStruct(UStruct *Struct, void *Context)
 	{
 		m_SuperName = TCHAR_TO_UTF8(*(Super->GetName()));
         m_SuperName = GetConstName(m_SuperName);
-		//OnRegisterStruct(Super);
 	}
 	m_Class = Cast<UClass>(Struct);
-
-	OnAddStructMember(Struct, Context);
+    m_ScriptStruct = Cast<UScriptStruct>(m_Struct);
 
     FCScriptContext* ScriptContext = (FCScriptContext*)Context;
     UStruct* SuperStruct = Struct->GetSuperStruct();
@@ -238,40 +179,18 @@ void  FCDynamicClassDesc::OnRegisterStruct(UStruct *Struct, void *Context)
 	}
 }
 
-void  FCDynamicClassDesc::OnAddStructMember(UStruct* Struct, void* Context)
+int   FCDynamicClassDesc::GetMemSize() const
 {
-    // 注册成员变量
-    const FProperty* PropertyLink = Struct->PropertyLink;
-    const FProperty* Property = nullptr;
-    for (; PropertyLink != nullptr; PropertyLink = PropertyLink->PropertyLinkNext)
+    int MemSize = sizeof(FCDynamicClassDesc);
+    for (CDynamicPropertyPtrArray::const_iterator itProperty = m_Property.begin(); itProperty != m_Property.end(); ++itProperty)
     {
-        Property = PropertyLink;
-
-        FCDynamicProperty* FCProperty = new FCDynamicProperty();
-        FCProperty->InitProperty(Property);
-        FCProperty->PropertyIndex = m_Property.size();
-        FCProperty->bOuter = false;
-
-        m_Property.push_back(FCProperty);
-        m_Name2Property[FCProperty->Name] = FCProperty;
+        MemSize += (*itProperty)->GetMemSize();
     }
-    // 注册一下原生的函数
-    UField* Children = Struct->Children;
-    for (; Children != nullptr; Children = Children->Next)
+    for (CDynamicFunctionNameMap::const_iterator itFunc = m_Functions.begin(); itFunc != m_Functions.end(); ++itFunc)
     {
-        UFunction* Function = Cast<UFunction>(Children);
-        if (Function)
-        {
-            FCDynamicFunction* DynamicFunction = new FCDynamicFunction();
-            DynamicFunction->InitParam(Function);
-            m_Functions[DynamicFunction->Name] = DynamicFunction;
-        }
+        MemSize += itFunc->second->GetMemSize();
     }
-	//UStruct *SuperStruct = Struct->GetSuperStruct();
-	//if(SuperStruct)
-	//{
-	//	OnAddStructMember(SuperStruct, Context);
-	//}
+    return MemSize;
 }
 
 FCDynamicFunction*  FCDynamicClassDesc::RegisterUEFunc(const char *pcsFuncName)
@@ -298,10 +217,45 @@ FCDynamicFunction*  FCDynamicClassDesc::RegisterUEFunc(const char *pcsFuncName)
 	}
 	FCDynamicFunction* DynamicFunction = new FCDynamicFunction();
 	DynamicFunction->InitParam(Function);
-	//DynamicFunction->Name = pcsFuncName;
 	m_Functions[DynamicFunction->Name] = DynamicFunction;
 
 	return DynamicFunction;
+}
+
+// 功能：注册一个类的属性
+FCDynamicProperty* FCDynamicClassDesc::RegisterProperty(const char* InPropertyName)
+{
+    CDynamicName2Property::iterator itAttrib = m_Name2Property.find(InPropertyName);
+    if (itAttrib != m_Name2Property.end())
+    {
+        return itAttrib->second;
+    }
+    FName InFieldName(InPropertyName);
+    const FProperty* Property = m_Struct->FindPropertyByName(InFieldName);
+    if (Property)
+    {
+        FCDynamicProperty* FCProperty = new FCDynamicProperty();
+        FCProperty->InitProperty(Property);
+        FCProperty->PropertyIndex = m_Property.size();
+        FCProperty->bOuter = false;
+
+        const char* FieldName = FCProperty->Name;
+        m_Property.push_back(FCProperty);
+        m_Name2Property[FieldName] = FCProperty;
+        return FCProperty;
+    }
+    if (m_Super)
+    {
+        FCDynamicProperty * FCProperty = m_Super->RegisterProperty(InPropertyName);
+        if(FCProperty)
+        {
+            const char* FieldName = FCProperty->Name;
+            m_Name2Property[FieldName] = FCProperty;
+            return FCProperty;
+        }
+    }
+    return nullptr;
+
 }
 
 // 功能：注册一个类的属性
@@ -313,7 +267,7 @@ FCDynamicProperty*  FCDynamicClassDesc::RegisterProperty(const char *pcsProperty
 		return itProperty->second;
 	}
 
-	FCDynamicProperty  *DynamicProperty = FindAttribByName(pcsPropertyName);
+	FCDynamicProperty  *DynamicProperty = RegisterProperty(pcsPropertyName);
 	m_ID2Property[nNameID] = DynamicProperty;
 	return DynamicProperty;
 }
@@ -337,6 +291,7 @@ FCDynamicFunction*  FCDynamicClassDesc::RegisterFunc(const char *pcsFuncName, in
 	m_ID2Function[nFuncID] = DynamicFunction;
 	return DynamicFunction;
 }
+
 //---------------------------------------------------------------------------
 
 FCDynamicClassDesc* FCScriptContext::RegisterWrapClass(const char *UEClassName, int nClassID)
@@ -432,6 +387,26 @@ FCDynamicClassDesc* FCScriptContext::RegisterByProperty(FProperty* Property)
     m_PropeytyMap[Property] = ClassDesc;
 
     return ClassDesc;
+}
+
+int FCScriptContext::GetMemSize() const
+{
+    int MemSize = 0;
+    for (CDynamicClassNameMap::const_iterator itClass = m_ClassNameMap.begin(); itClass != m_ClassNameMap.end(); ++itClass)
+    {
+        MemSize += itClass->second->GetMemSize();
+    }
+    return MemSize;
+}
+
+int FCScriptContext::GetClassMemSize(const char* InClassName) const
+{
+    CDynamicClassNameMap::const_iterator itClass = m_ClassNameMap.find(InClassName);
+    if (itClass != m_ClassNameMap.end())
+    {
+        return itClass->second->GetMemSize();
+    }
+    return 0;
 }
 
 void FCScriptContext::Clear()

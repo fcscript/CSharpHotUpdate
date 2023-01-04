@@ -27,17 +27,17 @@ struct FCDynamicPropertyBase
 	int		Offset_Internal;  // 相对偏移
 	int     PropertyIndex;    // 参数或属性索引(序号)
 	int     ScriptParamIndex; // 脚本参数索引号
-    const char *Name;        // 调试时用的(常引用)
+	const char* Name;        // 变量名,调试时用的(常引用)
+    const char* ClassName;   // 类名
 	
 	FCPropertyType    Type;       // 类型
-	EPropertyFlags    Flags;      // 属性类型（用于强制转换的检测)
 	const FProperty  *Property;
 	bool              bRef;       // 是不是引用类型
 	bool              bOuter;     // 是不是输出类型
     bool              bTempNeedRef;  // 临时的上下拷贝参数标记
     bool              bTempRealRef;  // 
 	
-	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Name(nullptr), Type(FCPropertyType::FCPROPERTY_Unkonw), Flags(CPF_None), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
+	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Name(nullptr), ClassName(nullptr),Type(FCPropertyType::FCPROPERTY_Unkonw), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
 	{
 	}
 	bool  IsRef() const
@@ -47,6 +47,14 @@ struct FCDynamicPropertyBase
 	bool  IsOuter() const
 	{
 		return bOuter;
+	}
+	const char* GetFieldName() const
+	{
+		return Name;
+	}
+	const char* GetClassName() const
+	{
+		return ClassName;
 	}
 	// 功能：得到委托的触发函数
 	UFunction *GetSignatureFunction() const
@@ -63,6 +71,7 @@ struct FCDynamicPropertyBase
 		}
 		return nullptr;
 	}
+	int GetMemSize() const { return sizeof(FCDynamicPropertyBase); }
 };
 
 typedef  void(*LPPushScriptValueFunc)(int64  VM, int64 ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void *ObjRefPtr);
@@ -79,10 +88,8 @@ struct FCDynamicProperty : public FCDynamicPropertyBase
 	}
 
 	void  InitProperty(const FProperty *InProperty);
+    int GetMemSize() const { return sizeof(FCDynamicProperty); }
 };
-
-// 复制一个函数
-UFunction* DuplicateUFunction(UFunction *TemplateFunction, UClass *OuterClass, const FName &NewFuncName);
 
 struct  FCDynamicFunction
 {
@@ -101,6 +108,7 @@ struct  FCDynamicFunction
 	{
 	}
 	void  InitParam(UFunction *InFunction);
+    int GetMemSize() const { return sizeof(FCDynamicFunction); }
 };
 
 struct FCDynamicOverrideFunction : public FCDynamicFunction
@@ -113,6 +121,7 @@ struct FCDynamicOverrideFunction : public FCDynamicFunction
 	FCDynamicOverrideFunction() : OleNativeFuncPtr(nullptr), CurOverrideFuncPtr(nullptr), m_NativeBytecodeIndex(0), m_bLockCall(false)
 	{
 	}
+    int GetMemSize() const { return sizeof(FCDynamicOverrideFunction); }
 };
 
 struct FCDelegateInfo
@@ -169,6 +178,7 @@ struct FCDynamicClassDesc
 {
 	UStruct                     *m_Struct;
 	UClass                      *m_Class;
+    UScriptStruct               *m_ScriptStruct;
 	FCDynamicClassDesc          *m_Super;
 	int                          m_nClassNameID; // 在脚本中的Wrap class ID, 唯一的
 	EClassCastFlags              m_ClassFlags;  // 用于强制转换的检测
@@ -184,7 +194,7 @@ struct FCDynamicClassDesc
 	CDynamicID2Property          m_ID2Property;    // id ==> Property
 	// ------- 脚本中的的属性ID或函数ID
 
-	FCDynamicClassDesc():m_Struct(nullptr), m_Class(nullptr), m_Super(nullptr), m_nClassNameID(0), m_ClassFlags(CASTCLASS_None), m_SuperName(nullptr), m_UEClassName(nullptr)
+	FCDynamicClassDesc():m_Struct(nullptr), m_Class(nullptr), m_ScriptStruct(nullptr), m_Super(nullptr), m_nClassNameID(0), m_ClassFlags(CASTCLASS_None), m_SuperName(nullptr), m_UEClassName(nullptr)
 	{
 	}
 	~FCDynamicClassDesc();
@@ -198,15 +208,19 @@ struct FCDynamicClassDesc
 	FCDynamicClassDesc &CopyDesc(const FCDynamicClassDesc &other);
 
 	void  OnRegisterStruct(UStruct *Struct, void *Context);
-	void  OnAddStructMember(UStruct* Struct, void* Context);
+    int   GetMemSize() const;
 
 	// 功能：注册一个函数
 	FCDynamicFunction*  RegisterUEFunc(const char *pcsFuncName);
+
+    // 功能：注册一个类的属性
+    FCDynamicProperty* RegisterProperty(const char* InPropertyName);
 	
 	// 功能：注册一个类的属性
 	FCDynamicProperty*  RegisterProperty(const char *pcsPropertyName, int nNameID);
 	// 功能：注册一个函数
 	FCDynamicFunction*  RegisterFunc(const char *pcsFuncName, int nFuncID);
+
 
 	FCDynamicFunction  *FindFunctionByID(int nFuncID)
 	{
@@ -242,11 +256,17 @@ struct FCDynamicClassDesc
 		{
 			return itFunction->second;
         }
-        if (m_Super)
+
+        // 没有找到，就动态注册一个
+        FCDynamicFunction *Function = RegisterUEFunc(FuncName);
+        if(Function)
         {
-            return m_Super->FindFunctionByName(FuncName);
+            return Function;
         }
-		return nullptr;
+        // 如果还是没有找到，就是设置一个空的, 避免反复查找
+        FuncName = GetConstName(FuncName);
+        m_Functions[FuncName] = nullptr;
+        return nullptr;
 	}
 	FCDynamicProperty *FindAttribByName(const char *AttribName)
 	{
@@ -255,10 +275,16 @@ struct FCDynamicClassDesc
 		{
 			return itAttrib->second;
 		}
-		if(m_Super)
-		{
-			return m_Super->FindAttribByName(AttribName);
-		}
+
+        // 没有找到，就动态注册一个
+        FCDynamicProperty *Property = RegisterProperty(AttribName);
+        if(Property)
+        {
+            return Property;
+        }
+        // 如果还是没有找到，就是设置一个空的, 避免反复查找
+        AttribName = GetConstName(AttribName);
+        m_Name2Property[AttribName] = nullptr;
 		return nullptr;
 	}
 };
@@ -289,6 +315,8 @@ struct FCScriptContext
 	FCDynamicClassDesc*  RegisterUClass(const char *UEClassName);
 	FCDynamicClassDesc*  RegisterUStruct(UStruct *Struct);
     FCDynamicClassDesc*  RegisterByProperty(FProperty* Property);
+    int GetMemSize() const;
+    int GetClassMemSize(const char* InClassName) const;
 	void Clear();
 
 	FCDynamicClassDesc  *FindClassByName(const char *ScriptClassName)

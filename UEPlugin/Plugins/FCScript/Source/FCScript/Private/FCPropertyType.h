@@ -108,3 +108,4 @@ const char* GetConstName(const char* InName);
 
 // 功能：得到反射属性的类型（脚本所支持的）
 FCPropertyType  GetScriptPropertyType(const FProperty *Property);
+const char* GetScriptPropertyClassName(FCPropertyType PropertyType, const FProperty* Property);

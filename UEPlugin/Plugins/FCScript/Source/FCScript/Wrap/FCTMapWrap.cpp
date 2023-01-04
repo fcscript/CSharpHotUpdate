@@ -359,7 +359,7 @@ int FCTMapWrap::begin_wrap(fc_intptr L)
             FScriptMap* ScriptMap = (FScriptMap*)ObjRef->GetThisAddr();
 			fc_intptr VM = fc_get_vm_ptr(L);
 			TMapIterator  *Iterator = new TMapIterator();
-			Iterator->MapInsPtr = nThisPtr;
+			Iterator->MapInsID = nThisPtr;
 			Iterator->Index = FCTMapIteratorWrap::ToNextValidIterator(ScriptMap, 0);
 			fc_intptr ItInsID = FCGetObj::GetIns()->PushMapIterator(Iterator);
             fc_intptr RetPtr = fc_get_return_ptr(L);
@@ -396,7 +396,7 @@ int FCTMapWrap::find_wrap(fc_intptr L)
             if (ScriptMap->IsValidIndex(PairIndex))
             {
                 TMapIterator* Iterator = new TMapIterator();
-                Iterator->MapInsPtr = nThisPtr;
+                Iterator->MapInsID = nThisPtr;
                 Iterator->Index = FCTMapIteratorWrap::ToNextValidIterator(ScriptMap, 0);
                 ItInsID = FCGetObj::GetIns()->PushMapIterator(Iterator);
             }

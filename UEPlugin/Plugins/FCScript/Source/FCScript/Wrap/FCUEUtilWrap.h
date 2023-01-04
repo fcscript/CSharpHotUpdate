@@ -24,4 +24,6 @@ public:
     static int GetBindScript_wrap(fc_intptr L);
     static int FString2String_wrap(fc_intptr L);
     static int String2FString_wrap(fc_intptr L);
+    static int GetObjRefSize_wrap(fc_intptr L);
+    static int GetClassDescMemSize_wrap(fc_intptr L);
 };

@@ -67,10 +67,10 @@ int FCTMapIteratorWrap::Key_wrap(fc_intptr L)
         TMapIterator* Iterator = ObjRef->GetMapIterator();
         if (Iterator)
         {
-            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsPtr);
+            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsID);
             if (ScriptMap && ScriptMap->IsValidIndex(Iterator->Index))
             {
-                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsPtr);
+                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
                 FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
                 FProperty* KeyProp = MapProperty->KeyProp;
@@ -97,10 +97,10 @@ int FCTMapIteratorWrap::GetValue_wrap(fc_intptr L)
 		TMapIterator  *Iterator = ObjRef->GetMapIterator();
 		if(Iterator)
         {
-            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsPtr);
+            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsID);
 			if(ScriptMap && ScriptMap->IsValidIndex(Iterator->Index))
             {
-                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsPtr);
+                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
                 FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
                 FProperty* ValueProp = MapProperty->ValueProp;
@@ -128,10 +128,10 @@ int FCTMapIteratorWrap::SetValue_wrap(fc_intptr L)
         TMapIterator* Iterator = ObjRef->GetMapIterator();
         if (Iterator)
         {
-            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsPtr);
+            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsID);
             if (ScriptMap && ScriptMap->IsValidIndex(Iterator->Index))
             {
-                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsPtr);
+                FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
                 FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
                 FProperty* ValueProp = MapProperty->ValueProp;
@@ -161,7 +161,7 @@ int FCTMapIteratorWrap::IsValid_wrap(fc_intptr L)
         TMapIterator* Iterator = ObjRef->GetMapIterator();
         if (Iterator)
         {
-            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsPtr);
+            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsID);
             if(ScriptMap && ScriptMap->IsValidIndex(Iterator->Index))
             {
                 bValid = true;
@@ -184,7 +184,7 @@ int FCTMapIteratorWrap::ToNext_wrap(fc_intptr L)
         TMapIterator* Iterator = ObjRef->GetMapIterator();
         if (Iterator)
         {
-            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsPtr);
+            FScriptMap* ScriptMap = FCTMapIteratorWrap::GetScriptMap(Iterator->MapInsID);
             if (ScriptMap)
             {
                 ++(Iterator->Index);
@@ -204,7 +204,7 @@ int FCTMapIteratorWrap::Reset_wrap(fc_intptr L)
 	return 0;
 }
 
-FScriptMap* FCTMapIteratorWrap::GetScriptMap(fc_intptr nIntPtr)
+FScriptMap* FCTMapIteratorWrap::GetScriptMap(int64 nIntPtr)
 {
     FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(nIntPtr);
     if (ObjRef && ObjRef->DynamicProperty)

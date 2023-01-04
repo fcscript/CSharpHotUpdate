@@ -3,10 +3,12 @@
 
 typedef  std::unordered_map<void*, FCPropertyType>   CPropertyTypeMap;
 typedef  std::unordered_map<const char *, FCPropertyType, FCStringHash, FCStringEqual>   CGraphyTypeMap;
+typedef  std::unordered_map<FCPropertyType, const char*>   CPropertyClassNameMap;
 typedef std::unordered_map<const char*, char*, FCStringHash, FCStringEqual> CCppName2NameMap;
 CPropertyTypeMap  gPropertyTypeMap;
 CGraphyTypeMap   gGraphyTypeMap;
 CPropertyTypeMap gCachePropertyTypeMap;
+CPropertyClassNameMap gPropertyClassNameMap;
 CCppName2NameMap  GCppName2NameMap;
 
 void  InitPropertyTable()
@@ -62,9 +64,51 @@ void  InitPropertyTable()
     gGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
 }
 
+void  InitProperyNameTable()
+{
+    if (!gPropertyClassNameMap.empty())
+    {
+        return;
+    }
+    gPropertyClassNameMap[FCPROPERTY_BoolProperty] = "bool";
+    gPropertyClassNameMap[FCPROPERTY_ByteProperty] = "byte";
+    gPropertyClassNameMap[FCPROPERTY_Int8Property] = "int8";
+    gPropertyClassNameMap[FCPROPERTY_Int16Property] = "int16";
+    gPropertyClassNameMap[FCPROPERTY_IntProperty] = "int";
+    gPropertyClassNameMap[FCPROPERTY_UInt32Property] = "uint";
+    gPropertyClassNameMap[FCPROPERTY_Int64Property] = "int64";
+    gPropertyClassNameMap[FCPROPERTY_FloatProperty] = "float";
+    gPropertyClassNameMap[FCPROPERTY_DoubleProperty] = "double";
+    gPropertyClassNameMap[FCPROPERTY_NumericProperty] = "double";
+    gPropertyClassNameMap[FCPROPERTY_FILED] = "FProperty";
+    gPropertyClassNameMap[FCPROPERTY_Enum] = "FEnumProperty";
+    //gPropertyClassNameMap[FCPROPERTY_ScriptStruct] = "UStruct";
+    //gPropertyClassNameMap[FCPROPERTY_Class] = "UClass";
+    //gPropertyClassNameMap[FCPROPERTY_ClassProperty] = "FClassProperty";
+    gPropertyClassNameMap[FCPROPERTY_ObjectProperty] = "FObject";
+    gPropertyClassNameMap[FCPROPERTY_WeakObjectPtr] = "TWeakObjectPtr";
+    gPropertyClassNameMap[FCPROPERTY_LazyObjectPtr] = "TLazyObjectPtr";
+    gPropertyClassNameMap[FCPROPERTY_Interface] = "Interface";
+    gPropertyClassNameMap[FCPROPERTY_SoftObjectReference] = "TSoftObjectPtr";
+    gPropertyClassNameMap[FCPROPERTY_NameProperty] = "FName";
+    gPropertyClassNameMap[FCPROPERTY_StrProperty] = "FString";
+    gPropertyClassNameMap[FCPROPERTY_TextProperty] = "FText";
+    //gPropertyClassNameMap[FCPROPERTY_StructProperty] = "UStruct";
+    gPropertyClassNameMap[FCPROPERTY_Array] = "TArray";
+    gPropertyClassNameMap[FCPROPERTY_Map] = "TMap";
+    gPropertyClassNameMap[FCPROPERTY_Set] = "TSet";
+    gPropertyClassNameMap[FCPROPERTY_DelegateProperty] = "DelegateEvent";
+    gPropertyClassNameMap[FCPROPERTY_MulticastDelegateProperty] = "MulticastDelegateEvent";
+
+#if OLD_UE_ENGINE == 0
+    gPropertyClassNameMap[FCPROPERTY_MulticastDelegateProperty] = "MulticastDelegateEvent";
+#endif
+}
+
 void  ReleasePropertyTable()
 {
 	gPropertyTypeMap.clear();
+    gPropertyClassNameMap.clear();
 	gGraphyTypeMap.clear();
 	gCachePropertyTypeMap.clear();
     ReleasePtrMap(GCppName2NameMap);
@@ -114,4 +158,23 @@ FCPropertyType  GetScriptPropertyType(const FProperty *Property)
 		return Type;
 	}
 	return FCPROPERTY_Unkonw;
+}
+
+const char* GetScriptPropertyClassName(FCPropertyType PropertyType, const FProperty* Property)
+{
+    InitProperyNameTable();
+    CPropertyClassNameMap::iterator itName = gPropertyClassNameMap.find(PropertyType);
+    if (itName != gPropertyClassNameMap.end())
+    {
+        return itName->second;
+    }
+    if (FCPROPERTY_StructProperty == PropertyType)
+    {
+        FStructProperty* StructProperty = (FStructProperty*)Property;
+        const char* Name = TCHAR_TO_UTF8(*StructProperty->Struct->GetName());
+        return GetConstName(Name);
+    }
+
+    const char* Name = TCHAR_TO_UTF8(*(Property->GetClass()->GetName()));
+    return GetConstName(Name);
 }

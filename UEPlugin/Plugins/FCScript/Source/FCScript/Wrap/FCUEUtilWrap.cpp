@@ -31,6 +31,8 @@ void FCUEUtilWrap::Register(fc_intptr VM)
     fc_register_class_func(VM, nClassName, "WToFString", String2FString_wrap);
     fc_register_class_func(VM, nClassName, "FStringToA", FString2String_wrap);
     fc_register_class_func(VM, nClassName, "FStringToW", FString2String_wrap);
+    fc_register_class_func(VM, nClassName, "GetObjRefSize", GetObjRefSize_wrap);
+    fc_register_class_func(VM, nClassName, "GetClassDescMemSize", GetClassDescMemSize_wrap);
 }
 
 int FCUEUtilWrap::GetName_wrap(fc_intptr L)
@@ -367,5 +369,28 @@ int FCUEUtilWrap::String2FString_wrap(fc_intptr L)
 		ObjID = FCGetObj::GetIns()->PushCppPropery(PropertyDesc, &value);
 	}
 	fc_set_value_wrap_objptr(VM, RetPtr, ObjID);
+    return 0;
+}
+
+int FCUEUtilWrap::GetObjRefSize_wrap(fc_intptr L)
+{
+    fc_intptr RetPtr = fc_get_return_ptr(L);
+    fc_set_value_int(RetPtr, sizeof(FCObjRef));
+    return 0;
+}
+
+int FCUEUtilWrap::GetClassDescMemSize_wrap(fc_intptr L)
+{
+    fc_intptr RetPtr = fc_get_return_ptr(L);
+    const char * ClassName = fc_cpp_get_string_a(L, 0);
+    if(ClassName)
+    {
+        FCDynamicClassDesc* DynamicClassDesc = GetScriptContext()->RegisterUClass(ClassName);
+        fc_set_value_int(RetPtr, DynamicClassDesc ? DynamicClassDesc->GetMemSize() : 0);
+    }
+    else
+    {
+        fc_set_value_int(RetPtr, GetScriptContext()->GetMemSize());
+    }
     return 0;
 }

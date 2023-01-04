@@ -150,6 +150,88 @@ int64  FCGetObj::PushProperty(UObject *Parent, const FCDynamicProperty *DynamicP
 	return PushChildProperty(ParentRef, DynamicProperty, pValueAddr);
 }
 
+int64  FCGetObj::PushChildProperty(FCObjRef* Parent, const FCDynamicProperty* DynamicProperty, void* pValueAddr)
+{
+	uint8  *ParentAddr = Parent->GetThisAddr();
+	ObjRefKey  ObjKey(ParentAddr, (const void*)(pValueAddr));
+
+	CScriptRefObjMap::iterator itObj = m_ObjMap.find(ObjKey);
+	if (itObj != m_ObjMap.end())
+	{
+		++(itObj->second->Ref);
+		return itObj->second->PtrIndex;
+	}
+	uint64 CastFlags = DynamicProperty->Property->GetCastFlags();
+
+    FCScriptContext* ScriptContext = GetScriptContext();
+	FCDynamicClassDesc* ClassDesc = NULL;
+	if (CASTCLASS_FStructProperty & CastFlags)
+	{
+		FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
+		ClassDesc = ScriptContext->RegisterUStruct(StructProperty->Struct);
+	}
+    else
+    {
+        ClassDesc = ScriptContext->RegisterByProperty((FProperty*)DynamicProperty->Property);
+    }
+
+	FCObjRef* ObjRef = NewObjRef();
+	ObjRef->Ref = 1;
+	ObjRef->RefType = EFCObjRefType::RefProperty;
+	ObjRef->Parent = nullptr;
+	ObjRef->ClassDesc = ClassDesc;
+	ObjRef->PtrIndex = ++m_nObjID;
+	ObjRef->DynamicProperty = (FCDynamicProperty*)DynamicProperty;
+	ObjRef->ThisObjAddr = (uint8*)pValueAddr;
+	m_ObjMap[ObjKey] = ObjRef;
+	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+
+	++(Parent->Ref);
+
+	ObjRef->Parent = Parent;
+    Parent->PushChild(ObjRef);
+	return ObjRef->PtrIndex;
+}
+
+int64  FCGetObj::PushStructValue(const FCDynamicProperty *DynamicProperty, void *pValueAddr)
+{
+	ObjRefKey  ObjKey(nullptr, pValueAddr);
+	CScriptRefObjMap::iterator itObj = m_ObjMap.find(ObjKey);
+	if (itObj != m_ObjMap.end())
+	{
+		++(itObj->second->Ref);
+		return itObj->second->PtrIndex;
+	}
+	void *SrcValueAddr = pValueAddr;
+	// FStructPropertyDesc
+	// 这种没有爹的，就拷贝一个吧
+	FStructProperty* StructProperty = (FStructProperty *)DynamicProperty->Property;
+	UStruct* Struct = StructProperty->Struct;
+    int ValueSize = Struct->GetStructureSize();
+    int ArrayDim = StructProperty->ArrayDim;
+	pValueAddr = NewStructBuffer(ValueSize);
+	Struct->InitializeStruct(pValueAddr, ArrayDim);
+    StructProperty->CopyValuesInternal(pValueAddr, SrcValueAddr, ArrayDim);
+	//StructProperty->CopyScriptStruct(pValueAddr, SrcValueAddr, ArrayDim);
+	
+	ObjKey = ObjRefKey(nullptr, pValueAddr);
+	FCScriptContext *ScriptContext = GetScriptContext();
+	FCDynamicClassDesc  *ClassDesc = ScriptContext->RegisterUStruct(Struct);
+
+	FCObjRef  *ObjRef = NewObjRef();
+	ObjRef->Ref = 1;
+	ObjRef->RefType = EFCObjRefType::RefStructValue;
+	ObjRef->Parent = nullptr;
+	ObjRef->ClassDesc = ClassDesc;
+	ObjRef->PtrIndex = ++m_nObjID;
+	ObjRef->DynamicProperty = (FCDynamicProperty *)DynamicProperty;
+	ObjRef->ThisObjAddr = (uint8* )pValueAddr;
+	m_ObjMap[ObjKey] = ObjRef;
+	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+	return ObjRef->PtrIndex;
+}
+
+
 int64  FCGetObj::PushNewTArray(const FCDynamicProperty* DynamicProperty, void* pValueAddr)
 {
     FArrayProperty* ArrayProperty = (FArrayProperty*)DynamicProperty->Property;
@@ -191,90 +273,15 @@ int64  FCGetObj::PushNewTSet(const FCDynamicProperty* DynamicProperty, void* pVa
 
     return ObjID;
 }
-
-int64  FCGetObj::PushChildProperty(FCObjRef* Parent, const FCDynamicProperty* DynamicProperty, void* pValueAddr)
-{
-    uint8* ParentAddr = Parent->GetThisAddr();
-    ObjRefKey  ObjKey(ParentAddr, (const void*)(pValueAddr));
-
-	CScriptRefObjMap::iterator itObj = m_ObjMap.find(ObjKey);
-	if (itObj != m_ObjMap.end())
-	{
-		++(itObj->second->Ref);
-		return itObj->second->PtrIndex;
-	}
-	uint64 CastFlags = DynamicProperty->Property->GetCastFlags();
-
-    FCScriptContext* ScriptContext = GetScriptContext();
-	FCDynamicClassDesc* ClassDesc = NULL;
-	if (CASTCLASS_FStructProperty & CastFlags)
-	{
-		FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
-		ClassDesc = ScriptContext->RegisterUStruct(StructProperty->Struct);
-	}
-    else
-    {
-        ClassDesc = ScriptContext->RegisterByProperty((FProperty*)DynamicProperty->Property);
-    }
-
-	FCObjRef* ObjRef = NewObjRef();
-	ObjRef->Ref = 1;
-	ObjRef->RefType = EFCObjRefType::RefProperty;
-	ObjRef->Parent = nullptr;
-	ObjRef->ClassDesc = ClassDesc;
-	ObjRef->PtrIndex = ++m_nObjID;
-	ObjRef->DynamicProperty = (FCDynamicProperty*)DynamicProperty;
-    ObjRef->ThisObjAddr = (uint8*)pValueAddr;
-	m_ObjMap[ObjKey] = ObjRef;
-	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
-
-	++(Parent->Ref);
-
-	ObjRef->Parent = Parent;
-	Parent->Childs.push_back(ObjRef);
-	return ObjRef->PtrIndex;
-}
-
-int64  FCGetObj::PushStructValue(const FCDynamicProperty *DynamicProperty, void *pValueAddr)
-{
-    ObjRefKey  ObjKey(nullptr, pValueAddr);
-	CScriptRefObjMap::iterator itObj = m_ObjMap.find(ObjKey);
-	if (itObj != m_ObjMap.end())
-	{
-		++(itObj->second->Ref);
-		return itObj->second->PtrIndex;
-	}
-	void *SrcValueAddr = pValueAddr;
-	// FStructPropertyDesc
-	// 这种没有爹的，就拷贝一个吧
-	FStructProperty* StructProperty = (FStructProperty *)DynamicProperty->Property;
-	UStruct* Struct = StructProperty->Struct;
-    int ValueSize = Struct->GetStructureSize();
-    int ArrayDim = StructProperty->ArrayDim;
-	pValueAddr = NewStructBuffer(ValueSize);
-	Struct->InitializeStruct(pValueAddr, ArrayDim);
-    StructProperty->CopyValuesInternal(pValueAddr, SrcValueAddr, ArrayDim);
-	//StructProperty->CopyScriptStruct(pValueAddr, SrcValueAddr, ArrayDim);
-	
-	ObjKey.ParentAddr = (unsigned char*)pValueAddr;
-	FCScriptContext *ScriptContext = GetScriptContext();
-	FCDynamicClassDesc  *ClassDesc = ScriptContext->RegisterUStruct(Struct);
-
-	FCObjRef  *ObjRef = NewObjRef();
-	ObjRef->Ref = 1;
-	ObjRef->RefType = EFCObjRefType::RefStructValue;
-	ObjRef->Parent = nullptr;
-	ObjRef->ClassDesc = ClassDesc;
-	ObjRef->PtrIndex = ++m_nObjID;
-	ObjRef->DynamicProperty = (FCDynamicProperty *)DynamicProperty;
-	ObjRef->ThisObjAddr = (uint8* )pValueAddr;
-	m_ObjMap[ObjKey] = ObjRef;
-	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
-	return ObjRef->PtrIndex;
-}
-
 int64  FCGetObj::PushCppPropery(const FCDynamicProperty* DynamicProperty, void* pValueAddr)
 {
+	ObjRefKey  ObjKey(nullptr, pValueAddr);
+	CScriptRefObjMap::iterator itObj = m_ObjMap.find(ObjKey);
+	if (itObj != m_ObjMap.end())
+	{
+		++(itObj->second->Ref);
+		return itObj->second->PtrIndex;
+	}
     void* SrcValueAddr = pValueAddr;
     // FStructPropertyDesc
     // 这种没有爹的，就拷贝一个吧
@@ -286,7 +293,6 @@ int64  FCGetObj::PushCppPropery(const FCDynamicProperty* DynamicProperty, void* 
     Property->CopySingleValue(pValueAddr, SrcValueAddr);
 
 
-    ObjRefKey  ObjKey(nullptr, pValueAddr);
     FCScriptContext* ScriptContext = GetScriptContext();
 
     FCObjRef* ObjRef = NewObjRef();
@@ -403,6 +409,17 @@ void   FCGetObj::ReleaseValue(int64 ObjID)
 	}
 }
 
+void   FCGetObj::ReleaseCacheRef(int64 ObjID, int nCacheRef)
+{
+	CIntPtr2RefObjMap::iterator itObj = m_IntPtrMap.find(ObjID);
+	if (itObj != m_IntPtrMap.end())
+	{
+		FCObjRef* ObjRef = itObj->second;
+		ObjRef->Ref -= nCacheRef - 1;
+		ReleaseObjRef(ObjRef);
+	}
+}
+
 FCObjRef  *FCGetObj::NewObjRef()
 {
 	return new FCObjRef();
@@ -416,7 +433,7 @@ void  FCGetObj::ReleaseObjRef(FCObjRef* ObjRef)
         FCObjRef* ParentRef = ObjRef->Parent;
         if (ParentRef)
         {
-            ParentRef->Childs.erase(ParentRef->Childs.MakeIterator(ObjRef));
+            ParentRef->EraseChild(ObjRef);
         }
         DestroyChildRef(ObjRef);
 
@@ -431,10 +448,10 @@ void  FCGetObj::ReleaseObjRef(FCObjRef* ObjRef)
 void  FCGetObj::DestroyChildRef(FCObjRef* ObjRef)
 {
 	// 父节点没有，儿子也没有必要留下, 儿子的儿子也不能留, 斩草要除根, 一脉不留存
-	while (ObjRef->Childs.size() > 0)
+	while (ObjRef->Childs)
 	{
-		FCObjRef* ChildPtr = ObjRef->Childs.front_ptr();
-		ObjRef->Childs.pop_front();
+		FCObjRef* ChildPtr = ObjRef->Childs;
+        ObjRef->Childs = ObjRef->Childs->m_pNext;
 		DestroyChildRef(ChildPtr);
 	}
 	DestroyObjRef(ObjRef);
@@ -458,8 +475,16 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
 			case EFCObjRefType::RefStructValue:
 			{
 				UStruct* Struct = ObjRef->ClassDesc->m_Struct;
+				UScriptStruct *ScriptStruct = ObjRef->ClassDesc->m_ScriptStruct;
 				int ValueSize = Struct->GetStructureSize();
 				int ArrayDim = ObjRef->DynamicProperty ? ObjRef->DynamicProperty->Property->ArrayDim : 1;
+				if (ScriptStruct)
+				{
+					if ((ScriptStruct->StructFlags & (STRUCT_IsPlainOldData | STRUCT_NoDestructor)))
+					{
+						break;
+					}
+				}
 				Struct->DestroyStruct(ObjRef->GetPropertyAddr(), ArrayDim);
 			}
 			break;
@@ -494,10 +519,10 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
             break;
 			case EFCObjRefType::MapIterator:
 			{
-				uint8 *pIteratorBuffer = (uint8*)ObjRef->GetThisAddr();
+				TMapIterator*pIteratorBuffer = (TMapIterator*)ObjRef->GetThisAddr();
 				if(pIteratorBuffer)
 				{
-					delete []pIteratorBuffer;
+					delete pIteratorBuffer;
 				}
 			}
 			break;
