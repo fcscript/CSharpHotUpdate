@@ -72,10 +72,34 @@ struct FCStringEqual
     }
 };
 
+struct FCDoubleKey
+{
+    const char* KeyType;
+    const char* ValueType;
+    FCDoubleKey() :KeyType(nullptr), ValueType(nullptr) {}
+    FCDoubleKey(const char* InKeyType, const char* InValueType) :KeyType(InKeyType), ValueType(InValueType) {}
+};
+
+template<> struct std::hash<FCDoubleKey>
+{
+    size_t operator()(const FCDoubleKey& Key) const
+    {
+        return fc_hash_string_key::Hash(Key.KeyType) + fc_hash_string_key::Hash(Key.ValueType);
+    }
+};
+
+template<> struct std::equal_to<FCDoubleKey>
+{
+    bool operator()(const FCDoubleKey& key1, const FCDoubleKey& key2) const
+    {
+        return fc_hash_string_key::Equal(key1.KeyType, key2.KeyType) && fc_hash_string_key::Equal(key1.ValueType, key2.ValueType);
+    }
+};
+
 struct ObjRefKey
 {
     const unsigned char* ParentAddr;    // 
-    const unsigned char* OffsetPtr;    // 对象自己的地址
+    const unsigned char* OffsetPtr;    //
     ObjRefKey() :ParentAddr(nullptr), OffsetPtr(nullptr) {}
     ObjRefKey(const void* InParentAddr, const void* InOffsetPtr) : ParentAddr((const unsigned char*)InParentAddr), OffsetPtr((const unsigned char*)InOffsetPtr) {}
 };
@@ -111,3 +135,9 @@ void  ReleasePtrMap(_TyPtrMap &PtrMap)
         }
 	}
 }
+
+#ifdef UE_BUILD_DEBUG
+#define  FC_ASSERT(exp)  if(exp) { UE_DEBUG_BREAK(); }
+#else
+#define  FC_ASSERT(exp)  
+#endif

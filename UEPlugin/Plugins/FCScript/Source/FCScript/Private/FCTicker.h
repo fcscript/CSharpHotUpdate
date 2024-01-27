@@ -7,6 +7,11 @@
 #include "Tickable.h"
 #include "FCTicker.generated.h"
 
+USTRUCT(noexport)
+struct FFCScriptPropertyCollector
+{
+};
+
 UCLASS()
 class UFCTicker : public UObject, public FTickableGameObject 
 {

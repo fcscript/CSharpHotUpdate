@@ -2,6 +2,7 @@
 
 #include "FCObjectManager.h"
 #include "FCGetObj.h"
+#include "FCTemplateType.h"
 
 //--------------------------测试代码-------------------------------------
 int64  TestCreateObject(const char* ClassName, int nClassName)
@@ -87,7 +88,7 @@ void   WriteUObject(int64 ObjID, const char* AttribName, UObject* v)
 			return;
 		}
 		uint8* ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
-		UStruct* Struct = DynamicProperty->Property->GetOwnerStruct();
+		UStruct* Struct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
 		UClass* InClass = UObject::StaticClass();
 		if (Struct == InClass || Struct->IsChildOf(InClass))
 		{
@@ -136,7 +137,7 @@ void   ReadUObject(int64 ObjID, const char* AttribName, UObject*& v)
 			return;
 		}
 		uint8* ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
-		UStruct* Struct = DynamicProperty->Property->GetOwnerStruct();
+		UStruct* Struct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
 		if (v)
 		{
 			if (Struct == v->GetClass() || Struct->IsChildOf(v->GetClass()))
@@ -176,7 +177,7 @@ void  PushStringToArray(int64 ObjID, const char* AttribName, const char* InStr)
 		int ElementSize = sizeof(FString);
 		FScriptArray* ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
 		int Index = ScriptArray->Num();
-		ScriptArray->Add(1, ElementSize);
+        ScriptArray_Add(ScriptArray, 1, ElementSize);
 		uint8* ObjAddr = (uint8*)ScriptArray->GetData();
 		uint8* ValudAddr = ObjAddr + Index * ElementSize;
 		new(ValudAddr) FString(InName);

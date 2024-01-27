@@ -16,16 +16,16 @@ void FCTSetWrap::Register(fc_intptr VM)
     fc_register_class_equal(VM, nClassName, obj_equal);
     fc_register_class_func(VM, nClassName, "GetNumb", GetNumb_wrap);
     fc_register_class_func(VM, nClassName, "Contains", Contains_wrap);  // bool Contains(_TyValue value)
-    fc_register_class_func(VM, nClassName, "Add", Add_wrap);  // È¥ÖØÌí¼Ó void Add(_TyValue value)
+    fc_register_class_func(VM, nClassName, "Add", Add_wrap);  // åŽ»é‡æ·»åŠ  void Add(_TyValue value)
     fc_register_class_func(VM, nClassName, "Remove", Remove_wrap); // int Remove(_TyValue value)
     fc_register_class_func(VM, nClassName, "Clear", Clear_wrap);
     fc_register_class_func(VM, nClassName, "ToArray", ToArray_wrap); 
     fc_register_class_func(VM, nClassName, "SetArray", SetArray_wrap);
 
-    // ÊôÐÔ·½·¨
+    // å±žæ€§æ–¹æ³•
     fc_register_class_attrib(VM, nClassName, "Length", GetNumb_wrap, nullptr);
 
-    // ¼æÈÝstl½Ó¿Ú
+    // å…¼å®¹stlæŽ¥å£
     fc_register_class_func(VM, nClassName, "size", GetNumb_wrap);
     fc_register_class_func(VM, nClassName, "push_back", Add_wrap);
 
@@ -104,7 +104,7 @@ int FCTSetWrap::Contains_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
 
@@ -131,7 +131,7 @@ int FCTSetWrap::Add_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
 
@@ -162,7 +162,7 @@ int FCTSetWrap::Remove_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
 
@@ -194,7 +194,7 @@ int FCTSetWrap::Clear_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         TSet_Clear(ScriptMap, SetProperty);
     }
@@ -210,7 +210,7 @@ int FCTSetWrap::ToArray_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
@@ -250,7 +250,7 @@ int FCTSetWrap::SetArray_wrap(fc_intptr L)
     int32 FindIndex = INDEX_NONE;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
@@ -290,7 +290,7 @@ int FCTSetWrap::GetMaxIndex_wrap(fc_intptr L)
     int MaxIndex = 0;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         MaxIndex = ScriptMap->GetMaxIndex();
     }
@@ -306,7 +306,7 @@ int FCTSetWrap::ToNextValidIndex_wrap(fc_intptr L)
     int ValidIndex = 0;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         fc_intptr  Arg0 = fc_get_param_ptr(L, 0);
         int32 PairIndex = fc_get_value_int(Arg0);
@@ -333,7 +333,7 @@ int FCTSetWrap::IsValidIndex_wrap(fc_intptr L)
     bool bValid = false;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         fc_intptr  Arg0 = fc_get_param_ptr(L, 0);
         int32 PairIndex = fc_get_value_int(Arg0);
@@ -352,7 +352,7 @@ int FCTSetWrap::GetAt_wrap(fc_intptr L)
     FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(nThisPtr);
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;
@@ -379,7 +379,7 @@ int FCTSetWrap::RemoveAt_wrap(fc_intptr L)
     int ValidIndex = 0;
     if (ObjRef && ObjRef->RefType == EFCObjRefType::NewTSet)
     {
-        FSetProperty* SetProperty = (FSetProperty*)ObjRef->DynamicProperty->Property;
+        FSetProperty* SetProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty();
         FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
         FProperty* ElementProp = SetProperty->ElementProp;
         const FScriptSetLayout& SetLayout = SetProperty->SetLayout;

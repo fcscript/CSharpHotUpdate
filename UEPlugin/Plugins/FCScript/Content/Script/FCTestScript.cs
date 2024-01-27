@@ -27,6 +27,7 @@ class FCTestScript
     public void ReceiveBeginPlay()
 	{
 		Self.OnClicked.AddListener(OnButtonClicked);
+		Self.OnDoubleClicked.AddListener(OnButtonDoubleClicked);
 		Self.OnResponseMessage.AddListener(OnResponseMessage);
         //Self.aID[0] = 1;
         TArray<StringA> NameList = Self.NameList;
@@ -41,6 +42,10 @@ class FCTestScript
 	public void OnButtonClicked()
 	{
 		os.print("[FCTestScript]OnButtonClicked");
+	}
+	public void OnButtonDoubleClicked()
+	{
+		os.print("[FCTestScript]OnButtonDoubleClicked");
 	}
 	public void OnResponseMessage(StringA MessageContent, bool bWasSuccessful)
 	{

@@ -84,10 +84,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "CallClicked"))
 	void CallClicked();
+
+    UFUNCTION(BlueprintCallable, meta = (DisplayName = "CallDoubleClicked"))
+    void CallDoubleClicked();
 	
 	
 	//UPROPERTY()
-	//TSharedPtr<UFCTest> SharedPtr;  // 这个是不支持的
+	//TSharedPtr<UFCTest> SharedPtr;  //
 
 	UPROPERTY()
 	TWeakObjectPtr<UFCTest>   WeakPtr;
@@ -123,6 +126,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Button|Event")
 	FOnButtonClickedEvent OnClicked;
+
+    UPROPERTY(BlueprintAssignable, Category = "Button|Event")
+    FOnButtonClickedEvent OnDoubleClicked;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FOnHttpResponseMessage OnResponseMessage;

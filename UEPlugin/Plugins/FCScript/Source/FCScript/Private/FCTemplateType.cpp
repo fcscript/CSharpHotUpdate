@@ -1,38 +1,93 @@
 #include "FCTemplateType.h"
 
-
-#if OLD_UE_ENGINE
-template<class _Ty>
-_Ty * NewUEProperty(UScriptStruct* ScriptStruct)
-{
-	_Ty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) _Ty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash);
-	return Property;
-}
-#else 
 template<class _Ty>
 _Ty* NewUEProperty(UScriptStruct* ScriptStruct)
 {
+#if OLD_UE_ENGINE
+    _Ty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) _Ty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash);
+#elif ENGINE_MAJOR_VERSION >= 5 
+    _Ty* Property = new _Ty(ScriptStruct, NAME_None, RF_Transient);
+    Property->PropertyFlags = CPF_ZeroConstructor | CPF_IsPlainOldData | CPF_NoDestructor | CPF_HasGetValueTypeHash;
+#else
 	_Ty* Property = new _Ty(ScriptStruct, NAME_None, RF_Transient, 0, CPF_HasGetValueTypeHash);
-	return Property;
+#endif
+    return Property;
 }
-#endif 
 
 FProperty  *NewUEBoolProperty(UScriptStruct* ScriptStruct)
 {
 #if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
 	UBoolProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UBoolProperty(FObjectInitializer(), EC_CppProperty, 0, (EPropertyFlags)0, 0xFF, 1, true);
+#elif ENGINE_MAJOR_VERSION >= 5 
+    UECodeGen_Private::FBoolPropertyParams Params;
+    FMemory::Memzero(&Params, sizeof(Params));
+    Params.PropertyFlags = CPF_None;
+    Params.Flags = UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool;
+    Params.ObjectFlags = RF_Transient;
+    Params.ArrayDim = 1;
+    Params.ElementSize = sizeof(bool);
+    Params.SizeOfOuter = sizeof(ScriptStruct);
+
+    //constexpr auto Params = UECodeGen_Private::FBoolPropertyParams
+    //{
+    //    nullptr,
+    //    nullptr,
+    //    CPF_None,
+    //    UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool,
+    //    RF_Transient,
+    //    #if ENGINE_MINOR_VERSION > 2
+    //    nullptr, nullptr, 1, sizeof(bool), sizeof(ScriptStruct), nullptr,
+    //    METADATA_PARAMS(0, nullptr)
+    //    #else
+    //    1, nullptr, nullptr, sizeof(bool), sizeof(ScriptStruct), nullptr,
+    //    METADATA_PARAMS(nullptr, 0)
+    //    #endif
+    //};
+    FBoolProperty* Property = new FBoolProperty(ScriptStruct, Params);
 #else
 	FBoolProperty* Property = new FBoolProperty(ScriptStruct, NAME_None, RF_Transient, 0, (EPropertyFlags)0, 0xFF, 1, true);
 #endif
-	return Property;
+    return Property;
 }
 
 FProperty* NewUEStructProperty(UScriptStruct* Struct, UScriptStruct* ScriptStruct)
 {
 #if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
-	FStructProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Struct);
+    UStructProperty *Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UStructProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Struct);
+#elif ENGINE_MAJOR_VERSION >= 5 
+    UECodeGen_Private::FStructPropertyParams Params;
+    FMemory::Memzero(&Params, sizeof(Params));
+    Params.PropertyFlags = ScriptStruct->GetCppStructOps()
+        ? ScriptStruct->GetCppStructOps()->GetComputedPropertyFlags() | CPF_HasGetValueTypeHash
+        : CPF_HasGetValueTypeHash;
+    Params.Flags = UECodeGen_Private::EPropertyGenFlags::Struct;
+    Params.ObjectFlags = RF_Transient;
+    Params.ArrayDim = 1;
+    Params.Offset = 0;
+
+    //const auto Params = UECodeGen_Private::FStructPropertyParams
+    //{
+    //    nullptr,
+    //    nullptr,
+    //    ScriptStruct->GetCppStructOps()
+    //        ? ScriptStruct->GetCppStructOps()->GetComputedPropertyFlags() | CPF_HasGetValueTypeHash
+    //        : CPF_HasGetValueTypeHash,
+    //    UECodeGen_Private::EPropertyGenFlags::Struct,
+    //    RF_Transient,
+
+    //    #if ENGINE_MINOR_VERSION > 2
+    //    nullptr, nullptr, 1, 0, nullptr,
+    //    METADATA_PARAMS(0, nullptr)
+    //    #else
+    //    1, nullptr, nullptr, 0, nullptr,
+    //    METADATA_PARAMS(nullptr, 0)
+    //    #endif
+    //};
+    FStructProperty* Property = new FStructProperty(ScriptStruct, Params);
+    Property->Struct = Struct;
+    Property->ElementSize = Struct->PropertiesSize;
 #else
 	FStructProperty* Property = new FStructProperty(ScriptStruct, NAME_None, RF_Transient, 0, CPF_HasGetValueTypeHash, Struct);
 #endif
@@ -43,7 +98,33 @@ FProperty  *NewUEClassProperty(UClass *Class, UScriptStruct* ScriptStruct)
 {
 #if OLD_UE_ENGINE
 	// see overloaded operator new that defined in DECLARE_CLASS(...)
-	UObjectProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Class);
+    //UObjectProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UObjectProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash, Class);
+    UClassProperty *Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) UClassProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_HasGetValueTypeHash | CPF_UObjectWrapper, Class, nullptr);
+#elif ENGINE_MAJOR_VERSION >= 5 
+    UECodeGen_Private::FObjectPropertyParams Params;
+    FMemory::Memzero(&Params, sizeof(Params));
+    Params.PropertyFlags = CPF_HasGetValueTypeHash;
+    Params.Flags = UECodeGen_Private::EPropertyGenFlags::Object;
+    Params.ObjectFlags = RF_Transient;
+    Params.ArrayDim = 1;
+
+    //constexpr auto Params = UECodeGen_Private::FObjectPropertyParams
+    //{
+    //    nullptr,
+    //    nullptr,
+    //    CPF_HasGetValueTypeHash,
+    //    UECodeGen_Private::EPropertyGenFlags::Object,
+    //    RF_Transient,
+    //    #if ENGINE_MINOR_VERSION > 2
+    //    nullptr, nullptr, 1, 0, nullptr,
+    //    METADATA_PARAMS(0, nullptr)
+    //    #else
+    //    1, nullptr, nullptr, 0, nullptr,
+    //    METADATA_PARAMS(nullptr, 0)
+    //    #endif
+    //};
+    FObjectProperty* Property = new FObjectProperty(ScriptStruct, Params);
+    Property->PropertyClass = Class;
 #else
 	FObjectProperty* Property = new FObjectProperty(ScriptStruct, NAME_None, RF_Transient, 0, CPF_HasGetValueTypeHash, Class);
 #endif
@@ -73,7 +154,7 @@ FMapProperty  *NewUEMapProperty(UScriptStruct* ScriptStruct)
 FSetProperty* NewUESetProperty(UScriptStruct* ScriptStruct)
 {
 #if OLD_UE_ENGINE
-	FSetProperty* Property = new (EC_InternalUseOnlyConstructor, ScriptStruct, NAME_None, RF_Transient) FMapProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_None);
+	FSetProperty* Property = new (EC_InternalUseOnlyConstructor, (UClass*)ScriptStruct, NAME_None, RF_Transient) FSetProperty(FObjectInitializer(), EC_CppProperty, 0, CPF_None);
 #else
 	FSetProperty* Property = new FSetProperty(ScriptStruct, NAME_None, RF_Transient);
 #endif
@@ -86,7 +167,7 @@ UScriptStruct   *GetGlbScriptStruct()
 {
 	if(!GScriptStruct)
 	{
-		GScriptStruct = FindObject<UScriptStruct>(ANY_PACKAGE, TEXT("PropertyCollector"));
+		GScriptStruct = FindObject<UScriptStruct>(ANY_PACKAGE, TEXT("FCScriptPropertyCollector"));
 	}
 	return GScriptStruct;
 }
@@ -177,7 +258,6 @@ FProperty  *CreateClassProperty(const char *InClassName)
 	{
 		if (DynamicClass->m_Struct)
 		{
-			// 注明一下，这里的Struct一定是UScriptStruct
 			FProperty* Property = NewUEStructProperty((UScriptStruct *)DynamicClass->m_Struct, GetGlbScriptStruct());
 			InClassName = DynamicClass->m_UEClassName;
 			GClassPropertyNameMap[InClassName] = Property;
@@ -278,6 +358,19 @@ FProperty *QueryTempalteProperty(fc_intptr VM, fc_intptr Ptr, int Index)
 	return Property;
 }
 
+FCDynamicProperty* GetDynamicPropertyByCppType(FCPropertyType InType, const char* InClassName, int InElementSize)
+{
+    CCppDynamicPropertyMap::iterator itProperty = GCppDynamicPropertyMap.find(InClassName);
+    if (itProperty != GCppDynamicPropertyMap.end())
+    {
+        return itProperty->second;
+    }
+    FCDynamicProperty* DynamicPropery = new FCDynamicProperty();
+    DynamicPropery->InitCppType(InType, InClassName, InElementSize);
+    GCppDynamicPropertyMap[InClassName] = DynamicPropery;
+    return DynamicPropery;
+}
+
 FArrayProperty* CreateTArrayProperty(fc_intptr VM, fc_intptr Ptr)
 {
 	FProperty *Property = QueryTempalteProperty(VM, Ptr, 0);
@@ -300,7 +393,7 @@ struct FCTArrayDynamicProperty : public FCDynamicProperty
 	{
 		if(ArrayProperty)
 		{
-			//delete ArrayProperty;  // UE会有GC，不要删除吧
+			//delete ArrayProperty;
 		}
 	}
 };
@@ -361,14 +454,13 @@ struct FCTMapDynamicProperty : public FCDynamicProperty
 	{
 		if(MapProperty)
 		{
-			// delete MapProperty; // UE会有GC，不要删除吧
+			// delete MapProperty;
 		}
 	}
 };
 
 FCDynamicProperty *GetTMapDynamicProperty(fc_intptr VM, fc_intptr Ptr)
 {
-	// 说明，由于TMap与TArray的参数不一样，所以不会存在相同的TemplateID, 这里共用一个模板列表吧
 	int TemplateID = fc_get_wrap_template_param_id(VM, Ptr);
 	CTempalteDynamicPropertyMap::iterator itProperty = GTempalteDynamicPropertyMap.find(TemplateID);
 	if(itProperty != GTempalteDynamicPropertyMap.end())
@@ -398,7 +490,7 @@ struct FCTSetDynamicProperty : public FCDynamicProperty
     {
         if (SetProperty)
         {
-            //delete SetProperty; // UE会有GC，不要删除吧
+            //delete SetProperty; //
         }
     }
 };
@@ -424,7 +516,6 @@ FSetProperty* CreateTSetProperty(fc_intptr VM, fc_intptr Ptr)
 
 FCDynamicProperty* GetTSetDynamicProperty(fc_intptr VM, fc_intptr Ptr)
 {
-    // 说明，由于TMap与TArray的参数不一样，所以不会存在相同的TemplateID, 这里共用一个模板列表吧
     int TemplateID = fc_get_wrap_template_param_id(VM, Ptr);
     CTempalteDynamicPropertyMap::iterator itProperty = GTempalteDynamicPropertyMap.find(TemplateID);
     if (itProperty != GTempalteDynamicPropertyMap.end())
@@ -446,12 +537,11 @@ FCDynamicProperty* GetTSetDynamicProperty(fc_intptr VM, fc_intptr Ptr)
 
 void ReleaseTempalteProperty()
 {
-	// 说明：UProperty对象不能释放，这个只能是全局管理的，由UE释放
 	//ReleasePtrMap(GBasePropertyIDMap);
 	//ReleasePtrMap(GClassPropertyNameMap);
 
-    GBasePropertyIDMap.clear(); // UE会自动释放，所以不能留
-    GClassPropertyNameMap.clear(); // UE会自动释放，所以不能留
+    GBasePropertyIDMap.clear();
+    GClassPropertyNameMap.clear();
 
 	ReleasePtrMap(GTempalteDynamicPropertyMap);
 	ReleasePtrMap(GStructDynamicPropertyMap);
@@ -473,7 +563,7 @@ void TArray_Clear(FScriptArray *ScriptArray, FProperty *Inner)
 		ValueAddr = ObjAddr + Index * ElementSize;
 		Inner->DestroyValue(ValueAddr);
 	}
-	ScriptArray->Remove(0, Numb, ElementSize);
+    ScriptArray_Remove(ScriptArray, 0, Numb, ElementSize);
 }
 
 void TMap_Clear(FScriptMap* ScriptMap, FMapProperty* MapProperty)

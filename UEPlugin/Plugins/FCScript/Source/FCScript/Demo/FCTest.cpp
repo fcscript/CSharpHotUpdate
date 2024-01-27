@@ -56,3 +56,8 @@ void UFCTest::CallClicked()
 {
     OnClicked.Broadcast();
 }
+
+void UFCTest::CallDoubleClicked()
+{
+    OnDoubleClicked.Broadcast();
+}

@@ -10,14 +10,39 @@ void  FCDynamicProperty::InitProperty(const FProperty *InProperty)
     Name = GetConstName(Name);
 	ElementSize = InProperty->ElementSize;
 	Offset_Internal = InProperty->GetOffset_ForInternal();
-	Property = InProperty;
+    SafePropertyPtr = GetSafeProperty(InProperty);
 	bOuter = InProperty->HasAnyPropertyFlags(CPF_OutParm);
 
-	Type = GetScriptPropertyType(Property);
+	Type = GetScriptPropertyType(InProperty);
     ClassName = GetScriptPropertyClassName(Type, InProperty);
 
 	InitDynamicPropertyWriteFunc(this, Type);
 	InitDynamicPropertyReadFunc(this, Type);
+
+#ifdef UE_BUILD_DEBUG
+    FCStringBuffer128   TempBuffer;
+    TempBuffer << ClassName << ':' << Name;
+    DebugDesc = GetConstName(TempBuffer.GetString());
+#endif
+}
+
+void  FCDynamicProperty::InitCppType(FCPropertyType InType, const char* InClassName, int InElementSize)
+{
+    Name = "";
+    ElementSize = InElementSize;
+    Offset_Internal = 0;
+    SafePropertyPtr = nullptr;
+    Type = InType;
+    ClassName = GetConstName(InClassName);
+
+    InitDynamicPropertyWriteFunc(this, Type);
+    InitDynamicPropertyReadFunc(this, Type);
+
+#ifdef UE_BUILD_DEBUG
+    FCStringBuffer128   TempBuffer;
+    TempBuffer << ClassName << ':' << Name << ":CppType";
+    DebugDesc = GetConstName(TempBuffer.GetString());
+#endif
 }
 
 void  FCDynamicFunction::InitParam(UFunction *InFunction)
@@ -409,6 +434,15 @@ int FCScriptContext::GetClassMemSize(const char* InClassName) const
     return 0;
 }
 
+void FCScriptContext::Init()
+{
+    if (!m_ManualObjectReference)
+    {
+        m_ManualObjectReference = new FCObjectReferencer();
+        m_ManualObjectReference->SetName("FCScript_ManualReference");
+    }
+}
+
 void FCScriptContext::Clear()
 {
 	m_bInit = false;
@@ -417,6 +451,7 @@ void FCScriptContext::Clear()
 		fc_release(m_ScriptVM);
 		m_ScriptVM = 0;
 	}
+    ClearAllOvrridenFunction();
 	ReleasePtrMap(m_ClassNameMap);
 	m_StructMap.clear();
     m_PropeytyMap.clear();
@@ -424,6 +459,38 @@ void FCScriptContext::Clear()
 	m_TempParamPtr = 0;
 	m_TempValuePtr = 0;
 	m_TempParamIndex = 0;
+
+    if (m_ManualObjectReference)
+    {
+        m_ManualObjectReference->Clear();
+        delete m_ManualObjectReference;
+        m_ManualObjectReference = nullptr;
+    }
+}
+
+void FCScriptContext::AddOverridenFunction(UClass* InClass, UFunction* Func)
+{
+    FNativeOverridenFnctionInfo Info;
+    Info.Class = InClass;
+    Info.Function = Func;
+    m_OveridenFunctionList.push_back(Info);
+    m_ManualObjectReference->Add(Func);
+}
+
+void FCScriptContext::ClearAllOvrridenFunction()
+{
+    for (int i = 0; i < m_OveridenFunctionList.size(); ++i)
+    {
+        FNativeOverridenFnctionInfo& Info = m_OveridenFunctionList[i];
+        Info.Class->RemoveFunctionFromFunctionMap(Info.Function);
+    }
+    m_OveridenFunctionList.clear();
+}
+
+void FCScriptContext::RemoveOverideFunction(UClass* InClass, UFunction* Func)
+{
+    // 不能直接删除这个函数，需要删除全局的DynamicFunction,再去除GC引用
+    //InClass->RemoveFunctionFromFunctionMap(Func);
 }
 
 //--------------------------------------------------------
@@ -438,6 +505,11 @@ FCContextManager::~FCContextManager()
 {
 	ConextMgrInsPtr = nullptr;
 	Clear();
+}
+
+void  FCContextManager::Init()
+{
+    ClientDSContext.Init();
 }
 
 void  FCContextManager::Clear()

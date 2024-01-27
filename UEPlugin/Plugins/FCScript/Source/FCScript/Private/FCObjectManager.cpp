@@ -2,6 +2,7 @@
 #include "FCDynamicOverrideFunc.h"
 #include "FCCallScriptFunc.h"
 #include "FCRunTimeRegister.h"
+#include "FCStringBuffer.h"
 #include "../../FCLib/include/fc_api.h"
 
 extern uint8 GRegisterNative(int32 NativeBytecodeIndex, const FNativeFuncPtr& Func);
@@ -281,6 +282,13 @@ void  FFCObjectdManager::RegisterScriptDelegate(UObject *InObject, const FCDynam
 	{
 		return ;
 	}
+    FName  FuncName;
+
+    // 因为同一个Class存在同类型的多个属性变量, 所以需要保证这个是唯一的, 但这个需要注意释放的问题，不然可能会Crash
+    FCStringBuffer128  NameBuffer;
+    NameBuffer << InDynamicProperty->GetFieldName() << "__FCScript_Delegate";  // 增加一个后缀，以免与变量重名
+    FuncName = NameBuffer.GetString();
+    Func = FindOrDumpFunction(Func, InObject->GetClass(), FuncName);
 
 	FCDynamicOverrideFunction *DynamicFunc = this->ToOverrideFunction(InObject, Func, FCDynamicOverrideDelegate, EX_CallFCDelegate);
 
@@ -302,19 +310,29 @@ void  FFCObjectdManager::RegisterScriptDelegate(UObject *InObject, const FCDynam
 	uint8* ValueAddr = ObjAddr + InDynamicProperty->Offset_Internal;
 	if(InDynamicProperty->Type == FCPropertyType::FCPROPERTY_MulticastDelegateProperty)
 	{
-		FMulticastDelegateProperty* DelegateProperty = (FMulticastDelegateProperty*)InDynamicProperty->Property;		
+		FMulticastDelegateProperty* DelegateProperty = (FMulticastDelegateProperty*)InDynamicProperty->SafePropertyPtr->CastDelegateProperty();
 		FScriptDelegate DynamicDelegate;
-		DynamicDelegate.BindUFunction(InObject, Func->GetFName());
+        DynamicDelegate.BindUFunction(InObject, FuncName);
 
 		FMulticastScriptDelegate& MulticastDelegate = (*(FMulticastScriptDelegate*)ValueAddr);
 		MulticastDelegate.AddUnique(MoveTemp(DynamicDelegate));
 	}
 	else if(FCPROPERTY_DelegateProperty == InDynamicProperty->Type)
 	{
-		FDelegateProperty* DelegateProperty = (FDelegateProperty*)InDynamicProperty->Property;
+		FDelegateProperty* DelegateProperty = (FDelegateProperty*)InDynamicProperty->SafePropertyPtr->CastDelegateProperty();
 		FScriptDelegate& ScriptDelegate = (*(FScriptDelegate*)ValueAddr);
-		ScriptDelegate.BindUFunction(InObject, Func->GetFName());
+		ScriptDelegate.BindUFunction(InObject, FuncName);
 	}
+    else if (FCPROPERTY_MulticastSparseDelegateProperty == InDynamicProperty->Type)
+    {
+        FMulticastSparseDelegateProperty* DelegateProperty = (FMulticastSparseDelegateProperty*)InDynamicProperty->SafePropertyPtr->CastDelegateProperty();
+        FSparseDelegate& ScriptDelegate = (*(FSparseDelegate*)ValueAddr);
+
+        FScriptDelegate DynamicDelegate;
+        DynamicDelegate.BindUFunction(InObject, FuncName);
+        FName  FieldName(InDynamicProperty->GetFieldName());
+        ScriptDelegate.__Internal_AddUnique(InObject, FieldName, DynamicDelegate);  // 这个必须是对象自身+属性名(名字不可以变)
+    }
 }
 
 void  FFCObjectdManager::RemoveScriptDelegate(UObject *InObject, const FCDynamicProperty* InDynamicProperty, fc_intptr InScriptThisPtr, int InClassNameID, int InFuncNameID)

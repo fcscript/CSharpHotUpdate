@@ -49,6 +49,7 @@ public class UFCTest : UObject
 	public List<int> aID { get;  set; }
 	public Vector3 Pos { get;  set; }
 	public MulticastDelegateEvent OnClicked { get;  set; }
+	public MulticastDelegateEvent OnDoubleClicked { get;  set; }
 	public DelegateEvent OnResponseMessage { get;  set; }	
 	public FTestAvatarSystemInitParams   AvatarParams{ get; set; }
 };

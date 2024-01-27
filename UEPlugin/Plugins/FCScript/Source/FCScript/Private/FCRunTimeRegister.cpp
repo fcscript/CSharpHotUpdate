@@ -224,7 +224,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     {
         ValuePtr = fc_get_param_ptr(L, Index);
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
-        DynamicProperty->Property->InitializeValue(ValueAddr);
+        DynamicProperty->SafePropertyPtr->InitializeValue(ValueAddr);
         DynamicProperty->bTempNeedRef = true;
         DynamicProperty->bTempRealRef = false;
         DynamicProperty->m_ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
@@ -235,7 +235,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     {
         DynamicProperty = BeginProperty + DynamicFunc->ReturnPropertyIndex;
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
-        DynamicProperty->Property->InitializeValue(ValueAddr);
+        DynamicProperty->SafePropertyPtr->InitializeValue(ValueAddr);
     }
 
     FFrame NewStack(ThisObject, Function, Frame, NULL, GetChildProperties(Function));
@@ -260,7 +260,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         Index = 0;
         for (; DynamicProperty < EndProperty; ++DynamicProperty, ++Index)
         {
-            if (DynamicProperty->bOuter && !DynamicProperty->Property->HasAnyPropertyFlags(CPF_ConstParm))
+            if (DynamicProperty->bOuter && !DynamicProperty->SafePropertyPtr->HasAnyPropertyFlags(CPF_ConstParm))
             {
                 ValuePtr = fc_get_param_ptr(L, Index);
                 ValueAddr = Locals + DynamicProperty->Offset_Internal;
@@ -275,7 +275,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
     {
         ValueAddr = Locals + DynamicProperty->Offset_Internal;
         if (!DynamicProperty->bTempRealRef)
-            DynamicProperty->Property->DestroyValue(ValueAddr);
+            DynamicProperty->SafePropertyPtr->DestroyValue(ValueAddr);
     }
 
     // 将返回值传给脚本
@@ -286,7 +286,7 @@ void   WrapNativeCallFunction(fc_intptr L, int ParamIndex, UObject *ThisObject, 
         //ValueAddr = Locals + DynamicProperty->Offset_Internal;
         ValueAddr = ReturnValueAddress;
         DynamicProperty->m_WriteScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, nullptr, nullptr);
-        DynamicProperty->Property->DestroyValue(ValueAddr);
+        DynamicProperty->SafePropertyPtr->DestroyValue(ValueAddr);
     }
 
     // 释放临时内存

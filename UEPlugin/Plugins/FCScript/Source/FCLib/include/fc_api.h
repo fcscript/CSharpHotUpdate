@@ -304,34 +304,34 @@ FC_EXPORT void FC_RUNTIME_API fc_register_class_equal(fc_intptr VM, int nClassNa
 
 // 反射类接口--------begin
 // 功能：注册C#反射类的回调函数
-FC_EXPORT void FC_API fc_register_reflex_class_func(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_func(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的属性get/set方法
-FC_EXPORT void FC_API fc_register_reflex_class_attrib(fc_intptr VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_attrib(fc_intptr VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet);
 
 // 功能：注册C#反射类的属性get/set方法, += , -=
-FC_EXPORT void FC_API fc_register_reflex_class_attrib_ex(fc_intptr VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet, fc_call_back_inport_class_func pAddSet, fc_call_back_inport_class_func pSubSet);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_attrib_ex(fc_intptr VM, fc_call_back_inport_class_func pGet, fc_call_back_inport_class_func pSet, fc_call_back_inport_class_func pAddSet, fc_call_back_inport_class_func pSubSet);
 
 // 功能：注册C#反射类的cast强制转换接口
-FC_EXPORT void FC_API fc_register_reflex_class_cast(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_cast(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的new
-FC_EXPORT void FC_API fc_register_reflex_class_new(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_new(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的delete
-FC_EXPORT void FC_API fc_register_reflex_class_del(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_del(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的释放引用接口
-FC_EXPORT void FC_API fc_register_reflex_class_release_ref(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_release_ref(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的hash函数
-FC_EXPORT void FC_API fc_register_reflex_class_hash(fc_intptr VM, fc_call_back_inport_class_func func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_hash(fc_intptr VM, fc_call_back_inport_class_func func);
 
 // 功能：注册C#反射类的Equal函数
-FC_EXPORT void FC_API fc_register_reflex_class_equal(fc_intptr VM, fc_call_back_inport_class_equal func);
+FC_EXPORT void FC_RUNTIME_API fc_register_reflex_class_equal(fc_intptr VM, fc_call_back_inport_class_equal func);
 
 // 功能：请求C#反射类的Override
-FC_EXPORT FC_CPP_ONLY bool FC_API fc_require_override(fc_intptr VM, fc_call_back_override func, fc_pcstr pcsClassName, fc_intptr UserData1, fc_intptr UserData2);
+FC_EXPORT FC_CPP_ONLY bool FC_RUNTIME_API fc_require_override(fc_intptr VM, fc_call_back_override func, fc_pcstr pcsClassName, fc_intptr UserData1, fc_intptr UserData2);
 
 // 反射类接口--------end
 //--------------------------------------------------------------------------------------------------
@@ -603,6 +603,7 @@ FC_EXPORT FC_CPP_ONLY fc_pcstr   FC_RUNTIME_API  fc_cpp_get_wrap_class_name(fc_i
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_void_ptr(fc_intptr ptr, fc_void_ptr v);
 
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_string(fc_intptr ptr, fc_pcstr v);
+FC_EXPORT   void  FC_RUNTIME_API fc_set_value_string_a(fc_intptr ptr, fc_pcstr v, int nLen);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_string_w(fc_intptr ptr, fc_ushort_ptr v, int nLen);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_vector2(fc_intptr ptr, const fc_vector2 &v);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_vector3(fc_intptr ptr, const fc_vector3 &v);

@@ -72,7 +72,7 @@ int FCTMapIteratorWrap::Key_wrap(fc_intptr L)
             {
                 FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
-                FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
+                FMapProperty* MapProperty = MapRef->DynamicProperty->SafePropertyPtr->CastMapProperty();
                 FProperty* KeyProp = MapProperty->KeyProp;
                 const FScriptMapLayout& MapLayout = MapProperty->MapLayout;
 
@@ -102,7 +102,7 @@ int FCTMapIteratorWrap::GetValue_wrap(fc_intptr L)
             {
                 FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
-                FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
+                FMapProperty* MapProperty = MapRef->DynamicProperty->SafePropertyPtr->CastMapProperty();
                 FProperty* ValueProp = MapProperty->ValueProp;
                 const FScriptMapLayout& MapLayout = MapProperty->MapLayout;
 
@@ -133,7 +133,7 @@ int FCTMapIteratorWrap::SetValue_wrap(fc_intptr L)
             {
                 FCObjRef* MapRef = FCGetObj::GetIns()->FindValue(Iterator->MapInsID);
 
-                FMapProperty* MapProperty = (FMapProperty*)MapRef->DynamicProperty->Property;
+                FMapProperty* MapProperty = MapRef->DynamicProperty->SafePropertyPtr->CastMapProperty();
                 FProperty* ValueProp = MapProperty->ValueProp;
                 const FScriptMapLayout& MapLayout = MapProperty->MapLayout;
 

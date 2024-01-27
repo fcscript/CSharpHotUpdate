@@ -96,7 +96,7 @@ bool  IsCanCastToScript(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 		return false;
 	}
 
-	UStruct *PropertyStruct = DynamicProperty->Property->GetOwnerStruct();
+	UStruct *PropertyStruct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
 	if( ClassDesc->m_Struct != PropertyStruct)
 	{
 		// 必须是子类(这个地方如果会慢的话，可以用hash_map优化)
@@ -118,7 +118,7 @@ bool  IsCanCastToScript(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 // 将UE对象写入脚本对象
 void  PushScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
+	FStructProperty* StructProperty = DynamicProperty->SafePropertyPtr->CastStructProperty();
 	FCDynamicClassDesc* ClassDesc = GetScriptValueClassDesc(VM, ValuePtr);
     if(ClassDesc)
     {
@@ -193,7 +193,7 @@ void  PushScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 {	
 	UObject *value = *((UObject **)ValueAddr);
 
-	FObjectProperty* ObjectProperty = (FObjectProperty*)DynamicProperty->Property;
+	FObjectProperty* ObjectProperty = DynamicProperty->SafePropertyPtr->CastObjectProperty();
 	UClass* InClass = value ? value->GetClass() : UObject::StaticClass();
 	UClass* Class = ObjectProperty->PropertyClass;
 	//if (ObjectProperty->PropertyClass->IsChildOf(UClass::StaticClass()))
@@ -232,6 +232,11 @@ void  PushScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 	//}
 }
 
+void  PushScriptObjectPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    PushScriptUObject(VM, ValuePtr, DynamicProperty, ValueAddr, ThisObj, ObjRefPtr);
+}
+
 void  PushScriptCppPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
 	fc_intptr PtrID = FCGetObj::GetIns()->PushCppPtr(ValueAddr);
@@ -254,6 +259,8 @@ void  PushScriptWeakObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBas
 	}
 	else
 	{
+        FWeakObjectPtr* ScriptPt = new FWeakObjectPtr(*WeakPtr);
+        FCDynamicProperty* InDynamicProperty = GetDynamicPropertyByCppType(FCPROPERTY_WeakObjectPtr, "FWeakObjectPtr", sizeof(FWeakObjectPtr));
 		PtrID = FCGetObj::GetIns()->PushTemplate((const FCDynamicProperty*)DynamicProperty, ValueAddr, EFCObjRefType::NewTWeakPtr);
 	}
 	fc_set_value_wrap_objptr(VM, ValuePtr, PtrID);
@@ -269,15 +276,56 @@ void  PushScriptLazyObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBas
 	}
 	else
 	{
+        FLazyObjectPtr* ScriptPt = new FLazyObjectPtr(*LazyPtr);
+        FCDynamicProperty* InDynamicProperty = GetDynamicPropertyByCppType(FCPROPERTY_LazyObjectPtr, "TLazyObjectPtr", sizeof(FLazyObjectPtr));
 		PtrID = FCGetObj::GetIns()->PushTemplate((const FCDynamicProperty*)DynamicProperty, ValueAddr, EFCObjRefType::NewTLazyPtr);
 	}
 	fc_set_value_wrap_objptr(VM, ValuePtr, PtrID);
 }
 
+void  PushScriptSoftObjectReference(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FSoftObjectPtr* InSoftPtr = (FSoftObjectPtr*)ValueAddr;
+    int64 ObjID = 0;
+    if (ThisObj)
+    {
+        ObjID = FCGetObj::GetIns()->PushProperty(ThisObj, (const FCDynamicProperty*)DynamicProperty, ValueAddr);
+    }
+    else
+    {
+        if (InSoftPtr)
+        {
+            FCDynamicProperty* InDynamicProperty = GetDynamicPropertyByCppType(FCPROPERTY_SoftObjectReference, "TSoftObjectPtr", sizeof(FSoftObjectPtr));
+            FSoftObjectPtr* SoftObjectPtr = new FSoftObjectPtr(*InSoftPtr);
+            ObjID = FCGetObj::GetIns()->PushTemplate((const FCDynamicProperty*)InDynamicProperty, SoftObjectPtr, EFCObjRefType::NewTSoftObjectPtr);
+        }
+    }
+    fc_set_value_wrap_objptr(VM, ValuePtr, ObjID);
+}
+
+void  PushScriptSoftClassReference(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FSoftObjectPtr* InSoftPtr = (FSoftObjectPtr*)ValueAddr;
+    int64 ObjID = 0;
+    if (ThisObj)
+    {
+        ObjID = FCGetObj::GetIns()->PushProperty(ThisObj, (const FCDynamicProperty*)DynamicProperty, ValueAddr);
+    }
+    else
+    {
+        if (InSoftPtr)
+        {
+            FCDynamicProperty* InDynamicProperty = GetDynamicPropertyByCppType(FCPROPERTY_SoftClassReference, "TSoftClassPtr", sizeof(FSoftObjectPtr));
+            FSoftObjectPtr* SoftObjectPtr = new FSoftObjectPtr(*InSoftPtr);
+            ObjID = FCGetObj::GetIns()->PushTemplate((const FCDynamicProperty*)InDynamicProperty, SoftObjectPtr, EFCObjRefType::NewTSoftClassPtr);
+        }
+    }
+    fc_set_value_wrap_objptr(VM, ValuePtr, ObjID);
+}
+
+
 void  PushScriptDelegate(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
-
 	fc_intptr PtrID = 0;
 	// 如果变量是UObject的属性
 	if (ThisObj)
@@ -293,7 +341,7 @@ void  PushScriptDelegate(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase 
 
 void  PushScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
-	FArrayProperty* Property = (FArrayProperty*)DynamicProperty->Property;
+	FArrayProperty* Property = DynamicProperty->SafePropertyPtr->CastArrayProperty();
 	int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
 	FCObjRef *ObjRef = FCGetObj::GetIns()->FindValue(ObjID);
 	if(ObjRef)
@@ -304,15 +352,15 @@ void  PushScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* D
 		}
 		if(EFCObjRefType::NewTArray == ObjRef->RefType)
 		{
-            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
 			return ;
 		}
 		else if(EFCObjRefType::RefProperty == ObjRef->RefType)
 		{			
-			UStruct* Struct = DynamicProperty->Property->GetOwnerStruct();
+			UStruct* Struct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
             if(ObjRef->GetPropertyType() == DynamicProperty->Type)
 			{
-                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
 				return ;
 			}
 		}
@@ -333,7 +381,7 @@ void  PushScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* D
 
 void  PushScriptTMap(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
-    FMapProperty* Property = (FMapProperty*)DynamicProperty->Property;
+    FMapProperty* Property = DynamicProperty->SafePropertyPtr->CastMapProperty();
     int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
     FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(ObjID);
     if (ObjRef)
@@ -344,15 +392,15 @@ void  PushScriptTMap(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyn
         }
         if (EFCObjRefType::NewTMap == ObjRef->RefType)
         {
-            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
             return;
         }
         else if (EFCObjRefType::RefProperty == ObjRef->RefType)
         {
-            UStruct* Struct = DynamicProperty->Property->GetOwnerStruct();
+            UStruct* Struct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
             if (ObjRef->GetPropertyType() == DynamicProperty->Type)
             {
-                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
                 return;
             }
         }
@@ -373,7 +421,7 @@ void  PushScriptTMap(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyn
 
 void  PushScriptTSet(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
-    FSetProperty* Property = (FSetProperty*)DynamicProperty->Property;
+    FSetProperty* Property = DynamicProperty->SafePropertyPtr->CastSetProperty();
     int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
     FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(ObjID);
     if (ObjRef)
@@ -384,15 +432,15 @@ void  PushScriptTSet(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyn
         }
         if (EFCObjRefType::NewTSet == ObjRef->RefType)
         {
-            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+            Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
             return;
         }
         else if (EFCObjRefType::RefProperty == ObjRef->RefType)
         {
-            UStruct* Struct = DynamicProperty->Property->GetOwnerStruct();
+            UStruct* Struct = DynamicProperty->SafePropertyPtr->GetOwnerStruct();
             if (ObjRef->GetPropertyType() == DynamicProperty->Type)
             {
-                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->Property->ArrayDim);
+                Property->CopyValuesInternal(ObjRef->GetPropertyAddr(), ValueAddr, DynamicProperty->SafePropertyPtr->ArrayDim);
                 return;
             }
         }
@@ -456,12 +504,21 @@ void  InitDynamicPropertyWriteFunc(FCDynamicProperty *DynamicProperty, FCPropert
 		case FCPROPERTY_ObjectProperty:
 			DynamicProperty->m_WriteScriptFunc = PushScriptUObject;
 			break;
+        case FCPROPERTY_ObjectPtrProperty:
+            DynamicProperty->m_WriteScriptFunc = PushScriptObjectPtr;
+            break;
 		case FCPROPERTY_WeakObjectPtr:
 			DynamicProperty->m_WriteScriptFunc = PushScriptWeakObject;
 			break;
 		case FCPROPERTY_LazyObjectPtr:
 			DynamicProperty->m_WriteScriptFunc = PushScriptLazyObject;
 			break;
+        case FCPROPERTY_SoftObjectReference:
+            DynamicProperty->m_WriteScriptFunc = PushScriptSoftObjectReference;
+            break;
+        case FCPROPERTY_SoftClassReference:
+            DynamicProperty->m_WriteScriptFunc = PushScriptSoftClassReference;
+            break;
 		case FCPROPERTY_StructProperty:
 			DynamicProperty->m_WriteScriptFunc = PushScriptStruct;
 			break;
@@ -554,7 +611,7 @@ void  ReadScriptFVector4D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase
 // 将脚本对象写入到UE对象
 void  ReadScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
+	FStructProperty* StructProperty = DynamicProperty->SafePropertyPtr->CastStructProperty();
 	fc_intptr PtrID = fc_get_value_wrap_objptr(ValuePtr);
     if(PtrID)
     {
@@ -595,19 +652,50 @@ void  ReadScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *D
 }
 void  ReadScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	FObjectProperty* ObjectProperty = (FObjectProperty*)DynamicProperty->Property;
+	FObjectProperty* ObjectProperty = DynamicProperty->SafePropertyPtr->CastObjectProperty();
 	fc_intptr PtrID = fc_get_value_wrap_objptr(ValuePtr);
 	UObject *SrcObj = FCGetObj::GetIns()->GetUObject(PtrID);
-	UClass *InClass = SrcObj ? SrcObj->GetClass() : UObject::StaticClass();
-	UClass *Class = ObjectProperty->PropertyClass;
-	if(Class == InClass || InClass->IsChildOf(Class))
-	{
-		*((UObject**)ValueAddr) = SrcObj;
-	}
-	else
-	{
-		*((UObject**)ValueAddr) = nullptr;
-	}
+    UClass* InClass = Cast<UClass>(SrcObj);
+    if (!InClass)
+    {
+        InClass = SrcObj ? SrcObj->GetClass() : UObject::StaticClass();
+    }
+    //UClass* Class = DynamicProperty->SafePropertyPtr->GetPropertyClass();
+    UClass* Class = DynamicProperty->SafePropertyPtr->GetPropertyClass();
+    if (Class == InClass || InClass->IsChildOf(Class))
+    {
+        *((UObject**)ValueAddr) = SrcObj;
+    }
+    else
+    {
+        *((UObject**)ValueAddr) = nullptr;
+        if (SrcObj)
+        {
+            UE_LOG(LogFCScript, Error, TEXT("invalid object param, cast to nullptr"));
+        }
+    }
+}
+
+void  ReadScriptObjectPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FObjectPtr* DesValue = (FObjectPtr*)ValueAddr;
+    fc_intptr PtrID = fc_get_value_wrap_objptr(ValuePtr);
+    FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(PtrID);
+    if (ObjRef && ObjRef->IsValid())
+    {
+        if (ObjRef->GetPropertyType() == FCPropertyType::FCPROPERTY_ObjectPtrProperty)
+        {
+            *DesValue = *((FObjectPtr*)ObjRef->GetPropertyAddr());
+        }
+        else
+        {
+            *DesValue = ObjRef->GetUObject();
+        }
+    }
+    else
+    {
+        *DesValue = nullptr;
+    }
 }
 
 void  ReadScriptCppPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
@@ -668,6 +756,94 @@ void  ReadScriptLazyObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBas
 		}
 	}
 }
+
+void  ReadScriptSoftObjectPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FSoftObjectPtr* SoftPtr = (FSoftObjectPtr*)ValueAddr;
+    fc_pcwstr AssetName = fc_cpp_get_value_string_w(VM, ValuePtr);
+    if (AssetName)
+    {
+        // 如果是字符串，就表示是路径
+        FString  AssetPath(AssetName);
+        FSoftObjectPath  ObjPath(AssetPath);
+        *SoftPtr = FSoftObjectPtr(ObjPath);
+    }
+    else
+    {
+        int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
+        FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(ObjID);
+        if (ObjRef)
+        {
+            UObject* InObject = ObjRef->GetUObject();
+            if (InObject)
+            {
+                *SoftPtr = InObject;
+            }
+            else if (ObjRef->DynamicProperty)
+            {
+                if (FCPropertyType::FCPROPERTY_SoftObjectReference == ObjRef->DynamicProperty->Type)
+                {
+                    FSoftObjectPtr* ScriptPtr = (FSoftObjectPtr*)ObjRef->GetPropertyAddr();
+                    *SoftPtr = *ScriptPtr;
+                }
+                else if (FCPROPERTY_ObjectProperty == ObjRef->DynamicProperty->Type)
+                {
+                    *SoftPtr = ObjRef->GetUObject();
+                }
+            }
+        }
+    }
+}
+
+void  ReadScriptSoftClassPtr(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FSoftObjectPtr* SoftPtr = (FSoftObjectPtr*)ValueAddr;
+    fc_pcwstr AssetName = fc_cpp_get_value_string_w(VM, ValuePtr);
+    if (AssetName)
+    {
+        // 如果是字符串，就表示是路径
+        FString  AssetPath(AssetName);
+        FSoftObjectPath  ObjPath(AssetPath);
+        *SoftPtr = FSoftObjectPtr(ObjPath);
+    }
+    else
+    {
+        int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
+        FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(ObjID);
+        if (ObjRef)
+        {
+            UObject* InObject = ObjRef->GetUObject();
+            if (InObject)
+            {
+                UClass* InClass = Cast<UClass>(InObject);
+                *SoftPtr = InClass;
+            }
+            else if (ObjRef->DynamicProperty)
+            {
+                if (FCPropertyType::FCPROPERTY_SoftClassReference == ObjRef->DynamicProperty->Type)
+                {
+                    FSoftObjectPtr* ScriptPtr = (FSoftObjectPtr*)ObjRef->GetPropertyAddr();
+                    *SoftPtr = *ScriptPtr;
+                    return;
+                }
+                else if (FCPROPERTY_ObjectProperty == ObjRef->DynamicProperty->Type)
+                {
+                    UClass* InClass = Cast<UClass>(ObjRef->GetUObject());
+                    *SoftPtr = InClass;
+                    return;
+                }
+                else if (FCPROPERTY_ClassProperty == ObjRef->DynamicProperty->Type)
+                {
+                    UClass* InClass = *((UClass**)ObjRef->GetPropertyAddr());
+                    *SoftPtr = InClass;
+                    return;
+                }
+            }
+        }
+        *SoftPtr = nullptr;
+    }
+}
+
 void  ReadScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
 	int64 ObjID = fc_get_value_wrap_objptr(ValuePtr);
@@ -676,8 +852,8 @@ void  ReadScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* D
 	{
 		if(EFCObjRefType::NewTArray == ObjRef->RefType)
 		{
-			FArrayProperty* Property = (FArrayProperty*)DynamicProperty->Property;
-            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+			FArrayProperty* Property = DynamicProperty->SafePropertyPtr->CastArrayProperty();
+            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
             if (DynamicProperty->bTempNeedRef)
             {
                 ((FCDynamicPropertyBase*)DynamicProperty)->bTempRealRef = true;
@@ -690,10 +866,10 @@ void  ReadScriptTArray(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* D
 		}
 		else if(DynamicProperty->Type == FCPropertyType::FCPROPERTY_Array)
 		{
-			FArrayProperty* Property = (FArrayProperty*)DynamicProperty->Property;
+			FArrayProperty* Property = DynamicProperty->SafePropertyPtr->CastArrayProperty();
             if (ObjRef->GetPropertyType() == DynamicProperty->Type)
 			{
-				//ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+				//ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
                 Property->CopyCompleteValue(ValueAddr, ObjRef->GetPropertyAddr());
 			}
 		}
@@ -708,8 +884,8 @@ void ReadScriptTMap(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyna
     {
         if (EFCObjRefType::NewTMap == ObjRef->RefType)
         {
-            FMapProperty* Property = (FMapProperty*)DynamicProperty->Property;
-            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+            FMapProperty* Property = DynamicProperty->SafePropertyPtr->CastMapProperty();
+            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
             if (DynamicProperty->bTempNeedRef)
             {
                 ((FCDynamicPropertyBase*)DynamicProperty)->bTempRealRef = true;
@@ -722,10 +898,10 @@ void ReadScriptTMap(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyna
         }
         else if (DynamicProperty->Type == FCPropertyType::FCPROPERTY_Map)
         {
-            FMapProperty* Property = (FMapProperty*)DynamicProperty->Property;
+            FMapProperty* Property = DynamicProperty->SafePropertyPtr->CastMapProperty();
             if (ObjRef->GetPropertyType() == DynamicProperty->Type)
             {
-                //ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+                //ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
                 Property->CopyCompleteValue(ValueAddr, ObjRef->GetPropertyAddr());
             }
         }
@@ -740,8 +916,8 @@ void ReadScriptTSet(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyna
     {
         if (EFCObjRefType::NewTSet == ObjRef->RefType)
         {
-            FMapProperty* Property = (FMapProperty*)DynamicProperty->Property;
-            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+            FMapProperty* Property = DynamicProperty->SafePropertyPtr->CastMapProperty();
+            //Property->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
             if (DynamicProperty->bTempNeedRef)
             {
                 ((FCDynamicPropertyBase*)DynamicProperty)->bTempRealRef = true;
@@ -754,14 +930,35 @@ void ReadScriptTSet(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dyna
         }
         else if (DynamicProperty->Type == FCPropertyType::FCPROPERTY_Set)
         {
-            FMapProperty* Property = (FMapProperty*)DynamicProperty->Property;
+            FMapProperty* Property = DynamicProperty->SafePropertyPtr->CastMapProperty();
             if (ObjRef->GetPropertyType() == DynamicProperty->Type)
             {
-                //ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->Property->ArrayDim);
+                //ArrayProperty->CopyValuesInternal(ValueAddr, ObjRef->GetPropertyAddr(), DynamicProperty->SafePropertyPtr->ArrayDim);
                 Property->CopyCompleteValue(ValueAddr, ObjRef->GetPropertyAddr());
             }
         }
     }
+}
+
+// 将脚本中的函数绑定到引擎中的FScriptDelegate
+// 不需要支持这个
+void  ReadScriptDelegate(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    // 这个还是不要支持了，因为不好追踪生命周期, 只能传入UObject，按该绑定的对象的生命周期来
+    // 可能参考FCDelegateWrap::AddListener_wrap, 不过，这里并不能支持
+    UE_LOG(LogFCScript, Error, TEXT("invalid calll, not surport"));
+}
+
+// 不需要支持这个
+void  ReadScriptMulticastDelegate(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    UE_LOG(LogFCScript, Error, TEXT("invalid calll, not surport"));
+}
+
+// 不需要支持这个
+void  ReadScriptMulticastSparseDelegate(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    UE_LOG(LogFCScript, Error, TEXT("invalid calll, not surport"));
 }
 
 void  InitDynamicPropertyReadFunc(FCDynamicProperty *DynamicProperty, FCPropertyType Flag)
@@ -809,12 +1006,21 @@ void  InitDynamicPropertyReadFunc(FCDynamicProperty *DynamicProperty, FCProperty
 		case FCPROPERTY_ObjectProperty:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptUObject;
 			break;
+        case FCPROPERTY_ObjectPtrProperty:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptObjectPtr;
+            break;
 		case FCPROPERTY_WeakObjectPtr:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptWeakObject;
 			break;
 		case FCPROPERTY_LazyObjectPtr:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptLazyObject;
 			break;
+        case FCPROPERTY_SoftObjectReference:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptSoftObjectPtr;
+            break;
+        case FCPROPERTY_SoftClassReference:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptSoftClassPtr;
+            break;
 		case FCPROPERTY_StructProperty:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptStruct;
 			break;
@@ -835,6 +1041,15 @@ void  InitDynamicPropertyReadFunc(FCDynamicProperty *DynamicProperty, FCProperty
             break;
         case FCPROPERTY_Set:
             DynamicProperty->m_ReadScriptFunc = ReadScriptTSet;
+            break;
+        case FCPROPERTY_DelegateProperty:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptDelegate;
+            break;
+        case FCPROPERTY_MulticastDelegateProperty:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptMulticastDelegate;
+            break;
+        case FCPROPERTY_MulticastSparseDelegateProperty:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptMulticastSparseDelegate;
             break;
 		default:
 			break;

@@ -2,14 +2,16 @@
 #include "FCStringCore.h"
 
 typedef  std::unordered_map<void*, FCPropertyType>   CPropertyTypeMap;
-typedef  std::unordered_map<const char *, FCPropertyType, FCStringHash, FCStringEqual>   CGraphyTypeMap;
 typedef  std::unordered_map<FCPropertyType, const char*>   CPropertyClassNameMap;
 typedef std::unordered_map<const char*, char*, FCStringHash, FCStringEqual> CCppName2NameMap;
+typedef  std::unordered_map<FName, FCPropertyType, FCFNameHash, FCFNameEqual>   CFName2PropertyTypeMap;
+typedef std::unordered_map <FCDoubleKey, int>  CDoubleName2IntMap;
 CPropertyTypeMap  gPropertyTypeMap;
-CGraphyTypeMap   gGraphyTypeMap;
+CFName2PropertyTypeMap  gInnerGraphyTypeMap;
 CPropertyTypeMap gCachePropertyTypeMap;
 CPropertyClassNameMap gPropertyClassNameMap;
 CCppName2NameMap  GCppName2NameMap;
+CDoubleName2IntMap    GDoubleName2IntMap;
 
 void  InitPropertyTable()
 {
@@ -35,11 +37,15 @@ void  InitPropertyTable()
 	gPropertyTypeMap[FClassProperty::StaticClass()]  = FCPROPERTY_ClassProperty;
 
 	gPropertyTypeMap[FObjectProperty::StaticClass()] = FCPROPERTY_ObjectProperty;
+#if ENGINE_MAJOR_VERSION >= 5
+    gPropertyTypeMap[FObjectPtrProperty::StaticClass()] = FCPROPERTY_ObjectPtrProperty; // TObjectPtr<class>
+#endif
 	gPropertyTypeMap[FWeakObjectProperty::StaticClass()] = FCPROPERTY_WeakObjectPtr;
 	gPropertyTypeMap[FLazyObjectProperty::StaticClass()] = FCPROPERTY_LazyObjectPtr;
 	gPropertyTypeMap[FInterfaceProperty::StaticClass()] = FCPROPERTY_Interface;
 
 	gPropertyTypeMap[FSoftObjectProperty::StaticClass()]  = FCPROPERTY_SoftObjectReference;
+    gPropertyTypeMap[FSoftClassProperty::StaticClass()] = FCPROPERTY_SoftClassReference;
 
 	gPropertyTypeMap[FNameProperty::StaticClass()]   = FCPROPERTY_NameProperty;
 	gPropertyTypeMap[FStrProperty::StaticClass()]    = FCPROPERTY_StrProperty;
@@ -53,15 +59,15 @@ void  InitPropertyTable()
 	gPropertyTypeMap[FMulticastDelegateProperty::StaticClass()] = FCPROPERTY_MulticastDelegateProperty;
 	#if OLD_UE_ENGINE == 0
 	gPropertyTypeMap[FMulticastInlineDelegateProperty::StaticClass()] = FCPROPERTY_MulticastDelegateProperty;
-	gPropertyTypeMap[FMulticastSparseDelegateProperty::StaticClass()] = FCPROPERTY_MulticastDelegateProperty;
+	gPropertyTypeMap[FMulticastSparseDelegateProperty::StaticClass()] = FCPROPERTY_MulticastSparseDelegateProperty;
 	#endif
 
-	gGraphyTypeMap["Vector2"] = FCPROPERTY_Vector2;
-	gGraphyTypeMap["Vector3"] = FCPROPERTY_Vector3;
-	gGraphyTypeMap["Vector4"] = FCPROPERTY_Vector4;
-    gGraphyTypeMap["Vector2D"] = FCPROPERTY_Vector2;
-    gGraphyTypeMap["Vector4D"] = FCPROPERTY_Vector4;
-    gGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
+    gInnerGraphyTypeMap["Vector2"] = FCPROPERTY_Vector2;
+    gInnerGraphyTypeMap["Vector3"] = FCPROPERTY_Vector3;
+    gInnerGraphyTypeMap["Vector4"] = FCPROPERTY_Vector4;
+    gInnerGraphyTypeMap["Vector2D"] = FCPROPERTY_Vector2;
+    gInnerGraphyTypeMap["Vector4D"] = FCPROPERTY_Vector4;
+    gInnerGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
 }
 
 void  InitProperyNameTable()
@@ -90,6 +96,7 @@ void  InitProperyNameTable()
     gPropertyClassNameMap[FCPROPERTY_LazyObjectPtr] = "TLazyObjectPtr";
     gPropertyClassNameMap[FCPROPERTY_Interface] = "Interface";
     gPropertyClassNameMap[FCPROPERTY_SoftObjectReference] = "TSoftObjectPtr";
+    gPropertyClassNameMap[FCPROPERTY_SoftClassReference] = "TSoftClassPtr";
     gPropertyClassNameMap[FCPROPERTY_NameProperty] = "FName";
     gPropertyClassNameMap[FCPROPERTY_StrProperty] = "FString";
     gPropertyClassNameMap[FCPROPERTY_TextProperty] = "FText";
@@ -102,6 +109,7 @@ void  InitProperyNameTable()
 
 #if OLD_UE_ENGINE == 0
     gPropertyClassNameMap[FCPROPERTY_MulticastDelegateProperty] = "MulticastDelegateEvent";
+    gPropertyClassNameMap[FCPROPERTY_MulticastSparseDelegateProperty] = "MulticastSparseDelegateEvent";
 #endif
 }
 
@@ -109,9 +117,10 @@ void  ReleasePropertyTable()
 {
 	gPropertyTypeMap.clear();
     gPropertyClassNameMap.clear();
-	gGraphyTypeMap.clear();
+    gInnerGraphyTypeMap.clear();
 	gCachePropertyTypeMap.clear();
     ReleasePtrMap(GCppName2NameMap);
+    GDoubleName2IntMap.clear();
 }
 
 const char* GetConstName(const char* InName)
@@ -133,31 +142,38 @@ const char* GetConstName(const char* InName)
 
 FCPropertyType  GetScriptPropertyType(const FProperty *Property)
 {
-	InitPropertyTable();
-	CPropertyTypeMap::const_iterator itFind = gPropertyTypeMap.find(Property->GetClass());
-	if(itFind != gPropertyTypeMap.end())
-	{
-		FCPropertyType Type = itFind->second;
-		if(Type == FCPROPERTY_StructProperty)
-		{
-			FStructProperty *StructProperty = (FStructProperty *)Property;
-			CPropertyTypeMap::iterator itCacheType = gCachePropertyTypeMap.find(StructProperty->Struct);
-			if(itCacheType != gCachePropertyTypeMap.end())
-			{
-				return itCacheType->second;
-			}
-			FString StructName = StructProperty->Struct->GetName();
-            const char *PropertyName = TCHAR_TO_UTF8(*StructName);
-			CGraphyTypeMap::iterator itGraphy = gGraphyTypeMap.find(PropertyName);
-			if(itGraphy != gGraphyTypeMap.end())
-			{
-				Type = itGraphy->second;
-			}
-			gCachePropertyTypeMap[StructProperty->Struct] = Type;
-		}
-		return Type;
-	}
-	return FCPROPERTY_Unkonw;
+    InitPropertyTable();
+    CPropertyTypeMap::const_iterator itFind = gPropertyTypeMap.find(Property->GetClass());
+    if (itFind != gPropertyTypeMap.end())
+    {
+        FCPropertyType Type = itFind->second;
+        if (Type == FCPROPERTY_StructProperty)
+        {
+            FStructProperty* StructProperty = (FStructProperty*)Property;
+            CPropertyTypeMap::iterator itCacheType = gCachePropertyTypeMap.find(StructProperty->Struct);
+            if (itCacheType != gCachePropertyTypeMap.end())
+            {
+                return itCacheType->second;
+            }
+
+            UStruct* Super = StructProperty->Struct;
+            while (Super)
+            {
+                FName StructPropertyName = Super->GetFName();
+                CFName2PropertyTypeMap::iterator ItInner = gInnerGraphyTypeMap.find(StructPropertyName);
+                if (ItInner != gInnerGraphyTypeMap.end())
+                {
+                    Type = ItInner->second;
+                    break;
+                }
+                Super = Super->GetSuperStruct();
+            }
+
+            gCachePropertyTypeMap[StructProperty->Struct] = Type;
+        }
+        return Type;
+    }
+    return FCPROPERTY_Unkonw;
 }
 
 const char* GetScriptPropertyClassName(FCPropertyType PropertyType, const FProperty* Property)
@@ -177,4 +193,22 @@ const char* GetScriptPropertyClassName(FCPropertyType PropertyType, const FPrope
 
     const char* Name = TCHAR_TO_UTF8(*(Property->GetClass()->GetName()));
     return GetConstName(Name);
+}
+
+int  GetMapTemplateParamNameID(const FProperty* KeyProperty, const FProperty* ValueProperty)
+{
+    FCPropertyType  KeyPropertyType = GetScriptPropertyType(KeyProperty);
+    FCPropertyType  ValuePropertyType = GetScriptPropertyType(ValueProperty);
+    const char* KeyName = GetScriptPropertyClassName(KeyPropertyType, KeyProperty);
+    const char* ValueName = GetScriptPropertyClassName(ValuePropertyType, ValueProperty);
+
+    FCDoubleKey  DoubleKey(KeyName, ValueName);
+    CDoubleName2IntMap::iterator itFind = GDoubleName2IntMap.find(DoubleKey);
+    if (itFind != GDoubleName2IntMap.end())
+    {
+        return itFind->second;
+    }
+    int NameID = GDoubleName2IntMap.size() + 1;
+    GDoubleName2IntMap[DoubleKey] = NameID;
+    return NameID;
 }

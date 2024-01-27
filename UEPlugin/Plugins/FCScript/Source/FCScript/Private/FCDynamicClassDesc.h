@@ -6,8 +6,11 @@
 #include "Logging/LogMacros.h"
 #include "CoreUObject.h"
 #include "FCPropertyType.h"
+#include "FCStringBuffer.h"
+#include "FCObjectReferencer.h"
 #include "../../FCLib/include/fc_api.h"
 #include "FCStringCore.h"
+#include "FCSafeProperty.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogFCScript, Log, All);
 
@@ -31,14 +34,22 @@ struct FCDynamicPropertyBase
     const char* ClassName;   // 类名
 	
 	FCPropertyType    Type;       // 类型
-	const FProperty  *Property;
+	//const FProperty  *Property;
+    const FCSafeProperty* SafePropertyPtr;
 	bool              bRef;       // 是不是引用类型
 	bool              bOuter;     // 是不是输出类型
     bool              bTempNeedRef;  // 临时的上下拷贝参数标记
     bool              bTempRealRef;  // 
+
+#ifdef UE_BUILD_DEBUG
+    const char* DebugDesc;
+#endif
 	
-	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Name(nullptr), ClassName(nullptr),Type(FCPropertyType::FCPROPERTY_Unkonw), Property(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
+	FCDynamicPropertyBase() :ElementSize(0), Offset_Internal(0), PropertyIndex(0), ScriptParamIndex(0), Name(nullptr), ClassName(nullptr),Type(FCPropertyType::FCPROPERTY_Unkonw), SafePropertyPtr(nullptr), bRef(false), bOuter(false), bTempNeedRef(false), bTempRealRef(false)
 	{
+#ifdef UE_BUILD_DEBUG
+        DebugDesc = nullptr;
+#endif
 	}
 	bool  IsRef() const
 	{
@@ -58,18 +69,8 @@ struct FCDynamicPropertyBase
 	}
 	// 功能：得到委托的触发函数
 	UFunction *GetSignatureFunction() const
-	{		
-		if(FCPropertyType::FCPROPERTY_MulticastDelegateProperty == Type)
-		{
-			FMulticastDelegateProperty* DelegateProperty = (FMulticastDelegateProperty*)Property;
-			return DelegateProperty->SignatureFunction;
-		}
-		else if(FCPROPERTY_DelegateProperty == Type)
-		{
-			FDelegateProperty* DelegateProperty = (FDelegateProperty*)Property;
-			return DelegateProperty->SignatureFunction;
-		}
-		return nullptr;
+	{
+        return SafePropertyPtr->GetSignatureFunction();
 	}
 	int GetMemSize() const { return sizeof(FCDynamicPropertyBase); }
 };
@@ -88,6 +89,7 @@ struct FCDynamicProperty : public FCDynamicPropertyBase
 	}
 
 	void  InitProperty(const FProperty *InProperty);
+    void  InitCppType(FCPropertyType InType, const char* InClassName, int InElementSize);
     int GetMemSize() const { return sizeof(FCDynamicProperty); }
 };
 
@@ -289,10 +291,18 @@ struct FCDynamicClassDesc
 	}
 };
 
+struct FNativeOverridenFnctionInfo
+{
+    UClass* Class;
+    UFunction* Function;
+    FNativeOverridenFnctionInfo() :Class(nullptr), Function(nullptr) {}
+};
+
 typedef std::unordered_map<const char*, FCDynamicClassDesc*, FCStringHash, FCStringEqual>   CDynamicClassNameMap;
 typedef std::unordered_map<int, FCDynamicClassDesc*>   CDynamicClassIDMap;
 typedef std::unordered_map<UStruct*, FCDynamicClassDesc*>   CDynamicUStructMap;
 typedef std::unordered_map<FProperty*, FCDynamicClassDesc*>   CDynamicPropertyMap;
+typedef std::vector<FNativeOverridenFnctionInfo>  COverridenFunctionList;
 
 struct FCScriptContext
 {
@@ -307,7 +317,10 @@ struct FCScriptContext
 	CDynamicClassIDMap    m_ClassIDMap;     // wrap class id ==> class ptr
     CDynamicPropertyMap   m_PropeytyMap;    // FPropery ==> class ptr
 
-	FCScriptContext():m_bInit(false), m_ScriptVM(0), m_TempParamPtr(0), m_TempValuePtr(0), m_TempParamIndex(0)
+    FCObjectReferencer* m_ManualObjectReference;
+    COverridenFunctionList   m_OveridenFunctionList;
+
+	FCScriptContext():m_bInit(false), m_ScriptVM(0), m_TempParamPtr(0), m_TempValuePtr(0), m_TempParamIndex(0), m_ManualObjectReference(nullptr)
 	{
 	}
 	
@@ -317,7 +330,11 @@ struct FCScriptContext
     FCDynamicClassDesc*  RegisterByProperty(FProperty* Property);
     int GetMemSize() const;
     int GetClassMemSize(const char* InClassName) const;
+    void Init();
 	void Clear();
+    void AddOverridenFunction(UClass* InClass, UFunction* Func);
+    void ClearAllOvrridenFunction();
+    void RemoveOverideFunction(UClass* InClass, UFunction* Func);
 
 	FCDynamicClassDesc  *FindClassByName(const char *ScriptClassName)
 	{
@@ -345,6 +362,7 @@ struct FCContextManager
 	static  FCContextManager  *ConextMgrInsPtr;
 	FCContextManager();
 	~FCContextManager();
+    void Init();
 	void Clear();
 };
 

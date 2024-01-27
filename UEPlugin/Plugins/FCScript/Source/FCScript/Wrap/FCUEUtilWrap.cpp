@@ -93,7 +93,7 @@ int FCUEUtilWrap::FindClass_wrap(fc_intptr L)
     fc_intptr VM = fc_get_vm_ptr(L);
     fc_intptr Arg0 = fc_get_param_ptr(L, 0);
     fc_intptr RetPtr = fc_get_return_ptr(L);
-	const char *ClassName = fc_cpp_get_value_string_a(VM, Arg0); // ClassName ±ØÐëÊÇ´ø _C ½áÎ²µÄ, Èç "/Game/CMShow/GitCMShow/Test/CMShowDomo/UMG/CMShowDemoUI.CMShowDemoUI_C"
+	const char *ClassName = fc_cpp_get_value_string_a(VM, Arg0); // ClassName å¿…é¡»æ˜¯å¸¦ _C ç»“å°¾çš„, å¦‚ "/Game/CMShow/GitCMShow/Test/CMShowDomo/UMG/CMShowDemoUI.CMShowDemoUI_C"
 
 	UStruct *Struct = FC_FindUEClass(ClassName);
     if (Struct)
@@ -201,7 +201,7 @@ int FCUEUtilWrap::SpawActor_wrap(fc_intptr L)
 
 int FCUEUtilWrap::LoadUserWidget_wrap(fc_intptr L)
 {
-    // ¼ÓÔØÒ»¸öÀ¶Í¼¶ÔÏó UClass *LoadUserWiget(UObject* WorldContextObject, const char *ClassName, APlayerController* OwningPlayer);
+    // åŠ è½½ä¸€ä¸ªè“å›¾å¯¹è±¡ UClass *LoadUserWiget(UObject* WorldContextObject, const char *ClassName, APlayerController* OwningPlayer);
     fc_intptr VM = fc_get_vm_ptr(L);
     fc_intptr RetPtr = fc_get_return_ptr(L);
     fc_intptr Arg1 = fc_get_param_ptr(L, 1);
@@ -210,7 +210,7 @@ int FCUEUtilWrap::LoadUserWidget_wrap(fc_intptr L)
     fc_intptr OwningPlayerObjID = fc_get_wrap_objptr(L, 2);
 
     UObject* WorldContextObject = FCGetObj::GetIns()->GetUObject(WroldObjID);
-    const char* ClassName = fc_cpp_get_value_string_a(VM, Arg1);  // ClassName ±ØÐëÊÇ´ø _C ½áÎ²µÄ, Èç "/Game/CMShow/GitCMShow/Test/CMShowDomo/UMG/CMShowDemoUI.CMShowDemoUI_C"
+    const char* ClassName = fc_cpp_get_value_string_a(VM, Arg1);  // ClassName å¿…é¡»æ˜¯å¸¦ _C ç»“å°¾çš„, å¦‚ "/Game/CMShow/GitCMShow/Test/CMShowDomo/UMG/CMShowDemoUI.CMShowDemoUI_C"
     UStruct* uiAsset = FC_FindUEClass(ClassName);
     UObject* OwningPlayer = FCGetObj::GetIns()->GetUObject(OwningPlayerObjID);
 
@@ -245,7 +245,7 @@ int FCUEUtilWrap::GetChild_Wrap(fc_intptr L)
         {
             uint8* ObjAddr = (uint8*)(ObjRef->GetPropertyAddr());
             uint8* ValueAddr = ObjAddr + DynamicProperty->Offset_Internal;
-            //void* PropertyAddr = DynamicProperty->Property->ContainerPtrToValuePtr<void>(ObjAddr);
+            //void* PropertyAddr = DynamicProperty->SafePropertyPtr->ContainerPtrToValuePtr<void>(ObjAddr);
             UObject* ThisObj = ObjRef->GetUObject();
             DynamicProperty->m_WriteScriptFunc(VM, RetPtr, DynamicProperty, ValueAddr, ThisObj, ObjRef);
         }
@@ -324,7 +324,7 @@ int FCUEUtilWrap::GetBindScript_wrap(fc_intptr L)
 			return 0;
 		}
 	}
-	fc_set_value_script_instance(L, RetPtr, 0);  // Ã»ÓÐÕÒµ½
+	fc_set_value_script_instance(L, RetPtr, 0);  // æ²¡æœ‰æ‰¾åˆ°
 	return 0;
 }
 

@@ -4,6 +4,7 @@
 #include "UObject/UObjectArray.h"
 #include "Engine/World.h"
 #include "CoreUObject.h"
+#include "FCPropertyType.h"
 #include "FCTicker.h"
 
 // -- 这个类用于UE的全局委托的交互模块，负责UE的全局委托与脚本的沟通

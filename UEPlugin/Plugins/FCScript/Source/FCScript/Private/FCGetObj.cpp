@@ -1,6 +1,7 @@
 #include "FCGetObj.h"
 #include "FCTemplateType.h"
 #include "FCCallScriptFunc.h"
+#include "FCStringBuffer.h"
 
 FCGetObj* FCGetObj::s_Ins = nullptr;
 
@@ -114,6 +115,12 @@ int64  FCGetObj::PushNewObject(FCDynamicClassDesc* ClassDesc, const FName& Name,
         ObjRef->ThisObjAddr = (uint8 *)Obj;
         m_ObjMap[ObjKey] = ObjRef;
     }
+#ifdef UE_BUILD_DEBUG
+    FCStringBuffer128   TempBuffer;
+    FString  ObjName = Obj->GetName();
+    TempBuffer << "UObject:" << TCHAR_TO_UTF8(*ObjName);
+    ObjRef->DebugDesc = GetConstName(TempBuffer.GetString());
+#endif
 
 	return ObjRef->PtrIndex;
 }
@@ -137,7 +144,30 @@ int64  FCGetObj::PushNewStruct(FCDynamicClassDesc* ClassDesc)
 	ObjRefKey  ObjKey(nullptr, pValueAddr);
 	m_ObjMap[ObjKey] = ObjRef;
 	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = ClassDesc->m_UEClassName;
+#endif
 	return ObjRef->PtrIndex;
+}
+
+int64  FCGetObj::PushCppStruct(FCDynamicClassDesc* ClassDesc, void* pValueAddr)
+{
+    FCObjRef* ObjRef = NewObjRef();
+    ObjRef->Ref = 1;
+    ObjRef->RefType = EFCObjRefType::NewCppStruct;
+    ObjRef->Parent = nullptr;
+    ObjRef->ClassDesc = ClassDesc;
+    ObjRef->PtrIndex = ++m_nObjID;
+    ObjRef->ThisObjAddr = (uint8*)pValueAddr;
+    ObjRef->DynamicProperty = nullptr;
+
+    ObjRefKey  ObjKey(nullptr, pValueAddr);
+    m_ObjMap[ObjKey] = ObjRef;
+    m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = ClassDesc->m_UEClassName;
+#endif
+    return ObjRef->PtrIndex;
 }
 
 int64  FCGetObj::PushProperty(UObject *Parent, const FCDynamicProperty *DynamicProperty, void *pValueAddr)
@@ -161,18 +191,18 @@ int64  FCGetObj::PushChildProperty(FCObjRef* Parent, const FCDynamicProperty* Dy
 		++(itObj->second->Ref);
 		return itObj->second->PtrIndex;
 	}
-	uint64 CastFlags = DynamicProperty->Property->GetCastFlags();
+	uint64 CastFlags = DynamicProperty->SafePropertyPtr->GetCastFlags();
 
     FCScriptContext* ScriptContext = GetScriptContext();
 	FCDynamicClassDesc* ClassDesc = NULL;
 	if (CASTCLASS_FStructProperty & CastFlags)
 	{
-		FStructProperty* StructProperty = (FStructProperty*)DynamicProperty->Property;
+		FStructProperty* StructProperty = DynamicProperty->SafePropertyPtr->CastStructProperty();
 		ClassDesc = ScriptContext->RegisterUStruct(StructProperty->Struct);
 	}
     else
     {
-        ClassDesc = ScriptContext->RegisterByProperty((FProperty*)DynamicProperty->Property);
+        ClassDesc = ScriptContext->RegisterByProperty((FProperty*)DynamicProperty->SafePropertyPtr->GetProperty());
     }
 
 	FCObjRef* ObjRef = NewObjRef();
@@ -190,6 +220,9 @@ int64  FCGetObj::PushChildProperty(FCObjRef* Parent, const FCDynamicProperty* Dy
 
 	ObjRef->Parent = Parent;
     Parent->PushChild(ObjRef);
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = DynamicProperty->DebugDesc;
+#endif
 	return ObjRef->PtrIndex;
 }
 
@@ -205,7 +238,7 @@ int64  FCGetObj::PushStructValue(const FCDynamicProperty *DynamicProperty, void 
 	void *SrcValueAddr = pValueAddr;
 	// FStructPropertyDesc
 	// 这种没有爹的，就拷贝一个吧
-	FStructProperty* StructProperty = (FStructProperty *)DynamicProperty->Property;
+	FStructProperty* StructProperty = DynamicProperty->SafePropertyPtr->CastStructProperty();
 	UStruct* Struct = StructProperty->Struct;
     int ValueSize = Struct->GetStructureSize();
     int ArrayDim = StructProperty->ArrayDim;
@@ -228,13 +261,16 @@ int64  FCGetObj::PushStructValue(const FCDynamicProperty *DynamicProperty, void 
 	ObjRef->ThisObjAddr = (uint8* )pValueAddr;
 	m_ObjMap[ObjKey] = ObjRef;
 	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = DynamicProperty->DebugDesc;
+#endif
 	return ObjRef->PtrIndex;
 }
 
 
 int64  FCGetObj::PushNewTArray(const FCDynamicProperty* DynamicProperty, void* pValueAddr)
 {
-    FArrayProperty* ArrayProperty = (FArrayProperty*)DynamicProperty->Property;
+    FArrayProperty* ArrayProperty = DynamicProperty->SafePropertyPtr->CastArrayProperty();
 
     FScriptArray* DesContent = new FScriptArray();
     int64 ObjID = PushTemplate(DynamicProperty, DesContent, EFCObjRefType::NewTArray);
@@ -247,7 +283,7 @@ int64  FCGetObj::PushNewTArray(const FCDynamicProperty* DynamicProperty, void* p
 
 int64  FCGetObj::PushNewTMap(const FCDynamicProperty* DynamicProperty, void* pValueAddr)
 {
-    FMapProperty* MapProperty = (FMapProperty*)DynamicProperty->Property;
+    FMapProperty* MapProperty = DynamicProperty->SafePropertyPtr->CastMapProperty();
 
     FScriptMap* DesContent = new FScriptMap();
     int64 ObjID = PushTemplate(DynamicProperty, DesContent, EFCObjRefType::NewTMap);
@@ -262,7 +298,7 @@ int64  FCGetObj::PushNewTMap(const FCDynamicProperty* DynamicProperty, void* pVa
 
 int64  FCGetObj::PushNewTSet(const FCDynamicProperty* DynamicProperty, void* pValueAddr)
 {
-    FSetProperty* SetProperty = (FSetProperty*)DynamicProperty->Property;
+    FSetProperty* SetProperty = DynamicProperty->SafePropertyPtr->CastSetProperty();
 
     FScriptSet* DesContent = new FScriptSet();
     int64 ObjID = PushTemplate(DynamicProperty, DesContent, EFCObjRefType::NewTSet);
@@ -285,7 +321,7 @@ int64  FCGetObj::PushCppPropery(const FCDynamicProperty* DynamicProperty, void* 
     void* SrcValueAddr = pValueAddr;
     // FStructPropertyDesc
     // 这种没有爹的，就拷贝一个吧
-    const FProperty* Property = DynamicProperty->Property;
+    const FProperty* Property = DynamicProperty->SafePropertyPtr->GetProperty();
     int ValueSize = Property->ElementSize;
     int ArrayDim = Property->ArrayDim;
     pValueAddr = NewStructBuffer(ValueSize);
@@ -305,6 +341,9 @@ int64  FCGetObj::PushCppPropery(const FCDynamicProperty* DynamicProperty, void* 
     ObjRef->ThisObjAddr = (uint8*)pValueAddr;
     m_ObjMap[ObjKey] = ObjRef;
     m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = DynamicProperty->DebugDesc;
+#endif
     return ObjRef->PtrIndex;
 }
 
@@ -330,6 +369,9 @@ int64  FCGetObj::PushTemplate(const FCDynamicProperty *DynamicProperty, void *pV
 	ObjRef->ThisObjAddr = (uint8 *)pValueAddr;
 	m_ObjMap[ObjKey] = ObjRef;
 	m_IntPtrMap[ObjRef->PtrIndex] = ObjRef;
+#ifdef UE_BUILD_DEBUG
+    ObjRef->DebugDesc = DynamicProperty->DebugDesc;
+#endif
 	return ObjRef->PtrIndex;
 }
 
@@ -468,7 +510,9 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
 		switch(ObjRef->RefType)
 		{
 			case EFCObjRefType::NewUObject:
+            case EFCObjRefType::RefObject:
 			{
+                GetScriptContext()->m_ManualObjectReference->Remove(ObjRef->GetUObject());
 			}
 			break;
 			case EFCObjRefType::NewUStruct:
@@ -477,7 +521,7 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
 				UStruct* Struct = ObjRef->ClassDesc->m_Struct;
 				UScriptStruct *ScriptStruct = ObjRef->ClassDesc->m_ScriptStruct;
 				int ValueSize = Struct->GetStructureSize();
-				int ArrayDim = ObjRef->DynamicProperty ? ObjRef->DynamicProperty->Property->ArrayDim : 1;
+				int ArrayDim = ObjRef->DynamicProperty ? ObjRef->DynamicProperty->SafePropertyPtr->ArrayDim : 1;
 				if (ScriptStruct)
 				{
 					if ((ScriptStruct->StructFlags & (STRUCT_IsPlainOldData | STRUCT_NoDestructor)))
@@ -490,14 +534,14 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
 			break;
 			case EFCObjRefType::NewProperty:
 			{
-				const FProperty *Property = ObjRef->DynamicProperty->Property;
+				const FProperty *Property = ObjRef->DynamicProperty->SafePropertyPtr->GetProperty();
 				Property->DestroyValue(ObjRef->GetThisAddr());
 			}
 			break;
 			case EFCObjRefType::NewTArray:
 			{
 				FScriptArray *ScriptArray = (FScriptArray*)ObjRef->GetThisAddr();
-				FArrayProperty  *ArrayProperty = (FArrayProperty *)ObjRef->DynamicProperty->Property;
+				FArrayProperty  *ArrayProperty = ObjRef->DynamicProperty->SafePropertyPtr->CastArrayProperty();
 				FProperty *Inner = ArrayProperty->Inner;
 				TArray_Clear(ScriptArray, Inner);
 				delete ScriptArray;
@@ -506,15 +550,39 @@ void  FCGetObj::DestroyObjRef(FCObjRef *ObjRef)
 			case EFCObjRefType::NewTMap:
 			{
 				FScriptMap *ScriptMap = (FScriptMap*)ObjRef->GetThisAddr();
-				TMap_Clear(ScriptMap, (FMapProperty *)ObjRef->DynamicProperty->Property);
+				TMap_Clear(ScriptMap, ObjRef->DynamicProperty->SafePropertyPtr->CastMapProperty());
 				delete ScriptMap;
 			}
             break;
             case EFCObjRefType::NewTSet:
             {
 				FScriptSet* ScriptMap = (FScriptSet*)ObjRef->GetThisAddr();
-				TSet_Clear(ScriptMap, (FSetProperty *)ObjRef->DynamicProperty->Property);
+				TSet_Clear(ScriptMap, ObjRef->DynamicProperty->SafePropertyPtr->CastSetProperty());
                 delete ScriptMap;
+            }
+            break;
+            case EFCObjRefType::NewTLazyPtr:
+            {
+                FLazyObjectPtr* LazyPtr = (FLazyObjectPtr*)ObjRef->GetThisAddr();
+                delete LazyPtr;
+            }
+            break;
+            case EFCObjRefType::NewTWeakPtr:
+            {
+                FWeakObjectPtr* WeakPtr = (FWeakObjectPtr*)ObjRef->GetThisAddr();
+                delete WeakPtr;
+            }
+            break;
+            case EFCObjRefType::NewTSoftObjectPtr:
+            {
+                FSoftObjectPtr* SoftPtr = (FSoftObjectPtr*)ObjRef->GetThisAddr();
+                delete SoftPtr;
+            }
+            break;
+            case EFCObjRefType::NewTSoftClassPtr:
+            {
+                FSoftObjectPtr* SoftPtr = (FSoftObjectPtr*)ObjRef->GetThisAddr();
+                delete SoftPtr;
             }
             break;
 			case EFCObjRefType::MapIterator:

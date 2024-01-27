@@ -3,6 +3,22 @@
 #include "UObject/ObjectMacros.h"
 #include "CoreUObject.h"
 
+struct FCFNameHash
+{
+    size_t operator()(const FName& Key) const
+    {
+        return Key.ToUnstableInt();
+    }
+};
+
+struct FCFNameEqual
+{
+    bool operator()(const FName& key1, const FName& key2) const
+    {
+        return key1 == key2;
+    }
+};
+
 enum FCPropertyType
 {
 	FCPROPERTY_Unkonw,          // 未知的
@@ -33,11 +49,13 @@ enum FCPropertyType
 	FCPROPERTY_StrProperty,     // FString
     FCPROPERTY_TextProperty,    // FText
 	FCPROPERTY_Property,        // 
-	FCPROPERTY_ObjectProperty,  // UObject*  // CPT_ObjectReference // CPT_WeakObjectReference // CPT_LazyObjectReference
+	FCPROPERTY_ObjectProperty,  // UObject* // FObjPtr(TObjectPtr<class>) //   // CPT_ObjectReference // CPT_WeakObjectReference // CPT_LazyObjectReference
+    FCPROPERTY_ObjectPtrProperty,  // TObjectPtr<class> // FObjPtr
 	FCPROPERTY_WeakObjectPtr,   // FWeakObjectProperty, TWeakObjectPtr<_Ty>, FWeakObjectPtr
 	FCPROPERTY_LazyObjectPtr,   // FLazyObjectProperty, TLazyObjectPtr<_Ty>, FLazyObjectPtr
 	FCPROPERTY_Interface,       // FInterfaceProperty
 	FCPROPERTY_SoftObjectReference, // CPT_SoftObjectReference
+    FCPROPERTY_SoftClassReference, // TSoftClassPtr
 	FCPROPERTY_Function,        // Fucntion
 	FCPROPERTY_StructProperty,  // Struct, FVector 也是这个类型噢
 	FCPROPERTY_Array,           // TArray
@@ -45,6 +63,7 @@ enum FCPropertyType
 	FCPROPERTY_Set,             // TSet -- FSetProperty
 	FCPROPERTY_DelegateProperty, // CPT_Delegate
 	FCPROPERTY_MulticastDelegateProperty, // CPT_MulticastDelegate
+    FCPROPERTY_MulticastSparseDelegateProperty, // CPT_SparseMulticastDelegate
 	FCPROPERTY_ObjectPropertyBase, // 
 };
 
@@ -109,3 +128,5 @@ const char* GetConstName(const char* InName);
 // 功能：得到反射属性的类型（脚本所支持的）
 FCPropertyType  GetScriptPropertyType(const FProperty *Property);
 const char* GetScriptPropertyClassName(FCPropertyType PropertyType, const FProperty* Property);
+
+int  GetMapTemplateParamNameID(const FProperty* KeyProperty, const FProperty* ValueProperty);

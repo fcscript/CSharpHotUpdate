@@ -8,6 +8,7 @@ enum EFCObjRefType
 	NewUObject,     // new UObject对象
 	NewUStruct,     // new UStrucct对象
 	NewProperty,    // new Property对象
+    NewCppStruct,   // new Cpp class
 	RefProperty,    // UObject的属性引用
     RefFunction,    // 引用Function
 	RefStructValue, // 普通的Struct变量引用
@@ -16,6 +17,8 @@ enum EFCObjRefType
 	NewTSet,        // new TSet
 	NewTLazyPtr,    // 
 	NewTWeakPtr,    // 
+    NewTSoftObjectPtr, // 
+    NewTSoftClassPtr, // 
 	CppPtr,         // 全局的Cpp对象指针
 	MapIterator,    // map_iterator
 };
@@ -43,9 +46,15 @@ struct FCObjRef
 	int        Ref;             // 引用计数
 	EFCObjRefType  RefType;
     FCObjRef *Childs; // 使用单链表
-	FCObjRef():m_pNext(NULL), Parent(NULL), ClassDesc(NULL), DynamicProperty(NULL), PtrIndex(0), ThisObjAddr(NULL), Ref(0), RefType(RefNone), Childs(nullptr)
-	{
-	}
+#ifdef UE_BUILD_DEBUG
+    const char* DebugDesc;
+#endif
+    FCObjRef() :m_pNext(NULL), Parent(NULL), ClassDesc(NULL), DynamicProperty(NULL), PtrIndex(0), ThisObjAddr(NULL), Ref(0), RefType(RefNone), Childs(nullptr)
+    {
+#ifdef UE_BUILD_DEBUG
+        DebugDesc = nullptr;
+#endif
+    }
     void PushChild(FCObjRef* ChildRef)
     {
         ChildRef->m_pNext = Childs;
@@ -114,7 +123,7 @@ struct FCObjRef
 	{
 		if(EFCObjRefType::RefProperty == RefType || EFCObjRefType::RefStructValue == RefType)
 		{
-			return (FStructProperty *)(DynamicProperty->Property);
+			return DynamicProperty->SafePropertyPtr->CastStructProperty();
 		}
 		return NULL;
 	}
@@ -150,6 +159,7 @@ public:
 	FCObjRef*  PushUObjectNoneRef(UObject* Obj);
 	int64  PushNewObject(FCDynamicClassDesc* ClassDesc, const FName& Name, UObject* Outer, fc_intptr VM, fc_intptr ScriptValuePtr);
 	int64  PushNewStruct(FCDynamicClassDesc* ClassDesc);
+    int64  PushCppStruct(FCDynamicClassDesc* ClassDesc, void* pValueAddr);
 	// 功能：压入一个UObject的属性(生成周期随父对象)的引用
 	int64  PushProperty(UObject *Parent, const FCDynamicProperty *DynamicProperty, void *pValueAddr);
 	// 功能：压入一个子属性(UObject或UStruct的成员变量)的引用

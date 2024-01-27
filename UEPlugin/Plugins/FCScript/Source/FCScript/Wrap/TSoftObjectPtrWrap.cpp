@@ -30,10 +30,11 @@ int TSoftObjectPtrWrap::LoadSynchronous_wrap(fc_intptr L)
     int64 ObjID = 0;
 	if (ObjRef && ObjRef->DynamicProperty)
 	{
-		if (ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_WeakObjectPtr)
+        if (ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_SoftObjectReference
+            || ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_SoftClassReference)
         {
 			FSoftObjectPtr *ScriptPtr = (FSoftObjectPtr*)ObjRef->GetPropertyAddr();
-			FSoftObjectProperty  *Property = (FSoftObjectProperty *)ObjRef->DynamicProperty->Property;
+			FSoftObjectProperty  *Property = (FSoftObjectProperty *)ObjRef->DynamicProperty->SafePropertyPtr->GetProperty();
             UClass *ObjClass = Property->PropertyClass;
             UObject *Obj = ScriptPtr->LoadSynchronous();
             ObjID = FCGetObj::GetIns()->PushUObject(Obj);
@@ -51,7 +52,8 @@ int TSoftObjectPtrWrap::GetAssetName_wrap(fc_intptr L)
     FCObjRef* ObjRef = FCGetObj::GetIns()->FindValue(nThisPtr);
     if (ObjRef && ObjRef->DynamicProperty)
     {
-        if (ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_WeakObjectPtr)
+        if (ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_SoftObjectReference
+            || ObjRef->DynamicProperty->Type == FCPropertyType::FCPROPERTY_SoftClassReference)
         {
             FSoftObjectPtr* ScriptPtr = (FSoftObjectPtr*)ObjRef->GetPropertyAddr();
             FString  AssetName = ScriptPtr->GetAssetName();
