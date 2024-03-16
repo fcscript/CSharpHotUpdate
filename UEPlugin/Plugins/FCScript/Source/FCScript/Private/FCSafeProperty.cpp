@@ -184,7 +184,7 @@ struct FCSafeProperty_ByteProperty : public FCSafeProperty
     }
 };
 
-// Vector2, Vector3, Vector4
+// Vector2, Vector3, Vector4, FPlane, FQuat, FRotator, FMatrix, FColor, FLinearColor
 struct FCSafeProperty_VectorX : public FCSafeProperty
 {
     FStructProperty* CastStructProperty() const override
@@ -466,6 +466,12 @@ FCSafeProperty  *CreateSafeProperty(FCPropertyType Type)
         case FCPROPERTY_Vector2:
         case FCPROPERTY_Vector3:
         case FCPROPERTY_Vector4:
+        case FCPROPERTY_Plane:
+        case FCPROPERTY_Quat:
+        case FCPROPERTY_Rotator:
+        case FCPROPERTY_Matrix:
+        case FCPROPERTY_Color:
+        case FCPROPERTY_LinearColor:
             return new FCSafeProperty_VectorX();
         case FCPROPERTY_ScriptStruct:
             return new FCSafeProperty_ScriptStruct();

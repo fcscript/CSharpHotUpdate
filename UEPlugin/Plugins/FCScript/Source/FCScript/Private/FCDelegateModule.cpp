@@ -41,6 +41,9 @@ void FFCDelegateModule::OnStartupModule()
 	FEditorDelegates::PrePIEEnded.AddRaw(this, &FFCDelegateModule::PrePIEEnded);
 	FEditorDelegates::EndPIE.AddRaw(this, &FFCDelegateModule::EndPIE);
 	FGameDelegates::Get().GetEndPlayMapDelegate().AddRaw(this, &FFCDelegateModule::OnEndPlayMap);
+
+    // 开启调试功能
+    fc_switch_debug(true);
 #endif
 }
 

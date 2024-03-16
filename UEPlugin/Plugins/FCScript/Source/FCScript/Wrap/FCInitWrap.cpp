@@ -10,6 +10,16 @@
 #include "FCTMapIteratorWrap.h"
 #include "FCTSetWrap.h"
 
+#include "../StructWrap/FVector2DWrap.h"
+#include "../StructWrap/FVectorWrap.h"
+#include "../StructWrap/FVector4Wrap.h"
+#include "../StructWrap/FRotatorWrap.h"
+#include "../StructWrap/FQuatWrap.h"
+#include "../StructWrap/FPlaneWrap.h"
+#include "../StructWrap/FMatrixWrap.h"
+#include "../StructWrap/FColorWrap.h"
+#include "../StructWrap/FLinearColorWrap.h"
+
 
 void FCInitWrap::Register(fc_intptr VM)
 {
@@ -23,5 +33,16 @@ void FCInitWrap::Register(fc_intptr VM)
 	TSoftObjectPtrWrap::Register(VM);
 	FCTMapIteratorWrap::Register(VM);
 	FCTSetWrap::Register(VM);
+
+    FVector2DWrap::Register(VM);
+    FVectorWrap::Register(VM);
+    FVector4Wrap::Register(VM);
+    FRotatorWrap::Register(VM);
+    FQuatWrap::Register(VM);
+    FRotatorWrap::Register(VM);
+    FPlaneWrap::Register(VM);
+    FMatrixWrap::Register(VM);
+    FColorWrap::Register(VM);
+    FLinearColorWrap::Register(VM);
 }
 

@@ -37,6 +37,12 @@ enum FCPropertyType
 	FCPROPERTY_Vector2,         // 扩展类型(本质还是FCPROPERTY_StructProperty)
 	FCPROPERTY_Vector3,
 	FCPROPERTY_Vector4,
+    FCPROPERTY_Plane,
+    FCPROPERTY_Quat,
+    FCPROPERTY_Rotator,
+    FCPROPERTY_Matrix,
+    FCPROPERTY_Color,
+    FCPROPERTY_LinearColor,
 
 	FCPROPERTY_FILED,			// UField
 	FCPROPERTY_Enum,            // enum

@@ -1,13 +1,13 @@
 ﻿<ProjName></ProjName>
 <FileExt>cpp</FileExt>
 <IncludePath>
-    $(curpath)\Script\
+    $(curpath)/Script/
 </IncludePath>
 <IncludeFile>
 </IncludeFile>
 <CSharpPath>
-    $(curpath)\Wrap\
-    $(curpath)\inner_wrap\
+    $(curpath)/Wrap/
+    $(curpath)/inner_wrap/
 </CSharpPath>
 <ExcutePath>
 </ExcutePath>
@@ -17,4 +17,8 @@
 </Breakpoint>
 <CopyPathName></CopyPathName>
 <ErrorLogPathName></ErrorLogPathName>
+<SimplifyWrap>true</SimplifyWrap>
+<SimplifyMember>true</SimplifyMember>
+<DynamicRegister>true</DynamicRegister>
+<DynamicClassFirstChars></DynamicClassFirstChars>
 <ProjCode>0</ProjCode>

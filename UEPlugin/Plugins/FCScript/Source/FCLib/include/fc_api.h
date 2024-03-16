@@ -1,4 +1,4 @@
-﻿
+
 #ifndef  __FC_API_H__
 #define  __FC_API_H__
 
@@ -358,6 +358,8 @@ FC_EXPORT int   FC_RUNTIME_API  fc_get_map_value_type(fc_intptr ptr);
 // 功能：得到对象模板类型
 FC_EXPORT int   FC_RUNTIME_API  fc_get_value_template_type(fc_intptr ptr);
 
+FC_EXPORT int   FC_RUNTIME_API  fc_get_value_class_name_id(fc_intptr ptr);
+
 
 //--------------------------------------------------------------------------------------------------
 // 以下接口脚本调用C#层wrap函数时，取脚本传递参数用的接口
@@ -436,6 +438,9 @@ FC_EXPORT int   FC_RUNTIME_API  fc_get_current_call_class_function_name_id(fc_in
 // 说明：这个接口仅在CPP类语言中调用(因为C#不支持与C原生字符串交互)
 FC_EXPORT FC_CPP_ONLY fc_pcstr   FC_RUNTIME_API  fc_cpp_get_current_call_class_name(fc_intptr L);
 
+// 功能：获取导入类的类名
+FC_EXPORT FC_CPP_ONLY fc_pcstr   FC_RUNTIME_API  fc_cpp_get_import_class_name(int nClassName);
+
 // 功能：通过函数ID获取类函数的名字(id转字符串)
 // 说明：这个接口仅在CPP类语言中调用(因为C#不支持与C原生字符串交互)
 FC_EXPORT FC_CPP_ONLY fc_pcstr   FC_RUNTIME_API  fc_cpp_get_current_call_class_function_name(fc_intptr L);
@@ -468,6 +473,9 @@ FC_EXPORT int   FC_RUNTIME_API  fc_get_wrap_template_param_count(fc_intptr VM, f
 
 // 功能：得到指定模板实例的第N个参数的类型
 FC_EXPORT int   FC_RUNTIME_API  fc_get_wrap_template_param_type(fc_intptr VM, fc_intptr ptr, int nIndex);
+
+// 功能：检查指定模板实例的第N个参数的类型是不是wrap class类
+FC_EXPORT bool   FC_RUNTIME_API  fc_is_wrap_class_type(int nValueType);
 
 // 功能：得到指定模板实例的第N个参数的类的ID
 FC_EXPORT int   FC_RUNTIME_API  fc_get_wrap_template_param_class_name_id(fc_intptr VM, fc_intptr ptr, int nIndex);
@@ -577,6 +585,31 @@ FC_EXPORT   void  FC_RUNTIME_API fc_set_value_double(fc_intptr ptr, double v);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_int64(fc_intptr ptr, fc_int64 v);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_uint64(fc_intptr ptr, fc_uint64 v);
 FC_EXPORT   void  FC_RUNTIME_API fc_set_value_intptr(fc_intptr VM, fc_intptr ptr, fc_intptr v);
+
+//--------------------------------------------------------------------------------------
+// 以下是对动态变量类型设置运行时的类型
+// 
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_bool(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_char(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_byte(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_short(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_ushort(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_int(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_uint(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_float(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_double(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_int64(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_uint64(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_string_a(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_string_w(fc_intptr VM, fc_intptr ptr);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_wrap_object(fc_intptr VM, fc_intptr ptr, int nClassName);
+
+// 设置模板类型，基础数据类型为(bool, char, byte, short, ushort, int, uint, float, double, int64, uint64, StringA, StringW)
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_byname(fc_intptr VM, fc_intptr ptr, const char *pcsClassName);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_wrap_template_param1(fc_intptr VM, fc_intptr ptr, int nTemplateClassName, const char *FirstParam);
+FC_EXPORT   void  FC_RUNTIME_API fc_change_value_type_wrap_template_params(fc_intptr VM, fc_intptr ptr, int nTemplateClassName, const char **Params, int nParamCount);
+
+//--------------------------------------------------------------------------------------
 
 // 功能：将跨平台的wrap对象(ID或地址)设置给脚本变量
 // 参数：ptr - 脚本对象地址

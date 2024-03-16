@@ -172,64 +172,107 @@ UScriptStruct   *GetGlbScriptStruct()
 	return GScriptStruct;
 }
 
-FProperty  *CreateBaseProperty(FCInnerBaseType InBaseType)
+FProperty* CreateBaseProperty_bool(const char * InClassName)
 {
-	UScriptStruct* ScriptStruct = GetGlbScriptStruct();
-	switch(InBaseType)
-	{
-		case FC_VALUE_TYPE_bool:
-			return NewUEBoolProperty(ScriptStruct);
-		case FC_VALUE_TYPE_CHAR:
-			return NewUEProperty<FByteProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_BYTE:
-			return NewUEProperty<FByteProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_WCHAR:
-		case FC_VALUE_TYPE_USHORT:
-			return NewUEProperty<FUInt16Property>(ScriptStruct);
-		case FC_VALUE_TYPE_SHORT:
-			return NewUEProperty<FInt16Property>(ScriptStruct);
-		case FC_VALUE_TYPE_INT:
-			return NewUEProperty<FIntProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_UINT:
-			return NewUEProperty<FUInt32Property>(ScriptStruct);
-		case FC_VALUE_TYPE_FLOAT:
-			return NewUEProperty<FFloatProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_DOUBLE:
-			return NewUEProperty<FDoubleProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_INT64:
-			return NewUEProperty<FInt64Property>(ScriptStruct);
-		case FC_VALUE_TYPE_UINT64:
-			return NewUEProperty<FUInt64Property>(ScriptStruct);
-		case FC_VALUE_TYPE_STRING_A:
-			return NewUEProperty<FNameProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_STRING_W:
-			return NewUEProperty<FStrProperty>(ScriptStruct);
-		case FC_VALUE_TYPE_VECTOR2:
-			return CreateClassProperty("Vector2");
-		case FC_VALUE_TYPE_VECTOR3:
-			return CreateClassProperty("Vector3");
-		case FC_VALUE_TYPE_VECTOR4:
-			return CreateClassProperty("Vector4");
-		case FC_VALUE_TYPE_COLOR:
-			return CreateClassProperty("Color");
-		case FC_VALUE_TYPE_COLOR32:
-			return CreateClassProperty("Color32");
-		default:
-			break;
-	}
-	return nullptr;
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEBoolProperty(ScriptStruct);
+}
+FProperty* CreateBaseProperty_char(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FByteProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_byte(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FByteProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_ushort(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FUInt16Property>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_short(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FInt16Property>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_int(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FIntProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_uint(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FUInt32Property>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_float(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FFloatProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_double(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FDoubleProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_int64(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FInt64Property>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_uint64(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FUInt64Property>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_StringA(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FNameProperty>(ScriptStruct);
+}
+FProperty* CreateBaseProperty_StringW(const char* InClassName)
+{
+    UScriptStruct* ScriptStruct = GetGlbScriptStruct();
+    return NewUEProperty<FStrProperty>(ScriptStruct);
 }
 
-typedef std::unordered_map<int, FProperty*> CTemplatePropertyIDMap;
+typedef FProperty* (*LPCreateBasePropertyFunc)(const char *);
+
 typedef std::unordered_map<const char *, FProperty*, FCStringHash, FCStringEqual> CTemplatePropertyNameMap;
 typedef std::unordered_map<UStruct*, FCDynamicProperty*> CStructDynamicPropertyMap;
 typedef std::unordered_map<FProperty*, FCDynamicProperty*> CPropertyDynamicPropertyMap;
 typedef std::unordered_map<const char*, FCDynamicProperty*, FCStringHash, FCStringEqual> CCppDynamicPropertyMap;
-CTemplatePropertyIDMap   GBasePropertyIDMap;
+typedef std::unordered_map<const char*, LPCreateBasePropertyFunc, FCStringHash, FCStringEqual> CCppCreateBasePropertyMap;
+
 CTemplatePropertyNameMap GClassPropertyNameMap;
 CStructDynamicPropertyMap GStructDynamicPropertyMap;
 CPropertyDynamicPropertyMap GPropertyDynamicPropertyMap;
 CCppDynamicPropertyMap      GCppDynamicPropertyMap;
+CCppCreateBasePropertyMap   GCppBasePropertyCreatorMap;
+
+void  InitBasePropertyCreator()
+{
+    if(GCppBasePropertyCreatorMap.size() > 0)
+    {
+        return ;
+    }
+    GCppBasePropertyCreatorMap["bool"] = CreateBaseProperty_bool;
+    GCppBasePropertyCreatorMap["char"] = CreateBaseProperty_char;
+    GCppBasePropertyCreatorMap["byte"] = CreateBaseProperty_byte;
+    GCppBasePropertyCreatorMap["short"] = CreateBaseProperty_short;
+    GCppBasePropertyCreatorMap["ushort"] = CreateBaseProperty_ushort;
+    GCppBasePropertyCreatorMap["wchar"] = CreateBaseProperty_ushort;
+    GCppBasePropertyCreatorMap["int"] = CreateBaseProperty_int;
+    GCppBasePropertyCreatorMap["uint"] = CreateBaseProperty_uint;
+    GCppBasePropertyCreatorMap["float"] = CreateBaseProperty_float;
+    GCppBasePropertyCreatorMap["double"] = CreateBaseProperty_double;
+    GCppBasePropertyCreatorMap["int64"] = CreateBaseProperty_int64;
+    GCppBasePropertyCreatorMap["uint64"] = CreateBaseProperty_uint64;
+    GCppBasePropertyCreatorMap["StringA"] = CreateBaseProperty_StringA;
+    GCppBasePropertyCreatorMap["StringW"] = CreateBaseProperty_StringW;
+}
 
 FProperty  *CreateClassProperty(const char *InClassName)
 {
@@ -238,6 +281,17 @@ FProperty  *CreateClassProperty(const char *InClassName)
 	{
 		return itProperty->second;
 	}
+    // 基础数据类型, bool, char, byte, short, ushort, int, uint
+    InitBasePropertyCreator();
+    CCppCreateBasePropertyMap::iterator itInner = GCppBasePropertyCreatorMap.find(InClassName);
+    if (itInner != GCppBasePropertyCreatorMap.end())
+    {
+        InClassName = itInner->first;
+        FProperty* Property = itInner->second(InClassName);
+        GClassPropertyNameMap[InClassName] = Property;
+        return Property;
+    }
+
 	const FCDynamicClassDesc *DynamicClass = GetScriptContext()->RegisterUClass(InClassName);
 	if(!DynamicClass)
 	{
@@ -329,32 +383,14 @@ FCDynamicProperty* GetDynamicPropertyByUEProperty(FProperty* InProperty)
 	return DynamicPropery;
 }
 
-FProperty  *GetBaseProperty(FCInnerBaseType InBaseType)
-{
-	CTemplatePropertyIDMap::iterator itProperty = GBasePropertyIDMap.find(InBaseType);
-	if(itProperty != GBasePropertyIDMap.end())
-	{
-		return itProperty->second;
-	}
-	FProperty  *Property = CreateBaseProperty(InBaseType);
-	GBasePropertyIDMap[InBaseType] = Property;
-	return Property;
-}
-
 FProperty *QueryTempalteProperty(fc_intptr VM, fc_intptr Ptr, int Index)
 {
-	int BaseType = fc_get_wrap_template_param_type(VM, Ptr, Index);
-
-	FProperty *Property = nullptr;
-	if(FC_VALUE_TYPE_INPORT_CLASS == BaseType)
-	{
-		fc_pcstr ClassName = fc_cpp_get_wrap_template_param_class_name(VM, Ptr, Index);
-		Property = CreateClassProperty(ClassName);
-	}
-	else
-	{
-		Property = GetBaseProperty((FCInnerBaseType)BaseType);
-	}
+    fc_pcstr ClassName = fc_cpp_get_wrap_template_param_class_name(VM, Ptr, Index);
+    if(!ClassName)
+    {
+        return nullptr;
+    }
+	FProperty *Property = CreateClassProperty(ClassName);
 	return Property;
 }
 
@@ -537,10 +573,8 @@ FCDynamicProperty* GetTSetDynamicProperty(fc_intptr VM, fc_intptr Ptr)
 
 void ReleaseTempalteProperty()
 {
-	//ReleasePtrMap(GBasePropertyIDMap);
 	//ReleasePtrMap(GClassPropertyNameMap);
 
-    GBasePropertyIDMap.clear();
     GClassPropertyNameMap.clear();
 
 	ReleasePtrMap(GTempalteDynamicPropertyMap);

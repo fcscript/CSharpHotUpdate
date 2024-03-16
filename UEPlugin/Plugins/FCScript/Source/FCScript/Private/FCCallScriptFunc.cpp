@@ -18,58 +18,128 @@ void  PushScriptDefault(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 }
 void  PushScriptBool(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_set_value_bool(ValuePtr, *((bool*)ValueAddr));
+    FBoolProperty* Property = (FBoolProperty*)DynamicProperty->SafePropertyPtr->Property;
+    bool bValue = Property->GetPropertyValue(ValueAddr);
+
+    fc_change_value_type_bool(VM, ValuePtr);
+	fc_set_value_bool(ValuePtr, bValue);
 }
 void  PushScriptInt8(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_byte(VM, ValuePtr);
 	fc_set_value_byte(ValuePtr, *((fc_byte*)ValueAddr));
 }
 void  PushScriptInt16(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_short(VM, ValuePtr);
 	fc_set_value_short(ValuePtr, *((short*)ValueAddr));
 }
 void  PushScriptInt32(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_int(VM, ValuePtr);
 	fc_set_value_int(ValuePtr, *((int32*)ValueAddr));
 }
 void  PushScriptInt64(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_int64(VM, ValuePtr);
 	fc_set_value_int64(ValuePtr, *((fc_int64*)ValueAddr));
 }
 void  PushScriptFloat(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_float(VM, ValuePtr);
 	fc_set_value_float(ValuePtr, *((float*)ValueAddr));
 }
 void  PushScriptDouble(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
+    fc_change_value_type_double(VM, ValuePtr);
 	fc_set_value_double(ValuePtr, *((double*)ValueAddr));
 }
 void  PushScriptFName(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
     FString value = ((FName*)ValueAddr)->ToString();
+    fc_change_value_type_string_w(VM, ValuePtr);
     fc_set_value_string_w(ValuePtr, (fc_ushort_ptr)(*value), value.Len());
 }
 void  PushScriptFString(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
 	FString &value = *((FString*)ValueAddr);
+    fc_change_value_type_string_w(VM, ValuePtr);
 	fc_set_value_string_w(ValuePtr, (fc_ushort_ptr)(*value), value.Len());
 }
 void  PushScriptFText(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
     FString value = ((FText*)ValueAddr)->ToString();
+    fc_change_value_type_string_w(VM, ValuePtr);
     fc_set_value_string_w(ValuePtr, (fc_ushort_ptr)(*value), value.Len());
 }
 void  PushScriptFVector(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_set_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+	//fc_set_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+    FVector* Ret = (FVector*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Ret)
+    {
+        *Ret = *((FVector*)ValueAddr);
+    }
+    else
+    {
+        fc_set_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+    }
 }
 void  PushScriptFVector2D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_set_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+	//fc_set_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+    FVector2D* Ret = (FVector2D*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Ret)
+    {
+        *Ret = *((FVector2D*)ValueAddr);
+    }
+    else
+    {
+        fc_set_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+    }
 }
 void  PushScriptFVector4D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_set_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+	//fc_set_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+    FVector4* Ret = (FVector4*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Ret)
+    {
+        *Ret = *((FVector4*)ValueAddr);
+    }
+    else
+    {
+        fc_set_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+    }
+}
+void  PushScriptFPlane(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FPlane *Ret = (FPlane*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FPlane*)ValueAddr);
+}
+void  PushScriptFQuat(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FQuat* Ret = (FQuat*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FQuat*)ValueAddr);
+}
+void  PushScriptFRotator(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FRotator* Ret = (FRotator*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FRotator*)ValueAddr);
+}
+void  PushScriptFMatrix(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FMatrix* Ret = (FMatrix*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FMatrix*)ValueAddr);
+}
+void  PushScriptFColor(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FColor* Ret = (FColor*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FColor*)ValueAddr);
+}
+void  PushScriptFLinearColor(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FLinearColor* Ret = (FLinearColor*)fc_get_value_wrap_objptr(ValuePtr);
+    *Ret = *((FLinearColor*)ValueAddr);
 }
 
 // 功能：根据脚本变量得到UE对象的描述类
@@ -157,35 +227,7 @@ void  PushScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *D
     }
     else
     {
-        LPPushScriptValueFunc   ReadScriptFunc = nullptr;    // 将脚本变量写入到UE对象
-        int Type = fc_get_value_type(ValuePtr);
-        const char* UEClassName = "";
-        switch (Type)
-        {
-        case FC_VALUE_TYPE_VECTOR2:
-            UEClassName = "FVector2D";
-            ReadScriptFunc = PushScriptFVector2D;
-            break;
-        case FC_VALUE_TYPE_VECTOR3:
-            UEClassName = "FVector";
-            ReadScriptFunc = PushScriptFVector;
-            break;
-        case FC_VALUE_TYPE_VECTOR4:
-            UEClassName = "FVector4";
-            ReadScriptFunc = PushScriptFVector4D;
-            break;
-        default:
-            break;
-        }
-        ClassDesc = GetScriptContext()->RegisterUClass(UEClassName);
-        if (ClassDesc && ClassDesc->m_Struct == StructProperty->Struct)
-        {
-            ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, ThisObj, ObjRefPtr);
-        }
-        else
-        {
-            fc_set_value_wrap_objptr(VM, ValuePtr, 0);
-        }
+        fc_set_value_wrap_objptr(VM, ValuePtr, 0);
     }
 }
 
@@ -531,6 +573,25 @@ void  InitDynamicPropertyWriteFunc(FCDynamicProperty *DynamicProperty, FCPropert
 		case FCPROPERTY_Vector4:
 			DynamicProperty->m_WriteScriptFunc = PushScriptFVector4D;
 			break;
+        case FCPROPERTY_Plane:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFPlane;
+            break;
+        case FCPROPERTY_Quat:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFQuat;
+            break;
+        case FCPROPERTY_Rotator:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFRotator;
+            break;
+        case FCPROPERTY_Matrix:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFMatrix;
+            break;
+        case FCPROPERTY_Color:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFColor;
+            break;
+        case FCPROPERTY_LinearColor:
+            DynamicProperty->m_WriteScriptFunc = PushScriptFLinearColor;
+            break;
+
 		case FCPROPERTY_Array:
 			DynamicProperty->m_WriteScriptFunc = PushScriptTArray;
 			break;
@@ -557,7 +618,11 @@ void  ReadScriptDefault(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *
 
 void  ReadScriptBool(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	*((bool *)ValueAddr) = fc_get_value_bool(ValuePtr);
+    FBoolProperty* Property = (FBoolProperty*)DynamicProperty->SafePropertyPtr->Property;
+    bool bValue = fc_get_value_bool(ValuePtr);
+    Property->SetPropertyValue(ValueAddr, bValue);
+
+	//*((bool *)ValueAddr) = fc_get_value_bool(ValuePtr);
 }
 
 void  ReadScriptInt8(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
@@ -598,16 +663,74 @@ void  ReadScriptFText(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* Dy
 }
 void  ReadScriptFVector2D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_get_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+	//fc_get_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+    FVector2D* Src = (FVector2D*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Src)
+    {
+        *((FVector2D*)ValueAddr) = *Src;
+    }
+    else
+    {
+        fc_get_value_vector2(ValuePtr, *((fc_vector2*)ValueAddr));
+    }
 }
 void  ReadScriptFVector(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
 {
-    fc_get_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+    //fc_get_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+    FVector* Src = (FVector*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Src)
+    {
+        *((FVector*)ValueAddr) = *Src;
+    }
+    else
+    {
+        fc_get_value_vector3(ValuePtr, *((fc_vector3*)ValueAddr));
+    }
 }
 void  ReadScriptFVector4D(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
-	fc_get_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+	//fc_get_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+    FVector4* Src = (FVector4*)fc_get_value_wrap_objptr(ValuePtr);
+    if(Src)
+    {
+        *((FVector4*)ValueAddr) = *Src;
+    }
+    else
+    {
+        fc_get_value_vector4(ValuePtr, *((fc_vector4*)ValueAddr));
+    }
 }
+void  ReadScriptFPlane(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FPlane* Src = (FPlane*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FPlane*)ValueAddr) = *Src;
+}
+void  ReadScriptFQuat(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FQuat* Src = (FQuat*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FQuat*)ValueAddr) = *Src;
+}
+void  ReadScriptFRotator(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FRotator* Src = (FRotator*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FRotator*)ValueAddr) = *Src;
+}
+void  ReadScriptFMatrix(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FMatrix* Src = (FMatrix*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FMatrix*)ValueAddr) = *Src;
+}
+void  ReadScriptFColor(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FColor* Src = (FColor*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FColor*)ValueAddr) = *Src;
+}
+void  ReadScriptFLinearColor(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase* DynamicProperty, uint8* ValueAddr, UObject* ThisObj, void* ObjRefPtr)
+{
+    FLinearColor* Src = (FLinearColor*)fc_get_value_wrap_objptr(ValuePtr);
+    *((FLinearColor*)ValueAddr) = *Src;
+}
+
 // 将脚本对象写入到UE对象
 void  ReadScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
 {
@@ -623,31 +746,6 @@ void  ReadScriptStruct(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *D
     }
     else
     {
-        LPPushScriptValueFunc   ReadScriptFunc = nullptr;    // 将脚本变量写入到UE对象
-        int Type = fc_get_value_type(ValuePtr);
-        const char *UEClassName = "";
-        switch(Type)
-        {
-            case FC_VALUE_TYPE_VECTOR2:
-                UEClassName = "FVector2D";
-                ReadScriptFunc = ReadScriptFVector2D;
-            break;
-            case FC_VALUE_TYPE_VECTOR3:
-                UEClassName = "FVector";
-                ReadScriptFunc = ReadScriptFVector;
-                break;
-            case FC_VALUE_TYPE_VECTOR4:
-                UEClassName = "FVector4";
-                ReadScriptFunc = ReadScriptFVector4D;
-                break;
-            default:
-                break;
-        }
-        FCDynamicClassDesc* ClassDesc = GetScriptContext()->RegisterUClass(UEClassName);
-        if(ClassDesc && ClassDesc->m_Struct == StructProperty->Struct)
-        {
-            ReadScriptFunc(VM, ValuePtr, DynamicProperty, ValueAddr, ThisObj, ObjRefPtr);
-        }
     }
 }
 void  ReadScriptUObject(int64 VM, int64  ValuePtr, const FCDynamicPropertyBase *DynamicProperty, uint8  *ValueAddr, UObject *ThisObj, void* ObjRefPtr)
@@ -1033,6 +1131,25 @@ void  InitDynamicPropertyReadFunc(FCDynamicProperty *DynamicProperty, FCProperty
 		case FCPROPERTY_Vector4:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptFVector4D;
 			break;
+        case FCPROPERTY_Plane:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFPlane;
+            break;
+        case FCPROPERTY_Quat:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFQuat;
+            break;
+        case FCPROPERTY_Rotator:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFRotator;
+            break;
+        case FCPROPERTY_Matrix:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFMatrix;
+            break;
+        case FCPROPERTY_Color:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFColor;
+            break;
+        case FCPROPERTY_LinearColor:
+            DynamicProperty->m_ReadScriptFunc = ReadScriptFLinearColor;
+            break;
+
 		case FCPROPERTY_Array:
 			DynamicProperty->m_ReadScriptFunc = ReadScriptTArray;
 			break;

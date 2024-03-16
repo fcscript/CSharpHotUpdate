@@ -44,6 +44,15 @@ struct FTestAvatarSystemInitParams
 	FVector   Offset;
 };
 
+UENUM(BlueprintType)
+enum EFCTestEnum
+{
+    One,
+    Two,
+    Three,
+    Wan = 100,  // 测试发现，UE不支持255以上的默认参数
+};
+
 UCLASS()
 class UFCTest : public UObject
 {
@@ -100,6 +109,18 @@ public:
 	
 	UPROPERTY()
 	TSoftObjectPtr<UObject>  ResPtr;
+
+    UPROPERTY(BlueprintReadWrite)
+    TSoftClassPtr<UClass> TSoftClassPtrVar;
+
+    UPROPERTY(BlueprintReadWrite)
+    TSubclassOf<UObject> TSubclassOfVar;
+
+    UPROPERTY(BlueprintReadWrite)
+    TSubclassOf<UFCTest> TSubclassOfTest;
+
+    UPROPERTY(BlueprintReadWrite)
+    TEnumAsByte<enum EFCTestEnum> EnumAsByteVar;
 
 	UPROPERTY()
 	class UFCTest* NextPtr;

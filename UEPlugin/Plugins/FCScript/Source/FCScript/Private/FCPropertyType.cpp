@@ -65,9 +65,14 @@ void  InitPropertyTable()
     gInnerGraphyTypeMap["Vector2"] = FCPROPERTY_Vector2;
     gInnerGraphyTypeMap["Vector3"] = FCPROPERTY_Vector3;
     gInnerGraphyTypeMap["Vector4"] = FCPROPERTY_Vector4;
-    gInnerGraphyTypeMap["Vector2D"] = FCPROPERTY_Vector2;
-    gInnerGraphyTypeMap["Vector4D"] = FCPROPERTY_Vector4;
     gInnerGraphyTypeMap["Vector"] = FCPROPERTY_Vector3;
+
+    gInnerGraphyTypeMap["Plane"] = FCPROPERTY_Plane;
+    gInnerGraphyTypeMap["Quat"] = FCPROPERTY_Quat;
+    gInnerGraphyTypeMap["Rotator"] = FCPROPERTY_Rotator;
+    gInnerGraphyTypeMap["Matrix"] = FCPROPERTY_Matrix;
+    gInnerGraphyTypeMap["Color"] = FCPROPERTY_Color;
+    gInnerGraphyTypeMap["LinearColor"] = FCPROPERTY_LinearColor;
 }
 
 void  InitProperyNameTable()
